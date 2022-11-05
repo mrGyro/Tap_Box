@@ -7,9 +7,9 @@ public class BaseBox : MonoBehaviour
         None = 0,
         TapFlowBox = 10
     }
-    
-    public BlockType Type;
-    public Vector3 ArrayPosition;
+
+    public GameField.BoxData Data;
+   
 
     public virtual void BoxReaction()
     {
