@@ -8,8 +8,7 @@ public class BaseBox : MonoBehaviour
         TapFlowBox = 10
     }
 
-    public GameField.BoxData Data;
-   
+    public BoxData Data;
 
     public virtual void BoxReaction()
     {
