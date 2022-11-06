@@ -6,6 +6,7 @@ public class TapFlowBox : BaseBox
     [SerializeField] private Transform _parent;
     [SerializeField] private float _speed;
 
+    private bool _isMove;
     private void Update()
     {
         Debug.DrawRay(_parent.position, _parent.forward * 50, Color.red);
@@ -13,6 +14,7 @@ public class TapFlowBox : BaseBox
 
     public override void BoxReaction()
     {
+        _isMove = true;
         var box = GetNearestForwardBox();
         if (box == null)
         {
@@ -27,25 +29,29 @@ public class TapFlowBox : BaseBox
 
     private async void MoveOut()
     {
-        while (true)
+        var x = _parent.forward * 50;
+        while (Vector3.Distance(_parent.position, x) > 1.03f)
         {
             _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
             await UniTask.Delay(30);
         }
+        
+        _isMove = false;
     }
 
     private async void MoveTo(BaseBox box)
     {
-
         while (Vector3.Distance(_parent.position, box.transform.position) > 1.03f)
         {
             _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
             await UniTask.Delay(30);
         }
+        
         var nearestPosition = GetNearestPosition(box);
 
         Data.ArrayPosition = GameField.Instance.GetIndexByWorldPosition(nearestPosition);
         _parent.position = nearestPosition;
+        _isMove = false;
     }
 
     private Vector3 GetNearestPosition(BaseBox box)
