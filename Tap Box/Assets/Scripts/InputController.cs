@@ -6,11 +6,19 @@ using UnityEngine.EventSystems;
 public class InputController : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] Camera camera;
-
+    void OnEnable()
+    {
+        Lean.Touch.LeanTouch.OnFingerTap += HandleFingerTap;
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
+       
+    }
+    
+    void HandleFingerTap(Lean.Touch.LeanFinger finger)
+    {
         var layerMask = LayerMask.GetMask($"GameFieldElement");
-        var ray = camera.ScreenPointToRay(eventData.position);
+        var ray = camera.ScreenPointToRay(finger.ScreenPosition);
         if (!Physics.Raycast(ray, out var hit, 1000, layerMask))
         {
             Debug.DrawRay(camera.transform.position, ray.direction  * 1000, Color.yellow, 5);
