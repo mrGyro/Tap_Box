@@ -103,7 +103,7 @@ MonoBehaviour:
     ArrayPosition: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0}
   _parent: {fileID: 7583876417348114652}
-  _speed: 30
+  _speed: 20
 --- !u!65 &5949886273935493567
 BoxCollider:
   m_ObjectHideFlags: 0
