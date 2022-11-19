@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4091272800315607868}
   - component: {fileID: 2243893941153267702}
   - component: {fileID: 2153523534962665410}
+  - component: {fileID: 1183103377632718266}
   - component: {fileID: 4282727605415713082}
   m_Layer: 6
   m_Name: RotateRoadBox
@@ -102,6 +103,19 @@ MonoBehaviour:
     Type: 20
     ArrayPosition: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0}
+  _reaction: {fileID: 1183103377632718266}
+--- !u!114 &1183103377632718266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 298106012068011555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f868947558a3da04cbd56429b4c7db2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _parent: {fileID: 1110354436729373849}
   _speed: 1000
 --- !u!65 &4282727605415713082
