@@ -14,7 +14,7 @@ public class InputController : MonoBehaviour
     void OnEnable()
     {
         LeanTouch.OnFingerTap += HandleFingerTap;
-        LeanTouch.OnGesture += Swipe;
+       // LeanTouch.OnGesture += Swipe;
     }
 
     private void Swipe(List<LeanFinger> fingers)

@@ -11,6 +11,17 @@ namespace Boxes.RotateRoadBox
         {
             await _reaction.ReactionStart();
             await _reaction.ReactionEnd();
+            CheckNearest();
+        }
+
+        private void CheckNearest()
+        {
+            var nearestBoxes = GameField.Instance.GetNearestBoxes(this);
+
+            foreach (var VARIABLE in nearestBoxes)
+            {
+                Debug.LogError(VARIABLE.Data.Type + " " + VARIABLE.Data.ArrayPosition);
+            }
         }
     }
 }

@@ -26,9 +26,7 @@ namespace Boxes.RotateRoadBox
 
         private void OnDrawGizmosSelected()
         {
-            Debug.DrawRay(_parent.position, _parent.forward * 50, Color.red);
-            Debug.DrawRay(_parent.position, _parent.right * 50, Color.green);
-            Debug.DrawRay(_parent.position, _parent.up * 50, Color.blue);
+            Debug.DrawRay(_parent.position, _parent.forward * 5, Color.red);
         }
 
         private async UniTask RotateBox()

@@ -1596,10 +1596,10 @@ MonoBehaviour:
   size: 1.03
   _boxes: []
   _datas:
-  - Type: 10
+  - Type: 20
     ArrayPosition: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0}
-  - Type: 10
+  - Type: 20
     ArrayPosition: {x: 1, y: 0, z: 0}
     Rotation: {x: 90, y: 0, z: 0}
   - Type: 20
@@ -1608,12 +1608,18 @@ MonoBehaviour:
   - Type: 20
     ArrayPosition: {x: 1, y: 1, z: 2}
     Rotation: {x: 0, y: 180, z: 0}
-  - Type: 10
+  - Type: 20
     ArrayPosition: {x: -1, y: 1, z: 1}
     Rotation: {x: 0, y: 180, z: 0}
-  - Type: 10
+  - Type: 20
     ArrayPosition: {x: 0, y: 1, z: 2}
     Rotation: {x: 0, y: 180, z: 0}
+  - Type: 20
+    ArrayPosition: {x: 0, y: 1, z: 1}
+    Rotation: {x: 0, y: 180, z: 0}
+  - Type: 20
+    ArrayPosition: {x: 0, y: 1, z: -2}
+    Rotation: {x: 0, y: 270, z: 0}
 --- !u!4 &1460762549
 Transform:
   m_ObjectHideFlags: 0
