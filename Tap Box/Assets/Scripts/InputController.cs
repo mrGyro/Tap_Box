@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Boxes;
 using DefaultNamespace;
 using Lean.Touch;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class InputController : MonoBehaviour
     void OnEnable()
     {
         LeanTouch.OnFingerTap += HandleFingerTap;
-        LeanTouch.OnGesture += Swipe;
+       // LeanTouch.OnGesture += Swipe;
     }
 
     private void Swipe(List<LeanFinger> fingers)

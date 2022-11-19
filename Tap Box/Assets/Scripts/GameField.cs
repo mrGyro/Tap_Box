@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Boxes;
 using UnityEngine;
 
 public class GameField : MonoBehaviour
@@ -39,7 +41,7 @@ public class GameField : MonoBehaviour
     {
         return arrayPosition * size;
     }
-    
+
     public Vector3 GetIndexByWorldPosition(Vector3 worldPosition)
     {
         return worldPosition / size;
@@ -49,4 +51,30 @@ public class GameField : MonoBehaviour
     {
         _boxes.Remove(box);
     }
+
+    public List<BaseBox> GetNearestBoxes(BaseBox box)
+    {
+        var positions = new List<Vector3>
+        {
+            box.Data.ArrayPosition + Vector3.up,
+            box.Data.ArrayPosition + Vector3.down,
+            box.Data.ArrayPosition + Vector3.forward,
+            box.Data.ArrayPosition + Vector3.back,
+            box.Data.ArrayPosition + Vector3.left,
+            box.Data.ArrayPosition + Vector3.right
+        };
+
+        var result = new List<BaseBox>();
+        foreach (var pos in positions)
+        {
+            var nearBox = GetBoxFromArrayPosition(pos);
+            if (nearBox != null)
+                result.Add(nearBox);
+        }
+
+        return result;
+    }
+
+    public BaseBox GetBoxFromArrayPosition(Vector3 position)
+        => _boxes.FirstOrDefault(x => x.Data.ArrayPosition == position);
 }

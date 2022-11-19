@@ -1,18 +1,20 @@
 using UnityEngine;
 
-public class BaseBox : MonoBehaviour
+namespace Boxes
 {
-    public enum BlockType
+    public class BaseBox : MonoBehaviour
     {
-        None = 0,
-        TapFlowBox = 10,
-        RotateRoadBox = 20
-    }
+        public enum BlockType
+        {
+            None = 0,
+            TapFlowBox = 10,
+            RotateRoadBox = 20
+        }
 
-    public BoxData Data;
+        public BoxData Data;
 
-    public virtual void BoxReaction()
-    {
-        
+        public virtual void BoxReaction()
+        {
+        }
     }
 }
