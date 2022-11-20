@@ -52,7 +52,7 @@ public class GameField : MonoBehaviour
         _boxes.Remove(box);
     }
 
-    public List<BaseBox> GetNearestBoxes(BaseBox box)
+    public List<BaseBox> GetNearestBoxes(BaseBox box, BaseBox.BlockType type = BaseBox.BlockType.None)
     {
         var positions = new List<Vector3>
         {
@@ -69,10 +69,24 @@ public class GameField : MonoBehaviour
         {
             var nearBox = GetBoxFromArrayPosition(pos);
             if (nearBox != null)
+            {
+                if (type != BaseBox.BlockType.None && nearBox.Data.Type != type)
+                    continue;
                 result.Add(nearBox);
+            }
         }
 
         return result;
+    }
+
+    public List<BaseBox> GetNearestBoxesLine(BaseBox box, BaseBox.BlockType type)
+    {
+        var line = new List<BaseBox> { box };
+        var nearestBoxes = GetNearestBoxes(box, box.Data.Type);
+
+        Debug.LogError(nearestBoxes.Count);
+
+        return line;
     }
 
     public BaseBox GetBoxFromArrayPosition(Vector3 position)
