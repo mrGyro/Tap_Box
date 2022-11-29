@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Boxes.Reactions;
 using UnityEngine;
@@ -7,13 +6,8 @@ namespace Boxes.RotateRoadBox
 {
     public class RotateRoadBox : BaseBox
     {
-        public BoxConnections Connections;
+        [SerializeField] private BoxConnections _connections;
         [SerializeField] private BaseReaction _reaction;
-
-        private void Start()
-        {
-            
-        }
 
         public override async void BoxReaction()
         {
@@ -22,29 +16,51 @@ namespace Boxes.RotateRoadBox
             CheckNearest();
         }
 
+        public BoxConnections GetConnections()
+        {
+            return _connections;
+        }
+
         private void CheckNearest()
         {
-            var nearestBoxes = GameField.Instance.GetNearestBoxes(this);
-            GameField.Instance.GetNearestBoxesLine(this, Data.Type);
-            foreach (var nearestBox in nearestBoxes)
+            var nearestBoxes = GameField.Instance.GetNearestBoxesLine(this, Data.Type);
+            List<RotateRoadBox> list = new List<RotateRoadBox> { this };
+
+            for (var index = 0; index < list.Count; index++)
             {
-                if (nearestBox.Data.Type != BlockType.RotateRoadBox)
+                foreach (var box in nearestBoxes)
                 {
-                    continue;
-                }
+                    var rotateRoadBox = box as RotateRoadBox;
 
-                var box = nearestBox as RotateRoadBox;
+                    if (rotateRoadBox == null)
+                    {
+                        continue;
+                    }
 
-                if (box == null)
-                {
-                    continue;
-                }
-
-                if (Connections.HasConnection(box.Connections))
-                {
-                    Debug.LogError(nearestBox.Data.Type + " " + nearestBox.Data.ArrayPosition);
+                    if (list[index].GetConnections().HasConnection(rotateRoadBox.GetConnections()))
+                    {
+                        if (!list.Exists(x => x == rotateRoadBox))
+                        {
+                            list.Add(rotateRoadBox);
+                        }
+                    }
                 }
             }
+
+            if (nearestBoxes.Count == list.Count)
+            {
+                foreach (var VARIABLE in list)
+                {
+                    VARIABLE.gameObject.SetActive(false);
+                    Destroy(VARIABLE.gameObject,0.2f);
+                }
+                
+                foreach (var VARIABLE in list)
+                {
+                    GameField.Instance.RemoveBox(VARIABLE);
+                }
+            }
+            Debug.LogError(GameField.Instance.GetBoxesCount());
         }
     }
 }

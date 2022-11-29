@@ -13,40 +13,51 @@ public class BoxConnections : MonoBehaviour
 
     public bool HasConnection(BoxConnections otherBox)
     {
+        if (otherBox == this)
+            return false;
+
         var connections = otherBox.GetConnectPoint();
         var thisConnections = GetConnectPoint();
 
         foreach (var connection in thisConnections)
         {
-            var result = connections.FirstOrDefault(x => Vector3.Distance(x, connection) < 0.3f);
+            var result = connections.FirstOrDefault(x => 
+                Vector3.Distance(x, transform.position) < 0.3f 
+                && Vector3.Distance(otherBox.transform.position, connection) < 0.3f);
+            
             if (result != Vector3.zero)
             {
                 return true;
             }
         }
+
         return false;
     }
 
-    public List<Vector3> GetConnectPoint()
+    private List<Vector3> GetConnectPoint()
     {
         List<Vector3> result = new List<Vector3>();
+        var transform1 = transform;
+
         if (Up)
-            result.Add(transform.up);
+        {
+            result.Add(transform1.position + transform1.localPosition);
+        }
 
         if (Down)
-            result.Add(-transform.up);
+            result.Add(transform1.position - transform1.up);
 
         if (Right)
-            result.Add(transform.right);
+            result.Add(transform1.position + transform1.right);
 
         if (Left)
-            result.Add(-transform.right);
+            result.Add(transform1.position - transform1.right);
 
         if (Forward)
-            result.Add(transform.forward);
+            result.Add(transform1.position + transform1.forward);
 
         if (Back)
-            result.Add(-transform.forward);
+            result.Add(transform1.position - transform1.forward);
 
         return result;
     }

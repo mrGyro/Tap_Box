@@ -37,6 +37,12 @@ public class GameField : MonoBehaviour
         }
     }
 
+    public int GetBoxesCount()
+    {
+        Debug.LogError(_boxes.Count + " " + _datas.Count);
+        return _boxes.Count;
+    }
+    
     public Vector3 GetWorldPosition(Vector3 arrayPosition)
     {
         return arrayPosition * size;
@@ -52,7 +58,42 @@ public class GameField : MonoBehaviour
         _boxes.Remove(box);
     }
 
-    public List<BaseBox> GetNearestBoxes(BaseBox box, BaseBox.BlockType type = BaseBox.BlockType.None)
+    public List<BaseBox> GetNearestBoxesLine(BaseBox box, BaseBox.BlockType type)
+    {
+        var line = new List<BaseBox> { box };
+        var nearestBoxes = GetNearestBoxes(box, type);
+        
+        var buffer = new List<BaseBox>(nearestBoxes);
+        while (buffer.Count > 0)
+        {
+            List<BaseBox> list = new List<BaseBox>();
+            for (var index = 0; index < buffer.Count; index++)
+            {
+                if (!nearestBoxes.Exists(x => x == buffer[index]))
+                {
+                    nearestBoxes.Add(buffer[index]);
+                }
+
+                foreach (var VARIABLE in GetNearestBoxes(buffer[index], buffer[index].Data.Type))
+                {
+                    if (!line.Exists(x => x == VARIABLE))
+                        line.Add(VARIABLE);
+                    
+                    if (!nearestBoxes.Exists(x => x == VARIABLE))
+                        list.Add(VARIABLE);
+                }
+            }
+
+            buffer = new List<BaseBox>(list);
+        }
+
+        return line;
+    }
+
+    private BaseBox GetBoxFromArrayPosition(Vector3 position)
+        => _boxes.FirstOrDefault(x => x.Data.ArrayPosition == position);
+    
+    private List<BaseBox> GetNearestBoxes(BaseBox box, BaseBox.BlockType type = BaseBox.BlockType.None)
     {
         var positions = new List<Vector3>
         {
@@ -78,17 +119,4 @@ public class GameField : MonoBehaviour
 
         return result;
     }
-
-    public List<BaseBox> GetNearestBoxesLine(BaseBox box, BaseBox.BlockType type)
-    {
-        var line = new List<BaseBox> { box };
-        var nearestBoxes = GetNearestBoxes(box, box.Data.Type);
-
-        Debug.LogError(nearestBoxes.Count);
-
-        return line;
-    }
-
-    public BaseBox GetBoxFromArrayPosition(Vector3 position)
-        => _boxes.FirstOrDefault(x => x.Data.ArrayPosition == position);
 }

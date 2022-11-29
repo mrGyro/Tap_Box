@@ -116,8 +116,8 @@ MonoBehaviour:
   Up: 0
   Down: 0
   Left: 0
-  Right: 0
-  Forward: 0
+  Right: 1
+  Forward: 1
   Back: 0
 --- !u!114 &5579473289008238708
 MonoBehaviour:
@@ -149,5 +149,5 @@ MonoBehaviour:
     Type: 20
     ArrayPosition: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0}
-  Connections: {fileID: 7533576528024907495}
+  _connections: {fileID: 7533576528024907495}
   _reaction: {fileID: 5579473289008238708}
