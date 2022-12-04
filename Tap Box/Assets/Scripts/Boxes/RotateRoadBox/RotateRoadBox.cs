@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Boxes.Reactions;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Boxes.RotateRoadBox
@@ -9,14 +10,14 @@ namespace Boxes.RotateRoadBox
         [SerializeField] private BoxConnections _connections;
         [SerializeField] private BaseReaction _reaction;
 
-        public override async void BoxReaction()
+        public override async UniTask BoxReactionStart()
         {
             await _reaction.ReactionStart();
             await _reaction.ReactionEnd();
             CheckNearest();
         }
 
-        public BoxConnections GetConnections()
+        private BoxConnections GetConnections()
         {
             return _connections;
         }
@@ -24,7 +25,7 @@ namespace Boxes.RotateRoadBox
         private void CheckNearest()
         {
             var nearestBoxes = GameField.Instance.GetNearestBoxesLine(this, Data.Type);
-            List<RotateRoadBox> list = new List<RotateRoadBox> { this };
+            var list = new List<RotateRoadBox> { this };
 
             for (var index = 0; index < list.Count; index++)
             {
@@ -32,34 +33,36 @@ namespace Boxes.RotateRoadBox
                 {
                     var rotateRoadBox = box as RotateRoadBox;
 
-                    if (rotateRoadBox == null)
+                    if (!rotateRoadBox)
                     {
                         continue;
                     }
 
-                    if (list[index].GetConnections().HasConnection(rotateRoadBox.GetConnections()))
+                    if (!list[index].GetConnections().HasConnection(rotateRoadBox.GetConnections()))
+                        continue;
+                    
+                    if (!list.Exists(x => x == rotateRoadBox))
                     {
-                        if (!list.Exists(x => x == rotateRoadBox))
-                        {
-                            list.Add(rotateRoadBox);
-                        }
+                        list.Add(rotateRoadBox);
                     }
                 }
             }
 
             if (nearestBoxes.Count == list.Count)
             {
-                foreach (var VARIABLE in list)
+                foreach (var box in list)
                 {
-                    VARIABLE.gameObject.SetActive(false);
-                    Destroy(VARIABLE.gameObject,0.2f);
+                    var boxGameObject = box.gameObject;
+                    boxGameObject.SetActive(false);
+                    Destroy(boxGameObject, 0.2f);
                 }
-                
-                foreach (var VARIABLE in list)
+
+                foreach (var box in list)
                 {
-                    GameField.Instance.RemoveBox(VARIABLE);
+                    GameField.Instance.RemoveBox(box);
                 }
             }
+
             Debug.LogError(GameField.Instance.GetBoxesCount());
         }
     }

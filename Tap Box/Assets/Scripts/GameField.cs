@@ -1,17 +1,20 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Boxes;
+using Boxes.SwipableBox;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class GameField : MonoBehaviour
 {
     public static GameField Instance;
+    public InputController InputController;
     [SerializeField] private Transform _rooTransform;
     [SerializeField] private float size;
 
     [SerializeField] private List<BaseBox> _boxes;
     [SerializeField] private List<BoxData> _datas;
+
 
     private void Awake()
     {
@@ -26,23 +29,28 @@ public class GameField : MonoBehaviour
         _boxes = new List<BaseBox>();
         foreach (var data in _datas)
         {
-            var x = await AssetProvider.LoadAssetAsync<GameObject>(data.Type.ToString());
-            var y = Instantiate(x, _rooTransform);
-            var a = y.GetComponent<BaseBox>();
-            a.transform.position = data.ArrayPosition * size;
-            a.transform.rotation = Quaternion.Euler(data.Rotation);
-            a.Data = data;
+            if (data.Type == BaseBox.BlockType.None)
+                continue;
 
-            _boxes.Add(a);
+            var boxGameObject = await InstantiateAssetAsync(data.Type.ToString());
+            var box = boxGameObject.GetComponent<BaseBox>();
+            box.transform.position = data.ArrayPosition * size;
+            box.transform.rotation = Quaternion.Euler(data.Rotation);
+            box.Data = data;
+            _boxes.Add(box);
         }
     }
 
     public int GetBoxesCount()
     {
-        Debug.LogError(_boxes.Count + " " + _datas.Count);
         return _boxes.Count;
     }
-    
+
+    public bool ExistBox(BaseBox box)
+    {
+        return _boxes.Exists(x=> x.Data.ArrayPosition == box.Data.ArrayPosition);
+    }
+
     public Vector3 GetWorldPosition(Vector3 arrayPosition)
     {
         return arrayPosition * size;
@@ -62,7 +70,7 @@ public class GameField : MonoBehaviour
     {
         var line = new List<BaseBox> { box };
         var nearestBoxes = GetNearestBoxes(box, type);
-        
+
         var buffer = new List<BaseBox>(nearestBoxes);
         while (buffer.Count > 0)
         {
@@ -78,7 +86,7 @@ public class GameField : MonoBehaviour
                 {
                     if (!line.Exists(x => x == VARIABLE))
                         line.Add(VARIABLE);
-                    
+
                     if (!nearestBoxes.Exists(x => x == VARIABLE))
                         list.Add(VARIABLE);
                 }
@@ -90,9 +98,34 @@ public class GameField : MonoBehaviour
         return line;
     }
 
+    public void SetActiveGlobalInput(bool value)
+    {
+        InputController.SetActiveInput(value);
+    }
+
+    public List<Vector3> EmptyPositionBetweenTwoBoxes(Vector3 destination, Vector3 origin)
+    {
+        Vector3 direction = (destination - origin).normalized;
+
+        int count = 0;
+        Vector3 current = origin;
+        List<Vector3> result = new List<Vector3>();
+
+        while (current != destination && count < 100)
+        {
+            current += direction;
+            if (current == destination)
+                break;
+            result.Add(current);
+            count++;
+        }
+
+        return result;
+    }
+
     private BaseBox GetBoxFromArrayPosition(Vector3 position)
         => _boxes.FirstOrDefault(x => x.Data.ArrayPosition == position);
-    
+
     private List<BaseBox> GetNearestBoxes(BaseBox box, BaseBox.BlockType type = BaseBox.BlockType.None)
     {
         var positions = new List<Vector3>
@@ -118,5 +151,17 @@ public class GameField : MonoBehaviour
         }
 
         return result;
+    }
+
+    public async UniTask<TapObject> CreateTapObject(string tapObjectName)
+    {
+        var boxGameObject = await InstantiateAssetAsync(tapObjectName);
+        return boxGameObject == null ? null : boxGameObject.GetComponent<TapObject>();
+    }
+
+    private async UniTask<GameObject> InstantiateAssetAsync(string assetName)
+    {
+        var x = await AssetProvider.LoadAssetAsync<GameObject>(assetName);
+        return x == null ? null : Instantiate(x, _rooTransform);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Boxes.Reactions;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -9,22 +10,18 @@ namespace Boxes.TapFlowBox
         [SerializeField] private BaseBox _box;
         [SerializeField] private Transform _parent;
         [SerializeField] private float _speed;
-    
+
         private bool _isMove;
         private int _layerMask;
         private const string GameFieldElement = "GameFieldElement";
-    
-        private void Start()
-        {
-            _layerMask = LayerMask.GetMask(GameFieldElement);
-        }
-    
+
         public override async UniTask ReactionStart()
         {
             if (_isMove)
                 return;
-        
+
             _isMove = true;
+            _layerMask = LayerMask.GetMask(GameFieldElement);
 
             var box = GetNearestForwardBox();
             if (box == null)
@@ -38,10 +35,6 @@ namespace Boxes.TapFlowBox
             }
         }
 
-        public override async UniTask ReactionEnd()
-        {
-        }
-    
         private void OnDrawGizmosSelected()
         {
             Debug.DrawRay(_parent.position, _parent.forward * 50, Color.red);
@@ -55,7 +48,7 @@ namespace Boxes.TapFlowBox
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
                 await UniTask.Delay(30);
             }
-        
+
             _isMove = false;
         }
 
@@ -66,7 +59,7 @@ namespace Boxes.TapFlowBox
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
                 await UniTask.Delay(30);
             }
-        
+
             var nearestPosition = GetNearestPosition(box);
             _box.Data.ArrayPosition = GameField.Instance.GetIndexByWorldPosition(nearestPosition);
             _parent.position = nearestPosition;

@@ -29,6 +29,14 @@ MonoBehaviour:
     m_Address: TapFlowBox
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 06a832c91faa89c499a35d607725c9dc
+    m_Address: SwipedBox
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 019fd73bde56b7243ba49f9f3d975e96
+    m_Address: TapObject
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d2092fe1ab8035d4192c7661d5d020b3, type: 2}
   m_SchemaSet:

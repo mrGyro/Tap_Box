@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Boxes
@@ -8,12 +9,21 @@ namespace Boxes
         {
             None = 0,
             TapFlowBox = 10,
-            RotateRoadBox = 20
+            RotateRoadBox = 20,
+            SwipedBox = 30
         }
 
         public BoxData Data;
 
-        public virtual void BoxReaction()
+        public virtual async UniTask BoxReactionStart()
+        {
+        }
+        
+        public virtual async UniTask BoxReactionProcess()
+        {
+        }
+        
+        public virtual async UniTask BoxReactionEnd()
         {
         }
     }
