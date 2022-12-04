@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: VFX_Circles
-  m_Shader: {fileID: 4800000, guid: 7b93653ac9e982a43abd89b8ad46927d, type: 3}
+  m_Shader: {fileID: 4800000, guid: 33a634f018a73eb419203d8be96b1058, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -49,6 +49,7 @@ Material:
     - _Usecenterglow: 0
     - _Usecustomrandom: 0
     - _Usedepth: 0
+    - _ZTestMode: 6
     m_Colors:
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _DistortionSpeedXYPowerZ: {r: 0, g: 0, b: 0, a: 0}
