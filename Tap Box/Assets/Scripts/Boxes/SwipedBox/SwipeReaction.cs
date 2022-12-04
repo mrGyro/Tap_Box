@@ -51,13 +51,13 @@ namespace Boxes.SwipableBox
 
             if (box1 != null)
             {
-                await CreatePlacesForMove(box1.Data.ArrayPosition);
+                await CreatePlacesForMove(box1.Data.ArrayPosition, -_parent.forward);
                 Debug.DrawRay(box1.transform.position, box1.transform.up * 5, Color.red, 5);
             }
 
             if (box2 != null)
             {
-                await CreatePlacesForMove(box2.Data.ArrayPosition);
+                await CreatePlacesForMove(box2.Data.ArrayPosition, _parent.forward);
                 Debug.DrawRay(box2.transform.position, box2.transform.up * 5, Color.red, 5);
             }
 
@@ -97,13 +97,13 @@ namespace Boxes.SwipableBox
             Debug.DrawRay(_parent.position, -_parent.forward * 5, Color.red);
         }
 
-        private async UniTask CreatePlacesForMove(Vector3 targetArrayPosition)
+        private async UniTask CreatePlacesForMove(Vector3 targetArrayPosition, Vector3 direction)
         {
             var positions = GameField.Instance.EmptyPositionBetweenTwoBoxes(_box.Data.ArrayPosition, targetArrayPosition);
             foreach (var VARIABLE in positions)
             {
                 var tapObject = await GameField.Instance.CreateTapObject(TapObject);
-                tapObject.Setup(VARIABLE);
+                tapObject.Setup(VARIABLE, VARIABLE + direction);
                 _tapObjects.Add(tapObject);
             }
         }
