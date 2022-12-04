@@ -31,7 +31,7 @@ namespace DefaultNamespace
                 
                 Camera.transform.position = _centr.position;
                 
-                Camera.transform.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis, Space.World); // <— This is what makes it work!
+                Camera.transform.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis); // <— This is what makes it work!
                 Camera.transform.Rotate(new Vector3(1, 0, 0), rotationAroundXAxis);
                 
                 Camera.transform.Translate(new Vector3(0, 0, -distanceToTarget));
