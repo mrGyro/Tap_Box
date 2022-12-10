@@ -11,6 +11,7 @@ public class GameField : MonoBehaviour
     public InputController InputController;
     [SerializeField] private Transform _rooTransform;
     [SerializeField] private float size;
+    [SerializeField] private GameObject winPanel;
 
     [SerializeField] private List<BaseBox> _boxes;
     [SerializeField] private List<BoxData> _datas;
@@ -41,9 +42,12 @@ public class GameField : MonoBehaviour
         }
     }
 
-    public int GetBoxesCount()
+    public void CheckForWin()
     {
-        return _boxes.Count;
+        if (_boxes.Count == 0)
+        {
+            winPanel.SetActive(true);
+        }
     }
 
     public bool ExistBox(BaseBox box)

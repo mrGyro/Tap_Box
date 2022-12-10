@@ -11,13 +11,18 @@ namespace Boxes.SwipableBox
         [SerializeField] private Transform _parent;
         [SerializeField] private float _flyEwaySpeed;
         [SerializeField] private float _moveSpeed;
+        [SerializeField] private float _distanse;
+        [SerializeField] private float _distanseToDieAction;
         [SerializeField] private BaseBox _box;
 
         private List<TapObject> _tapObjects;
         private int _layerMask;
         private int _layerMaskTapObject;
+        private IDieAction _dieAction;
+
         private const string GameFieldElement = "GameFieldElement";
         private const string TapObject = "TapObject";
+        private const string TapObjectCancelation = "TapObjectSwipedBoxCansel";
 
         private void Start()
         {
@@ -65,6 +70,10 @@ namespace Boxes.SwipableBox
             {
                 BackToDefaultState();
             }
+            else
+            {
+                CreateCancelationObject(_parent.position, _parent.forward);
+            }
         }
 
         private async void HandleFingerTap(LeanFinger finger)
@@ -79,8 +88,13 @@ namespace Boxes.SwipableBox
                 return;
 
             ClearTapObject();
-            _box.Data.ArrayPosition = box.GetArrayPosition();
-            await MoveTo(GameField.Instance.GetWorldPosition(_box.Data.ArrayPosition));
+
+            if (!box.name.Contains(TapObjectCancelation))
+            {
+                _box.Data.ArrayPosition = box.GetArrayPosition();
+                await MoveTo(GameField.Instance.GetWorldPosition(_box.Data.ArrayPosition));
+            }
+           
             BackToDefaultState();
         }
 
@@ -106,6 +120,13 @@ namespace Boxes.SwipableBox
                 tapObject.Setup(VARIABLE, VARIABLE + direction);
                 _tapObjects.Add(tapObject);
             }
+        }
+        
+        private async UniTask CreateCancelationObject(Vector3 targetArrayPosition, Vector3 direction)
+        {
+            var tapObject = await GameField.Instance.CreateTapObject(TapObjectCancelation);
+            tapObject.Setup(targetArrayPosition, targetArrayPosition + direction);
+            _tapObjects.Add(tapObject);
         }
 
         private void ClearTapObject()
@@ -137,13 +158,21 @@ namespace Boxes.SwipableBox
         
         private async UniTask MoveOut(Vector3 direction)
         {
-            var x = direction * 10;
-            var destination = _parent.position + x * 3;
-            while (Vector3.Distance(_parent.position, destination) > 1.03f)
+            GameField.Instance.CheckForWin();
+
+            bool isPlayDie = false;
+            Vector3 startPos = _parent.position;
+            while (Vector3.Distance(_parent.position, startPos) < _distanse)
             {
+                if (!isPlayDie && Vector3.Distance(_parent.position, startPos) > _distanseToDieAction)
+                {
+                    isPlayDie = true;
+                    GetComponent<IDieAction>()?.DieAction();
+                }
                 _parent.Translate(direction * (Time.deltaTime * _flyEwaySpeed), Space.World);
-                await UniTask.Delay(30);
+                await UniTask.Yield();
             }
+            Destroy(_parent.gameObject);
         }
 
         private async UniTask MoveTo(Vector3 targetPosition)
@@ -152,7 +181,7 @@ namespace Boxes.SwipableBox
             while (Vector3.Distance(_parent.position, targetPosition) > 0.15f)
             {
                 _parent.Translate(direction * (Time.deltaTime * _moveSpeed), Space.World);
-                await UniTask.Delay(30);
+                await UniTask.Yield();
             }
 
             _parent.position = targetPosition;

@@ -9,12 +9,35 @@ namespace Boxes.RotateRoadBox
     {
         [SerializeField] private BoxConnections _connections;
         [SerializeField] private BaseReaction _reaction;
+        [SerializeField] private Collider _collider;
+
+        private IDieAction[] _dieAction;
+
+        private void Start()
+        {
+            _dieAction = GetComponents<IDieAction>();
+        }
 
         public override async UniTask BoxReactionStart()
         {
+            _collider.enabled = false;
             await _reaction.ReactionStart();
             await _reaction.ReactionEnd();
             CheckNearest();
+
+        }
+
+        private async void Die()
+        {
+            _collider.enabled = false;
+            List<UniTask> tasks = new List<UniTask>();
+            foreach (var VARIABLE in _dieAction)
+            {
+                tasks.Add(VARIABLE.DieAction());
+            }
+
+            await UniTask.WhenAll(tasks);
+            Destroy(gameObject);
         }
 
         private BoxConnections GetConnections()
@@ -40,7 +63,7 @@ namespace Boxes.RotateRoadBox
 
                     if (!list[index].GetConnections().HasConnection(rotateRoadBox.GetConnections()))
                         continue;
-                    
+
                     if (!list.Exists(x => x == rotateRoadBox))
                     {
                         list.Add(rotateRoadBox);
@@ -52,9 +75,7 @@ namespace Boxes.RotateRoadBox
             {
                 foreach (var box in list)
                 {
-                    var boxGameObject = box.gameObject;
-                    boxGameObject.SetActive(false);
-                    Destroy(boxGameObject, 0.2f);
+                    box.Die();
                 }
 
                 foreach (var box in list)
@@ -62,8 +83,12 @@ namespace Boxes.RotateRoadBox
                     GameField.Instance.RemoveBox(box);
                 }
             }
+            else
+            {
+                _collider.enabled = true;
+            }
 
-            Debug.LogError(GameField.Instance.GetBoxesCount());
+            GameField.Instance.CheckForWin();
         }
     }
 }

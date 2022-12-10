@@ -25,6 +25,7 @@ public class InputController : MonoBehaviour
     private void Start()
     {
         _layerMask = LayerMask.GetMask(GameFieldElement);
+        _zoom.SetZomValue(100);
     }
 
     void OnEnable()

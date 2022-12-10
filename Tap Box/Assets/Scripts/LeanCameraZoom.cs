@@ -28,14 +28,18 @@ namespace DefaultNamespace
         public void SetZoom(List<LeanFinger> fingers)
         {
             Zoom *= LeanGesture.GetPinchRatio(fingers, WheelSensitivity);
+            SetZomValue(Zoom);
+        }
 
+        public void SetZomValue(float zoom)
+        {
+            Zoom = zoom;
             if (ZoomClamp)
             {
                 Zoom = Mathf.Clamp(Zoom, ZoomMin, ZoomMax);
             }
 
             Camera.fieldOfView = Zoom;
-
             _camera.m_Lens.FieldOfView = Zoom;
         }
     }

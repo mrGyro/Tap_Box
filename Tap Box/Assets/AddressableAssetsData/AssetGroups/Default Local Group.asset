@@ -17,10 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 946a778866cf27d4d9f0e3c6d861d482
   m_SerializeEntries:
-  - m_GUID: 11b6b4cf7fe70524b8ab9ac8ae84d751
-    m_Address: TapFlowBox
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: e5043400040339443843d5e068853cb1
     m_Address: RotateRoadBox
     m_ReadOnly: 0
@@ -35,6 +31,10 @@ MonoBehaviour:
     m_SerializedLabels: []
   - m_GUID: 019fd73bde56b7243ba49f9f3d975e96
     m_Address: TapObject
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6ee2e833346650b448baf67aafb0ed77
+    m_Address: TapObjectSwipedBoxCansel
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

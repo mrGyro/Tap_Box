@@ -36,7 +36,7 @@ namespace Boxes.RotateRoadBox
             {
                 var rot = Quaternion.RotateTowards(transform.localRotation, target, _speed * Time.deltaTime);
                 _parent.localRotation = rot;
-                await UniTask.Delay(30);
+                await UniTask.Yield();
             }
 
             _isMove = false;

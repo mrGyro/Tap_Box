@@ -10,6 +10,9 @@ namespace Boxes.TapFlowBox
         [SerializeField] private BaseBox _box;
         [SerializeField] private Transform _parent;
         [SerializeField] private float _speed;
+        [SerializeField] private float _distanse;
+        [SerializeField] private float _distanseToDieAction;
+
 
         private bool _isMove;
         private int _layerMask;
@@ -27,6 +30,7 @@ namespace Boxes.TapFlowBox
             if (box == null)
             {
                 GameField.Instance.RemoveBox(_box);
+                GameField.Instance.CheckForWin();
                 await MoveOut();
             }
             else
@@ -35,21 +39,29 @@ namespace Boxes.TapFlowBox
             }
         }
 
+
         private void OnDrawGizmosSelected()
         {
-            Debug.DrawRay(_parent.position, _parent.forward * 50, Color.red);
+            Debug.DrawRay(_parent.position, _parent.forward * _distanse, Color.red);
         }
 
         private async UniTask MoveOut()
         {
-            var x = _parent.forward * 50;
-            while (Vector3.Distance(_parent.position, x) > 1.03f)
+            bool isPlayDie = false;
+            Vector3 startPos = _parent.position;
+            while (Vector3.Distance(_parent.position, startPos) < _distanse)
             {
+                if (!isPlayDie && Vector3.Distance(_parent.position, startPos) > _distanseToDieAction)
+                {
+                    isPlayDie = true;
+                    GetComponent<IDieAction>()?.DieAction();
+                }
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
-                await UniTask.Delay(30);
+                await UniTask.Yield();
             }
 
             _isMove = false;
+            Destroy(_parent.gameObject);
         }
 
         private async UniTask MoveTo(BaseBox box)
@@ -57,7 +69,7 @@ namespace Boxes.TapFlowBox
             while (Vector3.Distance(_parent.position, box.transform.position) > 1.03f)
             {
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
-                await UniTask.Delay(30);
+                await UniTask.Yield();
             }
 
             var nearestPosition = GetNearestPosition(box);
