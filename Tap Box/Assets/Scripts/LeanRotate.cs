@@ -72,6 +72,9 @@ namespace DefaultNamespace
                 _rotationAroundYAxis = 0;
             if (xDirection < 0 && _rotationAroundXAxis < 0)
                 _rotationAroundXAxis = 0;
+
+            _rotationAroundXAxis = Mathf.Clamp(_rotationAroundXAxis, -10, 10);
+            _rotationAroundYAxis = Mathf.Clamp(_rotationAroundYAxis, -10, 10);
         }
     }
 }
