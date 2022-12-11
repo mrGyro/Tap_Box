@@ -16,7 +16,6 @@ public class GameField : MonoBehaviour
     [SerializeField] private List<BaseBox> _boxes;
     [SerializeField] private List<BoxData> _datas;
 
-
     private void Awake()
     {
         if (Instance == null)
