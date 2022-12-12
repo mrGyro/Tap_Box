@@ -677,11 +677,24 @@ MonoBehaviour:
   size: 1.03
   root: {fileID: 1266070995}
   shadowBox: {fileID: 1396079076}
-  currentBoxIcon: {fileID: 0}
+  currentBoxIcon: {fileID: 518954603}
   prefabs:
   - {fileID: 7940780056439262889, guid: 8bbff50bad1dcb74ba950424e443a1e2, type: 3}
   - {fileID: 3171489083053651445, guid: e5043400040339443843d5e068853cb1, type: 3}
   - {fileID: 518328626512657347, guid: 06a832c91faa89c499a35d607725c9dc, type: 3}
+  loadableSprites:
+  - m_AssetGUID: b0265bfe271ae5e4ab2ed9c55e5dc7e4
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 6b44de80b2877104991437d8fee2061d
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 24dd9c4aa68fc434e95491107bf411d0
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
   level: []
 --- !u!1 &1396079072
 GameObject:
