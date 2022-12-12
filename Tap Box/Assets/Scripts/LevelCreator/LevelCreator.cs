@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using Boxes;
 using Cysharp.Threading.Tasks;
-using Lean.Touch;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
 
 namespace LevelCreator
 {
@@ -13,41 +14,76 @@ namespace LevelCreator
         [SerializeField] float size;
         [SerializeField] Transform root;
         [SerializeField] Transform shadowBox;
+        [SerializeField] private Image currentBoxIcon;
         [SerializeField] List<BaseBox> prefabs;
+        [SerializeField] List<AssetReference> loadableSprites;
+
         [SerializeField] List<BaseBox> level;
 
-        private LeanFinger _finger;
         private BaseBox _currentSelected;
         private int _layerMask;
         private const string GameFieldElement = "GameFieldElement";
 
+        private Vector2 newPos;
         private void Start()
         {
             Upd();
+            SelectBlock(0);
+        }
+
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                LeftMouseButton(Input.mousePosition);
+            }
+            
+            if (Input.GetMouseButtonDown(1))
+            {
+                RemoveBlock(Input.mousePosition);
+            }
         }
 
         void OnEnable()
         {
             _layerMask = LayerMask.GetMask(GameFieldElement);
-            LeanTouch.OnFingerTap += HandleFingerTap;
         }
 
-        async UniTask Upd()
+        private void RemoveBlock(Vector2 mousePosition)
+        {
+            var box = RaycastBox(mousePosition);
+
+            if (box == null)
+                return;
+
+            level.Remove(box);
+            Destroy(box.gameObject);
+        }
+
+        private async UniTask Upd()
         {
             while (true)
             {
-                if (_finger != null)
-                {
-                    GetNewBoxPosition(_finger.ScreenPosition);
-                }
-
+                GetNewBoxPosition(newPos);
                 await UniTask.Delay(50);
             }
         }
 
-        private void HandleFingerTap(LeanFinger obj)
+        private async void SelectBlock(int newIndex)
         {
-            _finger = obj;
+            Debug.LogError(loadableSprites[0].RuntimeKey);
+            Debug.LogError(loadableSprites[0].SubObjectName);
+            Debug.LogError(loadableSprites[0]);
+            Debug.LogError(loadableSprites[0].Asset);
+            //var x = loadableSprites.Find(x=>x.a)
+            //var x = await Addressables.LoadAssetAsync<Sprite>(prefabs[0].Data.Type + "_icon");
+            
+           // currentBoxIcon.sprite = x;
+        }
+
+        private void LeftMouseButton(Vector2 pos)
+        {
+            newPos = pos;
 
             if (level.Count == 0)
             {
@@ -57,7 +93,7 @@ namespace LevelCreator
                 return;
             }
 
-            var box = RaycastBox(obj.ScreenPosition);
+            var box = RaycastBox(pos);
 
             if (box == null)
                 return;
@@ -123,12 +159,7 @@ namespace LevelCreator
             return hit;
         }
 
-        private void OnDisable()
-        {
-            LeanTouch.OnFingerTap -= HandleFingerTap;
-        }
-
-        async void Create()
+        private async void Create()
         {
             level ??= new List<BaseBox>();
 
