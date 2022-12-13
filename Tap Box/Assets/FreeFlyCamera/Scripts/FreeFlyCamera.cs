@@ -112,20 +112,20 @@ public class FreeFlyCamera : MonoBehaviour
     // Apply requested cursor state
     private void SetCursorState()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cursor.lockState = _wantedMode = CursorLockMode.None;
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            _wantedMode = CursorLockMode.Locked;
-        }
-
-        // Apply cursor state
-        Cursor.lockState = _wantedMode;
-        // Hide cursor when locking
-        Cursor.visible = (CursorLockMode.Locked != _wantedMode);
+        // if (Input.GetKeyDown(KeyCode.Escape))
+        // {
+        //     Cursor.lockState = _wantedMode = CursorLockMode.None;
+        // }
+        //
+        // if (Input.GetMouseButtonDown(0))
+        // {
+        //     _wantedMode = CursorLockMode.Locked;
+        // }
+        //
+        // // Apply cursor state
+        // Cursor.lockState = _wantedMode;
+        // // Hide cursor when locking
+        // Cursor.visible = (CursorLockMode.Locked != _wantedMode);
     }
 
     private void CalculateCurrentIncrease(bool moving)
@@ -147,16 +147,16 @@ public class FreeFlyCamera : MonoBehaviour
         if (!_active)
             return;
 
-        SetCursorState();
+       // SetCursorState();
 
         if (Cursor.visible)
             return;
 
         // Translation
-        if (_enableTranslation)
-        {
-            transform.Translate(Vector3.forward * Input.mouseScrollDelta.y * Time.deltaTime * _translationSpeed);
-        }
+        // if (_enableTranslation)
+        // {
+        //     transform.Translate(Vector3.forward * Input.mouseScrollDelta.y * Time.deltaTime * _translationSpeed);
+        // }
 
         // Movement
         if (_enableMovement)
@@ -181,7 +181,7 @@ public class FreeFlyCamera : MonoBehaviour
 
             if (Input.GetKey(_moveUp))
                 deltaPosition += transform.up;
-
+            
             if (Input.GetKey(_moveDown))
                 deltaPosition -= transform.up;
 

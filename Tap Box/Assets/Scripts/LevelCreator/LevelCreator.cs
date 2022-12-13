@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Boxes;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 namespace LevelCreator
@@ -15,33 +14,135 @@ namespace LevelCreator
         [SerializeField] Transform root;
         [SerializeField] Transform shadowBox;
         [SerializeField] private Image currentBoxIcon;
+        [SerializeField] private Button upButton;
+        [SerializeField] private Button downButton;
+        [SerializeField] private Button leftButton;
+        [SerializeField] private Button rightButton;
         [SerializeField] List<BaseBox> prefabs;
-        [SerializeField] List<AssetReference> loadableSprites;
+        [SerializeField] List<Sprite> loadableSprites;
 
         [SerializeField] List<BaseBox> level;
 
-        private BaseBox _currentSelected;
+        private BaseBox _currentSelectedBoxForInstantiate;
+        private BaseBox _currentTargetBox;
         private int _layerMask;
         private const string GameFieldElement = "GameFieldElement";
 
         private Vector2 newPos;
+        private int _currentIndex = 0;
+
         private void Start()
         {
             Upd();
-            SelectBlock(0);
+            _currentSelectedBoxForInstantiate = prefabs[_currentIndex];
+            SelectBlockForInstantoate();
+            upButton.onClick.AddListener(RotateUp);
+            downButton.onClick.AddListener(RotateDown);
+            leftButton.onClick.AddListener(RotateLeft);
+            rightButton.onClick.AddListener(RotateRight);
         }
+
+
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (_currentTargetBox == null)
+                {
+                    SelectBlock(Input.mousePosition);
+                }
+                else
+                {
+                    _currentTargetBox = null;
+                }
+            }
+
+            if (_currentTargetBox != null)
+            {
+                shadowBox.gameObject.SetActive(false);
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+
+                return;
+            }
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                _currentIndex++;
+                if (_currentIndex >= prefabs.Count)
+                    _currentIndex = 0;
+                _currentSelectedBoxForInstantiate = prefabs[_currentIndex];
+
+                SelectBlockForInstantoate();
+            }
+
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                _currentIndex--;
+                if (_currentIndex < 0)
+                    _currentIndex = prefabs.Count - 1;
+                _currentSelectedBoxForInstantiate = prefabs[_currentIndex];
+
+                SelectBlockForInstantoate();
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
                 LeftMouseButton(Input.mousePosition);
             }
-            
+
             if (Input.GetMouseButtonDown(1))
             {
                 RemoveBlock(Input.mousePosition);
             }
+        }
+        
+        private void RotateLeft()
+        {
+            if (_currentTargetBox == null)
+                return;
+            
+            _currentTargetBox.transform.Rotate(Vector3.up, -90);
+
+        }
+
+        private void RotateRight()
+        {
+            if (_currentTargetBox == null)
+                return;
+            _currentTargetBox.transform.Rotate(Vector3.up, 90);
+
+        }
+
+        private void RotateUp()
+        {
+            if (_currentTargetBox == null)
+                return;
+            _currentTargetBox.transform.Rotate(Vector3.left, 90);
+
+        }
+
+        private void RotateDown()
+        {
+            if (_currentTargetBox == null)
+                return;
+            _currentTargetBox.transform.Rotate(Vector3.left, -90);
+        }
+
+        private void SelectBlock(Vector2 mousePosition)
+        {
+            var box = RaycastBox(mousePosition);
+
+            if (box == null)
+            {
+
+                _currentTargetBox = null;
+                return;
+            }
+Debug.LogError("select " + box.name);
+            _currentTargetBox = box;
         }
 
         void OnEnable()
@@ -69,16 +170,10 @@ namespace LevelCreator
             }
         }
 
-        private async void SelectBlock(int newIndex)
+        private void SelectBlockForInstantoate()
         {
-            Debug.LogError(loadableSprites[0].RuntimeKey);
-            Debug.LogError(loadableSprites[0].SubObjectName);
-            Debug.LogError(loadableSprites[0]);
-            Debug.LogError(loadableSprites[0].Asset);
-            //var x = loadableSprites.Find(x=>x.a)
-            //var x = await Addressables.LoadAssetAsync<Sprite>(prefabs[0].Data.Type + "_icon");
-            
-           // currentBoxIcon.sprite = x;
+            var sprite = loadableSprites.Find(x => x.name == _currentSelectedBoxForInstantiate.Data.Type.ToString());
+            currentBoxIcon.sprite = sprite;
         }
 
         private void LeftMouseButton(Vector2 pos)
@@ -87,8 +182,8 @@ namespace LevelCreator
 
             if (level.Count == 0)
             {
-                _currentSelected = prefabs[0];
-                _currentSelected.Data.ArrayPosition = Vector3.zero;
+                _currentSelectedBoxForInstantiate = prefabs[_currentIndex];
+                _currentSelectedBoxForInstantiate.Data.ArrayPosition = Vector3.zero;
                 Create();
                 return;
             }
@@ -97,6 +192,7 @@ namespace LevelCreator
 
             if (box == null)
                 return;
+
 
             Create();
         }
@@ -140,7 +236,7 @@ namespace LevelCreator
             if (pos != hit.transform.position)
             {
                 shadowBox.position = pos;
-                _currentSelected.Data.ArrayPosition = new Vector3(pos.x / size, pos.y / size, pos.z / size);
+                _currentSelectedBoxForInstantiate.Data.ArrayPosition = new Vector3(pos.x / size, pos.y / size, pos.z / size);
             }
         }
 
@@ -163,11 +259,11 @@ namespace LevelCreator
         {
             level ??= new List<BaseBox>();
 
-            var boxGameObject = await InstantiateAssetAsync(_currentSelected.Data.Type.ToString());
+            var boxGameObject = await InstantiateAssetAsync(_currentSelectedBoxForInstantiate.Data.Type.ToString());
             var box = boxGameObject.GetComponent<BaseBox>();
-            box.transform.position = _currentSelected.Data.ArrayPosition * size;
-            box.transform.rotation = Quaternion.Euler(_currentSelected.Data.Rotation);
-            box.Data = _currentSelected.Data;
+            box.transform.position = _currentSelectedBoxForInstantiate.Data.ArrayPosition * size;
+            box.transform.rotation = Quaternion.Euler(_currentSelectedBoxForInstantiate.Data.Rotation);
+            box.Data = _currentSelectedBoxForInstantiate.Data;
             level.Add(box);
         }
 

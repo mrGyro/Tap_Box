@@ -38,7 +38,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 24dd9c4aa68fc434e95491107bf411d0
-    m_Address: SwipedBox_icon
+    m_Address: TapFlowBox_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 6b44de80b2877104991437d8fee2061d
@@ -46,7 +46,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: b0265bfe271ae5e4ab2ed9c55e5dc7e4
-    m_Address: TapFlowBox_icon
+    m_Address: SwipedBox_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0
