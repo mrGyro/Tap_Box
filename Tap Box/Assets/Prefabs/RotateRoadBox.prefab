@@ -203,8 +203,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Data:
     Type: 20
-    ArrayPosition: {x: 0, y: 0, z: 0}
-    Rotation: {x: 0, y: 0, z: 0}
+    ArrayPosition:
+      x: 0
+      y: 0
+      z: 0
+    Rotation:
+      x: 0
+      y: 0
+      z: 0
   _connections: {fileID: 7533576528024907495}
   _reaction: {fileID: 5579473289008238708}
   _collider: {fileID: 5756020076835142463}

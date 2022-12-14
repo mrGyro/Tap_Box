@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Boxes;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace LevelCreator
@@ -20,8 +21,7 @@ namespace LevelCreator
         [SerializeField] private Button rightButton;
         [SerializeField] List<BaseBox> prefabs;
         [SerializeField] List<Sprite> loadableSprites;
-
-        [SerializeField] List<BaseBox> level;
+        public List<BaseBox> Level;
 
         private BaseBox _currentSelectedBoxForInstantiate;
         private BaseBox _currentTargetBox;
@@ -42,10 +42,18 @@ namespace LevelCreator
             rightButton.onClick.AddListener(RotateRight);
         }
 
-
-
+        private bool _isActive = true;
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Tab))
+                _isActive = !_isActive;
+
+            if (!_isActive)
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+                return;
+            }
             if (Input.GetKeyDown(KeyCode.E))
             {
                 if (_currentTargetBox == null)
@@ -66,6 +74,7 @@ namespace LevelCreator
 
                 return;
             }
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
@@ -98,14 +107,14 @@ namespace LevelCreator
                 RemoveBlock(Input.mousePosition);
             }
         }
-        
+
         private void RotateLeft()
         {
             if (_currentTargetBox == null)
                 return;
-            
-            _currentTargetBox.transform.Rotate(Vector3.up, -90);
 
+            _currentTargetBox.transform.Rotate(Vector3.up, -90);
+            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
         }
 
         private void RotateRight()
@@ -113,7 +122,7 @@ namespace LevelCreator
             if (_currentTargetBox == null)
                 return;
             _currentTargetBox.transform.Rotate(Vector3.up, 90);
-
+            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
         }
 
         private void RotateUp()
@@ -121,7 +130,7 @@ namespace LevelCreator
             if (_currentTargetBox == null)
                 return;
             _currentTargetBox.transform.Rotate(Vector3.left, 90);
-
+            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
         }
 
         private void RotateDown()
@@ -129,6 +138,7 @@ namespace LevelCreator
             if (_currentTargetBox == null)
                 return;
             _currentTargetBox.transform.Rotate(Vector3.left, -90);
+            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
         }
 
         private void SelectBlock(Vector2 mousePosition)
@@ -137,11 +147,10 @@ namespace LevelCreator
 
             if (box == null)
             {
-
                 _currentTargetBox = null;
                 return;
             }
-Debug.LogError("select " + box.name);
+
             _currentTargetBox = box;
         }
 
@@ -150,6 +159,7 @@ Debug.LogError("select " + box.name);
             _layerMask = LayerMask.GetMask(GameFieldElement);
         }
 
+
         private void RemoveBlock(Vector2 mousePosition)
         {
             var box = RaycastBox(mousePosition);
@@ -157,7 +167,7 @@ Debug.LogError("select " + box.name);
             if (box == null)
                 return;
 
-            level.Remove(box);
+            Level.Remove(box);
             Destroy(box.gameObject);
         }
 
@@ -180,7 +190,7 @@ Debug.LogError("select " + box.name);
         {
             newPos = pos;
 
-            if (level.Count == 0)
+            if (Level.Count == 0)
             {
                 _currentSelectedBoxForInstantiate = prefabs[_currentIndex];
                 _currentSelectedBoxForInstantiate.Data.ArrayPosition = Vector3.zero;
@@ -257,14 +267,45 @@ Debug.LogError("select " + box.name);
 
         private async void Create()
         {
-            level ??= new List<BaseBox>();
+            Level ??= new List<BaseBox>();
 
             var boxGameObject = await InstantiateAssetAsync(_currentSelectedBoxForInstantiate.Data.Type.ToString());
             var box = boxGameObject.GetComponent<BaseBox>();
-            box.transform.position = _currentSelectedBoxForInstantiate.Data.ArrayPosition * size;
+            box.transform.position = _currentSelectedBoxForInstantiate.Data.ArrayPosition.ToVector3() * size;
             box.transform.rotation = Quaternion.Euler(_currentSelectedBoxForInstantiate.Data.Rotation);
-            box.Data = _currentSelectedBoxForInstantiate.Data;
-            level.Add(box);
+            box.Data = new BoxData()
+            {
+                Type = _currentSelectedBoxForInstantiate.Data.Type,
+                ArrayPosition = _currentSelectedBoxForInstantiate.Data.ArrayPosition,
+                Rotation = _currentSelectedBoxForInstantiate.Data.Rotation,
+            };
+            Level.Add(box);
+        }
+
+        public async void CreateBox(BoxData data)
+        {
+            Level ??= new List<BaseBox>();
+
+            var boxGameObject = await InstantiateAssetAsync(data.Type.ToString());
+            var box = boxGameObject.GetComponent<BaseBox>();
+            box.transform.position = data.ArrayPosition.ToVector3() * size;
+            box.transform.rotation = Quaternion.Euler(data.Rotation);
+            box.Data = data;
+            Level.Add(box);
+        }
+
+        public void RemoveAllBoxes()
+        {
+            if (Level == null || Level.Count == 0)
+                return;
+
+            foreach (var VARIABLE in Level)
+            {
+                VARIABLE.gameObject.SetActive(false);
+                Destroy(VARIABLE.gameObject);
+            }
+            
+            Level = new List<BaseBox>();
         }
 
         private async UniTask<GameObject> InstantiateAssetAsync(string assetName)

@@ -7,7 +7,7 @@ namespace Boxes
     public class BoxData
     {
         public BaseBox.BlockType Type;
-        public Vector3 ArrayPosition;
-        public Vector3 Rotation;
+        public SerializedVector3 ArrayPosition;
+        public SerializedVector3 Rotation;
     }
 }

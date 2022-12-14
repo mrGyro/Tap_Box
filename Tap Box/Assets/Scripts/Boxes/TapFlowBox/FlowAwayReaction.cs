@@ -80,7 +80,7 @@ namespace Boxes.TapFlowBox
 
         private Vector3 GetNearestPosition(BaseBox box)
         {
-            var direction = _box.Data.ArrayPosition - box.Data.ArrayPosition;
+            var direction = _box.Data.ArrayPosition.ToVector3() - box.Data.ArrayPosition;
             return GameField.Instance.GetWorldPosition(box.Data.ArrayPosition + direction.normalized);
         }
 

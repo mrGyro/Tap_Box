@@ -120,8 +120,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Data:
     Type: 30
-    ArrayPosition: {x: 0, y: 0, z: 0}
-    Rotation: {x: 0, y: 0, z: 0}
+    ArrayPosition:
+      x: 0
+      y: 0
+      z: 0
+    Rotation:
+      x: 0
+      y: 0
+      z: 0
   _reaction: {fileID: 2263867302438539693}
 --- !u!114 &7884632173514105863
 MonoBehaviour:

@@ -109,25 +109,6 @@ public class FreeFlyCamera : MonoBehaviour
             _wantedMode = CursorLockMode.Locked;
     }
 
-    // Apply requested cursor state
-    private void SetCursorState()
-    {
-        // if (Input.GetKeyDown(KeyCode.Escape))
-        // {
-        //     Cursor.lockState = _wantedMode = CursorLockMode.None;
-        // }
-        //
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        //     _wantedMode = CursorLockMode.Locked;
-        // }
-        //
-        // // Apply cursor state
-        // Cursor.lockState = _wantedMode;
-        // // Hide cursor when locking
-        // Cursor.visible = (CursorLockMode.Locked != _wantedMode);
-    }
-
     private void CalculateCurrentIncrease(bool moving)
     {
         _currentIncrease = Time.deltaTime;
@@ -146,8 +127,6 @@ public class FreeFlyCamera : MonoBehaviour
     {
         if (!_active)
             return;
-
-       // SetCursorState();
 
         if (Cursor.visible)
             return;

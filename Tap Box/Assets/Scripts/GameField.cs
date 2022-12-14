@@ -34,7 +34,7 @@ public class GameField : MonoBehaviour
 
             var boxGameObject = await InstantiateAssetAsync(data.Type.ToString());
             var box = boxGameObject.GetComponent<BaseBox>();
-            box.transform.position = data.ArrayPosition * size;
+            box.transform.position = data.ArrayPosition.ToVector3() * size;
             box.transform.rotation = Quaternion.Euler(data.Rotation);
             box.Data = data;
             _boxes.Add(box);
@@ -127,7 +127,7 @@ public class GameField : MonoBehaviour
     }
 
     private BaseBox GetBoxFromArrayPosition(Vector3 position)
-        => _boxes.FirstOrDefault(x => x.Data.ArrayPosition == position);
+        => _boxes.FirstOrDefault(x => x.Data.ArrayPosition.ToVector3() == position);
 
     private List<BaseBox> GetNearestBoxes(BaseBox box, BaseBox.BlockType type = BaseBox.BlockType.None)
     {
