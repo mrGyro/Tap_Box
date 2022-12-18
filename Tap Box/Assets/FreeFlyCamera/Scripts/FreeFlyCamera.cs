@@ -76,7 +76,7 @@ public class FreeFlyCamera : MonoBehaviour
 
     [SerializeField]
     [Tooltip("This keypress will move the camera to initialization position")]
-    private KeyCode _initPositonButton = KeyCode.R;
+   // private KeyCode _initPositonButton = KeyCode.R;
 
     #endregion UI
 
@@ -188,10 +188,10 @@ public class FreeFlyCamera : MonoBehaviour
         }
 
         // Return to init position
-        if (Input.GetKeyDown(_initPositonButton))
-        {
-            transform.position = _initPosition;
-            transform.eulerAngles = _initRotation;
-        }
+        // if (Input.GetKeyDown(_initPositonButton))
+        // {
+        //     transform.position = _initPosition;
+        //     transform.eulerAngles = _initRotation;
+        // }
     }
 }

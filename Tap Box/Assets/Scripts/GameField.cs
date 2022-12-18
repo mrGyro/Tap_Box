@@ -26,6 +26,7 @@ public class GameField : MonoBehaviour
 
     private void Awake()
     {
+        Debug.LogError(Application.dataPath);
         if (Instance == null)
         {
             Instance = this;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Boxes;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace LevelCreator
@@ -30,6 +29,7 @@ namespace LevelCreator
 
         private Vector2 newPos;
         private int _currentIndex = 0;
+        private bool _isActive = true;
 
         private void Start()
         {
@@ -42,7 +42,6 @@ namespace LevelCreator
             rightButton.onClick.AddListener(RotateRight);
         }
 
-        private bool _isActive = true;
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Tab))
@@ -54,7 +53,7 @@ namespace LevelCreator
                 Cursor.visible = true;
                 return;
             }
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.R))
             {
                 if (_currentTargetBox == null)
                 {
