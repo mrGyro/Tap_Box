@@ -36,11 +36,8 @@ namespace LevelCreator
             BinaryFormatter bf = new BinaryFormatter();
 
             string path = _path + fileName + ".txt";
-            Debug.LogError(path);
             if (File.Exists(path))
             {
-                Debug.LogError(path);
-
                 FileStream file = File.Open(path, FileMode.Open);
                 try
                 {

@@ -14,7 +14,7 @@ public class InputController : MonoBehaviour
     private bool _isEnable = true;
     private int _layerMask;
     private const string GameFieldElement = "GameFieldElement";
-
+    private AndroidNativeVibrationService _nativeVibration;
     public void SetActiveInput(bool value)
     {
         LeanTouch.Fingers.Clear();
@@ -23,6 +23,7 @@ public class InputController : MonoBehaviour
 
     private void Start()
     {
+        _nativeVibration = new AndroidNativeVibrationService();
         _layerMask = LayerMask.GetMask(GameFieldElement);
         _zoom.SetZomValue(100);
     }
@@ -58,6 +59,7 @@ public class InputController : MonoBehaviour
         if (box == null)
             return;
 
+        _nativeVibration.Vibrate(30);
         await box.BoxReactionStart();
     }
     
