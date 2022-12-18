@@ -1,4 +1,3 @@
-using System;
 using Boxes.Reactions;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -15,7 +14,6 @@ namespace Boxes.TapFlowBox
 
 
         private bool _isMove;
-        private int _layerMask;
         private const string GameFieldElement = "GameFieldElement";
 
         public override async UniTask ReactionStart()
@@ -24,9 +22,8 @@ namespace Boxes.TapFlowBox
                 return;
 
             _isMove = true;
-            _layerMask = LayerMask.GetMask(GameFieldElement);
 
-            var box = GetNearestForwardBox();
+            var box = GameField.Instance.GetNearestBoxInDirection(_box.Data.ArrayPosition, _parent.forward);
             if (box == null)
             {
                 GameField.Instance.RemoveBox(_box);
@@ -35,10 +32,9 @@ namespace Boxes.TapFlowBox
             }
             else
             {
-                await MoveTo(box);
+                await MoveToAndBack(box);
             }
         }
-
 
         private void OnDrawGizmosSelected()
         {
@@ -64,37 +60,23 @@ namespace Boxes.TapFlowBox
             Destroy(_parent.gameObject);
         }
 
-        private async UniTask MoveTo(BaseBox box)
+        private async UniTask MoveToAndBack(BaseBox box)
         {
+            Vector3 startPos = _parent.position;
             while (Vector3.Distance(_parent.position, box.transform.position) > 1.03f)
             {
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
                 await UniTask.Yield();
             }
-
-            var nearestPosition = GetNearestPosition(box);
-            _box.Data.ArrayPosition = GameField.Instance.GetIndexByWorldPosition(nearestPosition);
-            _parent.position = nearestPosition;
-            _isMove = false;
-        }
-
-        private Vector3 GetNearestPosition(BaseBox box)
-        {
-            var direction = _box.Data.ArrayPosition.ToVector3() - box.Data.ArrayPosition;
-            return GameField.Instance.GetWorldPosition(box.Data.ArrayPosition + direction.normalized);
-        }
-
-        private BaseBox GetNearestForwardBox()
-        {
-            var ray = new Ray(_parent.position, _parent.forward * 1000);
-            if (!Physics.Raycast(ray, out var hit, 1000, _layerMask))
+            
+            while (Vector3.Distance(_parent.position, startPos) > 1.03f)
             {
-                return null;
+                _parent.Translate(-_parent.forward * Time.deltaTime * _speed, Space.World);
+                await UniTask.Yield();
             }
 
-            var box = hit.transform.GetComponent<BaseBox>();
-
-            return box;
+            _parent.position = startPos;
+            _isMove = false;
         }
     }
 }

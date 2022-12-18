@@ -1674,9 +1674,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1083853633}
-        m_TargetAssemblyTypeName: SceneManager2, Assembly-CSharp
-        m_MethodName: OnClick
+      - m_Target: {fileID: 1460762548}
+        m_TargetAssemblyTypeName: GameField, Assembly-CSharp
+        m_MethodName: LoadNextLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2362,30 +2362,7 @@ MonoBehaviour:
   winPanel: {fileID: 1025250976}
   _boxes: []
   _datas:
-  - Type: 20
-    ArrayPosition: {x: -3, y: 1, z: 1}
-    Rotation: {x: 0, y: 0, z: 0}
-  - Type: 20
-    ArrayPosition: {x: 1, y: 0, z: 0}
-    Rotation: {x: 90, y: 0, z: 0}
-  - Type: 30
-    ArrayPosition: {x: 1, y: 1, z: -2}
-    Rotation: {x: 90, y: 90, z: 90}
-  - Type: 20
-    ArrayPosition: {x: 1, y: 1, z: 2}
-    Rotation: {x: 0, y: 180, z: 0}
-  - Type: 20
-    ArrayPosition: {x: -1, y: 1, z: 1}
-    Rotation: {x: 0, y: 90, z: 0}
-  - Type: 20
-    ArrayPosition: {x: 0, y: 1, z: 2}
-    Rotation: {x: 0, y: 180, z: 0}
-  - Type: 30
-    ArrayPosition: {x: 0, y: 1, z: 1}
-    Rotation: {x: 0, y: 180, z: 0}
-  - Type: 10
-    ArrayPosition: {x: 0, y: 1, z: -2}
-    Rotation: {x: 0, y: 270, z: 0}
+    Data: []
 --- !u!4 &1460762549
 Transform:
   m_ObjectHideFlags: 0

@@ -153,7 +153,7 @@ namespace Boxes.SwipableBox
             if (box == null)
                 return null;
             
-            return GameField.Instance.ExistBox(box) ? box : null;
+            return GameField.Instance.ExistBox(box.Data.ArrayPosition) ? box : null;
         }
         
         private async UniTask MoveOut(Vector3 direction)

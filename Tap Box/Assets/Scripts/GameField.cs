@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using Boxes;
 using Boxes.SwipableBox;
 using Cysharp.Threading.Tasks;
+using DefaultNamespace;
 using UnityEngine;
 
 public class GameField : MonoBehaviour
@@ -14,7 +17,12 @@ public class GameField : MonoBehaviour
     [SerializeField] private GameObject winPanel;
 
     [SerializeField] private List<BaseBox> _boxes;
-    [SerializeField] private List<BoxData> _datas;
+    [SerializeField] private LevelData _datas;
+
+    private int _currentLevelIndex = 1;
+
+    private Vector3 MaxLevelSize;
+    private Vector3 MinLevelSize;
 
     private void Awake()
     {
@@ -24,21 +32,15 @@ public class GameField : MonoBehaviour
         }
     }
 
-    async void Start()
+    private void Start()
     {
-        _boxes = new List<BaseBox>();
-        foreach (var data in _datas)
-        {
-            if (data.Type == BaseBox.BlockType.None)
-                continue;
+        CreateLevel("Level_" + _currentLevelIndex);
+    }
 
-            var boxGameObject = await InstantiateAssetAsync(data.Type.ToString());
-            var box = boxGameObject.GetComponent<BaseBox>();
-            box.transform.position = data.ArrayPosition.ToVector3() * size;
-            box.transform.rotation = Quaternion.Euler(data.Rotation);
-            box.Data = data;
-            _boxes.Add(box);
-        }
+    public void LoadNextLevel()
+    {
+        _currentLevelIndex++;
+        CreateLevel("Level_" + _currentLevelIndex);
     }
 
     public void CheckForWin()
@@ -49,9 +51,14 @@ public class GameField : MonoBehaviour
         }
     }
 
-    public bool ExistBox(BaseBox box)
+    public bool ExistBox(Vector3 boxArrayPosition)
     {
-        return _boxes.Exists(x=> x.Data.ArrayPosition == box.Data.ArrayPosition);
+        return _boxes.Exists(x => x.Data.ArrayPosition.ToVector3() == boxArrayPosition);
+    }
+
+    public BaseBox GetBoxByArrayPosition(Vector3 boxArrayPosition)
+    {
+        return _boxes.FirstOrDefault(x => x.Data.ArrayPosition.ToVector3() == boxArrayPosition);
     }
 
     public Vector3 GetWorldPosition(Vector3 arrayPosition)
@@ -64,41 +71,27 @@ public class GameField : MonoBehaviour
         return worldPosition / size;
     }
 
+    public BaseBox GetNearestBoxInDirection(Vector3 boxArrayPosition, Vector3 direction)
+    {
+        Vector3 currentPosition = boxArrayPosition;
+        currentPosition += direction;
+        while (CheckMaxLevelSize(currentPosition) && CheckMinLevelSize(currentPosition))
+        {
+            var box = GetBoxByArrayPosition(currentPosition);
+            if (box != null)
+            {
+                return box;
+            }
+
+            currentPosition += direction;
+        }
+
+        return null;
+    }
+
     public void RemoveBox(BaseBox box)
     {
         _boxes.Remove(box);
-    }
-
-    public List<BaseBox> GetNearestBoxesLine(BaseBox box, BaseBox.BlockType type)
-    {
-        var line = new List<BaseBox> { box };
-        var nearestBoxes = GetNearestBoxes(box, type);
-
-        var buffer = new List<BaseBox>(nearestBoxes);
-        while (buffer.Count > 0)
-        {
-            List<BaseBox> list = new List<BaseBox>();
-            for (var index = 0; index < buffer.Count; index++)
-            {
-                if (!nearestBoxes.Exists(x => x == buffer[index]))
-                {
-                    nearestBoxes.Add(buffer[index]);
-                }
-
-                foreach (var VARIABLE in GetNearestBoxes(buffer[index], buffer[index].Data.Type))
-                {
-                    if (!line.Exists(x => x == VARIABLE))
-                        line.Add(VARIABLE);
-
-                    if (!nearestBoxes.Exists(x => x == VARIABLE))
-                        list.Add(VARIABLE);
-                }
-            }
-
-            buffer = new List<BaseBox>(list);
-        }
-
-        return line;
     }
 
     public void SetActiveGlobalInput(bool value)
@@ -126,35 +119,29 @@ public class GameField : MonoBehaviour
         return result;
     }
 
-    private BaseBox GetBoxFromArrayPosition(Vector3 position)
-        => _boxes.FirstOrDefault(x => x.Data.ArrayPosition.ToVector3() == position);
-
-    private List<BaseBox> GetNearestBoxes(BaseBox box, BaseBox.BlockType type = BaseBox.BlockType.None)
+    private async void CreateLevel(string levelName)
     {
-        var positions = new List<Vector3>
+        _boxes = new List<BaseBox>();
+        _datas = await LoadLevelData(levelName);
+        foreach (var data in _datas.Data)
         {
-            box.Data.ArrayPosition + Vector3.up,
-            box.Data.ArrayPosition + Vector3.down,
-            box.Data.ArrayPosition + Vector3.forward,
-            box.Data.ArrayPosition + Vector3.back,
-            box.Data.ArrayPosition + Vector3.left,
-            box.Data.ArrayPosition + Vector3.right
-        };
+            if (data.Type == BaseBox.BlockType.None)
+                continue;
 
-        var result = new List<BaseBox>();
-        foreach (var pos in positions)
-        {
-            var nearBox = GetBoxFromArrayPosition(pos);
-            if (nearBox != null)
-            {
-                if (type != BaseBox.BlockType.None && nearBox.Data.Type != type)
-                    continue;
-                result.Add(nearBox);
-            }
+            var boxGameObject = await InstantiateAssetAsync(data.Type.ToString());
+            var box = boxGameObject.GetComponent<BaseBox>();
+            box.transform.position = data.ArrayPosition.ToVector3() * size;
+            box.transform.rotation = Quaternion.Euler(data.Rotation);
+            box.Data = data;
+            _boxes.Add(box);
+
+            SetMaxLevelSize(box.Data.ArrayPosition);
+            SetMinLevelSize(box.Data.ArrayPosition);
         }
-
-        return result;
     }
+
+    public BaseBox GetBoxFromArrayPosition(Vector3 position)
+        => _boxes.FirstOrDefault(x => x.Data.ArrayPosition.ToVector3() == position);
 
     public async UniTask<TapObject> CreateTapObject(string tapObjectName)
     {
@@ -162,9 +149,58 @@ public class GameField : MonoBehaviour
         return boxGameObject == null ? null : boxGameObject.GetComponent<TapObject>();
     }
 
+    private void SetMaxLevelSize(Vector3 arrayPosition)
+    {
+        MaxLevelSize.x = MaxLevelSize.x < arrayPosition.x ? arrayPosition.x : MaxLevelSize.x;
+        MaxLevelSize.y = MaxLevelSize.y < arrayPosition.y ? arrayPosition.y : MaxLevelSize.y;
+        MaxLevelSize.z = MaxLevelSize.z < arrayPosition.z ? arrayPosition.z : MaxLevelSize.z;
+    }
+
+    private void SetMinLevelSize(Vector3 arrayPosition)
+    {
+        MinLevelSize.x = MinLevelSize.x > arrayPosition.x ? arrayPosition.x : MinLevelSize.x;
+        MinLevelSize.y = MinLevelSize.y > arrayPosition.y ? arrayPosition.y : MinLevelSize.y;
+        MinLevelSize.z = MinLevelSize.z > arrayPosition.z ? arrayPosition.z : MinLevelSize.z;
+    }
+
+    private bool CheckMaxLevelSize(Vector3 arrayPosition)
+    {
+        if (MaxLevelSize.x < arrayPosition.x)
+            return false;
+        if (MaxLevelSize.y < arrayPosition.y)
+            return false;
+        if (MaxLevelSize.z < arrayPosition.z)
+            return false;
+
+        return true;
+    }
+
+    private bool CheckMinLevelSize(Vector3 arrayPosition)
+    {
+        if (MinLevelSize.x > arrayPosition.x)
+            return false;
+        if (MinLevelSize.y > arrayPosition.y)
+            return false;
+        if (MinLevelSize.z > arrayPosition.z)
+            return false;
+
+        return true;
+    }
+
     private async UniTask<GameObject> InstantiateAssetAsync(string assetName)
     {
         var x = await AssetProvider.LoadAssetAsync<GameObject>(assetName);
         return x == null ? null : Instantiate(x, _rooTransform);
+    }
+
+    private async UniTask<LevelData> LoadLevelData(string assetName)
+    {
+        var x = await AssetProvider.LoadAssetAsync<TextAsset>(assetName);
+        MemoryStream memStream = new MemoryStream();
+        BinaryFormatter binForm = new BinaryFormatter();
+        memStream.Write(x.bytes, 0, x.bytes.Length);
+        memStream.Seek(0, SeekOrigin.Begin);
+        LevelData obj = (LevelData)binForm.Deserialize(memStream);
+        return obj;
     }
 }

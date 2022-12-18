@@ -24,7 +24,7 @@ namespace LevelCreator
             }
 
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Create(Application.persistentDataPath + "/Levels/" + fileName + ".dat");
+            FileStream file = File.Create(Application.persistentDataPath + "/Levels/" + fileName + ".txt");
 
             bf.Serialize(file, wayData);
             file.Close();

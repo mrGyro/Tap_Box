@@ -49,6 +49,14 @@ MonoBehaviour:
     m_Address: SwipedBox_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 0cf066de35f82e84a8af50e6c549cef4
+    m_Address: Level_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2ed567c812fd23b48a9edb7a31314d5b
+    m_Address: Level_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d2092fe1ab8035d4192c7661d5d020b3, type: 2}
   m_SchemaSet:

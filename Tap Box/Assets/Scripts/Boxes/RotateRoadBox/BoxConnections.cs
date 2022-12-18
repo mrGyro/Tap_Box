@@ -40,9 +40,7 @@ public class BoxConnections : MonoBehaviour
         var transform1 = transform;
 
         if (Up)
-        {
-            result.Add(transform1.position + transform1.localPosition);
-        }
+            result.Add(transform1.position + transform1.up);
 
         if (Down)
             result.Add(transform1.position - transform1.up);
