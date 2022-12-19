@@ -26,9 +26,7 @@ public class BoxConnections : MonoBehaviour
                 && Vector3.Distance(otherBox.transform.position, connection) < 0.3f);
             
             if (result != Vector3.zero)
-            {
                 return true;
-            }
         }
 
         return false;

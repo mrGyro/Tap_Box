@@ -22,8 +22,8 @@ public class GameField : MonoBehaviour
 
     private int _currentLevelIndex = 1;
 
-    private Vector3 MaxLevelSize;
-    private Vector3 MinLevelSize;
+    private Vector3 _maxLevelSize;
+    private Vector3 _minLevelSize;
 
     private void Awake()
     {
@@ -60,9 +60,9 @@ public class GameField : MonoBehaviour
     private void SetNewTargetPosition()
     {
         Vector3 newPosition = new Vector3(
-            MaxLevelSize.x - (MaxLevelSize.x + Mathf.Abs(MinLevelSize.x)) / 2,
-            MaxLevelSize.y - (MaxLevelSize.y + Mathf.Abs(MinLevelSize.y)) / 2,
-            MaxLevelSize.z - (MaxLevelSize.z + Mathf.Abs(MinLevelSize.z)) / 2);
+            _maxLevelSize.x - (_maxLevelSize.x + Mathf.Abs(_minLevelSize.x)) / 2,
+            _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
+            _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
         
         InputController.SetNewTargetPosition(newPosition);
     }
@@ -167,8 +167,8 @@ public class GameField : MonoBehaviour
 
     private void SetNewMaxMinSize()
     {
-        MaxLevelSize = Vector3.negativeInfinity;
-        MinLevelSize = Vector3.positiveInfinity;
+        _maxLevelSize = Vector3.negativeInfinity;
+        _minLevelSize = Vector3.positiveInfinity;
         foreach (var VARIABLE in _boxes)
         {
             SetMaxLevelSize(VARIABLE.Data.ArrayPosition);
@@ -178,25 +178,25 @@ public class GameField : MonoBehaviour
 
     private void SetMaxLevelSize(Vector3 arrayPosition)
     {
-        MaxLevelSize.x = MaxLevelSize.x < arrayPosition.x ? arrayPosition.x : MaxLevelSize.x;
-        MaxLevelSize.y = MaxLevelSize.y < arrayPosition.y ? arrayPosition.y : MaxLevelSize.y;
-        MaxLevelSize.z = MaxLevelSize.z < arrayPosition.z ? arrayPosition.z : MaxLevelSize.z;
+        _maxLevelSize.x = _maxLevelSize.x < arrayPosition.x ? arrayPosition.x : _maxLevelSize.x;
+        _maxLevelSize.y = _maxLevelSize.y < arrayPosition.y ? arrayPosition.y : _maxLevelSize.y;
+        _maxLevelSize.z = _maxLevelSize.z < arrayPosition.z ? arrayPosition.z : _maxLevelSize.z;
     }
 
     private void SetMinLevelSize(Vector3 arrayPosition)
     {
-        MinLevelSize.x = MinLevelSize.x > arrayPosition.x ? arrayPosition.x : MinLevelSize.x;
-        MinLevelSize.y = MinLevelSize.y > arrayPosition.y ? arrayPosition.y : MinLevelSize.y;
-        MinLevelSize.z = MinLevelSize.z > arrayPosition.z ? arrayPosition.z : MinLevelSize.z;
+        _minLevelSize.x = _minLevelSize.x > arrayPosition.x ? arrayPosition.x : _minLevelSize.x;
+        _minLevelSize.y = _minLevelSize.y > arrayPosition.y ? arrayPosition.y : _minLevelSize.y;
+        _minLevelSize.z = _minLevelSize.z > arrayPosition.z ? arrayPosition.z : _minLevelSize.z;
     }
 
     private bool CheckMaxLevelSize(Vector3 arrayPosition)
     {
-        if (MaxLevelSize.x < arrayPosition.x)
+        if (_maxLevelSize.x < arrayPosition.x)
             return false;
-        if (MaxLevelSize.y < arrayPosition.y)
+        if (_maxLevelSize.y < arrayPosition.y)
             return false;
-        if (MaxLevelSize.z < arrayPosition.z)
+        if (_maxLevelSize.z < arrayPosition.z)
             return false;
 
         return true;
@@ -204,11 +204,11 @@ public class GameField : MonoBehaviour
 
     private bool CheckMinLevelSize(Vector3 arrayPosition)
     {
-        if (MinLevelSize.x > arrayPosition.x)
+        if (_minLevelSize.x > arrayPosition.x)
             return false;
-        if (MinLevelSize.y > arrayPosition.y)
+        if (_minLevelSize.y > arrayPosition.y)
             return false;
-        if (MinLevelSize.z > arrayPosition.z)
+        if (_minLevelSize.z > arrayPosition.z)
             return false;
 
         return true;
