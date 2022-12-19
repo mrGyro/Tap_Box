@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using Boxes;
 using Boxes.SwipableBox;
+using Cinemachine;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace;
 using UnityEngine;
@@ -49,7 +50,21 @@ public class GameField : MonoBehaviour
         if (_boxes.Count == 0)
         {
             winPanel.SetActive(true);
+            return;
         }
+
+        SetNewMaxMinSize();
+        SetNewTargetPosition();
+    }
+
+    private void SetNewTargetPosition()
+    {
+        Vector3 newPosition = new Vector3(
+            MaxLevelSize.x - (MaxLevelSize.x + Mathf.Abs(MinLevelSize.x)) / 2,
+            MaxLevelSize.y - (MaxLevelSize.y + Mathf.Abs(MinLevelSize.y)) / 2,
+            MaxLevelSize.z - (MaxLevelSize.z + Mathf.Abs(MinLevelSize.z)) / 2);
+        
+        InputController.SetNewTargetPosition(newPosition);
     }
 
     public bool ExistBox(Vector3 boxArrayPosition)
@@ -136,9 +151,9 @@ public class GameField : MonoBehaviour
             box.Data = data;
             _boxes.Add(box);
 
-            SetMaxLevelSize(box.Data.ArrayPosition);
-            SetMinLevelSize(box.Data.ArrayPosition);
         }
+        SetNewMaxMinSize();
+        SetNewTargetPosition();
     }
 
     public BaseBox GetBoxFromArrayPosition(Vector3 position)
@@ -148,6 +163,17 @@ public class GameField : MonoBehaviour
     {
         var boxGameObject = await InstantiateAssetAsync(tapObjectName);
         return boxGameObject == null ? null : boxGameObject.GetComponent<TapObject>();
+    }
+
+    private void SetNewMaxMinSize()
+    {
+        MaxLevelSize = Vector3.negativeInfinity;
+        MinLevelSize = Vector3.positiveInfinity;
+        foreach (var VARIABLE in _boxes)
+        {
+            SetMaxLevelSize(VARIABLE.Data.ArrayPosition);
+            SetMinLevelSize(VARIABLE.Data.ArrayPosition);
+        }
     }
 
     private void SetMaxLevelSize(Vector3 arrayPosition)

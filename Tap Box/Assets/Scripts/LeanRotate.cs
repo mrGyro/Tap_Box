@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Lean.Touch;
 using UnityEngine;
 
@@ -21,9 +19,13 @@ namespace DefaultNamespace
         private float _rotationAroundYAxis;
         private float _rotationAroundXAxis;
 
+
+        private Vector3 newPosition;
         private void Update()
         {
             Velocity();
+
+            _centr.position = Vector3.Lerp(_centr.position, newPosition, 0.01f);
         }
 
         public virtual void Rotate(List<LeanFinger> fingers)
@@ -44,6 +46,11 @@ namespace DefaultNamespace
                 Move();
                 _previousPosition = newPosition;
             }
+        }
+
+        public void SetTargetPosition(Vector3 position)
+        {
+            newPosition = position;
         }
 
         private void Move()

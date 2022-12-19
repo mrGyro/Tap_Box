@@ -34,6 +34,11 @@ public class InputController : MonoBehaviour
         LeanTouch.OnGesture += Swipe;
     }
 
+    public void SetNewTargetPosition(Vector3 position)
+    {
+        _rotate.SetTargetPosition(position);
+    }
+
     private void Swipe(List<LeanFinger> fingers)
     {
         switch (fingers.Count)

@@ -65,6 +65,14 @@ namespace LevelCreator
                 }
             }
 
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                HideBox(Input.mousePosition);
+            } 
+            
+            if (Input.GetKeyDown(KeyCode.G))
+                ShowAll();
+
             if (_currentTargetBox != null)
             {
                 shadowBox.gameObject.SetActive(false);
@@ -104,6 +112,26 @@ namespace LevelCreator
             if (Input.GetMouseButtonDown(1))
             {
                 RemoveBlock(Input.mousePosition);
+            }
+        }
+
+        private void HideBox(Vector3 mousePosition)
+        {
+            var box = RaycastBox(mousePosition);
+
+            if (box == null)
+            {
+                return;
+            }
+            
+            box.gameObject.SetActive(false);
+        }
+
+        private void ShowAll()
+        {
+            foreach (var VARIABLE in Level)
+            {
+                VARIABLE.gameObject.SetActive(true);
             }
         }
 
