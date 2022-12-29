@@ -4,9 +4,9 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using Boxes;
 using Boxes.SwipableBox;
-using Cinemachine;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace;
+using TMPro;
 using UnityEngine;
 
 public class GameField : MonoBehaviour
@@ -14,6 +14,7 @@ public class GameField : MonoBehaviour
     public static GameField Instance;
     public InputController InputController;
     [SerializeField] private Transform _rooTransform;
+    [SerializeField] private TMP_Text _levelText;
     [SerializeField] private float size;
     [SerializeField] private GameObject winPanel;
 
@@ -27,7 +28,6 @@ public class GameField : MonoBehaviour
 
     private void Awake()
     {
-        Debug.LogError(Application.dataPath);
         if (Instance == null)
         {
             Instance = this;
@@ -36,13 +36,17 @@ public class GameField : MonoBehaviour
 
     private void Start()
     {
-        CreateLevel("Level_" + _currentLevelIndex);
+        _currentLevelIndex = 0;
+        LoadNextLevel();
     }
 
     public void LoadNextLevel()
     {
         _currentLevelIndex++;
+        if (_currentLevelIndex > 9)
+            _currentLevelIndex = 1;
         CreateLevel("Level_" + _currentLevelIndex);
+        _levelText.text = "Level " + _currentLevelIndex;
     }
 
     public void CheckForWin()
@@ -63,7 +67,7 @@ public class GameField : MonoBehaviour
             _maxLevelSize.x - (_maxLevelSize.x + Mathf.Abs(_minLevelSize.x)) / 2,
             _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
             _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
-        
+
         InputController.SetNewTargetPosition(newPosition);
     }
 
@@ -94,6 +98,7 @@ public class GameField : MonoBehaviour
         while (CheckMaxLevelSize(currentPosition) && CheckMinLevelSize(currentPosition))
         {
             var box = GetBoxByArrayPosition(currentPosition);
+            Debug.LogError((box == null) + " " + currentPosition + " " + direction);
             if (box != null)
             {
                 return box;
@@ -150,8 +155,8 @@ public class GameField : MonoBehaviour
             box.transform.rotation = Quaternion.Euler(data.Rotation);
             box.Data = data;
             _boxes.Add(box);
-
         }
+
         SetNewMaxMinSize();
         SetNewTargetPosition();
     }
@@ -192,24 +197,40 @@ public class GameField : MonoBehaviour
 
     private bool CheckMaxLevelSize(Vector3 arrayPosition)
     {
-        if (_maxLevelSize.x < arrayPosition.x)
+        if ((int)_maxLevelSize.x < (int)arrayPosition.x)
+        {
             return false;
-        if (_maxLevelSize.y < arrayPosition.y)
+        }
+
+        if ((int)_maxLevelSize.y < (int)arrayPosition.y)
+        {
             return false;
-        if (_maxLevelSize.z < arrayPosition.z)
+        }
+
+        if ((int)_maxLevelSize.z < (int)arrayPosition.z)
+        {
             return false;
+        }
 
         return true;
     }
 
     private bool CheckMinLevelSize(Vector3 arrayPosition)
     {
-        if (_minLevelSize.x > arrayPosition.x)
+        if ((int)_minLevelSize.x > (int)arrayPosition.x)
+        {
             return false;
-        if (_minLevelSize.y > arrayPosition.y)
+        }
+
+        if ((int)_minLevelSize.y > (int)arrayPosition.y)
+        {
             return false;
-        if (_minLevelSize.z > arrayPosition.z)
+        }
+
+        if ((int)_minLevelSize.z > (int)arrayPosition.z)
+        {
             return false;
+        }
 
         return true;
     }
