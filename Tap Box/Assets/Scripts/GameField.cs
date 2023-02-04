@@ -45,6 +45,7 @@ public class GameField : MonoBehaviour
         _currentLevelIndex++;
         if (_currentLevelIndex > 9)
             _currentLevelIndex = 1;
+        
         CreateLevel("Level_" + _currentLevelIndex);
         _levelText.text = "Level " + _currentLevelIndex;
     }
@@ -58,7 +59,7 @@ public class GameField : MonoBehaviour
         }
 
         SetNewMaxMinSize();
-        SetNewTargetPosition();
+       // SetNewTargetPosition();
     }
 
     private void SetNewTargetPosition()
@@ -241,14 +242,22 @@ public class GameField : MonoBehaviour
         return x == null ? null : Instantiate(x, _rooTransform);
     }
 
-    private async UniTask<LevelData> LoadLevelData(string assetName)
+    private static async UniTask<LevelData> LoadLevelData(string assetName)
     {
         var x = await AssetProvider.LoadAssetAsync<TextAsset>(assetName);
         MemoryStream memStream = new MemoryStream();
         BinaryFormatter binForm = new BinaryFormatter();
         memStream.Write(x.bytes, 0, x.bytes.Length);
         memStream.Seek(0, SeekOrigin.Begin);
-        LevelData obj = (LevelData)binForm.Deserialize(memStream);
-        return obj;
+        return (LevelData)binForm.Deserialize(memStream);
+    }
+    
+    public static async UniTask<LevelData> LoadLevelDataText(TextAsset assetText)
+    {
+        MemoryStream memStream = new MemoryStream();
+        BinaryFormatter binForm = new BinaryFormatter();
+        memStream.Write(assetText.bytes, 0, assetText.bytes.Length);
+        memStream.Seek(0, SeekOrigin.Begin);
+        return (LevelData)binForm.Deserialize(memStream);
     }
 }

@@ -19,12 +19,10 @@ namespace DefaultNamespace
         private float _rotationAroundYAxis;
         private float _rotationAroundXAxis;
 
-
         private Vector3 newPosition;
         private void Update()
         {
             Velocity();
-
             _centr.position = Vector3.Lerp(_centr.position, newPosition, 0.01f);
         }
 

@@ -52,37 +52,58 @@ MonoBehaviour:
   - m_GUID: 053376f277818bb44b584f303c23bb8d
     m_Address: Level_4
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Levels
   - m_GUID: b63a0255bffa2a84cb4f8a9f72290e6f
     m_Address: Level_5
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Levels
   - m_GUID: 7f3a0c37ef053ad4c948424384f2b11d
     m_Address: Level_6
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Levels
   - m_GUID: 282b010f1fa61304098fd7acbae8103d
     m_Address: Level_7
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Levels
   - m_GUID: 2ed567c812fd23b48a9edb7a31314d5b
     m_Address: Level_8
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Levels
   - m_GUID: 0cf066de35f82e84a8af50e6c549cef4
     m_Address: Level_9
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Levels
   - m_GUID: eac71125cc196d743bc4efefcc183a6c
     m_Address: Level_1
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Levels
   - m_GUID: 9e3e905971a2af14aab0c9bf4bd70a1c
     m_Address: Level_2
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Levels
   - m_GUID: 6c23e4f84ca21c04484d693720cd520b
     m_Address: Level_3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Levels
+  - m_GUID: f906be6aeb5fc3447ab2f402108802f2
+    m_Address: LockedLevelItem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 9fa10cf5f5e66bf4a89aca7932bb77c9
+    m_Address: UnlockableLevel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6ef0e4406624bb9458b416a077bb3ebd
+    m_Address: PassedLevelItem
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0
