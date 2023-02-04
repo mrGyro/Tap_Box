@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace.UI.Levels;
+using LevelCreator;
+using SaveLoad_progress;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -10,7 +12,7 @@ public class LevelsWindiw : MonoBehaviour
     private const string AddressableUnlockLevelItem = "UnlockableLevel";
     private const string AddressableLockLevelItem = "LockedLevelItem";
 
-    private List<LevelButtonData> _levelsData = new();
+    private List<LevelData> _levelsData = new();
     private List<GameObject> _levelsDataButtons = new();
 
     [SerializeField] private RectTransform _root;
@@ -22,6 +24,7 @@ public class LevelsWindiw : MonoBehaviour
 
     private async void Setup()
     {
+        _levelsData = SaveLoadGameProgress.LoadGameProgress().LevelDatas;
         RemoveAllButtons();
         await Addressables.LoadAssetsAsync<TextAsset>("Levels", Callback);
         CreateLevelButtons();
@@ -29,13 +32,13 @@ public class LevelsWindiw : MonoBehaviour
 
     private async void Callback(TextAsset asset)
     {
-        var levelData = await GameField.LoadLevelDataText(asset);
+        var levelData = await SaveLoadGameProgress.LoadLevelDataText(asset);
         string level = asset.name.Remove(0, asset.name.LastIndexOf('_') + 1);
-        _levelsData.Add(new LevelButtonData()
-        {
-            levelNumberText = level,
-            Data = levelData
-        });
+        // _levelsData.Add(new LevelButtonData()
+        // {
+        //     levelNumberText = level,
+        //     Data = levelData
+        // });
     }
 
     private async void CreateLevelButtons()
@@ -44,16 +47,16 @@ public class LevelsWindiw : MonoBehaviour
         foreach (var VARIABLE in _levelsData)
         {
             GameObject g = await InstantiateAssetAsync(AddressablePassedLevelItem);
-
+            switch (VARIABLE.LevelStatus)
+            {
+                case Status.None:
+                    break;
+            }
 
             // g = await InstantiateAssetAsync(AddressableUnlockLevelItem);
             // g = await InstantiateAssetAsync(AddressableLockLevelItem);
 
-            g.GetComponent<UILevelItem>().Setup(new LevelButtonData()
-            {
-                levelNumberText = VARIABLE.levelNumberText,
-                status = VARIABLE.levelNumberText
-            });
+            g.GetComponent<UILevelItem>().Setup(VARIABLE);
 
             _levelsDataButtons.Add(g);
         }
@@ -70,11 +73,11 @@ public class LevelsWindiw : MonoBehaviour
         _levelsData.Clear();
     }
 
-    private int Compare(LevelButtonData b1, LevelButtonData b2)
+    private int Compare(LevelData b1, LevelData b2)
     {
         int x, y;
-        int.TryParse(b1.levelNumberText, out x);
-        int.TryParse(b2.levelNumberText, out y);
+        int.TryParse(b1.ID, out x);
+        int.TryParse(b2.ID, out y);
         if (x > y)
             return 1;
         if (x < y)

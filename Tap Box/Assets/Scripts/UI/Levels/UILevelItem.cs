@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace.UI.Levels;
 using JetBrains.Annotations;
+using LevelCreator;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,12 +18,12 @@ public class UILevelItem : MonoBehaviour
 
     [SerializeField] private Image coinIcon;
     [SerializeField] private TMP_Text priceText;
-    private LevelButtonData _data;
+    private LevelData _data;
 
-    public void Setup(LevelButtonData data)
+    public void Setup(LevelData data)
     {
-        levelNumberText.text = data.levelNumberText;
-        status.text = data.status;
+        levelNumberText.text = data.ID;
+        status.text = data.LevelStatus.ToString();
         interactButton.onClick.RemoveAllListeners();
         interactButton.onClick.AddListener(OnButtonClick);
         //icon ==
@@ -31,7 +32,7 @@ public class UILevelItem : MonoBehaviour
 
     private void OnButtonClick()
     {
-        GameField.Instance.LoadLevelByName("Level_" + _data.levelNumberText);
+        GameField.Instance.LoadLevelByName("Level_" + _data.ID);
         GameField.Instance.SetActiveLevelPanel(false);
     }
 }
