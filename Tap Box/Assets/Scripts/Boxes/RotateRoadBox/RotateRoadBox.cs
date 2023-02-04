@@ -12,10 +12,16 @@ namespace Boxes.RotateRoadBox
         [SerializeField] private Collider _collider;
 
         private IDieAction[] _dieAction;
+        private List<RotateRoadBox> _nearestBoxes;
 
         private void Start()
         {
             _dieAction = GetComponents<IDieAction>();
+        }
+
+        public async override UniTask Init()
+        {
+            _nearestBoxes = GetNearestBoxesLine(this, Data.Type);   
         }
 
         public override async UniTask BoxReactionStart()
@@ -24,7 +30,6 @@ namespace Boxes.RotateRoadBox
             await _reaction.ReactionStart();
             await _reaction.ReactionEnd();
             CheckNearest();
-
         }
 
         private async void Die()
@@ -47,10 +52,9 @@ namespace Boxes.RotateRoadBox
 
         private void CheckNearest()
         {
-            var nearestBoxes = GetNearestBoxesLine(this, Data.Type);
-            var list = GetNearestAndCanConnected(nearestBoxes);
+            var list = GetNearestAndCanConnected(_nearestBoxes);
 
-            if (nearestBoxes.Count == list.Count)
+            if (_nearestBoxes.Count == list.Count)
             {
                 foreach (var box in list)
                 {
@@ -69,7 +73,7 @@ namespace Boxes.RotateRoadBox
 
             GameField.Instance.CheckForWin();
         }
-        
+
         private List<RotateRoadBox> GetNearestAndCanConnected(List<RotateRoadBox> nearestBoxes)
         {
             var list = new List<RotateRoadBox> { this };
@@ -93,13 +97,13 @@ namespace Boxes.RotateRoadBox
 
             return list;
         }
-        
+
         private List<RotateRoadBox> GetNearestBoxesLine(RotateRoadBox box, BlockType type)
         {
             var line = new List<RotateRoadBox> { box };
             var nearestBoxes = GetNearestBoxes(box, type);
             var buffer = new List<RotateRoadBox>(nearestBoxes);
-        
+
             while (buffer.Count > 0)
             {
                 List<RotateRoadBox> list = new List<RotateRoadBox>();
@@ -124,17 +128,14 @@ namespace Boxes.RotateRoadBox
 
             return line;
         }
-        
+
         private List<RotateRoadBox> GetNearestBoxes(RotateRoadBox box, BlockType type = BlockType.None)
         {
-            var transform1 = box.transform;
-            var up = transform1.up;
-            var forward = transform1.forward;
-            var right = transform1.right;
+            var thisTransform = box.transform;
+            var forward = thisTransform.forward;
+            var right = thisTransform.right;
             var positions = new List<Vector3>
             {
-                // box.Data.ArrayPosition + up,
-                // box.Data.ArrayPosition - up,
                 box.Data.ArrayPosition + forward,
                 box.Data.ArrayPosition - forward,
                 box.Data.ArrayPosition + right,
@@ -145,12 +146,12 @@ namespace Boxes.RotateRoadBox
             foreach (var pos in positions)
             {
                 var nearBox = GameField.Instance.GetBoxFromArrayPosition(pos) as RotateRoadBox;
-                if (nearBox == null) 
+                if (nearBox == null)
                     continue;
-            
+
                 if (type != BlockType.None && nearBox.Data.Type != type)
                     continue;
-                
+
                 result.Add(nearBox);
             }
 

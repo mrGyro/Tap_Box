@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace.UI.Levels;
@@ -12,6 +11,7 @@ public class LevelsWindiw : MonoBehaviour
     private const string AddressableLockLevelItem = "LockedLevelItem";
 
     private List<LevelButtonData> _levelsData = new();
+    private List<GameObject> _levelsDataButtons = new();
 
     [SerializeField] private RectTransform _root;
 
@@ -22,9 +22,9 @@ public class LevelsWindiw : MonoBehaviour
 
     private async void Setup()
     {
-         await Addressables.LoadAssetsAsync<TextAsset>("Levels", Callback);
-         CreateLevelButtons();
-
+        RemoveAllButtons();
+        await Addressables.LoadAssetsAsync<TextAsset>("Levels", Callback);
+        CreateLevelButtons();
     }
 
     private async void Callback(TextAsset asset)
@@ -36,9 +36,6 @@ public class LevelsWindiw : MonoBehaviour
             levelNumberText = level,
             Data = levelData
         });
-        
-        
-
     }
 
     private async void CreateLevelButtons()
@@ -57,7 +54,20 @@ public class LevelsWindiw : MonoBehaviour
                 levelNumberText = VARIABLE.levelNumberText,
                 status = VARIABLE.levelNumberText
             });
+
+            _levelsDataButtons.Add(g);
         }
+    }
+
+    private void RemoveAllButtons()
+    {
+        for (int i = _levelsDataButtons.Count - 1; i >= 0; i--)
+        {
+            Destroy(_levelsDataButtons[i]);
+        }
+
+        _levelsDataButtons.Clear();
+        _levelsData.Clear();
     }
 
     private int Compare(LevelButtonData b1, LevelButtonData b2)
@@ -69,8 +79,8 @@ public class LevelsWindiw : MonoBehaviour
             return 1;
         if (x < y)
             return -1;
-        
-            return 0;
+
+        return 0;
     }
 
     private async UniTask<GameObject> InstantiateAssetAsync(string assetName)

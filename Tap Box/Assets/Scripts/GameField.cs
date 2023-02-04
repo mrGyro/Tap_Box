@@ -17,12 +17,12 @@ public class GameField : MonoBehaviour
     [SerializeField] private TMP_Text _levelText;
     [SerializeField] private float size;
     [SerializeField] private GameObject winPanel;
+    [SerializeField] private LevelsWindiw levelPanel;
 
     [SerializeField] private List<BaseBox> _boxes;
     [SerializeField] private LevelData _datas;
 
     private int _currentLevelIndex = 1;
-
     private Vector3 _maxLevelSize;
     private Vector3 _minLevelSize;
 
@@ -40,26 +40,45 @@ public class GameField : MonoBehaviour
         LoadNextLevel();
     }
 
+    public void SetActiveLevelPanel(bool value)
+    {
+        levelPanel.gameObject.SetActive(value);
+    }
+
     public void LoadNextLevel()
     {
         _currentLevelIndex++;
         if (_currentLevelIndex > 9)
             _currentLevelIndex = 1;
-        
-        CreateLevel("Level_" + _currentLevelIndex);
+
+        LoadLevelByName("Level_" + _currentLevelIndex);
         _levelText.text = "Level " + _currentLevelIndex;
     }
 
-    public void CheckForWin()
+    public void LoadLevelByName(string levelName)
+    {
+        for (int i = _boxes.Count - 1; i >= 0; i--)
+        {
+            Destroy(_boxes[i].gameObject);
+        }
+
+        _boxes.Clear();
+        string level = levelName.Remove(0, levelName.LastIndexOf('_') + 1);
+        _levelText.text = "Level " + level;
+
+        CreateLevel(levelName);
+    }
+
+    public async void CheckForWin()
     {
         if (_boxes.Count == 0)
         {
+            await UniTask.Delay(1000);
             winPanel.SetActive(true);
             return;
         }
 
         SetNewMaxMinSize();
-       // SetNewTargetPosition();
     }
 
     private void SetNewTargetPosition()
@@ -143,8 +162,8 @@ public class GameField : MonoBehaviour
 
     private async void CreateLevel(string levelName)
     {
-        _boxes = new List<BaseBox>();
         _datas = await LoadLevelData(levelName);
+        _boxes = new List<BaseBox>();
         foreach (var data in _datas.Data)
         {
             if (data.Type == BaseBox.BlockType.None)
@@ -156,6 +175,11 @@ public class GameField : MonoBehaviour
             box.transform.rotation = Quaternion.Euler(data.Rotation);
             box.Data = data;
             _boxes.Add(box);
+        }
+
+        foreach (var VARIABLE in _boxes)
+        {
+            await VARIABLE.Init();
         }
 
         SetNewMaxMinSize();
@@ -251,7 +275,7 @@ public class GameField : MonoBehaviour
         memStream.Seek(0, SeekOrigin.Begin);
         return (LevelData)binForm.Deserialize(memStream);
     }
-    
+
     public static async UniTask<LevelData> LoadLevelDataText(TextAsset assetText)
     {
         MemoryStream memStream = new MemoryStream();

@@ -14,6 +14,10 @@ namespace Boxes
         }
 
         public BoxData Data;
+        
+        public virtual async UniTask Init()
+        {
+        }
 
         public virtual async UniTask BoxReactionStart()
         {
