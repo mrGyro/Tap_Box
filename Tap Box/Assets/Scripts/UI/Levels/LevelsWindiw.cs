@@ -24,7 +24,7 @@ public class LevelsWindiw : MonoBehaviour
 
     private async void Setup()
     {
-        _levelsData = SaveLoadGameProgress.LoadGameProgress().LevelDatas;
+        _levelsData = (await SaveLoadGameProgress.LoadGameProgress()).LevelDatas;
         RemoveAllButtons();
         await Addressables.LoadAssetsAsync<TextAsset>("Levels", Callback);
         CreateLevelButtons();
@@ -45,7 +45,7 @@ public class LevelsWindiw : MonoBehaviour
     {
         _levelsData.Sort(Compare);
         string asset = String.Empty;
-        
+
         foreach (var VARIABLE in _levelsData)
         {
             switch (VARIABLE.LevelStatus)
@@ -62,7 +62,7 @@ public class LevelsWindiw : MonoBehaviour
                     asset = AddressableLockLevelItem;
                     break;
             }
-            
+
             GameObject g = await InstantiateAssetAsync(asset);
 
             // g = await InstantiateAssetAsync(AddressableUnlockLevelItem);

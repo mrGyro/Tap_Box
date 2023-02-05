@@ -14,14 +14,29 @@ namespace SaveLoad_progress
 
         public static void SaveGameProgress(GameProgress progress)
         {
-            
         }
 
-        public static GameProgress LoadGameProgress()
+        public static async UniTask<GameProgress> LoadGameProgress()
         {
-            return null;
+            var loadLevelsFromFile = LoadLevelsFromFile();
+            GameProgress progress = new GameProgress
+            {
+                LevelDatas = new List<LevelData>()
+            };
+
+            foreach (var assetName in loadLevelsFromFile)
+            {
+                var levelData = await LoadLevelData(assetName);
+
+                if (levelData == null) 
+                    continue;
+                progress.LevelDatas.Add(levelData);
+                Debug.LogError(assetName);
+            }
+
+            return progress;
         }
-        
+
         public static async UniTask<LevelData> LoadLevelData(string assetName)
         {
             var x = await AssetProvider.LoadAssetAsync<TextAsset>(assetName);
@@ -40,8 +55,7 @@ namespace SaveLoad_progress
             memStream.Seek(0, SeekOrigin.Begin);
             return (LevelData)binForm.Deserialize(memStream);
         }
-        
-        
+
         public static void SaveLevelToFile(LevelData wayData, string fileName)
         {
             if (!Directory.Exists(Path))
@@ -95,7 +109,7 @@ namespace SaveLoad_progress
             {
                 if (variable.Contains(".meta"))
                     continue;
-                Debug.LogError(variable);
+
                 var x = variable.Remove(0, variable.LastIndexOf('/') + 1);
                 var index = x.LastIndexOf('.');
                 var y = x.Remove(index, x.Length - index);
