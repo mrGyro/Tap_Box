@@ -2,29 +2,28 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using DefaultNamespace;
 using UnityEngine;
 
 namespace LevelCreator
 {
     public class SaveLoadLevels
     {
-        private static string _path = Application.dataPath + "/Prefabs/LevelAssets/";
+        private static readonly string Path = Application.dataPath + "/Prefabs/LevelAssets/";
+
         public bool LevelFileExist(string fileName)
         {
-            return File.Exists(_path + fileName + ".dat");
+            return File.Exists(Path + fileName + ".dat");
         }
 
         public static void SaveLevelToFile(LevelData wayData, string fileName)
         {
-            
-            if (!Directory.Exists(_path))
+            if (!Directory.Exists(Path))
             {
-                Directory.CreateDirectory(_path);
+                Directory.CreateDirectory(Path);
             }
 
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Create(_path + fileName + ".txt");
+            FileStream file = File.Create(Path + fileName + ".txt");
 
             bf.Serialize(file, wayData);
             file.Close();
@@ -35,7 +34,7 @@ namespace LevelCreator
         {
             BinaryFormatter bf = new BinaryFormatter();
 
-            string path = _path + fileName + ".txt";
+            string path = Path + fileName + ".txt";
             if (File.Exists(path))
             {
                 FileStream file = File.Open(path, FileMode.Open);
@@ -43,7 +42,6 @@ namespace LevelCreator
                 {
                     LevelData wayData = (LevelData)bf.Deserialize(file);
                     file.Close();
-
 
                     return wayData;
                 }
@@ -59,15 +57,16 @@ namespace LevelCreator
 
         public static List<string> LoadLevelsFromFile()
         {
-            if (!Directory.Exists(_path))
+            if (!Directory.Exists(Path))
             {
-                Directory.CreateDirectory(_path);
+                Directory.CreateDirectory(Path);
             }
-            var files = Directory.GetFiles(_path);
+
+            var files = Directory.GetFiles(Path);
             List<string> result = new List<string>();
             foreach (var variable in files)
             {
-                if(variable.Contains(".meta"))
+                if (variable.Contains(".meta"))
                     continue;
                 Debug.LogError(variable);
                 var x = variable.Remove(0, variable.LastIndexOf('/') + 1);

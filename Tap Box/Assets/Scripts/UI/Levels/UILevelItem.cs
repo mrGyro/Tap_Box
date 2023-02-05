@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using DefaultNamespace.UI.Levels;
-using JetBrains.Annotations;
 using LevelCreator;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 

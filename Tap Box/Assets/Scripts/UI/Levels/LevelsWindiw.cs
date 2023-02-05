@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using DefaultNamespace.UI.Levels;
 using LevelCreator;
 using SaveLoad_progress;
 using UnityEngine;
@@ -44,14 +44,26 @@ public class LevelsWindiw : MonoBehaviour
     private async void CreateLevelButtons()
     {
         _levelsData.Sort(Compare);
+        string asset = String.Empty;
+        
         foreach (var VARIABLE in _levelsData)
         {
-            GameObject g = await InstantiateAssetAsync(AddressablePassedLevelItem);
             switch (VARIABLE.LevelStatus)
             {
                 case Status.None:
                     break;
+                case Status.Open:
+                    asset = AddressableUnlockLevelItem;
+                    break;
+                case Status.Passed:
+                    asset = AddressablePassedLevelItem;
+                    break;
+                case Status.Close:
+                    asset = AddressableLockLevelItem;
+                    break;
             }
+            
+            GameObject g = await InstantiateAssetAsync(asset);
 
             // g = await InstantiateAssetAsync(AddressableUnlockLevelItem);
             // g = await InstantiateAssetAsync(AddressableLockLevelItem);
