@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UILevelItem : MonoBehaviour
 {
+    public Status ButtonType;
     [SerializeField] private TMP_Text levelNumberText;
     [SerializeField] private TMP_Text status;
     [SerializeField] private Image icon;
@@ -17,12 +18,22 @@ public class UILevelItem : MonoBehaviour
 
     public void Setup(LevelData data)
     {
-        levelNumberText.text = data.ID;
-        status.text = data.LevelStatus.ToString();
-        interactButton.onClick.RemoveAllListeners();
-        interactButton.onClick.AddListener(OnButtonClick);
-        //icon ==
+        if (levelNumberText != null)
+            levelNumberText.text = data.ID;
+        if (status != null)
+            status.text = data.LevelStatus.ToString();
+        if (interactButton != null)
+        {
+            interactButton.onClick.RemoveAllListeners();
+            interactButton.onClick.AddListener(OnButtonClick);
+        }
+
         _data = data;
+    }
+
+    public void SetActive(bool value)
+    {
+        gameObject.SetActive(value);
     }
 
     private void OnButtonClick()

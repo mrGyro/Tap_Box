@@ -1,21 +1,16 @@
-using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
 using SaveLoad_progress;
+using UI.Levels;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 public class LevelsWindiw : MonoBehaviour
 {
-    private const string AddressablePassedLevelItem = "PassedLevelItem";
-    private const string AddressableUnlockLevelItem = "UnlockableLevel";
-    private const string AddressableLockLevelItem = "LockedLevelItem";
-
+    [SerializeField] private LevelsPool levelsPool;
+    [SerializeField] private RectTransform root;
     private List<LevelData> _levelsData = new();
-    private List<GameObject> _levelsDataButtons = new();
-
-    [SerializeField] private RectTransform _root;
 
     private void OnEnable()
     {
@@ -24,16 +19,18 @@ public class LevelsWindiw : MonoBehaviour
 
     private async void Setup()
     {
-        _levelsData = (await SaveLoadGameProgress.LoadGameProgress()).LevelDatas;
         RemoveAllButtons();
+        var x = await SaveLoadGameProgress.LoadGameProgress();
+        _levelsData = x.LevelDatas;
+
         await Addressables.LoadAssetsAsync<TextAsset>("Levels", Callback);
         CreateLevelButtons();
     }
 
-    private async void Callback(TextAsset asset)
+    private void Callback(TextAsset asset)
     {
-        var levelData = await SaveLoadGameProgress.LoadLevelDataText(asset);
-        string level = asset.name.Remove(0, asset.name.LastIndexOf('_') + 1);
+        // var levelData = await SaveLoadGameProgress.LoadLevelDataText(asset);
+        // string level = asset.name.Remove(0, asset.name.LastIndexOf('_') + 1);
         // _levelsData.Add(new LevelButtonData()
         // {
         //     levelNumberText = level,
@@ -44,45 +41,25 @@ public class LevelsWindiw : MonoBehaviour
     private async void CreateLevelButtons()
     {
         _levelsData.Sort(Compare);
-        string asset = String.Empty;
 
-        foreach (var VARIABLE in _levelsData)
+        foreach (var levelData in _levelsData)
         {
-            switch (VARIABLE.LevelStatus)
-            {
-                case Status.None:
-                    break;
-                case Status.Open:
-                    asset = AddressableUnlockLevelItem;
-                    break;
-                case Status.Passed:
-                    asset = AddressablePassedLevelItem;
-                    break;
-                case Status.Close:
-                    asset = AddressableLockLevelItem;
-                    break;
-            }
+            var level = await levelsPool.Get(levelData.LevelStatus);
+            level.Setup(levelData);
 
-            GameObject g = await InstantiateAssetAsync(asset);
-
-            // g = await InstantiateAssetAsync(AddressableUnlockLevelItem);
-            // g = await InstantiateAssetAsync(AddressableLockLevelItem);
-
-            g.GetComponent<UILevelItem>().Setup(VARIABLE);
-
-            _levelsDataButtons.Add(g);
+           // _levelsDataButtons.Add(g);
         }
     }
 
     private void RemoveAllButtons()
     {
-        for (int i = _levelsDataButtons.Count - 1; i >= 0; i--)
-        {
-            Destroy(_levelsDataButtons[i]);
-        }
-
-        _levelsDataButtons.Clear();
-        _levelsData.Clear();
+        // for (int i = _levelsDataButtons.Count - 1; i >= 0; i--)
+        // {
+        //     Destroy(_levelsDataButtons[i]);
+        // }
+        //
+        // _levelsDataButtons.Clear();
+        // _levelsData.Clear();
     }
 
     private int Compare(LevelData b1, LevelData b2)
@@ -98,9 +75,5 @@ public class LevelsWindiw : MonoBehaviour
         return 0;
     }
 
-    private async UniTask<GameObject> InstantiateAssetAsync(string assetName)
-    {
-        var x = await AssetProvider.LoadAssetAsync<GameObject>(assetName);
-        return x == null ? null : Instantiate(x, _root);
-    }
+
 }

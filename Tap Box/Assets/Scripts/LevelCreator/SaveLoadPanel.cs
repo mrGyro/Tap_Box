@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Boxes;
-using DefaultNamespace;
 using TMPro;
 using UnityEngine;
 
@@ -10,6 +9,9 @@ namespace LevelCreator
     {
         [SerializeField] private Transform _filesRoot;
         [SerializeField] private TMP_InputField _inputField;
+        [SerializeField] private TMP_InputField reward;
+        [SerializeField] private TMP_Dropdown statusDropDown;
+        [SerializeField] private Status status;
         [SerializeField] private FilePrefab _filePrefab;
         [SerializeField] private LevelCreator _levelCreator;
 
@@ -50,7 +52,33 @@ namespace LevelCreator
                 Debug.LogError(VARIABLE.Data.ArrayPosition.ToVector3() + " " + VARIABLE.Data.Rotation.ToVector3());
             }
 
-            SaveLoadLevels.SaveLevelToFile(new LevelData() { Data = data }, _inputField.text);
+            int.TryParse(reward.text, out var rewardCount);
+            SaveLoadLevels.SaveLevelToFile(new LevelData()
+            {
+                Data = data,
+                LevelStatus = status,
+                Reward = rewardCount
+            }, _inputField.text);
+        }
+
+        public void StatusChanged()
+        {
+            Debug.LogError(statusDropDown.value);
+            switch (statusDropDown.value)
+            {
+                case 0:
+                    status = Status.None;
+                    break;
+                case 1:
+                    status = Status.Close;
+                    break;
+                case 2:
+                    status = Status.Open;
+                    break;
+                case 3:
+                    status = Status.Passed;
+                    break;
+            }
         }
 
         private void LoadFiles()

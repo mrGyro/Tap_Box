@@ -9,16 +9,16 @@ namespace LevelCreator
     {
         public string ID;
         public Status LevelStatus;
-        public int Price;
+        public int Reward;
         public int BestResult;
         public List<BoxData> Data;
     }
-    
+
     public enum Status
     {
-        None,
-        Close,
-        Open,
-        Passed
+        None = 0,
+        Close = 1,
+        Open = 2,
+        Passed = 3
     }
 }

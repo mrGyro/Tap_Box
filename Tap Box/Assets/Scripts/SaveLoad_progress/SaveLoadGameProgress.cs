@@ -11,15 +11,22 @@ namespace SaveLoad_progress
     public class SaveLoadGameProgress
     {
         private static readonly string Path = Application.dataPath + "/Prefabs/LevelAssets/";
+        private static readonly string PathProgress = Application.dataPath + "/Prefabs/GameProgress.txt";
 
         public static void SaveGameProgress(GameProgress progress)
         {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Create(PathProgress);
+
+            bf.Serialize(file, progress);
+            file.Close();
+            Debug.LogError("saved");
         }
 
         public static async UniTask<GameProgress> LoadGameProgress()
         {
-            var loadLevelsFromFile = LoadLevelsFromFile();
-            GameProgress progress = new GameProgress
+            var loadLevelsFromFile = LoadLevelsName();
+            GameProgress defaultLevels = new GameProgress
             {
                 LevelDatas = new List<LevelData>()
             };
@@ -28,13 +35,34 @@ namespace SaveLoad_progress
             {
                 var levelData = await LoadLevelData(assetName);
 
-                if (levelData == null) 
+                if (levelData == null)
                     continue;
-                progress.LevelDatas.Add(levelData);
+                defaultLevels.LevelDatas.Add(levelData);
                 Debug.LogError(assetName);
             }
 
-            return progress;
+            var gameProgress = await LoadProgressData();
+
+            if (gameProgress.LevelDatas != null)
+            {
+                foreach (var levelData in gameProgress.LevelDatas)
+                {
+                    var level = defaultLevels.LevelDatas.Find(x => x.ID == levelData.ID);
+
+                    if (level == null)
+                        continue;
+
+                    level.LevelStatus = levelData.LevelStatus;
+                    level.BestResult = levelData.BestResult;
+                }
+            }
+            else
+            {
+                gameProgress.LevelDatas = defaultLevels.LevelDatas;
+            }
+            
+           
+            return defaultLevels;
         }
 
         public static async UniTask<LevelData> LoadLevelData(string assetName)
@@ -47,61 +75,20 @@ namespace SaveLoad_progress
             return (LevelData)binForm.Deserialize(memStream);
         }
 
-        public static async UniTask<LevelData> LoadLevelDataText(TextAsset assetText)
+        private static async UniTask<GameProgress> LoadProgressData()
         {
+            var x = await AssetProvider.LoadAssetAsync<TextAsset>("GameProgress");
             MemoryStream memStream = new MemoryStream();
             BinaryFormatter binForm = new BinaryFormatter();
-            memStream.Write(assetText.bytes, 0, assetText.bytes.Length);
+            memStream.Write(x.bytes, 0, x.bytes.Length);
             memStream.Seek(0, SeekOrigin.Begin);
-            return (LevelData)binForm.Deserialize(memStream);
+            return (GameProgress)binForm.Deserialize(memStream);
         }
 
-        public static void SaveLevelToFile(LevelData wayData, string fileName)
+        private static List<string> LoadLevelsName()
         {
             if (!Directory.Exists(Path))
-            {
                 Directory.CreateDirectory(Path);
-            }
-
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Create(Path + fileName + ".txt");
-
-            bf.Serialize(file, wayData);
-            file.Close();
-            Debug.LogError("saved");
-        }
-
-        public static LevelData LoadLevelFromFile(string fileName)
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-
-            string path = Path + fileName + ".txt";
-            if (File.Exists(path))
-            {
-                FileStream file = File.Open(path, FileMode.Open);
-                try
-                {
-                    LevelData wayData = (LevelData)bf.Deserialize(file);
-                    file.Close();
-
-                    return wayData;
-                }
-                catch (Exception)
-                {
-                    file.Close();
-                    return null;
-                }
-            }
-
-            return null;
-        }
-
-        public static List<string> LoadLevelsFromFile()
-        {
-            if (!Directory.Exists(Path))
-            {
-                Directory.CreateDirectory(Path);
-            }
 
             var files = Directory.GetFiles(Path);
             List<string> result = new List<string>();
@@ -117,6 +104,31 @@ namespace SaveLoad_progress
             }
 
             return result;
+        }
+
+        private static GameProgress LoadGameProgressFromFile()
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+
+            string path = PathProgress;
+            if (File.Exists(path))
+            {
+                FileStream file = File.Open(path, FileMode.Open);
+                try
+                {
+                    GameProgress wayData = (GameProgress)bf.Deserialize(file);
+                    file.Close();
+
+                    return wayData;
+                }
+                catch (Exception)
+                {
+                    file.Close();
+                    return null;
+                }
+            }
+
+            return null;
         }
     }
 }
