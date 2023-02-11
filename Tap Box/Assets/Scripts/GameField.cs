@@ -10,7 +10,6 @@ using UnityEngine;
 
 public class GameField : MonoBehaviour
 {
-    public static GameField Instance;
     public InputController InputController;
     [SerializeField] private Transform _rooTransform;
     [SerializeField] private TMP_Text _levelText;
@@ -24,14 +23,6 @@ public class GameField : MonoBehaviour
     private int _currentLevelIndex = 1;
     private Vector3 _maxLevelSize;
     private Vector3 _minLevelSize;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-    }
 
     private void Start()
     {

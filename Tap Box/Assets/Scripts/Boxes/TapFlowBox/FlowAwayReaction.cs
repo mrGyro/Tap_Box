@@ -23,11 +23,11 @@ namespace Boxes.TapFlowBox
 
             _isMove = true;
 
-            var box = GameField.Instance.GetNearestBoxInDirection(_box.Data.ArrayPosition, _parent.forward);
+            var box = Game.Instance.GameField.GetNearestBoxInDirection(_box.Data.ArrayPosition, _parent.forward);
             if (box == null)
             {
-                GameField.Instance.RemoveBox(_box);
-                GameField.Instance.CheckForWin();
+                Game.Instance.GameField.RemoveBox(_box);
+                Game.Instance.GameField.CheckForWin();
                 await MoveOut();
             }
             else

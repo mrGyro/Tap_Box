@@ -49,16 +49,8 @@ MonoBehaviour:
     m_Address: SwipedBox_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: f906be6aeb5fc3447ab2f402108802f2
-    m_Address: LockedLevelItem
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 9fa10cf5f5e66bf4a89aca7932bb77c9
-    m_Address: UnlockableLevel
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 6ef0e4406624bb9458b416a077bb3ebd
-    m_Address: PassedLevelItem
+    m_Address: LevelButton
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: eac71125cc196d743bc4efefcc183a6c

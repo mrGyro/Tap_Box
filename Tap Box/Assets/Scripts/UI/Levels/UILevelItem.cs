@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class UILevelItem : MonoBehaviour
 {
     public Status ButtonType;
+    public LevelData Data;
+
     [SerializeField] private TMP_Text levelNumberText;
     [SerializeField] private TMP_Text status;
     [SerializeField] private Image icon;
@@ -14,10 +16,24 @@ public class UILevelItem : MonoBehaviour
 
     [SerializeField] private Image coinIcon;
     [SerializeField] private TMP_Text priceText;
-    private LevelData _data;
 
     public void Setup(LevelData data)
     {
+        // switch (status)
+        // {
+        //     case Status.None:
+        //         break;
+        //     case Status.Open:
+        //         asset = AddressableUnlockLevelItem;
+        //         break;
+        //     case Status.Passed:
+        //         asset = LevelButtonAddressable;
+        //         break;
+        //     case Status.Close:
+        //         asset = AddressableLockLevelItem;
+        //         break;
+        // }
+        
         if (levelNumberText != null)
             levelNumberText.text = data.ID;
         if (status != null)
@@ -28,8 +44,14 @@ public class UILevelItem : MonoBehaviour
             interactButton.onClick.AddListener(OnButtonClick);
         }
 
-        _data = data;
+        Data = data;
     }
+
+    public void UpdateButton(LevelData data)
+    {
+        
+    }
+
 
     public void SetActive(bool value)
     {
@@ -38,7 +60,7 @@ public class UILevelItem : MonoBehaviour
 
     private void OnButtonClick()
     {
-        GameField.Instance.LoadLevelByName("Level_" + _data.ID);
-        GameField.Instance.SetActiveLevelPanel(false);
+        Game.Instance.GameField.LoadLevelByName("Level_" + Data.ID);
+        Game.Instance.GameField.SetActiveLevelPanel(false);
     }
 }

@@ -12,6 +12,15 @@ namespace LevelCreator
         public int Reward;
         public int BestResult;
         public List<BoxData> Data;
+
+        public void UpdateData(LevelData data)
+        {
+            ID = data.ID;
+            LevelStatus = data.LevelStatus;
+            Reward = data.Reward;
+            BestResult = data.BestResult;
+            Data = data.Data;
+        }
     }
 
     public enum Status
