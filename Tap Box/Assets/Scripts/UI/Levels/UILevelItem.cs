@@ -43,13 +43,12 @@ namespace UI.Levels
 
         public void UpdateButton(LevelData data)
         {
+            Setup(data);
         }
 
         public void SetActive(bool value)
         {
             gameObject.SetActive(value);
         }
-
-
     }
 }

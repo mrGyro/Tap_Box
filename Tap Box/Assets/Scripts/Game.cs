@@ -7,6 +7,7 @@ public class Game : MonoBehaviour
 
     public GameField GameField;
     public LevelsWindiw LevelsWindiw;
+    public InputController InputController;
 
     private async void Awake()
     {

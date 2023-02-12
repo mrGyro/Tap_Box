@@ -10,7 +10,6 @@ using UnityEngine;
 
 public class GameField : MonoBehaviour
 {
-    public InputController InputController;
     [SerializeField] private Transform _rooTransform;
     [SerializeField] private TMP_Text _levelText;
     [SerializeField] private float size;
@@ -53,7 +52,7 @@ public class GameField : MonoBehaviour
         }
 
         _boxes.Clear();
-        string level = levelName.Remove(0, levelName.LastIndexOf('_') + 1);
+        var level = levelName.Remove(0, levelName.LastIndexOf('_') + 1);
         _levelText.text = "Level " + level;
 
         CreateLevel(levelName);
@@ -65,6 +64,11 @@ public class GameField : MonoBehaviour
         {
             await UniTask.Delay(1000);
             winPanel.SetActive(true);
+            
+            _datas.LevelStatus = Status.Passed;
+            Game.Instance.LevelsWindiw.UpdateLevel(_datas);
+            
+            Game.Instance.LevelsWindiw.CheckRequirement();
             return;
         }
 
@@ -78,17 +82,12 @@ public class GameField : MonoBehaviour
             _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
             _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
 
-        InputController.SetNewTargetPosition(newPosition);
+        Game.Instance.InputController.SetNewTargetPosition(newPosition);
     }
 
     public bool ExistBox(Vector3 boxArrayPosition)
     {
         return _boxes.Exists(x => x.Data.ArrayPosition.ToVector3() == boxArrayPosition);
-    }
-
-    public BaseBox GetBoxByArrayPosition(Vector3 boxArrayPosition)
-    {
-        return _boxes.FirstOrDefault(x => x.Data.ArrayPosition.ToVector3() == boxArrayPosition);
     }
 
     public Vector3 GetWorldPosition(Vector3 arrayPosition)
@@ -127,7 +126,7 @@ public class GameField : MonoBehaviour
 
     public void SetActiveGlobalInput(bool value)
     {
-        InputController.SetActiveInput(value);
+        Game.Instance.InputController.SetActiveInput(value);
     }
 
     public List<Vector3> EmptyPositionBetweenTwoBoxes(Vector3 destination, Vector3 origin)
@@ -149,11 +148,17 @@ public class GameField : MonoBehaviour
 
         return result;
     }
+    
+    private BaseBox GetBoxByArrayPosition(Vector3 boxArrayPosition)
+    {
+        return _boxes.FirstOrDefault(x => x.Data.ArrayPosition.ToVector3() == boxArrayPosition);
+    }
 
     private async void CreateLevel(string levelName)
     {
         _datas = await SaveLoadGameProgress.LoadLevelData(levelName);
         _boxes = new List<BaseBox>();
+        
         foreach (var data in _datas.Data)
         {
             if (data.Type == BaseBox.BlockType.None)
@@ -167,9 +172,9 @@ public class GameField : MonoBehaviour
             _boxes.Add(box);
         }
 
-        foreach (var VARIABLE in _boxes)
+        foreach (var baseBox in _boxes)
         {
-            await VARIABLE.Init();
+            await baseBox.Init();
         }
 
         SetNewMaxMinSize();
@@ -189,10 +194,10 @@ public class GameField : MonoBehaviour
     {
         _maxLevelSize = Vector3.negativeInfinity;
         _minLevelSize = Vector3.positiveInfinity;
-        foreach (var VARIABLE in _boxes)
+        foreach (var baseBox in _boxes)
         {
-            SetMaxLevelSize(VARIABLE.Data.ArrayPosition);
-            SetMinLevelSize(VARIABLE.Data.ArrayPosition);
+            SetMaxLevelSize(baseBox.Data.ArrayPosition);
+            SetMinLevelSize(baseBox.Data.ArrayPosition);
         }
     }
 
@@ -255,6 +260,4 @@ public class GameField : MonoBehaviour
         var x = await AssetProvider.LoadAssetAsync<GameObject>(assetName);
         return x == null ? null : Instantiate(x, _rooTransform);
     }
-
-
 }

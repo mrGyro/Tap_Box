@@ -78,7 +78,7 @@ namespace Boxes.SwipableBox
 
         private async void HandleFingerTap(LeanFinger finger)
         {
-            var hit = Game.Instance.GameField.InputController.RaycastBox(finger.ScreenPosition, _layerMaskTapObject);
+            var hit = Game.Instance.InputController.RaycastBox(finger.ScreenPosition, _layerMaskTapObject);
 
             if (hit.collider == null)
                 return;
@@ -114,10 +114,10 @@ namespace Boxes.SwipableBox
         private async UniTask CreatePlacesForMove(Vector3 targetArrayPosition, Vector3 direction)
         {
             var positions = Game.Instance.GameField.EmptyPositionBetweenTwoBoxes(_box.Data.ArrayPosition, targetArrayPosition);
-            foreach (var VARIABLE in positions)
+            foreach (var arrayPosition in positions)
             {
                 var tapObject = await Game.Instance.GameField.CreateTapObject(TapObject);
-                tapObject.Setup(VARIABLE, VARIABLE + direction);
+                tapObject.Setup(arrayPosition, arrayPosition + direction);
                 _tapObjects.Add(tapObject);
             }
         }
@@ -131,9 +131,9 @@ namespace Boxes.SwipableBox
 
         private void ClearTapObject()
         {
-            foreach (var VARIABLE in _tapObjects)
+            foreach (var variable in _tapObjects)
             {
-                GameObject o = VARIABLE.gameObject;
+                GameObject o = variable.gameObject;
                 o.SetActive(false);
                 Destroy(o, 0.5f);
             }

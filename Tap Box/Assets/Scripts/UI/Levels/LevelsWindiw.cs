@@ -34,6 +34,11 @@ public class LevelsWindiw : MonoBehaviour
         UpdateLevelsButton(level);
     }
 
+    public void CheckRequirement()
+    {
+        
+    }
+
     private void Callback(TextAsset asset)
     {
     }
