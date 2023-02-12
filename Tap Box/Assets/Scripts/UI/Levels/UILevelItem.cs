@@ -1,66 +1,55 @@
 using LevelCreator;
-using TMPro;
+using UI.Levels.LevelButton;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class UILevelItem : MonoBehaviour
+namespace UI.Levels
 {
-    public Status ButtonType;
-    public LevelData Data;
-
-    [SerializeField] private TMP_Text levelNumberText;
-    [SerializeField] private TMP_Text status;
-    [SerializeField] private Image icon;
-    [SerializeField] private Button interactButton;
-    [SerializeField] private TMP_Text interactButtonText;
-
-    [SerializeField] private Image coinIcon;
-    [SerializeField] private TMP_Text priceText;
-
-    public void Setup(LevelData data)
+    public class UILevelItem : MonoBehaviour
     {
-        // switch (status)
-        // {
-        //     case Status.None:
-        //         break;
-        //     case Status.Open:
-        //         asset = AddressableUnlockLevelItem;
-        //         break;
-        //     case Status.Passed:
-        //         asset = LevelButtonAddressable;
-        //         break;
-        //     case Status.Close:
-        //         asset = AddressableLockLevelItem;
-        //         break;
-        // }
-        
-        if (levelNumberText != null)
-            levelNumberText.text = data.ID;
-        if (status != null)
-            status.text = data.LevelStatus.ToString();
-        if (interactButton != null)
+        public LevelData Data;
+
+        [SerializeField] private CloseButtonView closeButtonView;
+        [SerializeField] private OpenButtonView openButtonView;
+        [SerializeField] private PassedButtonView passedButton;
+
+        public void Setup(LevelData data)
         {
-            interactButton.onClick.RemoveAllListeners();
-            interactButton.onClick.AddListener(OnButtonClick);
+            switch (data.LevelStatus)
+            {
+                case Status.None:
+                    break;
+                case Status.Open:
+                    passedButton.SetActive(false);
+                    closeButtonView.SetActive(false);
+                    openButtonView.SetActive(true);
+                    openButtonView.Setup(data);
+                    break;
+                case Status.Passed:
+                    openButtonView.SetActive(false);
+                    closeButtonView.SetActive(false);
+                    passedButton.SetActive(true);
+                    passedButton.Setup(data);
+                    break;
+                case Status.Close:
+                    passedButton.SetActive(false);
+                    openButtonView.SetActive(false);
+                    closeButtonView.SetActive(true);
+                    closeButtonView.Setup(data);
+                    break;
+            }
+
+            Data = data;
         }
 
-        Data = data;
-    }
+        public void UpdateButton(LevelData data)
+        {
+        }
 
-    public void UpdateButton(LevelData data)
-    {
-        
-    }
+        public void SetActive(bool value)
+        {
+            gameObject.SetActive(value);
+        }
 
 
-    public void SetActive(bool value)
-    {
-        gameObject.SetActive(value);
-    }
-
-    private void OnButtonClick()
-    {
-        Game.Instance.GameField.LoadLevelByName("Level_" + Data.ID);
-        Game.Instance.GameField.SetActiveLevelPanel(false);
     }
 }

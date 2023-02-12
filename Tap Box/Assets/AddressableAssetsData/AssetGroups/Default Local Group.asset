@@ -66,6 +66,22 @@ MonoBehaviour:
     m_Address: GameProgress
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: e87d1fd608533b547977da3ccd228f0b
+    m_Address: PassedIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 01bd3deec7a98c048bc714958bfe6fd3
+    m_Address: OpenIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ff6a7dcf82298d74aa31cf2ad7cf176c
+    m_Address: CloseIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8e659895f11130a458e453363316fb79
+    m_Address: Coins
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d2092fe1ab8035d4192c7661d5d020b3, type: 2}
   m_SchemaSet:
