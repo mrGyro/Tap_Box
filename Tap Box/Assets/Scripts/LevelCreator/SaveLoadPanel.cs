@@ -7,13 +7,14 @@ namespace LevelCreator
 {
     public class SaveLoadPanel : MonoBehaviour
     {
-        [SerializeField] private Transform _filesRoot;
-        [SerializeField] private TMP_InputField _inputField;
+        [SerializeField] private Transform filesRoot;
+        [SerializeField] private TMP_InputField fileName;
+        [SerializeField] private TMP_InputField id;
         [SerializeField] private TMP_InputField reward;
         [SerializeField] private TMP_Dropdown statusDropDown;
         [SerializeField] private Status status;
-        [SerializeField] private FilePrefab _filePrefab;
-        [SerializeField] private LevelCreator _levelCreator;
+        [SerializeField] private FilePrefab filePrefab;
+        [SerializeField] private LevelCreator levelCreator;
 
         private string _currentSelected;
 
@@ -34,11 +35,11 @@ namespace LevelCreator
             if (levelData == null)
                 return;
 
-            _levelCreator.RemoveAllBoxes();
+            levelCreator.RemoveAllBoxes();
 
-            foreach (var VARIABLE in levelData.Data)
+            foreach (var variable in levelData.Data)
             {
-                _levelCreator.CreateBox(VARIABLE);
+                levelCreator.CreateBox(variable);
             }
         }
 
@@ -46,19 +47,20 @@ namespace LevelCreator
         {
             List<BoxData> data = new List<BoxData>();
 
-            foreach (var VARIABLE in _levelCreator.Level)
+            foreach (var variable in levelCreator.Level)
             {
-                data.Add(VARIABLE.Data);
-                Debug.LogError(VARIABLE.Data.ArrayPosition.ToVector3() + " " + VARIABLE.Data.Rotation.ToVector3());
+                data.Add(variable.Data);
+                Debug.LogError(variable.Data.ArrayPosition.ToVector3() + " " + variable.Data.Rotation.ToVector3());
             }
 
             int.TryParse(reward.text, out var rewardCount);
             SaveLoadLevels.SaveLevelToFile(new LevelData()
             {
                 Data = data,
+                ID = id.text,
                 LevelStatus = status,
                 Reward = rewardCount
-            }, _inputField.text);
+            }, fileName.text);
         }
 
         public void StatusChanged()
@@ -83,7 +85,7 @@ namespace LevelCreator
 
         private void LoadFiles()
         {
-            foreach (Transform child in _filesRoot)
+            foreach (Transform child in filesRoot)
             {
                 Destroy(child.gameObject);
             }
@@ -94,15 +96,25 @@ namespace LevelCreator
 
             foreach (var button in list)
             {
-                var fileButton = Instantiate(_filePrefab, _filesRoot);
+                var fileButton = Instantiate(filePrefab, filesRoot);
                 fileButton.Setup(button, SetSelectedFile);
             }
         }
 
-        private void SetSelectedFile(string fileName)
+        private void SetSelectedFile(string selectedFileName)
         {
-            _currentSelected = fileName;
-            _inputField.text = fileName;
+            var levelData = SaveLoadLevels.LoadLevelFromFile(selectedFileName);
+            if (levelData == null)
+            {
+                Debug.LogError("Level nit fount:" + selectedFileName);
+                return;
+            }
+            
+            _currentSelected = selectedFileName;
+            fileName.text = selectedFileName;
+            id.text = levelData.ID;
+            reward.text = levelData.Reward.ToString();
+            statusDropDown.value = (int)levelData.LevelStatus;
         }
     }
 }
