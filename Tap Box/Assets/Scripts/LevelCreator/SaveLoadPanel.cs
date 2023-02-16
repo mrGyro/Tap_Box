@@ -12,11 +12,14 @@ namespace LevelCreator
         [SerializeField] private TMP_InputField id;
         [SerializeField] private TMP_InputField reward;
         [SerializeField] private TMP_Dropdown statusDropDown;
-        [SerializeField] private Status status;
+        [SerializeField] private TMP_Dropdown requirementDropDown;
+        [SerializeField] private TMP_InputField requirementValue;
         [SerializeField] private FilePrefab filePrefab;
         [SerializeField] private LevelCreator levelCreator;
 
         private string _currentSelected;
+        private Status _status;
+        private Reqirement.RequirementType _requirement;
 
         private void OnEnable()
         {
@@ -58,8 +61,13 @@ namespace LevelCreator
             {
                 Data = data,
                 ID = id.text,
-                LevelStatus = status,
-                Reward = rewardCount
+                LevelStatus = _status,
+                Reward = rewardCount,
+                Reqirement = new Reqirement()
+                {
+                    Type = _requirement,
+                    Value = requirementValue.text,
+                }
             }, fileName.text);
         }
 
@@ -69,17 +77,29 @@ namespace LevelCreator
             switch (statusDropDown.value)
             {
                 case 0:
-                    status = Status.None;
+                    _status = Status.None;
                     break;
                 case 1:
-                    status = Status.Close;
+                    _status = Status.Close;
                     break;
                 case 2:
-                    status = Status.Open;
+                    _status = Status.Open;
                     break;
                 case 3:
-                    status = Status.Passed;
+                    _status = Status.Passed;
                     break;
+            }
+        }        
+        
+        public void RequirementChanged()
+        {
+            Debug.LogError(requirementDropDown.value);
+            switch (requirementDropDown.value)
+            {
+                case 0:
+                    _requirement = Reqirement.RequirementType.PassedLevel;
+                    break;
+      
             }
         }
 
@@ -115,6 +135,8 @@ namespace LevelCreator
             id.text = levelData.ID;
             reward.text = levelData.Reward.ToString();
             statusDropDown.value = (int)levelData.LevelStatus;
+            requirementDropDown.value = (int)levelData.Reqirement.Type;
+            requirementValue.text = levelData.Reqirement.Value;
         }
     }
 }

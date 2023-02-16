@@ -1,4 +1,5 @@
-﻿using LevelCreator;
+﻿using System;
+using LevelCreator;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,12 +18,35 @@ namespace UI.Levels.LevelButton
             background.color = Color.gray;
 
             icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>("CloseIcon");
-            status.text = "For open";
-            requirements.text = "Pass level 1";
+            GetRequiredString(data);
         }
         public void SetActive(bool value)
         {
             gameObject.SetActive(value);
+        }
+
+        private void GetRequiredString(LevelData data)
+        {
+            var type = string.Empty;
+            var value = string.Empty;
+
+            switch (data.Reqirement.Type)
+            {
+                case Reqirement.RequirementType.PassedLevel:
+                    type = "Complete \n";
+                    break;
+            }
+
+            status.text = type;
+            
+            switch (data.Reqirement.Type)
+            {
+                case Reqirement.RequirementType.PassedLevel:
+                    value = $"Level {data.Reqirement.Value}";
+                    break;
+            }
+
+            requirements.text = value;
         }
     }
 }

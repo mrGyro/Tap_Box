@@ -41,6 +41,15 @@ namespace UI.Levels
             Data = data;
         }
 
+        public void CheckRequirement()
+        {
+            if (Data.LevelStatus == Status.Close && Data.Reqirement.CheckForDone())
+            {
+                Data.LevelStatus = Status.Open;
+                UpdateButton(Data);
+            }
+        }
+
         public void UpdateButton(LevelData data)
         {
             Setup(data);

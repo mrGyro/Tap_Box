@@ -52,8 +52,7 @@ public class GameField : MonoBehaviour
         }
 
         _boxes.Clear();
-        var level = levelName.Remove(0, levelName.LastIndexOf('_') + 1);
-        _levelText.text = "Level " + level;
+
 
         CreateLevel(levelName);
     }
@@ -66,7 +65,7 @@ public class GameField : MonoBehaviour
             winPanel.SetActive(true);
             
             _datas.LevelStatus = Status.Passed;
-            Game.Instance.LevelsWindiw.UpdateLevel(_datas);
+            Game.Instance.UpdateLevel(_datas);
             
             Game.Instance.LevelsWindiw.CheckRequirement();
             return;
@@ -159,6 +158,9 @@ public class GameField : MonoBehaviour
         _datas = await SaveLoadGameProgress.LoadLevelData(levelName);
         _boxes = new List<BaseBox>();
         
+        var level = levelName.Remove(0, levelName.LastIndexOf('_') + 1);
+        _levelText.text = "Level " + level;
+        
         foreach (var data in _datas.Data)
         {
             if (data.Type == BaseBox.BlockType.None)
@@ -179,6 +181,8 @@ public class GameField : MonoBehaviour
 
         SetNewMaxMinSize();
         SetNewTargetPosition();
+
+
     }
 
     public BaseBox GetBoxFromArrayPosition(Vector3 position)

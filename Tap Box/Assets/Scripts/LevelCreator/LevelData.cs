@@ -11,6 +11,7 @@ namespace LevelCreator
         public Status LevelStatus;
         public int Reward;
         public int BestResult;
+        public Reqirement Reqirement;
         public List<BoxData> Data;
 
         public void UpdateData(LevelData data)

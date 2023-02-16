@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using LevelCreator;
 using SaveLoad_progress;
 using UI.Levels;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 public class LevelsWindiw : MonoBehaviour
 {
@@ -13,20 +10,19 @@ public class LevelsWindiw : MonoBehaviour
     [SerializeField] private RectTransform root;
 
     private List<LevelData> _levelsData = new();
-    private List<UILevelItem> _uiLevelItems = new();
+    public List<UILevelItem> uiLevelItems = new();
 
     public async void Setup()
     {
         var progress = await SaveLoadGameProgress.LoadGameProgress();
         _levelsData = progress.LevelDatas;
 
-        await Addressables.LoadAssetsAsync<TextAsset>("Levels", Callback);
         CreateLevelButtons();
     }
 
     public void UpdateLevel(LevelData level)
     {
-        var updateLevel = _uiLevelItems.Find(x => x.Data.ID == level.ID);
+        var updateLevel = uiLevelItems.Find(x => x.Data.ID == level.ID);
         if (updateLevel == null)
             return;
 
@@ -36,7 +32,10 @@ public class LevelsWindiw : MonoBehaviour
 
     public void CheckRequirement()
     {
-        
+        foreach (var level in uiLevelItems)
+        {
+            level.CheckRequirement();
+        }
     }
 
     private void Callback(TextAsset asset)
@@ -51,7 +50,7 @@ public class LevelsWindiw : MonoBehaviour
         {
             var level = await levelsPool.Get();
             level.Setup(levelData);
-            _uiLevelItems.Add(level);
+            uiLevelItems.Add(level);
         }
     }
 
@@ -68,7 +67,7 @@ public class LevelsWindiw : MonoBehaviour
 
     private void UpdateLevelsButton(LevelData levelData)
     {
-        var updateLevelButton = _uiLevelItems.Find(x => x.Data.ID == levelData.ID);
+        var updateLevelButton = uiLevelItems.Find(x => x.Data.ID == levelData.ID);
 
         if (updateLevelButton == null)
             return;
