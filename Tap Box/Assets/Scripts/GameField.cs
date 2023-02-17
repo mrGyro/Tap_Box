@@ -4,7 +4,6 @@ using Boxes;
 using Boxes.SwipableBox;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
-using SaveLoad_progress;
 using TMPro;
 using UnityEngine;
 
@@ -155,7 +154,7 @@ public class GameField : MonoBehaviour
 
     private async void CreateLevel(string levelName)
     {
-        _datas = await SaveLoadGameProgress.LoadLevelData(levelName);
+        _datas = await Game.Instance.Progress.LoadLevelData(levelName);
         _boxes = new List<BaseBox>();
         
         var level = levelName.Remove(0, levelName.LastIndexOf('_') + 1);
@@ -181,8 +180,6 @@ public class GameField : MonoBehaviour
 
         SetNewMaxMinSize();
         SetNewTargetPosition();
-
-
     }
 
     public BaseBox GetBoxFromArrayPosition(Vector3 position)

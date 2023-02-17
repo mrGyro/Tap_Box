@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using LevelCreator;
-using SaveLoad_progress;
 using UI.Levels;
 using UnityEngine;
 
@@ -9,14 +8,10 @@ public class LevelsWindiw : MonoBehaviour
     [SerializeField] private LevelsPool levelsPool;
     [SerializeField] private RectTransform root;
 
-    private List<LevelData> _levelsData = new();
     public List<UILevelItem> uiLevelItems = new();
 
-    public async void Setup()
-    {
-        var progress = await SaveLoadGameProgress.LoadGameProgress();
-        _levelsData = progress.LevelDatas;
-
+    public void Setup()
+    { 
         CreateLevelButtons();
     }
 
@@ -38,15 +33,13 @@ public class LevelsWindiw : MonoBehaviour
         }
     }
 
-    private void Callback(TextAsset asset)
-    {
-    }
+
 
     private async void CreateLevelButtons()
     {
-        _levelsData.Sort(Compare);
+        Game.Instance.Progress.LevelDatas.Sort(Compare);
 
-        foreach (var levelData in _levelsData)
+        foreach (var levelData in Game.Instance.Progress.LevelDatas)
         {
             var level = await levelsPool.Get();
             level.Setup(levelData);
