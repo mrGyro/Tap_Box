@@ -18,32 +18,21 @@ public class GameField : MonoBehaviour
     [SerializeField] private List<BaseBox> _boxes;
     [SerializeField] private LevelData _datas;
 
-    private int _currentLevelIndex = 1;
     private Vector3 _maxLevelSize;
     private Vector3 _minLevelSize;
-
-    private void Start()
-    {
-        _currentLevelIndex = 0;
-        LoadNextLevel();
-    }
 
     public void SetActiveLevelPanel(bool value)
     {
         levelPanel.gameObject.SetActive(value);
     }
 
-    public void LoadNextLevel()
+    public void LoadLevelByName(string levelName)
     {
-        _currentLevelIndex++;
-        if (_currentLevelIndex > 9)
-            _currentLevelIndex = 1;
-
-        LoadLevelByName("Level_" + _currentLevelIndex);
-        _levelText.text = "Level " + _currentLevelIndex;
+        ClearGameField();
+        CreateLevel(levelName);
     }
 
-    public void LoadLevelByName(string levelName)
+    public void ClearGameField()
     {
         for (int i = _boxes.Count - 1; i >= 0; i--)
         {
@@ -51,9 +40,6 @@ public class GameField : MonoBehaviour
         }
 
         _boxes.Clear();
-
-
-        CreateLevel(levelName);
     }
 
     public async void CheckForWin()
@@ -153,6 +139,7 @@ public class GameField : MonoBehaviour
 
     private async void CreateLevel(string levelName)
     {
+        Debug.LogError(levelName);
         _datas = await Game.Instance.Progress.LoadLevelData(levelName);
         _boxes = new List<BaseBox>();
         

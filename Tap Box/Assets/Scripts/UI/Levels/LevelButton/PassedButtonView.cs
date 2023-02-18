@@ -38,7 +38,7 @@ namespace UI.Levels.LevelButton
         
         private void OnButtonClick()
         {
-            Game.Instance.GameField.LoadLevelByName("Level_" + _data.ID);
+            Game.Instance.LoadLevelById(_data.ID);
             Game.Instance.GameField.SetActiveLevelPanel(false);
         }
     }

@@ -17,6 +17,7 @@ namespace SaveLoad_progress
     [Serializable]
     public class GameProgress
     {
+        public string LastStartedLevelID;
         public List<LevelData> LevelDatas;
 
 #if UNITY_EDITOR
@@ -25,15 +26,12 @@ namespace SaveLoad_progress
         {
             File.Delete(Application.persistentDataPath + "/GameProgress.dat");
         }
-
 #endif
 
         public async UniTask SaveGameProgress(GameProgress progress)
         {
-            foreach (var VARIABLE in progress.LevelDatas)
-            {
-                Debug.LogError(VARIABLE.ID + " " + VARIABLE.LevelStatus);
-            }
+            Debug.LogError("---------" + progress.LastStartedLevelID);
+
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Create(Application.persistentDataPath + "/GameProgress.dat");
 
@@ -52,13 +50,9 @@ namespace SaveLoad_progress
         public async UniTask Load()
         {
             Debug.LogError("Load");
-
             var progress = await LoadGameProgress();
             LevelDatas = progress.LevelDatas;
-            foreach (var VARIABLE in LevelDatas)
-            {
-                Debug.LogError(VARIABLE.ID + " " + VARIABLE.LevelStatus);
-            }
+            LastStartedLevelID = progress.LastStartedLevelID;
         }
 
         private async UniTask<GameProgress> LoadGameProgress()
@@ -79,8 +73,6 @@ namespace SaveLoad_progress
             }
 
             var gameProgress = LoadGameProgressFromFile();
-            Debug.LogError(gameProgress.LevelDatas.Count);
-
             if (gameProgress.LevelDatas != null)
             {
                 foreach (var levelData in gameProgress.LevelDatas)
@@ -98,6 +90,8 @@ namespace SaveLoad_progress
             {
                 gameProgress.LevelDatas = defaultLevels.LevelDatas;
             }
+
+            defaultLevels.LastStartedLevelID = gameProgress.LastStartedLevelID;
 
             await UniTask.Yield();
             return defaultLevels;
@@ -135,7 +129,10 @@ namespace SaveLoad_progress
         private async UniTask<List<string>> LoadLevelsName()
         {
             List<string> result = new List<string>();
-            await Addressables.LoadAssetsAsync<TextAsset>("Levels", asset => { result.Add(asset.name); });
+            await Addressables.LoadAssetsAsync<TextAsset>("Levels", asset =>
+            {
+                result.Add(asset.name);
+            });
             return result;
         }
 

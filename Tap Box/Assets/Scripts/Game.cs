@@ -1,3 +1,4 @@
+using System.Linq;
 using LevelCreator;
 using SaveLoad_progress;
 using UnityEngine;
@@ -19,10 +20,18 @@ public class Game : MonoBehaviour
             Progress = new GameProgress();
         }
 
-        // Progress.PathProgress = Application.persistentDataPath + "/GameProgress.dat";
         await Progress.Load();
-
         LevelsWindiw.Setup();
+
+        Debug.LogError("--------------" + Progress.LastStartedLevelID);
+        if (string.IsNullOrEmpty(Progress.LastStartedLevelID))
+        {
+            LoadNextLevel();
+        }
+        else
+        {
+            LoadLevelById(Progress.LastStartedLevelID);
+        }
     }
 
     public async void SaveLevel(LevelData level)
@@ -46,16 +55,37 @@ public class Game : MonoBehaviour
         Progress.LevelDatas[updateLevelButton].BestResult = level.BestResult;
     }
 
-    private async void OnDisable()
+    public async void LoadNextLevel()
     {
-        Debug.LogError("Save disable");
-
+        Progress.LastStartedLevelID = GetNextLevelId();
+        GameField.LoadLevelByName(Progress.LastStartedLevelID);
         await Progress.Save();
     }
 
-    private async void OnDestroy()
+    public async void LoadLevelById(string id)
     {
-        Debug.LogError("Save destroy");
+        Progress.LastStartedLevelID = id;
+        GameField.LoadLevelByName(Progress.LastStartedLevelID);
         await Progress.Save();
     }
+
+    private string GetNextLevelId()
+    {
+        var index = Progress.LevelDatas.FirstOrDefault(x => x.LevelStatus == Status.Open) 
+                    ?? Progress.LevelDatas.Last(x => x.LevelStatus == Status.Passed);
+
+        return index.ID;
+    }
+    // private async void OnDisable()
+    // {
+    //     Debug.LogError("Save disable");
+    //
+    //     await Progress.Save();
+    // }
+    //
+    // private async void OnDestroy()
+    // {
+    //     Debug.LogError("Save destroy");
+    //     await Progress.Save();
+    // }
 }
