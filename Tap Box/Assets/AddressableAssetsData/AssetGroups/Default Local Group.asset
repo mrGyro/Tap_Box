@@ -53,10 +53,6 @@ MonoBehaviour:
     m_Address: LevelButton
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 03fbcad7e13a16a4085ad50c6128147f
-    m_Address: Level_2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: cf0c55ecd1685e44fb3eb4ae4d21e242
     m_Address: GameProgress
     m_ReadOnly: 0
@@ -75,18 +71,6 @@ MonoBehaviour:
     m_SerializedLabels: []
   - m_GUID: 8e659895f11130a458e453363316fb79
     m_Address: Coins
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 58175438d40460a44b8c8f30411eaec4
-    m_Address: Level_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: eac71125cc196d743bc4efefcc183a6c
-    m_Address: Level_1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 5c6a240b638e53a4ab95a41076cd035a
-    m_Address: Level_4
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

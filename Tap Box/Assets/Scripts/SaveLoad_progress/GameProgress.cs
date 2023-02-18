@@ -5,6 +5,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+
+#if UNITY_EDITOR
+using UnityEditor;
+
+#endif
 
 namespace SaveLoad_progress
 {
@@ -12,13 +18,24 @@ namespace SaveLoad_progress
     public class GameProgress
     {
         public List<LevelData> LevelDatas;
-        public string Path;
-        public string PathProgress;
+
+#if UNITY_EDITOR
+        [MenuItem("Tools/GiroGame/RemoveSaves")]
+        public static void RemoveFile()
+        {
+            File.Delete(Application.persistentDataPath + "/GameProgress.dat");
+        }
+
+#endif
 
         public async UniTask SaveGameProgress(GameProgress progress)
         {
+            foreach (var VARIABLE in progress.LevelDatas)
+            {
+                Debug.LogError(VARIABLE.ID + " " + VARIABLE.LevelStatus);
+            }
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Create(PathProgress);
+            FileStream file = File.Create(Application.persistentDataPath + "/GameProgress.dat");
 
             bf.Serialize(file, progress);
             file.Close();
@@ -42,12 +59,11 @@ namespace SaveLoad_progress
             {
                 Debug.LogError(VARIABLE.ID + " " + VARIABLE.LevelStatus);
             }
-            
         }
 
         private async UniTask<GameProgress> LoadGameProgress()
         {
-            var loadLevelsFromFile = LoadLevelsName();
+            var loadLevelsFromFile = await LoadLevelsName();
             GameProgress defaultLevels = new GameProgress
             {
                 LevelDatas = new List<LevelData>()
@@ -62,7 +78,8 @@ namespace SaveLoad_progress
                 defaultLevels.LevelDatas.Add(levelData);
             }
 
-            var gameProgress = await LoadProgressData();
+            var gameProgress = LoadGameProgressFromFile();
+            Debug.LogError(gameProgress.LevelDatas.Count);
 
             if (gameProgress.LevelDatas != null)
             {
@@ -96,44 +113,29 @@ namespace SaveLoad_progress
             return (LevelData)binForm.Deserialize(memStream);
         }
 
-        private static async UniTask<GameProgress> LoadProgressData()
+        // private static async UniTask<GameProgress> LoadProgressData()
+        // {
+        //     var x = await AssetProvider.LoadAssetAsync<TextAsset>("GameProgress");
+        //     MemoryStream memStream = new MemoryStream();
+        //     BinaryFormatter binForm = new BinaryFormatter();
+        //     memStream.Write(x.bytes, 0, x.bytes.Length);
+        //     memStream.Seek(0, SeekOrigin.Begin);
+        //
+        //     try
+        //     {
+        //         return (GameProgress)binForm.Deserialize(memStream);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Debug.LogError("FistStart");
+        //         return new GameProgress();
+        //     }
+        // }
+
+        private async UniTask<List<string>> LoadLevelsName()
         {
-            var x = await AssetProvider.LoadAssetAsync<TextAsset>("GameProgress");
-            MemoryStream memStream = new MemoryStream();
-            BinaryFormatter binForm = new BinaryFormatter();
-            memStream.Write(x.bytes, 0, x.bytes.Length);
-            memStream.Seek(0, SeekOrigin.Begin);
-
-            try
-            {
-                return (GameProgress)binForm.Deserialize(memStream);
-
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("FistStart");
-                return new GameProgress();
-            }
-        }
-
-        private List<string> LoadLevelsName()
-        {
-            if (!Directory.Exists(Path))
-                Directory.CreateDirectory(Path);
-
-            var files = Directory.GetFiles(Path);
             List<string> result = new List<string>();
-            foreach (var variable in files)
-            {
-                if (variable.Contains(".meta"))
-                    continue;
-
-                var x = variable.Remove(0, variable.LastIndexOf('/') + 1);
-                var index = x.LastIndexOf('.');
-                var y = x.Remove(index, x.Length - index);
-                result.Add(y);
-            }
-
+            await Addressables.LoadAssetsAsync<TextAsset>("Levels", asset => { result.Add(asset.name); });
             return result;
         }
 
@@ -141,25 +143,36 @@ namespace SaveLoad_progress
         {
             BinaryFormatter bf = new BinaryFormatter();
 
-            string path = PathProgress;
+            string path = Application.persistentDataPath + "/GameProgress.dat";
             if (File.Exists(path))
             {
                 FileStream file = File.Open(path, FileMode.Open);
                 try
                 {
-                    GameProgress wayData = (GameProgress)bf.Deserialize(file);
+                    GameProgress progress = (GameProgress)bf.Deserialize(file);
                     file.Close();
 
-                    return wayData;
+                    if (progress.LevelDatas == null)
+                    {
+                        LevelDatas = new List<LevelData>();
+                    }
+
+                    return progress;
                 }
                 catch (Exception)
                 {
                     file.Close();
-                    return null;
+                    return new GameProgress()
+                    {
+                        LevelDatas = new List<LevelData>()
+                    };
                 }
             }
 
-            return null;
+            return new GameProgress()
+            {
+                LevelDatas = new List<LevelData>()
+            };
         }
     }
 }

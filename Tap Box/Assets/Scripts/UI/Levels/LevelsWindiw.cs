@@ -33,8 +33,6 @@ public class LevelsWindiw : MonoBehaviour
         }
     }
 
-
-
     private async void CreateLevelButtons()
     {
         Game.Instance.Progress.LevelDatas.Sort(Compare);

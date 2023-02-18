@@ -64,9 +64,8 @@ public class GameField : MonoBehaviour
             winPanel.SetActive(true);
             
             _datas.LevelStatus = Status.Passed;
-            Game.Instance.UpdateLevel(_datas);
+            Game.Instance.SaveLevel(_datas);
             
-            Game.Instance.LevelsWindiw.CheckRequirement();
             return;
         }
 

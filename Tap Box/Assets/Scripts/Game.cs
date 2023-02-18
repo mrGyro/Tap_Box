@@ -1,4 +1,3 @@
-using System;
 using LevelCreator;
 using SaveLoad_progress;
 using UnityEngine;
@@ -11,7 +10,7 @@ public class Game : MonoBehaviour
     public LevelsWindiw LevelsWindiw;
     public InputController InputController;
     public GameProgress Progress;
-    
+
     private async void Awake()
     {
         if (Instance == null)
@@ -20,29 +19,31 @@ public class Game : MonoBehaviour
             Progress = new GameProgress();
         }
 
-        Progress.Path = Application.dataPath + "/Prefabs/LevelAssets/";
-        Progress.PathProgress = Application.dataPath + "/Prefabs/GameProgress.txt";
+        // Progress.PathProgress = Application.persistentDataPath + "/GameProgress.dat";
         await Progress.Load();
 
         LevelsWindiw.Setup();
     }
 
-    public async void UpdateLevel(LevelData level)
+    public async void SaveLevel(LevelData level)
     {
         LevelsWindiw.UpdateLevel(level);
-        UpdateProgress(level);
+        Updateevel(level);
+        Debug.LogError(level.ID + " " + level.LevelStatus);
+        LevelsWindiw.CheckRequirement();
+
         await Progress.Save();
     }
-    
-    private void UpdateProgress(LevelData level)
-    {
-        var updateLevelButton = Game.Instance.Progress.LevelDatas.Find(x => x.ID == level.ID);
 
-        if (updateLevelButton == null)
+    public void Updateevel(LevelData level)
+    {
+        var updateLevelButton = Instance.Progress.LevelDatas.FindIndex(x => x.ID == level.ID);
+
+        if (updateLevelButton == -1)
             return;
 
-        updateLevelButton.LevelStatus = level.LevelStatus;
-        updateLevelButton.BestResult = level.BestResult;
+        Progress.LevelDatas[updateLevelButton].LevelStatus = level.LevelStatus;
+        Progress.LevelDatas[updateLevelButton].BestResult = level.BestResult;
     }
 
     private async void OnDisable()

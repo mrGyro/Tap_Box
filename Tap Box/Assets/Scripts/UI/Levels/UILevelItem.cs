@@ -43,11 +43,12 @@ namespace UI.Levels
 
         public void CheckRequirement()
         {
-            if (Data.LevelStatus == Status.Close && Data.Reqirement.CheckForDone())
-            {
-                Data.LevelStatus = Status.Open;
-                UpdateButton(Data);
-            }
+            if (Data.LevelStatus != Status.Close || !Data.Reqirement.CheckForDone()) 
+                return;
+            
+            Data.LevelStatus = Status.Open;
+            UpdateButton(Data);
+            Game.Instance.Updateevel(Data);
         }
 
         public void UpdateButton(LevelData data)
