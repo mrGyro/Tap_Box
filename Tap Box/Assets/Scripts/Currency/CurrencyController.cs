@@ -21,15 +21,15 @@ namespace Currency
         public void AddCurrency(Type type, int value)
         {
             var currencyType = type.ToString();
-            
+
             if (Game.Instance.Progress.Currencies.ContainsKey(currencyType))
                 Game.Instance.Progress.Currencies[currencyType] += value;
             else
                 Game.Instance.Progress.Currencies.Add(currencyType, value);
-            
+
             OnCurrencyCountChanged?.Invoke(currencyType, Game.Instance.Progress.Currencies[currencyType]);
         }
-        
+
         public void RemoveCurrency(Type type, int value)
         {
             var currencyType = type.ToString();
@@ -44,13 +44,20 @@ namespace Currency
             }
             else
                 Game.Instance.Progress.Currencies.Add(currencyType, 0);
-            
+
             OnCurrencyCountChanged?.Invoke(currencyType, Game.Instance.Progress.Currencies[currencyType]);
         }
 
         public List<RewardViewSetting> GetRewardSettings()
         {
-            return new List<RewardViewSetting>();
+            return new List<RewardViewSetting>()
+            {
+                new() { IsBig = false, RewardCount = 10, Percent = 10, RewardType = Type.Coin },
+                new() { IsBig = false, RewardCount = 20, Percent = 30, RewardType = Type.Coin },
+                new() { IsBig = false, RewardCount = 30, Percent = 50, RewardType = Type.Coin },
+                new() { IsBig = false, RewardCount = 40, Percent = 70, RewardType = Type.Coin },
+                new() { IsBig = false, RewardCount = 1, Percent = 90, RewardType = Type.RandomSkin }
+            };
         }
     }
 }
