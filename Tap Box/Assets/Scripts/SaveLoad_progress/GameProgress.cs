@@ -18,6 +18,10 @@ namespace SaveLoad_progress
     public class GameProgress
     {
         public string LastStartedLevelID;
+        public int CurrentWinWindowsProgress;
+
+        public Dictionary<string, int> Currencies = new();
+
         public List<LevelData> LevelDatas;
 
 #if UNITY_EDITOR
@@ -53,6 +57,7 @@ namespace SaveLoad_progress
             var progress = await LoadGameProgress();
             LevelDatas = progress.LevelDatas;
             LastStartedLevelID = progress.LastStartedLevelID;
+            CurrentWinWindowsProgress = progress.CurrentWinWindowsProgress;
         }
 
         private async UniTask<GameProgress> LoadGameProgress()

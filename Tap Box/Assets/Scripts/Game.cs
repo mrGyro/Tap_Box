@@ -1,4 +1,5 @@
 using System.Linq;
+using Currency;
 using LevelCreator;
 using SaveLoad_progress;
 using UnityEngine;
@@ -10,7 +11,9 @@ public class Game : MonoBehaviour
     public GameField GameField;
     public LevelsWindiw LevelsWindiw;
     public InputController InputController;
+    public WinWindow WinWindow;
     public GameProgress Progress;
+    public CurrencyController CurrencyController;
 
     private async void Awake()
     {
@@ -18,12 +21,12 @@ public class Game : MonoBehaviour
         {
             Instance = this;
             Progress = new GameProgress();
+            CurrencyController = new CurrencyController();
         }
 
         await Progress.Load();
         LevelsWindiw.Setup();
 
-        Debug.LogError("--------------" + Progress.LastStartedLevelID);
         if (string.IsNullOrEmpty(Progress.LastStartedLevelID))
         {
             LoadNextLevel();

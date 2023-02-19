@@ -12,7 +12,6 @@ public class GameField : MonoBehaviour
     [SerializeField] private Transform _rooTransform;
     [SerializeField] private TMP_Text _levelText;
     [SerializeField] private float size;
-    [SerializeField] private GameObject winPanel;
     [SerializeField] private LevelsWindiw levelPanel;
 
     [SerializeField] private List<BaseBox> _boxes;
@@ -47,7 +46,7 @@ public class GameField : MonoBehaviour
         if (_boxes.Count == 0)
         {
             await UniTask.Delay(1000);
-            winPanel.SetActive(true);
+            Game.Instance.WinWindow.SetActive(true);
             
             _datas.LevelStatus = Status.Passed;
             Game.Instance.SaveLevel(_datas);
