@@ -7,7 +7,7 @@ namespace DefaultNamespace.UI.WinWindow
     public class RewardViewSetting
     {
         public bool IsBig;
-        public int Percent;
+        public float Percent;
         public CurrencyController.Type RewardType;
         public int RewardCount;
     }

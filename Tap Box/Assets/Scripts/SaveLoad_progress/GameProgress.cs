@@ -18,7 +18,8 @@ namespace SaveLoad_progress
     public class GameProgress
     {
         public string LastStartedLevelID;
-        public int CurrentWinWindowsProgress;
+        public float CurrentWinWindowsProgress;
+        public float NextWinWindowsProgress;
 
         public Dictionary<string, int> Currencies = new();
 
@@ -34,8 +35,6 @@ namespace SaveLoad_progress
 
         public async UniTask SaveGameProgress(GameProgress progress)
         {
-            Debug.LogError("---------" + progress.LastStartedLevelID);
-
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Create(Application.persistentDataPath + "/GameProgress.dat");
 
@@ -46,14 +45,11 @@ namespace SaveLoad_progress
 
         public async UniTask Save()
         {
-            Debug.LogError("Save");
-
             await SaveGameProgress(this);
         }
 
         public async UniTask Load()
         {
-            Debug.LogError("Load");
             var progress = await LoadGameProgress();
             LevelDatas = progress.LevelDatas;
             LastStartedLevelID = progress.LastStartedLevelID;

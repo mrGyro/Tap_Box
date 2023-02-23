@@ -41,7 +41,6 @@ public class Game : MonoBehaviour
     {
         LevelsWindiw.UpdateLevel(level);
         Updateevel(level);
-        Debug.LogError(level.ID + " " + level.LevelStatus);
         LevelsWindiw.CheckRequirement();
 
         await Progress.Save();
