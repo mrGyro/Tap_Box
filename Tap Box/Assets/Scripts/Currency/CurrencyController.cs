@@ -16,37 +16,49 @@ namespace Currency
             VFXSkin,
         }
 
-        public Action<string, int> OnCurrencyCountChanged;
+        public Action<Type, int> OnCurrencyCountChanged;
 
         public void AddCurrency(Type type, int value)
         {
-            var currencyType = type.ToString();
+            if (Game.Instance.Progress.Currencies == null)
+                return;
 
-            if (Game.Instance.Progress.Currencies.ContainsKey(currencyType))
-                Game.Instance.Progress.Currencies[currencyType] += value;
+            if (Game.Instance.Progress.Currencies.ContainsKey(type))
+                Game.Instance.Progress.Currencies[type] += value;
             else
-                Game.Instance.Progress.Currencies.Add(currencyType, value);
+                Game.Instance.Progress.Currencies.Add(type, value);
 
-            OnCurrencyCountChanged?.Invoke(currencyType, Game.Instance.Progress.Currencies[currencyType]);
+            OnCurrencyCountChanged?.Invoke(type, Game.Instance.Progress.Currencies[type]);
         }
 
         public void RemoveCurrency(Type type, int value)
         {
-            var currencyType = type.ToString();
+            if (Game.Instance.Progress.Currencies == null)
+                return;
 
-            if (Game.Instance.Progress.Currencies.ContainsKey(currencyType))
+            if (Game.Instance.Progress.Currencies.ContainsKey(type))
             {
-                Game.Instance.Progress.Currencies[currencyType] -= value;
-                if (Game.Instance.Progress.Currencies[currencyType] < 0)
+                Game.Instance.Progress.Currencies[type] -= value;
+                if (Game.Instance.Progress.Currencies[type] < 0)
                 {
-                    Game.Instance.Progress.Currencies[currencyType] = 0;
+                    Game.Instance.Progress.Currencies[type] = 0;
                 }
             }
             else
-                Game.Instance.Progress.Currencies.Add(currencyType, 0);
+                Game.Instance.Progress.Currencies.Add(type, 0);
 
-            OnCurrencyCountChanged?.Invoke(currencyType, Game.Instance.Progress.Currencies[currencyType]);
+            OnCurrencyCountChanged?.Invoke(type, Game.Instance.Progress.Currencies[type]);
         }
+
+        public int GetCurrency(Type type)
+        {
+            if (Game.Instance.Progress.Currencies == null)
+                return 0;
+            
+            return Game.Instance.Progress.Currencies.ContainsKey(type) ? Game.Instance.Progress.Currencies[type] : 0;
+        }
+
+        public bool IsInitialized() => Game.Instance.Progress.Currencies != null;
 
         public List<RewardViewSetting> GetRewardSettings()
         {

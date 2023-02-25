@@ -89,6 +89,7 @@ public class Game : MonoBehaviour
                        + " " 
                        + settings.IsBig);
         
+        CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
         await UniTask.Delay(2000);
     }
 

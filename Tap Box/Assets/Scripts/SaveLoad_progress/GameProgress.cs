@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Currency;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace SaveLoad_progress
         public float CurrentWinWindowsProgress;
         public int NextRewardIndexWinWindow;
 
-        public Dictionary<string, int> Currencies = new();
+        public Dictionary<CurrencyController.Type, int> Currencies;
 
         public List<LevelData> LevelDatas;
 
@@ -39,6 +40,7 @@ namespace SaveLoad_progress
             LastStartedLevelID = progress.LastStartedLevelID;
             CurrentWinWindowsProgress = progress.CurrentWinWindowsProgress;
             NextRewardIndexWinWindow = progress.NextRewardIndexWinWindow;
+            Currencies = progress.Currencies;
         }
 
 
