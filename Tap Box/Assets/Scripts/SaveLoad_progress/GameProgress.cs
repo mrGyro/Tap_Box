@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using LevelCreator;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -19,7 +20,7 @@ namespace SaveLoad_progress
     {
         public string LastStartedLevelID;
         public float CurrentWinWindowsProgress;
-        public float NextWinWindowsProgress;
+        public int NextRewardIndexWinWindow;
 
         public Dictionary<string, int> Currencies = new();
 
@@ -32,6 +33,14 @@ namespace SaveLoad_progress
             File.Delete(Application.persistentDataPath + "/GameProgress.dat");
         }
 #endif
+        public void SetValues(GameProgress progress)
+        {
+            LevelDatas = progress.LevelDatas;
+            LastStartedLevelID = progress.LastStartedLevelID;
+            CurrentWinWindowsProgress = progress.CurrentWinWindowsProgress;
+            NextRewardIndexWinWindow = progress.NextRewardIndexWinWindow;
+        }
+
 
         public async UniTask SaveGameProgress(GameProgress progress)
         {
@@ -51,15 +60,13 @@ namespace SaveLoad_progress
         public async UniTask Load()
         {
             var progress = await LoadGameProgress();
-            LevelDatas = progress.LevelDatas;
-            LastStartedLevelID = progress.LastStartedLevelID;
-            CurrentWinWindowsProgress = progress.CurrentWinWindowsProgress;
+            SetValues(progress);
         }
 
         private async UniTask<GameProgress> LoadGameProgress()
         {
             var loadLevelsFromFile = await LoadLevelsName();
-            GameProgress defaultLevels = new GameProgress
+            GameProgress loadGameProgress = new GameProgress
             {
                 LevelDatas = new List<LevelData>()
             };
@@ -70,7 +77,7 @@ namespace SaveLoad_progress
 
                 if (levelData == null)
                     continue;
-                defaultLevels.LevelDatas.Add(levelData);
+                loadGameProgress.LevelDatas.Add(levelData);
             }
 
             var gameProgress = LoadGameProgressFromFile();
@@ -78,7 +85,7 @@ namespace SaveLoad_progress
             {
                 foreach (var levelData in gameProgress.LevelDatas)
                 {
-                    var level = defaultLevels.LevelDatas.Find(x => x.ID == levelData.ID);
+                    var level = loadGameProgress.LevelDatas.Find(x => x.ID == levelData.ID);
 
                     if (level == null)
                         continue;
@@ -89,13 +96,13 @@ namespace SaveLoad_progress
             }
             else
             {
-                gameProgress.LevelDatas = defaultLevels.LevelDatas;
+                gameProgress.LevelDatas = loadGameProgress.LevelDatas;
             }
 
-            defaultLevels.LastStartedLevelID = gameProgress.LastStartedLevelID;
+            loadGameProgress.SetValues(gameProgress);
 
             await UniTask.Yield();
-            return defaultLevels;
+            return loadGameProgress;
         }
 
         public async UniTask<LevelData> LoadLevelData(string assetName)

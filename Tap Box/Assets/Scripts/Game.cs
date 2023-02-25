@@ -1,5 +1,7 @@
 using System.Linq;
 using Currency;
+using Cysharp.Threading.Tasks;
+using DefaultNamespace.UI.WinWindow;
 using LevelCreator;
 using SaveLoad_progress;
 using UnityEngine;
@@ -71,6 +73,25 @@ public class Game : MonoBehaviour
         await Progress.Save();
     }
 
+    public float GetWinProgress()
+    {
+        return 20;
+    }
+    
+    public async UniTask GetReward(RewardViewSetting settings)
+    {
+        Debug.LogError("--------giv reward " 
+                       + settings.RewardType 
+                       + " " 
+                       + settings.RewardCount 
+                       + " " 
+                       + settings.Percent 
+                       + " " 
+                       + settings.IsBig);
+        
+        await UniTask.Delay(2000);
+    }
+
     private string GetNextLevelId()
     {
         var index = Progress.LevelDatas.FirstOrDefault(x => x.LevelStatus == Status.Open) 
@@ -78,16 +99,4 @@ public class Game : MonoBehaviour
 
         return index.ID;
     }
-    // private async void OnDisable()
-    // {
-    //     Debug.LogError("Save disable");
-    //
-    //     await Progress.Save();
-    // }
-    //
-    // private async void OnDestroy()
-    // {
-    //     Debug.LogError("Save destroy");
-    //     await Progress.Save();
-    // }
 }

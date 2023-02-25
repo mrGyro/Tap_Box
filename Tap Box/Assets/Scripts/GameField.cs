@@ -138,7 +138,6 @@ public class GameField : MonoBehaviour
 
     private async void CreateLevel(string levelName)
     {
-        Debug.LogError(levelName);
         _datas = await Game.Instance.Progress.LoadLevelData(levelName);
         _boxes = new List<BaseBox>();
         
