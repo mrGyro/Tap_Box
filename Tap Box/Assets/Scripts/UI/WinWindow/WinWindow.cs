@@ -69,6 +69,7 @@ public class WinWindow : MonoBehaviour
 
         var previousIndex = Game.Instance.Progress.NextRewardIndexWinWindow - 1;
         var x = (progress.value - _settings[previousIndex].Percent) / (_settings[Game.Instance.Progress.NextRewardIndexWinWindow].Percent - _settings[previousIndex].Percent);
+        
         return x * 100;
     }
 
@@ -82,6 +83,7 @@ public class WinWindow : MonoBehaviour
 
             for (var i = 0; i < _settings.Count; i++)
                 rewardViews[i].SetTokState(progress.value >= _settings[i].Percent);
+            
             return _settings[0];
         }
 
@@ -94,6 +96,7 @@ public class WinWindow : MonoBehaviour
             
             for (var i = 0; i < _settings.Count; i++)
                 rewardViews[i].SetTokState(progress.value >= _settings[i].Percent);
+            
             return _settings[0];
         }
 

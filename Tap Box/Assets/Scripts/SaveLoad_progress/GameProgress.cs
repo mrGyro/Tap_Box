@@ -7,7 +7,6 @@ using Cysharp.Threading.Tasks;
 using LevelCreator;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -22,6 +21,8 @@ namespace SaveLoad_progress
         public string LastStartedLevelID;
         public float CurrentWinWindowsProgress;
         public int NextRewardIndexWinWindow;
+        public int CurrentPlayerLevel;
+        public float CurrentPlayerLevelProgress;
 
         public Dictionary<CurrencyController.Type, int> Currencies;
 
@@ -41,6 +42,8 @@ namespace SaveLoad_progress
             CurrentWinWindowsProgress = progress.CurrentWinWindowsProgress;
             NextRewardIndexWinWindow = progress.NextRewardIndexWinWindow;
             Currencies = progress.Currencies;
+            CurrentPlayerLevel = progress.CurrentPlayerLevel;
+            CurrentPlayerLevelProgress = progress.CurrentPlayerLevelProgress;
         }
 
 

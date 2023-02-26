@@ -14,7 +14,6 @@ public class CurrensyCounter : MonoBehaviour
     private async void Start()
     {
         await UniTask.WaitUntil(() => Game.Instance.CurrencyController.IsInitialized());
-        Debug.LogError(Game.Instance.CurrencyController.IsInitialized());
         icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>(type.ToString());
         count.text = Game.Instance.CurrencyController.GetCurrency(type).ToString();
         Game.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;

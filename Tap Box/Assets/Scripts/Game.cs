@@ -39,6 +39,11 @@ public class Game : MonoBehaviour
         }
     }
 
+    private void Handler()
+    {
+        Debug.LogError(1);
+    }
+
     public async void SaveLevel(LevelData level)
     {
         LevelsWindiw.UpdateLevel(level);
@@ -77,25 +82,30 @@ public class Game : MonoBehaviour
     {
         return 20;
     }
-    
+
     public async UniTask GetReward(RewardViewSetting settings)
     {
-        Debug.LogError("--------giv reward " 
-                       + settings.RewardType 
-                       + " " 
-                       + settings.RewardCount 
-                       + " " 
-                       + settings.Percent 
-                       + " " 
+        Debug.LogError("--------giv reward "
+                       + settings.RewardType
+                       + " "
+                       + settings.RewardCount
+                       + " "
+                       + settings.Percent
+                       + " "
                        + settings.IsBig);
-        
+
         CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
         await UniTask.Delay(2000);
+    }
+    
+    public void SetActiveLevelPanel(bool value)
+    {
+        LevelsWindiw.gameObject.SetActive(value);
     }
 
     private string GetNextLevelId()
     {
-        var index = Progress.LevelDatas.FirstOrDefault(x => x.LevelStatus == Status.Open) 
+        var index = Progress.LevelDatas.FirstOrDefault(x => x.LevelStatus == Status.Open)
                     ?? Progress.LevelDatas.Last(x => x.LevelStatus == Status.Passed);
 
         return index.ID;

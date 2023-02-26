@@ -4,41 +4,30 @@ using Boxes;
 using Boxes.SwipableBox;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
-using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class GameField : MonoBehaviour
+public class GameField : MonoBehaviour, IInitializable
 {
-    [SerializeField] private Transform _rooTransform;
-    [SerializeField] private TMP_Text _levelText;
     [SerializeField] private float size;
-    [SerializeField] private LevelsWindiw levelPanel;
 
-    [SerializeField] private List<BaseBox> _boxes;
-    [SerializeField] private LevelData _datas;
-
+    private Transform _rootTransform;
     private Vector3 _maxLevelSize;
     private Vector3 _minLevelSize;
+    private List<BaseBox> _boxes;
+    private LevelData _data;
 
-    public void SetActiveLevelPanel(bool value)
+    public void Initialize()
     {
-        levelPanel.gameObject.SetActive(value);
+        _rootTransform = transform;
+        _boxes = new List<BaseBox>();
+        _data = new LevelData();
     }
-
+    
     public void LoadLevelByName(string levelName)
     {
         ClearGameField();
         CreateLevel(levelName);
-    }
-
-    public void ClearGameField()
-    {
-        for (int i = _boxes.Count - 1; i >= 0; i--)
-        {
-            Destroy(_boxes[i].gameObject);
-        }
-
-        _boxes.Clear();
     }
 
     public async void CheckForWin()
@@ -47,10 +36,10 @@ public class GameField : MonoBehaviour
         {
             await UniTask.Delay(1000);
             Game.Instance.WinWindow.SetActive(true);
-            
-            _datas.LevelStatus = Status.Passed;
-            Game.Instance.SaveLevel(_datas);
-            
+
+            _data.LevelStatus = Status.Passed;
+            Game.Instance.SaveLevel(_data);
+
             return;
         }
 
@@ -75,11 +64,6 @@ public class GameField : MonoBehaviour
     public Vector3 GetWorldPosition(Vector3 arrayPosition)
     {
         return arrayPosition * size;
-    }
-
-    public Vector3 GetIndexByWorldPosition(Vector3 worldPosition)
-    {
-        return worldPosition / size;
     }
 
     public BaseBox GetNearestBoxInDirection(Vector3 boxArrayPosition, Vector3 direction)
@@ -130,7 +114,17 @@ public class GameField : MonoBehaviour
 
         return result;
     }
-    
+
+    private void ClearGameField()
+    {
+        for (int i = _boxes.Count - 1; i >= 0; i--)
+        {
+            Destroy(_boxes[i].gameObject);
+        }
+
+        _boxes.Clear();
+    }
+
     private BaseBox GetBoxByArrayPosition(Vector3 boxArrayPosition)
     {
         return _boxes.FirstOrDefault(x => x.Data.ArrayPosition.ToVector3() == boxArrayPosition);
@@ -138,13 +132,10 @@ public class GameField : MonoBehaviour
 
     private async void CreateLevel(string levelName)
     {
-        _datas = await Game.Instance.Progress.LoadLevelData(levelName);
+        _data = await Game.Instance.Progress.LoadLevelData(levelName);
         _boxes = new List<BaseBox>();
-        
-        var level = levelName.Remove(0, levelName.LastIndexOf('_') + 1);
-        _levelText.text = "Level " + level;
-        
-        foreach (var data in _datas.Data)
+
+        foreach (var data in _data.Data)
         {
             if (data.Type == BaseBox.BlockType.None)
                 continue;
@@ -243,6 +234,6 @@ public class GameField : MonoBehaviour
     private async UniTask<GameObject> InstantiateAssetAsync(string assetName)
     {
         var x = await AssetProvider.LoadAssetAsync<GameObject>(assetName);
-        return x == null ? null : Instantiate(x, _rooTransform);
+        return x == null ? null : Instantiate(x, _rootTransform);
     }
 }
