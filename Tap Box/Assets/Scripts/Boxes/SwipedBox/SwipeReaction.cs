@@ -43,13 +43,13 @@ namespace Boxes.SwipableBox
 
             if (box1 == null || box2 == null)
             {
-                Game.Instance.GameField.RemoveBox(_box);
+                Managers.Instance.GameField.RemoveBox(_box);
                 await MoveOut(box1 == null ? _parent.forward : -_parent.forward);
                 Destroy(gameObject, 0.2f);
                 return;
             }
 
-            Game.Instance.GameField.SetActiveGlobalInput(false);
+            Managers.Instance.GameField.SetActiveGlobalInput(false);
             LeanTouch.OnFingerTap += HandleFingerTap;
 
             ClearTapObject();
@@ -78,7 +78,7 @@ namespace Boxes.SwipableBox
 
         private async void HandleFingerTap(LeanFinger finger)
         {
-            var hit = Game.Instance.InputController.RaycastBox(finger.ScreenPosition, _layerMaskTapObject);
+            var hit = Managers.Instance.InputController.RaycastBox(finger.ScreenPosition, _layerMaskTapObject);
 
             if (hit.collider == null)
                 return;
@@ -92,7 +92,7 @@ namespace Boxes.SwipableBox
             if (!box.name.Contains(TapObjectCancelation))
             {
                 _box.Data.ArrayPosition = box.GetArrayPosition();
-                await MoveTo(Game.Instance.GameField.GetWorldPosition(_box.Data.ArrayPosition));
+                await MoveTo(Managers.Instance.GameField.GetWorldPosition(_box.Data.ArrayPosition));
             }
            
             BackToDefaultState();
@@ -102,7 +102,7 @@ namespace Boxes.SwipableBox
         {
             IsReactionOnProcess = false;
             LeanTouch.OnFingerTap -= HandleFingerTap;
-            Game.Instance.GameField.SetActiveGlobalInput(true);
+            Managers.Instance.GameField.SetActiveGlobalInput(true);
         }
 
         private void OnDrawGizmosSelected()
@@ -113,10 +113,10 @@ namespace Boxes.SwipableBox
 
         private async UniTask CreatePlacesForMove(Vector3 targetArrayPosition, Vector3 direction)
         {
-            var positions = Game.Instance.GameField.EmptyPositionBetweenTwoBoxes(_box.Data.ArrayPosition, targetArrayPosition);
+            var positions = Managers.Instance.GameField.EmptyPositionBetweenTwoBoxes(_box.Data.ArrayPosition, targetArrayPosition);
             foreach (var arrayPosition in positions)
             {
-                var tapObject = await Game.Instance.GameField.CreateTapObject(TapObject);
+                var tapObject = await Managers.Instance.GameField.CreateTapObject(TapObject);
                 tapObject.Setup(arrayPosition, arrayPosition + direction);
                 _tapObjects.Add(tapObject);
             }
@@ -124,7 +124,7 @@ namespace Boxes.SwipableBox
         
         private async UniTask CreateCancelationObject(Vector3 targetArrayPosition, Vector3 direction)
         {
-            var tapObject = await Game.Instance.GameField.CreateTapObject(TapObjectCancelation);
+            var tapObject = await Managers.Instance.GameField.CreateTapObject(TapObjectCancelation);
             tapObject.Setup(targetArrayPosition, targetArrayPosition + direction);
             _tapObjects.Add(tapObject);
         }
@@ -153,12 +153,12 @@ namespace Boxes.SwipableBox
             if (box == null)
                 return null;
             
-            return Game.Instance.GameField.ExistBox(box.Data.ArrayPosition) ? box : null;
+            return Managers.Instance.GameField.ExistBox(box.Data.ArrayPosition) ? box : null;
         }
         
         private async UniTask MoveOut(Vector3 direction)
         {
-            Game.Instance.GameField.CheckForWin();
+            Managers.Instance.GameField.CheckForWin();
 
             bool isPlayDie = false;
             Vector3 startPos = _parent.position;

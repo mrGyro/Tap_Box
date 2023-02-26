@@ -35,9 +35,9 @@ public class LevelsWindiw : MonoBehaviour
 
     private async void CreateLevelButtons()
     {
-        Game.Instance.Progress.LevelDatas.Sort(Compare);
+        Managers.Instance.Progress.LevelDatas.Sort(Compare);
 
-        foreach (var levelData in Game.Instance.Progress.LevelDatas)
+        foreach (var levelData in Managers.Instance.Progress.LevelDatas)
         {
             var level = await levelsPool.Get();
             level.Setup(levelData);

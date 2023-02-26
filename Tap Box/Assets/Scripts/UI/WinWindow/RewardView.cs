@@ -41,7 +41,6 @@ namespace DefaultNamespace.UI.WinWindow
         public void SetTokState(bool value)
         {
             image.sprite = value ? _getSprite : _notGetSprite;
-            Debug.LogError(value + " " + image.sprite);
         }
 
         public void UpdateRewardText(string text)

@@ -38,8 +38,8 @@ namespace UI.Levels.LevelButton
         
         private void OnButtonClick()
         {
-            Game.Instance.LoadLevelById(_data.ID);
-            Game.Instance.SetActiveLevelPanel(false);
+            Managers.Instance.LoadLevelById(_data.ID);
+            Managers.Instance.SetActiveLevelPanel(false);
         }
     }
 }

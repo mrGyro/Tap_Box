@@ -12,9 +12,7 @@ namespace Boxes.TapFlowBox
         [SerializeField] private float _distanse;
         [SerializeField] private float _distanseToDieAction;
 
-
         private bool _isMove;
-        private const string GameFieldElement = "GameFieldElement";
 
         public override async UniTask ReactionStart()
         {
@@ -23,11 +21,11 @@ namespace Boxes.TapFlowBox
 
             _isMove = true;
 
-            var box = Game.Instance.GameField.GetNearestBoxInDirection(_box.Data.ArrayPosition, _parent.forward);
+            var box = Managers.Instance.GameField.GetNearestBoxInDirection(_box.Data.ArrayPosition, _parent.forward);
             if (box == null)
             {
-                Game.Instance.GameField.RemoveBox(_box);
-                Game.Instance.GameField.CheckForWin();
+                Managers.Instance.GameField.RemoveBox(_box);
+                Managers.Instance.GameField.CheckForWin();
                 await MoveOut();
             }
             else
@@ -52,8 +50,9 @@ namespace Boxes.TapFlowBox
                     isPlayDie = true;
                     GetComponent<IDieAction>()?.DieAction();
                 }
+
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
-                await UniTask.Yield();
+                await UniTask.WaitForEndOfFrame(this);
             }
 
             _isMove = false;
@@ -66,13 +65,13 @@ namespace Boxes.TapFlowBox
             while (Vector3.Distance(_parent.position, box.transform.position) > 1.03f)
             {
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
-                await UniTask.Yield();
+                await UniTask.WaitForEndOfFrame(this);
             }
-            
+
             while (Vector3.Distance(_parent.position, startPos) > 1.03f)
             {
                 _parent.Translate(-_parent.forward * Time.deltaTime * _speed, Space.World);
-                await UniTask.Yield();
+                await UniTask.WaitForEndOfFrame(this);
             }
 
             _parent.position = startPos;

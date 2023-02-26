@@ -1,22 +1,28 @@
 using Currency;
 using Cysharp.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CurrensyCounter : MonoBehaviour
+public class CurrensyCounter : MonoBehaviour, IInitializable
 {
     [SerializeField] private RectTransform countRectTransform;
     [SerializeField] private Image icon;
     [SerializeField] private TMP_Text count;
     [SerializeField] private CurrencyController.Type type;
 
-    private async void Start()
+    // private async void Start()
+    // {
+    //     await UniTask.WaitUntil(() => Managers.Instance.CurrencyController.IsInitialized());
+    //     
+    // }
+    
+    public async void Initialize()
     {
-        await UniTask.WaitUntil(() => Game.Instance.CurrencyController.IsInitialized());
         icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>(type.ToString());
-        count.text = Game.Instance.CurrencyController.GetCurrency(type).ToString();
-        Game.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;
+        count.text = Managers.Instance.CurrencyController.GetCurrency(type).ToString();
+        Managers.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;
         await UpdateLayout();
     }
 
@@ -29,7 +35,7 @@ public class CurrensyCounter : MonoBehaviour
 
     private void OnDestroy()
     {
-        Game.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
+        Managers.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
     }
 
     private async UniTask UpdateLayout()
@@ -38,4 +44,6 @@ public class CurrensyCounter : MonoBehaviour
         await UniTask.Yield();
         LayoutRebuilder.ForceRebuildLayoutImmediate(countRectTransform);
     }
+
+    
 }

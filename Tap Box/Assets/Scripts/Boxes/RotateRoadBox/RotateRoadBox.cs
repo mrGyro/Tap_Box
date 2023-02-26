@@ -63,7 +63,7 @@ namespace Boxes.RotateRoadBox
 
                 foreach (var box in list)
                 {
-                    Game.Instance.GameField.RemoveBox(box);
+                    Managers.Instance.GameField.RemoveBox(box);
                 }
             }
             else
@@ -71,7 +71,7 @@ namespace Boxes.RotateRoadBox
                 _collider.enabled = true;
             }
 
-            Game.Instance.GameField.CheckForWin();
+            Managers.Instance.GameField.CheckForWin();
         }
 
         private List<RotateRoadBox> GetNearestAndCanConnected(List<RotateRoadBox> nearestBoxes)
@@ -145,7 +145,7 @@ namespace Boxes.RotateRoadBox
             var result = new List<RotateRoadBox>();
             foreach (var pos in positions)
             {
-                var nearBox = Game.Instance.GameField.GetBoxFromArrayPosition(pos) as RotateRoadBox;
+                var nearBox = Managers.Instance.GameField.GetBoxFromArrayPosition(pos) as RotateRoadBox;
                 if (nearBox == null)
                     continue;
 

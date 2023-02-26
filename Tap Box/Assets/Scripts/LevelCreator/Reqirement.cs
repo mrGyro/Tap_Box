@@ -17,7 +17,7 @@ public class Reqirement
         switch (Type)
         {
             case RequirementType.PassedLevel:
-                var level = Game.Instance.LevelsWindiw.uiLevelItems.Find(x => x.Data.ID == Value);
+                var level = Managers.Instance.LevelsWindiw.uiLevelItems.Find(x => x.Data.ID == Value);
                 if (level.Data.LevelStatus == Status.Passed)
                 {
                     return true;

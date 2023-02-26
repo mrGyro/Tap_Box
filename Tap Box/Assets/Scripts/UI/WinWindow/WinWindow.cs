@@ -31,7 +31,7 @@ public class WinWindow : MonoBehaviour
         await UniTask.Delay(1000);
 
         var nearestPercent = SetNextNearestPercent();
-        rewardViews[Game.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
+        rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
 
         var yVelocity = 0f;
         while (progress.value < _sliderProgressTarget)
@@ -45,30 +45,30 @@ public class WinWindow : MonoBehaviour
                 nearestPercent = SetNextNearestPercent();
             }
 
-            rewardViews[Game.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardText(((int)GetPercents()).ToString());
+            rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardText(((int)GetPercents()).ToString());
         }
 
-        Game.Instance.Progress.CurrentWinWindowsProgress = progress.value;
-        await Game.Instance.Progress.Save();
+        Managers.Instance.Progress.CurrentWinWindowsProgress = progress.value;
+        await Managers.Instance.Progress.Save();
     }
 
     private async UniTask GetReward(RewardViewSetting nearestPercent)
     {
-        rewardViews[Game.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardText("100");
-        rewardViews[Game.Instance.Progress.NextRewardIndexWinWindow].SetTokState(true);
-        rewardViews[Game.Instance.Progress.NextRewardIndexWinWindow].SetActiveVFX(true);
+        rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardText("100");
+        rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetTokState(true);
+        rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveVFX(true);
         winVFX.SetActive(true);
-        await Game.Instance.GetReward(nearestPercent);
+        await Managers.Instance.GetReward(nearestPercent);
         winVFX.SetActive(false);
     }
 
     private float GetPercents()
     {
-        if (Game.Instance.Progress.NextRewardIndexWinWindow == 0)
+        if (Managers.Instance.Progress.NextRewardIndexWinWindow == 0)
             return (progress.value / _settings[0].Percent) * 100;
 
-        var previousIndex = Game.Instance.Progress.NextRewardIndexWinWindow - 1;
-        var x = (progress.value - _settings[previousIndex].Percent) / (_settings[Game.Instance.Progress.NextRewardIndexWinWindow].Percent - _settings[previousIndex].Percent);
+        var previousIndex = Managers.Instance.Progress.NextRewardIndexWinWindow - 1;
+        var x = (progress.value - _settings[previousIndex].Percent) / (_settings[Managers.Instance.Progress.NextRewardIndexWinWindow].Percent - _settings[previousIndex].Percent);
         
         return x * 100;
     }
@@ -108,10 +108,10 @@ public class WinWindow : MonoBehaviour
 
     private void SetNextIndex(int index)
     {
-        rewardViews[Game.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(false);
-        rewardViews[Game.Instance.Progress.NextRewardIndexWinWindow].SetActiveVFX(false);
-        Game.Instance.Progress.NextRewardIndexWinWindow = index;
-        rewardViews[Game.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
+        rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(false);
+        rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveVFX(false);
+        Managers.Instance.Progress.NextRewardIndexWinWindow = index;
+        rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
     }
 
     private async void Setup()
@@ -120,18 +120,18 @@ public class WinWindow : MonoBehaviour
         goNextButton.onClick.RemoveAllListeners();
         goNextButton.onClick.AddListener(() =>
         {
-            Game.Instance.LoadNextLevel();
+            Managers.Instance.LoadNextLevel();
             gameObject.SetActive(false);
         });
         
         var scrollRect = progress.GetComponent<RectTransform>();
 
-        _settings = Game.Instance.CurrencyController.GetRewardSettings();
+        _settings = Managers.Instance.CurrencyController.GetRewardSettings();
         var size = scrollRect.sizeDelta.x / 100;
 
-        progress.value = Game.Instance.Progress.CurrentWinWindowsProgress;
-        _sliderProgressTarget = Game.Instance.Progress.CurrentWinWindowsProgress;
-        _sliderProgressTarget += Game.Instance.GetWinProgress();
+        progress.value = Managers.Instance.Progress.CurrentWinWindowsProgress;
+        _sliderProgressTarget = Managers.Instance.Progress.CurrentWinWindowsProgress;
+        _sliderProgressTarget += Managers.Instance.GetWinProgress();
 
         for (var i = _settings.Count; i < _settings.Count; i++)
         {

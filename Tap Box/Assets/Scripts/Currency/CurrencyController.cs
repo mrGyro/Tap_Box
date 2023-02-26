@@ -20,45 +20,45 @@ namespace Currency
 
         public void AddCurrency(Type type, int value)
         {
-            if (Game.Instance.Progress.Currencies == null)
+            if (Managers.Instance.Progress.Currencies == null)
                 return;
 
-            if (Game.Instance.Progress.Currencies.ContainsKey(type))
-                Game.Instance.Progress.Currencies[type] += value;
+            if (Managers.Instance.Progress.Currencies.ContainsKey(type))
+                Managers.Instance.Progress.Currencies[type] += value;
             else
-                Game.Instance.Progress.Currencies.Add(type, value);
+                Managers.Instance.Progress.Currencies.Add(type, value);
 
-            OnCurrencyCountChanged?.Invoke(type, Game.Instance.Progress.Currencies[type]);
+            OnCurrencyCountChanged?.Invoke(type, Managers.Instance.Progress.Currencies[type]);
         }
 
         public void RemoveCurrency(Type type, int value)
         {
-            if (Game.Instance.Progress.Currencies == null)
+            if (Managers.Instance.Progress.Currencies == null)
                 return;
 
-            if (Game.Instance.Progress.Currencies.ContainsKey(type))
+            if (Managers.Instance.Progress.Currencies.ContainsKey(type))
             {
-                Game.Instance.Progress.Currencies[type] -= value;
-                if (Game.Instance.Progress.Currencies[type] < 0)
+                Managers.Instance.Progress.Currencies[type] -= value;
+                if (Managers.Instance.Progress.Currencies[type] < 0)
                 {
-                    Game.Instance.Progress.Currencies[type] = 0;
+                    Managers.Instance.Progress.Currencies[type] = 0;
                 }
             }
             else
-                Game.Instance.Progress.Currencies.Add(type, 0);
+                Managers.Instance.Progress.Currencies.Add(type, 0);
 
-            OnCurrencyCountChanged?.Invoke(type, Game.Instance.Progress.Currencies[type]);
+            OnCurrencyCountChanged?.Invoke(type, Managers.Instance.Progress.Currencies[type]);
         }
 
         public int GetCurrency(Type type)
         {
-            if (Game.Instance.Progress.Currencies == null)
+            if (Managers.Instance.Progress.Currencies == null)
                 return 0;
             
-            return Game.Instance.Progress.Currencies.ContainsKey(type) ? Game.Instance.Progress.Currencies[type] : 0;
+            return Managers.Instance.Progress.Currencies.ContainsKey(type) ? Managers.Instance.Progress.Currencies[type] : 0;
         }
 
-        public bool IsInitialized() => Game.Instance.Progress.Currencies != null;
+        public bool IsInitialized() => Managers.Instance.Progress.Currencies != null;
 
         public List<RewardViewSetting> GetRewardSettings()
         {

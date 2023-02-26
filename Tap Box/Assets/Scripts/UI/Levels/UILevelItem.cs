@@ -48,7 +48,7 @@ namespace UI.Levels
             
             Data.LevelStatus = Status.Open;
             UpdateButton(Data);
-            Game.Instance.Updateevel(Data);
+            Managers.Instance.Updateevel(Data);
         }
 
         public void UpdateButton(LevelData data)

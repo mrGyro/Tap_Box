@@ -28,11 +28,7 @@ public class InputController : MonoBehaviour
         _zoom.SetZomValue(100);
     }
 
-    void OnEnable()
-    {
-        LeanTouch.OnFingerTap += HandleFingerTap;
-        LeanTouch.OnGesture += Swipe;
-    }
+
 
     public void SetNewTargetPosition(Vector3 position)
     {
@@ -90,6 +86,12 @@ public class InputController : MonoBehaviour
         return hit;
     }
 
+    private void OnEnable()
+    {
+        LeanTouch.OnFingerTap += HandleFingerTap;
+        LeanTouch.OnGesture += Swipe;
+    }
+    
     private void OnDestroy()
     {
         LeanTouch.OnFingerTap -= HandleFingerTap;

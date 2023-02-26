@@ -23,11 +23,13 @@ public class GameField : MonoBehaviour, IInitializable
         _boxes = new List<BaseBox>();
         _data = new LevelData();
     }
+
+    public int GetBoxCount => _boxes.Count;
     
-    public void LoadLevelByName(string levelName)
+    public async UniTask LoadLevelByName(string levelName)
     {
         ClearGameField();
-        CreateLevel(levelName);
+        await CreateLevel(levelName);
     }
 
     public async void CheckForWin()
@@ -35,10 +37,10 @@ public class GameField : MonoBehaviour, IInitializable
         if (_boxes.Count == 0)
         {
             await UniTask.Delay(1000);
-            Game.Instance.WinWindow.SetActive(true);
+            Managers.Instance.WinWindow.SetActive(true);
 
             _data.LevelStatus = Status.Passed;
-            Game.Instance.SaveLevel(_data);
+            Managers.Instance.SaveLevel(_data);
 
             return;
         }
@@ -53,7 +55,7 @@ public class GameField : MonoBehaviour, IInitializable
             _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
             _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
 
-        Game.Instance.InputController.SetNewTargetPosition(newPosition);
+        Managers.Instance.InputController.SetNewTargetPosition(newPosition);
     }
 
     public bool ExistBox(Vector3 boxArrayPosition)
@@ -88,11 +90,12 @@ public class GameField : MonoBehaviour, IInitializable
     public void RemoveBox(BaseBox box)
     {
         _boxes.Remove(box);
+        Core.MessengerStatic.Messenger<BaseBox>.Broadcast(Constants.Events.OnBoxRemoveFromGameField, box);
     }
 
     public void SetActiveGlobalInput(bool value)
     {
-        Game.Instance.InputController.SetActiveInput(value);
+        Managers.Instance.InputController.SetActiveInput(value);
     }
 
     public List<Vector3> EmptyPositionBetweenTwoBoxes(Vector3 destination, Vector3 origin)
@@ -130,9 +133,9 @@ public class GameField : MonoBehaviour, IInitializable
         return _boxes.FirstOrDefault(x => x.Data.ArrayPosition.ToVector3() == boxArrayPosition);
     }
 
-    private async void CreateLevel(string levelName)
+    private async UniTask CreateLevel(string levelName)
     {
-        _data = await Game.Instance.Progress.LoadLevelData(levelName);
+        _data = await Managers.Instance.Progress.LoadLevelData(levelName);
         _boxes = new List<BaseBox>();
 
         foreach (var data in _data.Data)
