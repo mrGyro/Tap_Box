@@ -37,7 +37,7 @@ public class GameField : MonoBehaviour, IInitializable
         if (_boxes.Count == 0)
         {
             await UniTask.Delay(1000);
-            Managers.Instance.WinWindow.SetActive(true);
+            Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.WinPopUp);
 
             _data.LevelStatus = Status.Passed;
             Managers.Instance.SaveLevel(_data);
@@ -47,7 +47,7 @@ public class GameField : MonoBehaviour, IInitializable
 
         SetNewMaxMinSize();
     }
-
+    
     private void SetNewTargetPosition()
     {
         Vector3 newPosition = new Vector3(

@@ -1,20 +1,43 @@
-using Unity.VisualScripting;
+using DefaultNamespace.Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class NewLevelPanel : MonoBehaviour, IInitializable
+namespace UI
 {
-    public void Initialize()
+    public class NewLevelPanel : PopUpBase
     {
-        Managers.Instance.PlayerLevelManager.OnLevelChanged += LevelChanged;
-    }
+        [SerializeField] private Button button;
+        public override void Initialize()
+        {
+            ID = Constants.PopUps.NewLevelPopUp;
+            Priority = 100;
+            Managers.Instance.PlayerLevelManager.OnLevelChanged += LevelChanged;
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(Close);
+        }
 
-    private void LevelChanged(int obj)
-    {
-        gameObject.SetActive(true);
-    }
+        public override void Show()
+        {
+            gameObject.SetActive(true);
+            IsShowing = true;
+            OnShow?.Invoke(this);
+        }
 
-    private void OnDestroy()
-    {
-        Managers.Instance.PlayerLevelManager.OnLevelChanged -= LevelChanged;
+        public override void Close()
+        {
+            gameObject.SetActive(false);
+            OnClose?.Invoke(this);
+            IsShowing = false;
+        }
+
+        private void LevelChanged(int obj)
+        {
+            Managers.Instance.UIManager.ShowPopUp(ID);
+        }
+
+        private void OnDestroy()
+        {
+            Managers.Instance.PlayerLevelManager.OnLevelChanged -= LevelChanged;
+        }
     }
 }

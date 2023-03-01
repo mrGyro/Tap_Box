@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using DefaultNamespace.Managers;
 using DefaultNamespace.UI.WinWindow;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WinWindow : MonoBehaviour
+public class WinWindow : PopUpBase
 {
     [SerializeField] private Slider progress;
     [SerializeField] private Button goNextButton;
@@ -16,7 +18,27 @@ public class WinWindow : MonoBehaviour
     private List<RewardViewSetting> _settings;
     private float _sliderProgressTarget;
 
-    public async void SetActive(bool value)
+    public override void Initialize()
+    {
+        ID = Constants.PopUps.WinPopUp;
+        Priority = 1;
+    }
+
+    public override void Show()
+    {
+        SetActive(true);
+        OnShow?.Invoke(this);
+        IsShowing = true;
+    }
+
+    public override void Close()
+    {
+        SetActive(false);
+        OnClose?.Invoke(this);
+        IsShowing = false;
+    }
+
+    private async void SetActive(bool value)
     {
         gameObject.SetActive(value);
         if (!value) return;
@@ -69,7 +91,7 @@ public class WinWindow : MonoBehaviour
 
         var previousIndex = Managers.Instance.Progress.NextRewardIndexWinWindow - 1;
         var x = (progress.value - _settings[previousIndex].Percent) / (_settings[Managers.Instance.Progress.NextRewardIndexWinWindow].Percent - _settings[previousIndex].Percent);
-        
+
         return x * 100;
     }
 
@@ -83,7 +105,7 @@ public class WinWindow : MonoBehaviour
 
             for (var i = 0; i < _settings.Count; i++)
                 rewardViews[i].SetTokState(progress.value >= _settings[i].Percent);
-            
+
             return _settings[0];
         }
 
@@ -93,10 +115,10 @@ public class WinWindow : MonoBehaviour
             progress.value = progress.minValue;
             _sliderProgressTarget -= progress.maxValue;
             SetNextIndex(0);
-            
+
             for (var i = 0; i < _settings.Count; i++)
                 rewardViews[i].SetTokState(progress.value >= _settings[i].Percent);
-            
+
             return _settings[0];
         }
 
@@ -121,9 +143,9 @@ public class WinWindow : MonoBehaviour
         goNextButton.onClick.AddListener(() =>
         {
             Managers.Instance.LoadNextLevel();
-            gameObject.SetActive(false);
+            Close();
         });
-        
+
         var scrollRect = progress.GetComponent<RectTransform>();
 
         _settings = Managers.Instance.CurrencyController.GetRewardSettings();
