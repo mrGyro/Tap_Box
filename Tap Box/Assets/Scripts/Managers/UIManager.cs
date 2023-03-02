@@ -30,24 +30,19 @@ public class UIManager : MonoBehaviour, IInitializable
             return;
         
         AddToPopUpQueue(popup);
-        Debug.LogError("==== add " + popup.ID);
         ShowNext();
     }
 
     public void ClosePopUp(string id)
     {
-        Debug.LogError("==1== close " + id);
-
         var popup = popups.Find(x => x.ID == id);
         if (popup == null)
             return;
 
         popup.Close();
         popup.IsShowing = false;
-        Debug.LogError("==2== close " + popup.ID);
 
         RemoveFromPopUpQueue(popup);
-
         ShowNext();
     }
 

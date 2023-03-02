@@ -1,5 +1,4 @@
 using System.Linq;
-using Boxes;
 using Currency;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace.UI.WinWindow;
@@ -18,6 +17,7 @@ public class Managers : MonoBehaviour
     public CurrencyController CurrencyController;
     public UIManager UIManager;
     public PlayerLevelManager PlayerLevelManager;
+    public SkinsManager SkinsManager;
 
     private async void Awake()
     {
@@ -27,6 +27,7 @@ public class Managers : MonoBehaviour
             Progress = new GameProgress();
             CurrencyController = new CurrencyController();
             PlayerLevelManager = new PlayerLevelManager();
+            SkinsManager = new SkinsManager();
         }
 
         await Progress.Load();

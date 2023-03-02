@@ -1,13 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using DefaultNamespace.Managers;
 
-public class SkinsPoUp : MonoBehaviour
+namespace UI.Skins
 {
-    // Start is called before the first frame update
-    void Start()
+    public class SkinsPoUp : PopUpBase
     {
-        
-    }
+        // Start is called before the first frame update
+        void Start()
+        {
+            ID = Constants.PopUps.SkinsPopUp;
+            Priority = 0;
+        }
 
+        public override void Show()
+        {
+            gameObject.SetActive(true);
+        }
+        public override void Close()
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }
