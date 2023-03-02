@@ -23,6 +23,8 @@ namespace SaveLoad_progress
         public int NextRewardIndexWinWindow;
         public int CurrentPlayerLevel;
         public float CurrentPlayerLevelProgress;
+        public string CurrentSkin;
+
 
         public Dictionary<CurrencyController.Type, int> Currencies;
 
@@ -44,13 +46,11 @@ namespace SaveLoad_progress
             Currencies = progress.Currencies;
             CurrentPlayerLevel = progress.CurrentPlayerLevel;
             CurrentPlayerLevelProgress = progress.CurrentPlayerLevelProgress;
-            
-
+            CurrentSkin = string.IsNullOrEmpty(CurrentSkin) ? "Default" : progress.CurrentSkin;
         }
 
         public async UniTask SaveGameProgress(GameProgress progress)
         {
-            Debug.LogError(progress.CurrentPlayerLevelProgress + " save " + progress.CurrentPlayerLevel);
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Create(Application.persistentDataPath + "/GameProgress.dat");
 
@@ -97,7 +97,6 @@ namespace SaveLoad_progress
             }
 
             var gameProgress = LoadGameProgressFromFile();
-            Debug.LogError(gameProgress.CurrentPlayerLevel + " asdasd " + gameProgress.CurrentPlayerLevelProgress);
             if (gameProgress.LevelDatas != null)
             {
                 foreach (var levelData in gameProgress.LevelDatas)
@@ -129,24 +128,13 @@ namespace SaveLoad_progress
             return (LevelData)binForm.Deserialize(memStream);
         }
 
-        // private static async UniTask<GameProgress> LoadProgressData()
-        // {
-        //     var x = await AssetProvider.LoadAssetAsync<TextAsset>("GameProgress");
-        //     MemoryStream memStream = new MemoryStream();
-        //     BinaryFormatter binForm = new BinaryFormatter();
-        //     memStream.Write(x.bytes, 0, x.bytes.Length);
-        //     memStream.Seek(0, SeekOrigin.Begin);
-        //
-        //     try
-        //     {
-        //         return (GameProgress)binForm.Deserialize(memStream);
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Debug.LogError("FistStart");
-        //         return new GameProgress();
-        //     }
-        // }
+        public async UniTask ChangeBlock(string name)
+        {
+            if (CurrentSkin == name)
+                return;
+            CurrentSkin = name;
+            await Managers.Instance.GameField.ChangeSkin();
+        }
 
         private async UniTask<List<string>> LoadLevelsName()
         {

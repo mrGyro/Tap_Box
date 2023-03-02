@@ -24,10 +24,9 @@ public class GameField : MonoBehaviour, IInitializable
     }
 
     public int GetBoxCount => _boxes.Count;
-    
+
     public async UniTask LoadLevelByName(string levelName)
     {
-        ClearGameField();
         await CreateLevel(levelName);
     }
 
@@ -45,7 +44,7 @@ public class GameField : MonoBehaviour, IInitializable
 
         SetNewMaxMinSize();
     }
-    
+
     private void SetNewTargetPosition()
     {
         Vector3 newPosition = new Vector3(
@@ -133,14 +132,32 @@ public class GameField : MonoBehaviour, IInitializable
     private async UniTask CreateLevel(string levelName)
     {
         _data = await Managers.Instance.Progress.LoadLevelData(levelName);
+
+        await CreateBoxes(_data.Data);
+
+        SetNewMaxMinSize();
+        SetNewTargetPosition();
+    }
+
+    public async UniTask ChangeSkin()
+    {
+        var list = new List<BoxData>();
+        foreach (var VARIABLE in _boxes)
+            list.Add(VARIABLE.Data);
+
+        await CreateBoxes(list);
+    }
+    private async UniTask CreateBoxes(List<BoxData> dataList)
+    {
+        ClearGameField();
         _boxes = new List<BaseBox>();
 
-        foreach (var data in _data.Data)
+        foreach (var data in dataList)
         {
             if (data.Type == BaseBox.BlockType.None)
                 continue;
 
-            var boxGameObject = await InstantiateAssetAsync(data.Type.ToString());
+            var boxGameObject = await InstantiateAssetAsync($"{Managers.Instance.Progress.CurrentSkin}_{data.Type}");
             var box = boxGameObject.GetComponent<BaseBox>();
             box.transform.position = data.ArrayPosition.ToVector3() * size;
             box.transform.rotation = Quaternion.Euler(data.Rotation);
@@ -152,9 +169,6 @@ public class GameField : MonoBehaviour, IInitializable
         {
             await baseBox.Init();
         }
-
-        SetNewMaxMinSize();
-        SetNewTargetPosition();
     }
 
     public BaseBox GetBoxFromArrayPosition(Vector3 position)

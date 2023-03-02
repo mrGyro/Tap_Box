@@ -4,11 +4,10 @@ namespace UI.Skins
 {
     public class SkinsPoUp : PopUpBase
     {
-        // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             ID = Constants.PopUps.SkinsPopUp;
-            Priority = 0;
+            Priority = 1;
         }
 
         public override void Show()

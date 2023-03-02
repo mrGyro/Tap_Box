@@ -11,7 +11,6 @@ public class PlayerLevelUI : MonoBehaviour, IInitializable
 
     public void Initialize()
     {
-        Debug.LogError(Managers.Instance.Progress.CurrentPlayerLevel + " " + Managers.Instance.Progress.CurrentPlayerLevelProgress);
         currentLevel.text = Managers.Instance.Progress.CurrentPlayerLevel.ToString();
         nextLevel.text = (Managers.Instance.Progress.CurrentPlayerLevel + 1).ToString();
         progress.value = Managers.Instance.Progress.CurrentPlayerLevelProgress;

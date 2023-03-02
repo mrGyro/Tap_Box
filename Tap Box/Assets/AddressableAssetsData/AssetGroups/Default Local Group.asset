@@ -18,15 +18,15 @@ MonoBehaviour:
   m_GUID: 946a778866cf27d4d9f0e3c6d861d482
   m_SerializeEntries:
   - m_GUID: e5043400040339443843d5e068853cb1
-    m_Address: RotateRoadBox
+    m_Address: Default_RotateRoadBox
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 8bbff50bad1dcb74ba950424e443a1e2
-    m_Address: TapFlowBox
+    m_Address: Default_TapFlowBox
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 06a832c91faa89c499a35d607725c9dc
-    m_Address: SwipedBox
+    m_Address: Default_SwipedBox
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 019fd73bde56b7243ba49f9f3d975e96
@@ -91,6 +91,18 @@ MonoBehaviour:
     m_SerializedLabels: []
   - m_GUID: 394c0b82b56efc643a3dfe9aebf348f2
     m_Address: Coin_notGet
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8b4544319b6798b48ba200ca3a3860db
+    m_Address: Skin1_RotateRoadBox
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5a2e51a498f4c974b8d6ff7f7fe52863
+    m_Address: Skin1_SwipedBox
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 811af24e878f4474fb88e1eb4c471529
+    m_Address: Skin1_TapFlowBox
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

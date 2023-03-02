@@ -68,8 +68,6 @@ public class UIManager : MonoBehaviour, IInitializable
         if (_popUpsQueue.Find(x => x.IsShowing) != null)
             return;
 
-        Debug.LogError("==== show newxt " + _popUpsQueue[^1].ID);
-
         _popUpsQueue[^1].Show();
         _popUpsQueue[^1].IsShowing = true;
 
