@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using DefaultNamespace.Managers;
 using DefaultNamespace.UI.Popup;
+using UI;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour, IInitializable
 {
-    [SerializeField] private CurrensyCounter coinCounter;
+    [SerializeField] private CurrencyCounter coinCounter;
     [SerializeField] private PlayerLevelUI playerLevelUI;
     [SerializeField] private TurnsLeftCounter turnsLeftCounter;
 

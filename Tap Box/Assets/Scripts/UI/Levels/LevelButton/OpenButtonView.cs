@@ -26,7 +26,7 @@ namespace UI.Levels.LevelButton
             icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>("OpenIcon");
 
             rewardTitle.text = "Reward";
-            rewardIcon.sprite = await AssetProvider.LoadAssetAsync<Sprite>("Coins");
+            rewardIcon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{Constants.Currency.Coins}_icon");
             rewardNumber.text = _data.Reward.ToString();
 
             actionButton.onClick.RemoveAllListeners();

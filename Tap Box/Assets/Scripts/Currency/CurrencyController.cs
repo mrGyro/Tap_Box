@@ -14,15 +14,15 @@ namespace Currency
             BackgroundSkin,
             FlowSkin,
             VFXSkin,
+            Ads
         }
 
         public Action<Type, int> OnCurrencyCountChanged;
 
         public void AddCurrency(Type type, int value)
         {
-            if (Managers.Instance.Progress.Currencies == null)
-                return;
-
+            Managers.Instance.Progress.Currencies ??= new Dictionary<Type, int>();
+            
             if (Managers.Instance.Progress.Currencies.ContainsKey(type))
                 Managers.Instance.Progress.Currencies[type] += value;
             else

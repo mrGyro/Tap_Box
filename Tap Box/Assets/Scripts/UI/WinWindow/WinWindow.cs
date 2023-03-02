@@ -77,6 +77,7 @@ public class WinWindow : PopUpBase
         winVFX.SetActive(true);
         await Managers.Instance.GetReward(nearestPercent);
         winVFX.SetActive(false);
+        
     }
 
     private float GetPercents()
