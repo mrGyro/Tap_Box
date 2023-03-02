@@ -1,5 +1,4 @@
-﻿using System;
-using Unity.VisualScripting;
+﻿using Unity.VisualScripting;
 using UnityEngine;
 
 namespace DefaultNamespace.Managers
@@ -9,8 +8,7 @@ namespace DefaultNamespace.Managers
         public int Priority;
         public string ID;
         public bool IsShowing;
-        public Action<PopUpBase> OnShow;
-        public Action<PopUpBase> OnClose;
+
         public virtual void Show(){}
         public virtual void Close(){}
         public virtual void Initialize() { }

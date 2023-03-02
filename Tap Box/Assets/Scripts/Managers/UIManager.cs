@@ -20,9 +20,7 @@ public class UIManager : MonoBehaviour, IInitializable
         turnsLeftCounter.Initialize();
 
         foreach (var variable in popups)
-        {
             variable.Initialize();
-        }
     }
 
     public void ShowPopUp(string id)
@@ -30,34 +28,41 @@ public class UIManager : MonoBehaviour, IInitializable
         var popup = popups.Find(x => x.ID == id);
         if (popup == null)
             return;
-
+        
         AddToPopUpQueue(popup);
+        Debug.LogError("==== add " + popup.ID);
         ShowNext();
     }
 
-    public void AddToPopUpQueue(PopUpBase popUpBase)
+    public void ClosePopUp(string id)
     {
-        _popUpsQueue.Add(popUpBase);
-        popUpBase.OnClose += OnPopUpClose;
-        _popUpsQueue.Sort(new PopUpComparer());
+        Debug.LogError("==1== close " + id);
 
-        foreach (var VARIABLE in _popUpsQueue)
-        {
-            Debug.LogError(VARIABLE.Priority);
-        }
+        var popup = popups.Find(x => x.ID == id);
+        if (popup == null)
+            return;
 
-        Debug.LogError("-----------------------");
+        popup.Close();
+        popup.IsShowing = false;
+        Debug.LogError("==2== close " + popup.ID);
+
+        RemoveFromPopUpQueue(popup);
+
+        ShowNext();
     }
 
-    public void RemoveFromPopUpQueue(PopUpBase popUpBase)
+    private void AddToPopUpQueue(PopUpBase popUpBase)
+    {
+        if (_popUpsQueue.Exists(x => x.ID == popUpBase.ID))
+            return;
+        
+        _popUpsQueue.Add(popUpBase);
+        _popUpsQueue.Sort(new PopUpComparer());
+    }
+
+    private void RemoveFromPopUpQueue(PopUpBase popUpBase)
     {
         _popUpsQueue.Remove(popUpBase);
-    }
-
-    private void OnPopUpClose(PopUpBase popUpBase)
-    {
-        RemoveFromPopUpQueue(popUpBase);
-        ShowNext();
     }
 
     private void ShowNext()
@@ -65,9 +70,13 @@ public class UIManager : MonoBehaviour, IInitializable
         if (_popUpsQueue.Count == 0)
             return;
 
-        if (_popUpsQueue.Find(x => x.IsShowing) != null) 
+        if (_popUpsQueue.Find(x => x.IsShowing) != null)
             return;
-        
+
+        Debug.LogError("==== show newxt " + _popUpsQueue[^1].ID);
+
         _popUpsQueue[^1].Show();
+        _popUpsQueue[^1].IsShowing = true;
+
     }
 }

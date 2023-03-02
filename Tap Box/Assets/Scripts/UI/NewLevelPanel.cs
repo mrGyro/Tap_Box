@@ -13,21 +13,18 @@ namespace UI
             Priority = 100;
             Managers.Instance.PlayerLevelManager.OnLevelChanged += LevelChanged;
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(Close);
+            button.onClick.AddListener((() => Managers.Instance.UIManager.ClosePopUp(ID)));
         }
 
         public override void Show()
         {
             gameObject.SetActive(true);
-            IsShowing = true;
-            OnShow?.Invoke(this);
         }
 
         public override void Close()
         {
             gameObject.SetActive(false);
-            OnClose?.Invoke(this);
-            IsShowing = false;
+            
         }
 
         private void LevelChanged(int obj)

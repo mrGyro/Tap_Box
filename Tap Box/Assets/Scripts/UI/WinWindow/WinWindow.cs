@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
@@ -27,15 +26,11 @@ public class WinWindow : PopUpBase
     public override void Show()
     {
         SetActive(true);
-        OnShow?.Invoke(this);
-        IsShowing = true;
     }
 
     public override void Close()
     {
         SetActive(false);
-        OnClose?.Invoke(this);
-        IsShowing = false;
     }
 
     private async void SetActive(bool value)
@@ -143,7 +138,7 @@ public class WinWindow : PopUpBase
         goNextButton.onClick.AddListener(() =>
         {
             Managers.Instance.LoadNextLevel();
-            Close();
+            Managers.Instance.UIManager.ClosePopUp(ID);
         });
 
         var scrollRect = progress.GetComponent<RectTransform>();

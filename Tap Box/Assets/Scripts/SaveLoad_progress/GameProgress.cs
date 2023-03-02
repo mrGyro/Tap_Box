@@ -44,11 +44,13 @@ namespace SaveLoad_progress
             Currencies = progress.Currencies;
             CurrentPlayerLevel = progress.CurrentPlayerLevel;
             CurrentPlayerLevelProgress = progress.CurrentPlayerLevelProgress;
-        }
+            
 
+        }
 
         public async UniTask SaveGameProgress(GameProgress progress)
         {
+            Debug.LogError(progress.CurrentPlayerLevelProgress + " save " + progress.CurrentPlayerLevel);
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Create(Application.persistentDataPath + "/GameProgress.dat");
 
@@ -64,28 +66,38 @@ namespace SaveLoad_progress
 
         public async UniTask Load()
         {
-            var progress = await LoadGameProgress();
-            SetValues(progress);
+            await LoadGameProgress();
         }
 
-        private async UniTask<GameProgress> LoadGameProgress()
+        public void CheckRequirement()
         {
-            var loadLevelsFromFile = await LoadLevelsName();
-            GameProgress loadGameProgress = new GameProgress
+            foreach (var levelData in LevelDatas)
+            {
+                if (levelData.Reqirement.CheckForDone() && levelData.LevelStatus == Status.Close)
+                    levelData.LevelStatus = Status.Open;
+            }
+        }
+
+        private async UniTask LoadGameProgress()
+        {
+            var loadGameProgress = new GameProgress
             {
                 LevelDatas = new List<LevelData>()
             };
-
+            
+            var loadLevelsFromFile = await LoadLevelsName();
             foreach (var assetName in loadLevelsFromFile)
             {
                 var levelData = await LoadLevelData(assetName);
 
                 if (levelData == null)
                     continue;
+                
                 loadGameProgress.LevelDatas.Add(levelData);
             }
 
             var gameProgress = LoadGameProgressFromFile();
+            Debug.LogError(gameProgress.CurrentPlayerLevel + " asdasd " + gameProgress.CurrentPlayerLevelProgress);
             if (gameProgress.LevelDatas != null)
             {
                 foreach (var levelData in gameProgress.LevelDatas)
@@ -103,11 +115,8 @@ namespace SaveLoad_progress
             {
                 gameProgress.LevelDatas = loadGameProgress.LevelDatas;
             }
-
-            loadGameProgress.SetValues(gameProgress);
-
-            await UniTask.Yield();
-            return loadGameProgress;
+            
+            SetValues(gameProgress);
         }
 
         public async UniTask<LevelData> LoadLevelData(string assetName)
@@ -154,6 +163,7 @@ namespace SaveLoad_progress
             BinaryFormatter bf = new BinaryFormatter();
 
             string path = Application.persistentDataPath + "/GameProgress.dat";
+            Debug.LogError(path);
             if (File.Exists(path))
             {
                 FileStream file = File.Open(path, FileMode.Open);

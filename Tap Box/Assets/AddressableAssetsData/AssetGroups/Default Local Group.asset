@@ -53,10 +53,6 @@ MonoBehaviour:
     m_Address: LevelButton
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: cf0c55ecd1685e44fb3eb4ae4d21e242
-    m_Address: GameProgress
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: e87d1fd608533b547977da3ccd228f0b
     m_Address: PassedIcon
     m_ReadOnly: 0

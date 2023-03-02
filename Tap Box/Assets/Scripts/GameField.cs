@@ -21,7 +21,6 @@ public class GameField : MonoBehaviour, IInitializable
     {
         _rootTransform = transform;
         _boxes = new List<BaseBox>();
-        _data = new LevelData();
     }
 
     public int GetBoxCount => _boxes.Count;
@@ -38,7 +37,6 @@ public class GameField : MonoBehaviour, IInitializable
         {
             await UniTask.Delay(1000);
             Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.WinPopUp);
-
             _data.LevelStatus = Status.Passed;
             Managers.Instance.SaveLevel(_data);
 
@@ -75,7 +73,6 @@ public class GameField : MonoBehaviour, IInitializable
         while (CheckMaxLevelSize(currentPosition) && CheckMinLevelSize(currentPosition))
         {
             var box = GetBoxByArrayPosition(currentPosition);
-            Debug.LogError((box == null) + " " + currentPosition + " " + direction);
             if (box != null)
             {
                 return box;

@@ -1,35 +1,48 @@
 using System.Collections.Generic;
+using System.Linq;
+using DefaultNamespace.Managers;
 using LevelCreator;
 using UI.Levels;
 using UnityEngine;
 
-public class LevelsWindiw : MonoBehaviour
+public class LevelsWindiw : PopUpBase
 {
     [SerializeField] private LevelsPool levelsPool;
-    [SerializeField] private RectTransform root;
-
     public List<UILevelItem> uiLevelItems = new();
 
-    public void Setup()
-    { 
+    public override void Initialize()
+    {
+        ID = Constants.PopUps.LevelListPopUp;
+        Priority = 1;
         CreateLevelButtons();
     }
 
-    public void UpdateLevel(LevelData level)
+    public override void Close()
     {
-        var updateLevel = uiLevelItems.Find(x => x.Data.ID == level.ID);
-        if (updateLevel == null)
-            return;
-
-        updateLevel.Data.UpdateData(level);
-        UpdateLevelsButton(level);
+        gameObject.SetActive(false);
     }
 
-    public void CheckRequirement()
+    public override void Show()
     {
-        foreach (var level in uiLevelItems)
+        UpdateLevel();
+        gameObject.SetActive(true);
+    }
+
+    private void UpdateLevel()
+    {
+        foreach (var data in Managers.Instance.Progress.LevelDatas)
         {
-            level.CheckRequirement();
+            var level = uiLevelItems.FirstOrDefault(x => x.Data.ID == data.ID);
+            if (level == null)
+                continue;
+            
+            level.Data.UpdateData(level.Data);
+            UpdateLevelsButton(level.Data);
+
+            if (!CheckForDone(level.Data.Reqirement))
+                continue;
+
+            level.Setup(data);
         }
     }
 
@@ -63,6 +76,23 @@ public class LevelsWindiw : MonoBehaviour
         if (updateLevelButton == null)
             return;
 
-        updateLevelButton.UpdateButton(levelData);
+        updateLevelButton.Setup(levelData);
+    }
+
+    private bool CheckForDone(Reqirement requirement)
+    {
+        switch (requirement.Type)
+        {
+            case Reqirement.RequirementType.PassedLevel:
+                var level = uiLevelItems.Find(x => x.Data.ID == requirement.Value);
+                if (level != null && level.Data.LevelStatus == Status.Passed)
+                {
+                    return true;
+                }
+
+                break;
+        }
+
+        return false;
     }
 }

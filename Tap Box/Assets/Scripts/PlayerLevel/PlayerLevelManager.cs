@@ -1,6 +1,7 @@
 ﻿using System;
 using Boxes;
 using Unity.VisualScripting;
+using UnityEngine;
 
 namespace PlayerLevel
 {
@@ -22,7 +23,6 @@ namespace PlayerLevel
         public void AddExperience(float value)
         {
             Managers.Instance.Progress.CurrentPlayerLevelProgress += value;
-
             if (Managers.Instance.Progress.CurrentPlayerLevelProgress >= 100)
             {
                 AddLevel();

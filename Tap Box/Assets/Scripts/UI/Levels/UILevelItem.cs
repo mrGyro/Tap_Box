@@ -41,21 +41,6 @@ namespace UI.Levels
             Data = data;
         }
 
-        public void CheckRequirement()
-        {
-            if (Data.LevelStatus != Status.Close || !Data.Reqirement.CheckForDone()) 
-                return;
-            
-            Data.LevelStatus = Status.Open;
-            UpdateButton(Data);
-            Managers.Instance.Updateevel(Data);
-        }
-
-        public void UpdateButton(LevelData data)
-        {
-            Setup(data);
-        }
-
         public void SetActive(bool value)
         {
             gameObject.SetActive(value);

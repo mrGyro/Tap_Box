@@ -39,7 +39,7 @@ namespace UI.Levels.LevelButton
         private void OnButtonClick()
         {
             Managers.Instance.LoadLevelById(_data.ID);
-            Managers.Instance.SetActiveLevelPanel(false);
+            Managers.Instance.UIManager.ClosePopUp(Constants.PopUps.LevelListPopUp);
         }
     }
 }
