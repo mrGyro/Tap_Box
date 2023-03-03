@@ -22,6 +22,15 @@ namespace UI
             Managers.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;
             await UpdateLayout();
         }
+        
+        public async UniTask UpdateLayout()
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(countRectTransform);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(textRectTransform);
+            await UniTask.Yield();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(countRectTransform);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(textRectTransform);
+        }
 
         private async void CurrencyCountChanged(CurrencyController.Type arg1, int arg2)
         {
@@ -34,16 +43,5 @@ namespace UI
         {
             Managers.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
         }
-
-        private async UniTask UpdateLayout()
-        {
-            LayoutRebuilder.ForceRebuildLayoutImmediate(countRectTransform);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(textRectTransform);
-            await UniTask.Yield();
-            LayoutRebuilder.ForceRebuildLayoutImmediate(countRectTransform);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(textRectTransform);
-        }
-
-    
     }
 }

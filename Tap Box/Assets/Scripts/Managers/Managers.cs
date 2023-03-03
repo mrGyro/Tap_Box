@@ -46,8 +46,8 @@ public class Managers : MonoBehaviour
 
     public async void SaveLevel(LevelData level)
     {
-        Progress.CheckRequirement();
         UpdateLevel(level);
+        Progress.CheckRequirement();
         await Progress.Save();
     }
 
@@ -88,7 +88,6 @@ public class Managers : MonoBehaviour
 
     private string GetNextLevelId()
     {
-
         var index = Progress.LevelDatas.FirstOrDefault(x => x.LevelStatus == Status.Open)
                     ?? Progress.LevelDatas.Last(x => x.LevelStatus == Status.Passed);
 

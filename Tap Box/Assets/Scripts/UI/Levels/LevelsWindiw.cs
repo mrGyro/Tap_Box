@@ -39,7 +39,7 @@ public class LevelsWindiw : PopUpBase
             level.Data.UpdateData(level.Data);
             UpdateLevelsButton(level.Data);
 
-            if (!CheckForDone(level.Data.Reqirement))
+            if (!level.Data.Reqirement.CheckForDone())
                 continue;
 
             level.Setup(data);
@@ -79,20 +79,21 @@ public class LevelsWindiw : PopUpBase
         updateLevelButton.Setup(levelData);
     }
 
-    private bool CheckForDone(Reqirement requirement)
-    {
-        switch (requirement.Type)
-        {
-            case Reqirement.RequirementType.PassedLevel:
-                var level = uiLevelItems.Find(x => x.Data.ID == requirement.Value);
-                if (level != null && level.Data.LevelStatus == Status.Passed)
-                {
-                    return true;
-                }
-
-                break;
-        }
-
-        return false;
-    }
+    // private bool CheckForDone(Reqirement requirement)
+    // {
+    //     switch (requirement.Type)
+    //     {
+    //         case Reqirement.RequirementType.PassedLevel:
+    //             var level = uiLevelItems.Find(x => x.Data.ID == requirement.Value);
+    //             Debug.LogError("----");
+    //             if (level != null && level.Data.LevelStatus == Status.Passed)
+    //             {
+    //                 return true;
+    //             }
+    //
+    //             break;
+    //     }
+    //
+    //     return false;
+    // }
 }

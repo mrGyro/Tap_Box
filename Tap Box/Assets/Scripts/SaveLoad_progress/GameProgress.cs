@@ -5,6 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Currency;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
+using UI.Skins;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -24,11 +25,11 @@ namespace SaveLoad_progress
         public int CurrentPlayerLevel;
         public float CurrentPlayerLevelProgress;
         public string CurrentSkin;
-
-
+        
         public Dictionary<CurrencyController.Type, int> Currencies;
 
         public List<LevelData> LevelDatas;
+        public List<SkinData> SkinDatas;
 
 #if UNITY_EDITOR
         [MenuItem("Tools/GiroGame/RemoveSaves")]
@@ -43,10 +44,11 @@ namespace SaveLoad_progress
             LastStartedLevelID = progress.LastStartedLevelID;
             CurrentWinWindowsProgress = progress.CurrentWinWindowsProgress;
             NextRewardIndexWinWindow = progress.NextRewardIndexWinWindow;
-            Currencies = progress.Currencies;
+            Currencies = progress.Currencies ?? new Dictionary<CurrencyController.Type, int>();
             CurrentPlayerLevel = progress.CurrentPlayerLevel;
             CurrentPlayerLevelProgress = progress.CurrentPlayerLevelProgress;
-            CurrentSkin = string.IsNullOrEmpty(CurrentSkin) ? "Default" : progress.CurrentSkin;
+            SkinDatas = progress.SkinDatas ?? new List<SkinData>();
+            CurrentSkin = string.IsNullOrEmpty(progress.CurrentSkin) ? "Default" : progress.CurrentSkin;
         }
 
         public async UniTask SaveGameProgress(GameProgress progress)
@@ -59,32 +61,25 @@ namespace SaveLoad_progress
             await UniTask.Yield();
         }
 
-        public async UniTask Save()
-        {
+        public async UniTask Save() =>
             await SaveGameProgress(this);
-        }
 
-        public async UniTask Load()
-        {
+        public async UniTask Load() =>
             await LoadGameProgress();
-        }
 
         public void CheckRequirement()
         {
             foreach (var levelData in LevelDatas)
             {
-                if (levelData.Reqirement.CheckForDone() && levelData.LevelStatus == Status.Close)
+                if (levelData.Reqirement.CheckForDone() && levelData.LevelStatus != Status.Passed)
                     levelData.LevelStatus = Status.Open;
             }
         }
 
         private async UniTask LoadGameProgress()
         {
-            var loadGameProgress = new GameProgress
-            {
-                LevelDatas = new List<LevelData>()
-            };
-            
+            var levelDatas = new List<LevelData>();
+
             var loadLevelsFromFile = await LoadLevelsName();
             foreach (var assetName in loadLevelsFromFile)
             {
@@ -92,29 +87,44 @@ namespace SaveLoad_progress
 
                 if (levelData == null)
                     continue;
-                
-                loadGameProgress.LevelDatas.Add(levelData);
+
+                levelDatas.Add(levelData);
             }
 
             var gameProgress = LoadGameProgressFromFile();
-            if (gameProgress.LevelDatas != null)
+            gameProgress.LevelDatas ??= new List<LevelData>();
+
+            List<LevelData> buffer = new List<LevelData>();
+            foreach (var levelData in levelDatas)
             {
-                foreach (var levelData in gameProgress.LevelDatas)
+                var level = gameProgress.LevelDatas.Find(x => x.ID == levelData.ID);
+
+                if (level != null)
                 {
-                    var level = loadGameProgress.LevelDatas.Find(x => x.ID == levelData.ID);
-
-                    if (level == null)
-                        continue;
-
-                    level.LevelStatus = levelData.LevelStatus;
+                    level.Data = null;
+                    level.ID = levelData.ID;
+                    level.LevelStatus = level.LevelStatus;
+                    level.Reqirement = levelData.Reqirement;
+                    level.Reward = levelData.Reward;
                     level.BestResult = levelData.BestResult;
                 }
+                else
+                {
+                    buffer.Add(new LevelData()
+                    {
+                        Data = null,
+                        ID = levelData.ID,
+                        LevelStatus = levelData.LevelStatus,
+                        Reqirement = levelData.Reqirement,
+                        Reward = levelData.Reward,
+                        BestResult = levelData.BestResult
+                    });
+                }
             }
-            else
-            {
-                gameProgress.LevelDatas = loadGameProgress.LevelDatas;
-            }
-            
+
+            if (buffer.Count > 0)
+                gameProgress.LevelDatas.AddRange(buffer);
+
             SetValues(gameProgress);
         }
 
@@ -139,10 +149,7 @@ namespace SaveLoad_progress
         private async UniTask<List<string>> LoadLevelsName()
         {
             List<string> result = new List<string>();
-            await Addressables.LoadAssetsAsync<TextAsset>("Levels", asset =>
-            {
-                result.Add(asset.name);
-            });
+            await Addressables.LoadAssetsAsync<TextAsset>("Levels", asset => { result.Add(asset.name); });
             return result;
         }
 

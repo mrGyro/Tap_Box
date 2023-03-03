@@ -1,4 +1,3 @@
-using System;
 using Currency;
 using TMPro;
 using UI.Skins;
@@ -15,12 +14,14 @@ public class SkinsButton : MonoBehaviour
     [SerializeField] private TMP_Text getTypeText;
     [Space] [SerializeField] private SkinData data;
 
-    public void Start()
-    {
-        Setup();
-    }
 
-    private async void Setup()
+    public SkinData GetSkinData()
+        => data;
+    
+    public void SetSkinData(SkinData value)
+        => data = value;
+
+    public async void Setup()
     {
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(OnClick);
@@ -51,6 +52,7 @@ public class SkinsButton : MonoBehaviour
         if (data.IsOpen)
         {
             await Managers.Instance.Progress.ChangeBlock(data.SkinAddressableName);
+            await Managers.Instance.Progress.Save();
             return;
         }
         
@@ -62,9 +64,9 @@ public class SkinsButton : MonoBehaviour
                 
                 if (Managers.Instance.Progress.Currencies[data.Type] >= data.Price)
                 {
-                    Managers.Instance.Progress.Currencies[data.Type] -= data.Price;
                     Managers.Instance.CurrencyController.RemoveCurrency(data.Type, data.Price);
                     data.IsOpen = true;
+                    Managers.Instance.Progress.SkinDatas.Add(data);
                 }
                 else
                 {
@@ -78,5 +80,6 @@ public class SkinsButton : MonoBehaviour
         
         Setup();
         await Managers.Instance.Progress.ChangeBlock(data.SkinAddressableName);
+        await Managers.Instance.Progress.Save();
     }
 }

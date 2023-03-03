@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using LevelCreator;
+using UnityEngine;
 
 [Serializable]
 public class Reqirement
@@ -10,23 +11,23 @@ public class Reqirement
         PassedLevel = 0,
     }
     
+    public RequirementType Type;
+    public string Value;
+    
     public bool CheckForDone()
     {
         switch (Type)
         {
             case RequirementType.PassedLevel:
                 var level = Managers.Instance.Progress.LevelDatas.FirstOrDefault(x => x.ID == Value);
-                if (level != null && level.LevelStatus == Status.Passed)
-                {
-                    return true;
-                }
+                if (level == null)
+                    return false;
 
-                break;
+                return level.LevelStatus == Status.Passed;
         }
 
         return false;
     }
 
-    public RequirementType Type;
-    public string Value;
+
 }
