@@ -49,7 +49,7 @@ namespace Boxes.SwipableBox
                 return;
             }
 
-            Managers.Instance.GameField.SetActiveGlobalInput(false);
+            Managers.Instance.SetActiveGlobalInput(false);
             LeanTouch.OnFingerTap += HandleFingerTap;
 
             ClearTapObject();
@@ -102,7 +102,7 @@ namespace Boxes.SwipableBox
         {
             IsReactionOnProcess = false;
             LeanTouch.OnFingerTap -= HandleFingerTap;
-            Managers.Instance.GameField.SetActiveGlobalInput(true);
+            Managers.Instance.SetActiveGlobalInput(true);
         }
 
         private void OnDrawGizmosSelected()

@@ -9,8 +9,14 @@ public class TurnsLeftCounter : MonoBehaviour, IInitializable
 
     public void Initialize()
     {
-        Core.MessengerStatic.Messenger<BaseBox>.AddListener(Constants.Events.OnBoxRemoveFromGameField, OnBoxRemoved);
+        Core.MessengerStatic.Messenger.AddListener(Constants.Events.OnBoxClicked, OnBoxRemoved);
         Core.MessengerStatic.Messenger<string>.AddListener(Constants.Events.OnLevelCreated, OnLevelCreated);
+        Core.MessengerStatic.Messenger.AddListener(Constants.Events.OnGameLoose, OnLoose);
+    }
+
+    private void OnLoose()
+    {
+        Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
     }
 
     private void OnLevelCreated(string obj)
@@ -18,7 +24,7 @@ public class TurnsLeftCounter : MonoBehaviour, IInitializable
         SetTurnsText();
     }
 
-    private void OnBoxRemoved(BaseBox obj)
+    private void OnBoxRemoved()
     {
         SetTurnsText();
     }
@@ -30,7 +36,8 @@ public class TurnsLeftCounter : MonoBehaviour, IInitializable
 
     private void OnDestroy()
     {
-        Core.MessengerStatic.Messenger<BaseBox>.RemoveListener(Constants.Events.OnBoxRemoveFromGameField, OnBoxRemoved);
+        Core.MessengerStatic.Messenger.RemoveListener(Constants.Events.OnBoxClicked, OnBoxRemoved);
         Core.MessengerStatic.Messenger<string>.RemoveListener(Constants.Events.OnLevelCreated, OnLevelCreated);
+        Core.MessengerStatic.Messenger.RemoveListener(Constants.Events.OnGameLoose, OnLoose);
     }
 }

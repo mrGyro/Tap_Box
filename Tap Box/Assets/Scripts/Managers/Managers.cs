@@ -68,6 +68,11 @@ public class Managers : MonoBehaviour
     {
         return 20;
     }
+    
+    public void SetActiveGlobalInput(bool value)
+    {
+        InputController.SetActiveInput(value);
+    }
 
     public async UniTask GetReward(RewardViewSetting settings)
     {

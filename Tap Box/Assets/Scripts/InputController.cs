@@ -28,8 +28,6 @@ public class InputController : MonoBehaviour
         _zoom.SetZomValue(100);
     }
 
-
-
     public void SetNewTargetPosition(Vector3 position)
     {
         _rotate.SetTargetPosition(position);
@@ -61,7 +59,10 @@ public class InputController : MonoBehaviour
             return;
 
         _nativeVibration.Vibrate(30);
-        await box.BoxReactionStart();
+
+        box.BoxReactionStart();
+        Managers.Instance.GameField.GetBoxCount--;
+
     }
     
     private BaseBox RaycastBox(Vector2 screenPosition)

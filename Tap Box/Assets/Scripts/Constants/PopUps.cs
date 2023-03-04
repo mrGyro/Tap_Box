@@ -6,5 +6,6 @@
         public static string NewLevelPopUp = "NewLevelPopUp";
         public static string LevelListPopUp = "LevelListPopUp";
         public static string SkinsPopUp = "SkinsPopUp";
+        public static string LosePopUp = "LosePopUp";
     }
 }

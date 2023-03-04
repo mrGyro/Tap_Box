@@ -17,13 +17,34 @@ public class GameField : MonoBehaviour, IInitializable
     private List<BaseBox> _boxes;
     private LevelData _data;
 
+    private int _boxesCount;
     public void Initialize()
     {
         _rootTransform = transform;
         _boxes = new List<BaseBox>();
     }
 
-    public int GetBoxCount => _boxes.Count;
+    public int GetBoxCount
+    {
+        get
+        {
+            return _boxesCount;
+        }
+        set
+        {
+            _boxesCount = value;
+
+
+            if (_boxesCount == 0 && _boxes.Count != 0)
+            {
+                _boxesCount = 0;
+                Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
+                Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnGameLoose);
+            }
+            
+            Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnBoxClicked);
+        }
+    }
 
     public async UniTask LoadLevelByName(string levelName)
     {
@@ -89,11 +110,6 @@ public class GameField : MonoBehaviour, IInitializable
         Core.MessengerStatic.Messenger<BaseBox>.Broadcast(Constants.Events.OnBoxRemoveFromGameField, box);
     }
 
-    public void SetActiveGlobalInput(bool value)
-    {
-        Managers.Instance.InputController.SetActiveInput(value);
-    }
-
     public List<Vector3> EmptyPositionBetweenTwoBoxes(Vector3 destination, Vector3 origin)
     {
         Vector3 direction = (destination - origin).normalized;
@@ -112,6 +128,15 @@ public class GameField : MonoBehaviour, IInitializable
         }
 
         return result;
+    }
+
+    public async UniTask ChangeSkin()
+    {
+        var list = new List<BoxData>();
+        foreach (var box in _boxes)
+            list.Add(box.Data);
+
+        await CreateBoxes(list);
     }
 
     private void ClearGameField()
@@ -137,16 +162,16 @@ public class GameField : MonoBehaviour, IInitializable
 
         SetNewMaxMinSize();
         SetNewTargetPosition();
+        GetBoxCount = _boxes.Count + AddedTurns();
     }
 
-    public async UniTask ChangeSkin()
+    private int AddedTurns()
     {
-        var list = new List<BoxData>();
-        foreach (var VARIABLE in _boxes)
-            list.Add(VARIABLE.Data);
-
-        await CreateBoxes(list);
+        var count = _boxes.Count * 0.05f;
+        count = Mathf.Clamp(count, 1, 100);
+        return (int)count;
     }
+
     private async UniTask CreateBoxes(List<BoxData> dataList)
     {
         ClearGameField();
