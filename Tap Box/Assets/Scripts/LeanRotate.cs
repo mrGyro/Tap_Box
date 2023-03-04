@@ -26,6 +26,10 @@ namespace DefaultNamespace
             _centr.position = Vector3.Lerp(_centr.position, newPosition, 0.01f);
         }
 
+        public void SetDistanceToTarget(float distance)
+        {
+            distanceToTarget = distance;
+        }
         public virtual void Rotate(List<LeanFinger> fingers)
         {
             if (fingers[0].Age == 0)
@@ -35,18 +39,24 @@ namespace DefaultNamespace
             }
             else
             {
-                Vector3 newPosition = Camera.ScreenToViewportPoint(fingers[0].ScreenPosition);
-                Vector3 direction = _previousPosition - newPosition;
+                Vector3 newPosition2 = Camera.ScreenToViewportPoint(fingers[0].ScreenPosition);
+                Vector3 direction = _previousPosition - newPosition2;
 
                 _rotationAroundYAxis = -direction.x * 180; // camera moves horizontally
                 _rotationAroundXAxis = direction.y * 180; // camera moves vertically
 
                 Move();
-                _previousPosition = newPosition;
+                _previousPosition = newPosition2;
             }
         }
 
         public void SetTargetPosition(Vector3 position)
+        {
+            newPosition = position;
+            _centr.position = position;
+        }
+        
+        public void SetTargetPositionMove(Vector3 position)
         {
             newPosition = position;
         }

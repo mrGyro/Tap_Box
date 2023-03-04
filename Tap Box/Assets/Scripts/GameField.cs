@@ -72,8 +72,8 @@ public class GameField : MonoBehaviour, IInitializable
             _maxLevelSize.x - (_maxLevelSize.x + Mathf.Abs(_minLevelSize.x)) / 2,
             _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
             _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
-
-        Managers.Instance.InputController.SetNewTargetPosition(newPosition);
+        
+        Managers.Instance.InputController.SetStartLevelSettings(newPosition);
     }
 
     public bool ExistBox(Vector3 boxArrayPosition)

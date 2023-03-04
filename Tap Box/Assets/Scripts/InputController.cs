@@ -28,9 +28,10 @@ public class InputController : MonoBehaviour
         _zoom.SetZomValue(100);
     }
 
-    public void SetNewTargetPosition(Vector3 position)
+    public void SetStartLevelSettings(Vector3 position)
     {
         _rotate.SetTargetPosition(position);
+        _rotate.SetDistanceToTarget(10);
     }
 
     private void Swipe(List<LeanFinger> fingers)
@@ -48,7 +49,7 @@ public class InputController : MonoBehaviour
         }
     }
 
-    private async void HandleFingerTap(LeanFinger finger)
+    private void HandleFingerTap(LeanFinger finger)
     {
         if (!_isEnable)
             return;
@@ -62,7 +63,6 @@ public class InputController : MonoBehaviour
 
         box.BoxReactionStart();
         Managers.Instance.GameField.GetBoxCount--;
-
     }
     
     private BaseBox RaycastBox(Vector2 screenPosition)
