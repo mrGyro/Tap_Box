@@ -10,5 +10,6 @@ namespace UI.Skins
         public int Price;
         public string SkinAddressableName;
         public bool IsOpen;
+        public bool IsRandom;
     }
 }

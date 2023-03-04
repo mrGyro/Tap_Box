@@ -12,17 +12,33 @@ namespace UI.Skins
 
         public override void Initialize()
         {
-            foreach (var data in Managers.Instance.Progress.SkinDatas)
+            var buffer = new List<SkinData>();
+
+            foreach (var button in skinsButtons)
             {
-                var button = skinsButtons.FirstOrDefault(x => x.GetSkinData().SkinAddressableName == data.SkinAddressableName);
-                if (button == null)
+                var data = Managers.Instance.Progress.SkinDatas.FirstOrDefault(x
+                    => x.SkinAddressableName == button.GetSkinData().SkinAddressableName);
+                if (data == null)
                 {
+                    var forCopy = button.GetSkinData();
+                    buffer.Add(new SkinData()
+                    {
+                        IsOpen = forCopy.IsOpen,
+                        Price = forCopy.Price,
+                        SkinAddressableName = forCopy.SkinAddressableName,
+                        Type = forCopy.Type,
+                        IsRandom = forCopy.IsRandom
+                    });
+
                     continue;
                 }
 
                 button.SetSkinData(data);
             }
 
+            Managers.Instance.Progress.SkinDatas.AddRange(buffer);
+
+            Debug.LogError(Managers.Instance.Progress.SkinDatas.Count);
             foreach (var button in skinsButtons)
             {
                 button.Setup();

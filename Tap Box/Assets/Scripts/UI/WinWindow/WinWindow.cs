@@ -62,7 +62,7 @@ public class WinWindow : PopUpBase
                 nearestPercent = SetNextNearestPercent();
             }
 
-            rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardText(((int)GetPercents()).ToString());
+            rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardPercentText(((int)GetPercents()).ToString());
         }
 
         Managers.Instance.Progress.CurrentWinWindowsProgress = progress.value;
@@ -71,13 +71,12 @@ public class WinWindow : PopUpBase
 
     private async UniTask GetReward(RewardViewSetting nearestPercent)
     {
-        rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardText("100");
+        rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardPercentText("100");
         rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetTokState(true);
         rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveVFX(true);
         winVFX.SetActive(true);
         await Managers.Instance.GetReward(nearestPercent);
         winVFX.SetActive(false);
-        
     }
 
     private float GetPercents()

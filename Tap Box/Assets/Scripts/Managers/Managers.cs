@@ -5,6 +5,7 @@ using DefaultNamespace.UI.WinWindow;
 using LevelCreator;
 using PlayerLevel;
 using SaveLoad_progress;
+using UI.Skins;
 using UnityEngine;
 
 public class Managers : MonoBehaviour
@@ -74,8 +75,26 @@ public class Managers : MonoBehaviour
 
     public async UniTask GetReward(RewardViewSetting settings)
     {
-        CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
+        if (settings.RewardType == CurrencyController.Type.Coin)
+        {
+            CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
+        }
+        else
+        {
+            GetSkinRandomSkin(settings.RewardType);
+        }
+
         await UniTask.Delay(2000);
+    }
+
+    private void GetSkinRandomSkin(CurrencyController.Type type)
+    {
+        if (type != CurrencyController.Type.RandomSkin)
+        {
+            var settings = CurrencyController.GetRewardSettings();
+            var max = settings.Max(x => x.RewardCount) * 1.5f;
+            CurrencyController.AddCurrency(CurrencyController.Type.Coin, (int)max);
+        }
     }
     
     private void UpdateLevel(LevelData level)

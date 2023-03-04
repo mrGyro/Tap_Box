@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DefaultNamespace.UI.WinWindow;
+using UI.Skins;
 
 namespace Currency
 {
@@ -31,6 +33,26 @@ namespace Currency
             OnCurrencyCountChanged?.Invoke(type, Managers.Instance.Progress.Currencies[type]);
         }
 
+        public void AddSkin(Type type, string value)
+        {
+            var skinData = Managers.Instance.Progress.SkinDatas.FirstOrDefault(x => x.SkinAddressableName == value);
+           
+            if (skinData != null)
+            {
+                skinData.IsOpen = true;
+                return;
+            }
+            
+            Managers.Instance.Progress.SkinDatas.Add(new SkinData()
+            {
+                IsOpen = true,
+                Price = 0,
+                SkinAddressableName = value,
+                Type = type,
+                IsRandom = false
+            });
+        } 
+
         public void RemoveCurrency(Type type, int value)
         {
             if (Managers.Instance.Progress.Currencies == null)
@@ -57,8 +79,6 @@ namespace Currency
             
             return Managers.Instance.Progress.Currencies.ContainsKey(type) ? Managers.Instance.Progress.Currencies[type] : 0;
         }
-
-        public bool IsInitialized() => Managers.Instance.Progress.Currencies != null;
 
         public List<RewardViewSetting> GetRewardSettings()
         {

@@ -17,7 +17,7 @@ public class SkinsButton : MonoBehaviour
 
     public SkinData GetSkinData()
         => data;
-    
+
     public void SetSkinData(SkinData value)
         => data = value;
 
@@ -26,13 +26,10 @@ public class SkinsButton : MonoBehaviour
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(OnClick);
 
-        if (data.IsOpen)
-        {
-            GetTypeGameObject.SetActive(false);
-            return;
-        }
+        GetTypeGameObject.SetActive(!data.IsOpen);
 
-        GetTypeGameObject.SetActive(true);
+        if (data.IsOpen)
+            return;
 
         switch (data.Type)
         {
@@ -55,18 +52,18 @@ public class SkinsButton : MonoBehaviour
             await Managers.Instance.Progress.Save();
             return;
         }
-        
+
         switch (data.Type)
         {
             case CurrencyController.Type.Coin:
                 if (!Managers.Instance.Progress.Currencies.ContainsKey(data.Type))
                     return;
-                
+
                 if (Managers.Instance.Progress.Currencies[data.Type] >= data.Price)
                 {
                     Managers.Instance.CurrencyController.RemoveCurrency(data.Type, data.Price);
                     data.IsOpen = true;
-                    Managers.Instance.Progress.SkinDatas.Add(data);
+                    Managers.Instance.CurrencyController.AddSkin(data.Type, data.SkinAddressableName);
                 }
                 else
                 {
@@ -77,7 +74,7 @@ public class SkinsButton : MonoBehaviour
             case CurrencyController.Type.Ads:
                 return;
         }
-        
+
         Setup();
         await Managers.Instance.Progress.ChangeBlock(data.SkinAddressableName);
         await Managers.Instance.Progress.Save();

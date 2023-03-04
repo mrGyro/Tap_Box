@@ -43,7 +43,7 @@ namespace DefaultNamespace.UI.WinWindow
             image.sprite = value ? _getSprite : _notGetSprite;
         }
 
-        public void UpdateRewardText(string text)
+        public void UpdateRewardPercentText(string text)
         {
             rewardPercents.text = $"{text}%";
         }
