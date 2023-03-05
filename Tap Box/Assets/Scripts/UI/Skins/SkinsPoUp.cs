@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Currency;
 using DefaultNamespace.Managers;
 using UnityEngine;
 
@@ -11,6 +13,18 @@ namespace UI.Skins
         [SerializeField] private List<SkinsButton> skinsButtons;
 
         public override void Initialize()
+        {
+            Setup();
+            Core.MessengerStatic.Messenger<CurrencyController.Type, string>.AddListener(Constants.Events.OnGetRandomSkin, OnGetRandomSkin);
+
+        }
+
+        private void OnGetRandomSkin(CurrencyController.Type arg1, string arg2)
+        {
+            Setup();
+        }
+
+        private void Setup()
         {
             var buffer = new List<SkinData>();
 
@@ -38,7 +52,6 @@ namespace UI.Skins
 
             Managers.Instance.Progress.SkinDatas.AddRange(buffer);
 
-            Debug.LogError(Managers.Instance.Progress.SkinDatas.Count);
             foreach (var button in skinsButtons)
             {
                 button.Setup();
@@ -60,6 +73,12 @@ namespace UI.Skins
         public override void Close()
         {
             gameObject.SetActive(false);
+        }
+
+        private void OnDestroy()
+        {
+            Core.MessengerStatic.Messenger<CurrencyController.Type, string>.RemoveListener(Constants.Events.OnGetRandomSkin, OnGetRandomSkin);
+
         }
     }
 }

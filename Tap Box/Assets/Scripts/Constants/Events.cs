@@ -6,5 +6,6 @@
         public static string OnBoxClicked = "OnBoxClicked";
         public static string OnLevelCreated = "OnLevelCreated";
         public static string OnGameLoose = "OnGameLoose";
+        public static string OnGetRandomSkin = "OnGetRandomSkin";
     }
 }

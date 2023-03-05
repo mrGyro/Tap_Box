@@ -64,6 +64,7 @@ public class SkinsButton : MonoBehaviour
                     Managers.Instance.CurrencyController.RemoveCurrency(data.Type, data.Price);
                     data.IsOpen = true;
                     Managers.Instance.CurrencyController.AddSkin(data.Type, data.SkinAddressableName);
+                    await Managers.Instance.Progress.ChangeBlock(data.SkinAddressableName);
                 }
                 else
                 {
@@ -76,7 +77,6 @@ public class SkinsButton : MonoBehaviour
         }
 
         Setup();
-        await Managers.Instance.Progress.ChangeBlock(data.SkinAddressableName);
         await Managers.Instance.Progress.Save();
     }
 }
