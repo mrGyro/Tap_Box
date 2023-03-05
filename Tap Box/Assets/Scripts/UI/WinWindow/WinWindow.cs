@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Currency;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace.Managers;
 using DefaultNamespace.UI.WinWindow;
@@ -58,7 +59,7 @@ public class WinWindow : PopUpBase
 
             if (progress.value > nearestPercent.Percent)
             {
-                await GetReward(nearestPercent);
+                await GetRewardFromSettings(nearestPercent);
                 nearestPercent = SetNextNearestPercent();
             }
 
@@ -69,14 +70,39 @@ public class WinWindow : PopUpBase
         await Managers.Instance.Progress.Save();
     }
 
-    private async UniTask GetReward(RewardViewSetting nearestPercent)
+    private async UniTask GetRewardFromSettings(RewardViewSetting nearestPercent)
     {
         rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardPercentText("100");
         rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetTokState(true);
         rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveVFX(true);
         winVFX.SetActive(true);
-        await Managers.Instance.GetReward(nearestPercent);
+        await GiveReward(nearestPercent);
         winVFX.SetActive(false);
+    }
+
+    private async UniTask GiveReward(RewardViewSetting settings)
+    {
+        if (settings.RewardType == CurrencyController.Type.Coin)
+            Managers.Instance.CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
+        else if (settings.RewardType == CurrencyController.Type.RandomSkin)
+            GetSkinRandomSkin(settings.RewardType);
+
+        await UniTask.Delay(2000);
+    }
+
+    private void GetSkinRandomSkin(CurrencyController.Type type)
+    {
+        var randomSkin = Managers.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.IsRandom && !skin.IsOpen);
+        if (randomSkin == null)
+        {
+            var settings = Managers.Instance.CurrencyController.GetRewardSettings();
+            var max = settings.Max(x => x.RewardCount) * 1.5f;
+            Managers.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, (int)max);
+            return;
+        }
+        
+        Managers.Instance.CurrencyController.AddSkin(randomSkin.Type, randomSkin.SkinAddressableName);
+
     }
 
     private float GetPercents()

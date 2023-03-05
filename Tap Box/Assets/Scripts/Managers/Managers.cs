@@ -73,29 +73,7 @@ public class Managers : MonoBehaviour
         InputController.SetActiveInput(value);
     }
 
-    public async UniTask GetReward(RewardViewSetting settings)
-    {
-        if (settings.RewardType == CurrencyController.Type.Coin)
-        {
-            CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
-        }
-        else
-        {
-            GetSkinRandomSkin(settings.RewardType);
-        }
 
-        await UniTask.Delay(2000);
-    }
-
-    private void GetSkinRandomSkin(CurrencyController.Type type)
-    {
-        if (type != CurrencyController.Type.RandomSkin)
-        {
-            var settings = CurrencyController.GetRewardSettings();
-            var max = settings.Max(x => x.RewardCount) * 1.5f;
-            CurrencyController.AddCurrency(CurrencyController.Type.Coin, (int)max);
-        }
-    }
     
     private void UpdateLevel(LevelData level)
     {
