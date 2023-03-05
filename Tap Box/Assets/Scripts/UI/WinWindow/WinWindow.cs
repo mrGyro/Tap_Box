@@ -95,14 +95,11 @@ public class WinWindow : PopUpBase
         var randomSkin = Managers.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.IsRandom && !skin.IsOpen);
         if (randomSkin == null)
         {
-            Debug.LogError("cerrency ");
             var settings = Managers.Instance.CurrencyController.GetRewardSettings();
             var max = settings.Max(x => x.RewardCount) * 1.5f;
             Managers.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, (int)max);
             return;
         }
-
-        Debug.LogError("skin  " + randomSkin.Type + " " + randomSkin.SkinAddressableName);
 
         Managers.Instance.CurrencyController.AddSkin(randomSkin.Type, randomSkin.SkinAddressableName);
         Core.MessengerStatic.Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, randomSkin.Type, randomSkin.SkinAddressableName);
