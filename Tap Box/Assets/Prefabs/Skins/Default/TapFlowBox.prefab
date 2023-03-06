@@ -168,6 +168,7 @@ MonoBehaviour:
   _speed: 10
   _distanse: 20
   _distanseToDieAction: 2
+  _collider: {fileID: 6002168507717174386}
 --- !u!65 &6002168507717174386
 BoxCollider:
   m_ObjectHideFlags: 0

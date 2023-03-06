@@ -11,6 +11,7 @@ namespace Boxes.TapFlowBox
         [SerializeField] private float _speed;
         [SerializeField] private float _distanse;
         [SerializeField] private float _distanseToDieAction;
+        [SerializeField] private Collider _collider;
 
         private bool _isMove;
 
@@ -41,8 +42,9 @@ namespace Boxes.TapFlowBox
 
         private async UniTask MoveOut()
         {
-            bool isPlayDie = false;
-            Vector3 startPos = _parent.position;
+            _collider.enabled = false;
+            var isPlayDie = false;
+            var startPos = _parent.position;
             while (Vector3.Distance(_parent.position, startPos) < _distanse)
             {
                 if (!isPlayDie && Vector3.Distance(_parent.position, startPos) > _distanseToDieAction)
