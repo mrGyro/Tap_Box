@@ -40,10 +40,12 @@ public class UIManager : MonoBehaviour, IInitializable
         if (popup == null)
             return;
 
+
         popup.Close();
         popup.IsShowing = false;
 
         RemoveFromPopUpQueue(popup);
+        Managers.Instance.SetActiveGlobalInput(true);
         ShowNext();
     }
 
@@ -69,6 +71,7 @@ public class UIManager : MonoBehaviour, IInitializable
         if (_popUpsQueue.Find(x => x.IsShowing) != null)
             return;
 
+        Managers.Instance.SetActiveGlobalInput(false);
         _popUpsQueue[^1].Show();
         _popUpsQueue[^1].IsShowing = true;
 

@@ -1,11 +1,8 @@
 using System.Linq;
 using Currency;
-using Cysharp.Threading.Tasks;
-using DefaultNamespace.UI.WinWindow;
 using LevelCreator;
 using PlayerLevel;
 using SaveLoad_progress;
-using UI.Skins;
 using UnityEngine;
 
 public class Managers : MonoBehaviour
