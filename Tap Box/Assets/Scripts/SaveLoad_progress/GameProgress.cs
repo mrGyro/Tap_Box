@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using Currency;
 using Cysharp.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace SaveLoad_progress
         public int CurrentPlayerLevel;
         public float CurrentPlayerLevelProgress;
         public string CurrentSkin;
-        
+
         public Dictionary<CurrencyController.Type, int> Currencies;
 
         public List<LevelData> LevelDatas;
@@ -61,8 +62,15 @@ namespace SaveLoad_progress
             await UniTask.Yield();
         }
 
-        public async UniTask Save() =>
+        public async UniTask Save()
+        {
+            var level = LevelDatas.FirstOrDefault(x => x.ID == LastStartedLevelID);
+
+            if (level != null)
+                level.Data = Managers.Instance.GameField.GetDataForSave();
+
             await SaveGameProgress(this);
+        }
 
         public async UniTask Load() =>
             await LoadGameProgress();
@@ -78,7 +86,7 @@ namespace SaveLoad_progress
 
         private async UniTask LoadGameProgress()
         {
-            var levelDatas = new List<LevelData>();
+            var levelDataList = new List<LevelData>();
 
             var loadLevelsFromFile = await LoadLevelsName();
             foreach (var assetName in loadLevelsFromFile)
@@ -88,38 +96,29 @@ namespace SaveLoad_progress
                 if (levelData == null)
                     continue;
 
-                levelDatas.Add(levelData);
+                levelDataList.Add(levelData);
             }
 
             var gameProgress = LoadGameProgressFromFile();
             gameProgress.LevelDatas ??= new List<LevelData>();
 
             List<LevelData> buffer = new List<LevelData>();
-            foreach (var levelData in levelDatas)
+            foreach (var levelData in levelDataList)
             {
                 var level = gameProgress.LevelDatas.Find(x => x.ID == levelData.ID);
 
-                if (level != null)
+                if (level == null)
                 {
-                    level.Data = null;
-                    level.ID = levelData.ID;
-                    level.LevelStatus = level.LevelStatus;
-                    level.Reqirement = levelData.Reqirement;
-                    level.Reward = levelData.Reward;
-                    level.BestResult = levelData.BestResult;
+                    level = new LevelData();
+                    buffer.Add(level);
                 }
-                else
-                {
-                    buffer.Add(new LevelData()
-                    {
-                        Data = null,
-                        ID = levelData.ID,
-                        LevelStatus = levelData.LevelStatus,
-                        Reqirement = levelData.Reqirement,
-                        Reward = levelData.Reward,
-                        BestResult = levelData.BestResult
-                    });
-                }
+
+                level.Data = !string.IsNullOrEmpty(gameProgress.LastStartedLevelID) && gameProgress.LastStartedLevelID.Equals(levelData.ID) ? level.Data : null;
+                level.ID = levelData.ID;
+                level.LevelStatus = levelData.LevelStatus;
+                level.Reqirement = levelData.Reqirement;
+                level.Reward = levelData.Reward;
+                level.BestResult = levelData.BestResult;
             }
 
             if (buffer.Count > 0)

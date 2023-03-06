@@ -55,7 +55,9 @@ public class Managers : MonoBehaviour
     public async void LoadLevelById(string id)
     {
         Progress.LastStartedLevelID = id;
+        
         await GameField.LoadLevelByName(Progress.LastStartedLevelID);
+
         await Progress.Save();
         Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
     }
@@ -70,8 +72,6 @@ public class Managers : MonoBehaviour
         InputController.SetActiveInput(value);
     }
 
-
-    
     private void UpdateLevel(LevelData level)
     {
         var updateLevelButton = Instance.Progress.LevelDatas.FindIndex(x => x.ID == level.ID);

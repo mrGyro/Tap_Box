@@ -18,6 +18,7 @@ public class GameField : MonoBehaviour, IInitializable
     private LevelData _data;
 
     private int _boxesCount;
+
     public void Initialize()
     {
         _rootTransform = transform;
@@ -26,10 +27,7 @@ public class GameField : MonoBehaviour, IInitializable
 
     public int GetBoxCount
     {
-        get
-        {
-            return _boxesCount;
-        }
+        get { return _boxesCount; }
         set
         {
             _boxesCount = value;
@@ -41,7 +39,7 @@ public class GameField : MonoBehaviour, IInitializable
                 Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
                 Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnGameLoose);
             }
-            
+
             Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnBoxClicked);
         }
     }
@@ -58,6 +56,7 @@ public class GameField : MonoBehaviour, IInitializable
             await UniTask.Delay(1000);
             Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.WinPopUp);
             _data.LevelStatus = Status.Passed;
+            _data.Data = null;
             Managers.Instance.SaveLevel(_data);
 
             return;
@@ -72,7 +71,7 @@ public class GameField : MonoBehaviour, IInitializable
             _maxLevelSize.x - (_maxLevelSize.x + Mathf.Abs(_minLevelSize.x)) / 2,
             _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
             _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
-        
+
         Managers.Instance.InputController.SetStartLevelSettings(newPosition);
     }
 
@@ -139,6 +138,17 @@ public class GameField : MonoBehaviour, IInitializable
         await CreateBoxes(list);
     }
 
+    public List<BoxData> GetDataForSave()
+    {
+        var result = new List<BoxData>();
+        foreach (var baseBox in _boxes)
+        {
+            result.Add(baseBox.Data);
+        }
+
+        return result.Count == 0 ? null : result;
+    }
+
     private void ClearGameField()
     {
         for (int i = _boxes.Count - 1; i >= 0; i--)
@@ -158,7 +168,16 @@ public class GameField : MonoBehaviour, IInitializable
     {
         _data = await Managers.Instance.Progress.LoadLevelData(levelName);
 
-        await CreateBoxes(_data.Data);
+        var level = Managers.Instance.Progress.LevelDatas.FirstOrDefault(x => x.ID == Managers.Instance.Progress.LastStartedLevelID);
+
+        if (level != null && level.Data != null)
+        {
+            await CreateBoxes(level.Data);
+        }
+        else
+        {
+            await CreateBoxes(_data.Data);
+        }
 
         SetNewMaxMinSize();
         SetNewTargetPosition();
