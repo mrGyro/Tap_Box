@@ -1,104 +1,67 @@
-using System;
-using Unity.Services.Mediation;
 using UnityEngine;
 
 namespace Ads
 {
     public class RewardedAds
     {
-        private string _androidAdUnitId;
-        private string _iosAdUnitId;
-        IRewardedAd rewardedAd;
-
-        public void Init(string androidAdUnitId, string iosAdUnitId)
+        public void Init()
         {
-            _androidAdUnitId = androidAdUnitId;
-            _iosAdUnitId = iosAdUnitId;
-            
-            switch (Application.platform)
-            {
-                // Instantiate a rewarded ad object with platform-specific Ad Unit ID
-                case RuntimePlatform.Android:
-                    rewardedAd = new RewardedAd(_androidAdUnitId);
-                    break;
-                case RuntimePlatform.IPhonePlayer:
-                    rewardedAd = new RewardedAd(_iosAdUnitId);
-                    break;
-#if UNITY_EDITOR
-                default:
-                    rewardedAd = new RewardedAd("myExampleAdUnitId");
-                    break;
-#endif
-            }
-
-            // Subscribe callback methods to load events:
-            rewardedAd.OnLoaded += AdLoaded;
-            rewardedAd.OnFailedLoad += AdFailedToLoad;
-
-            // Subscribe callback methods to show events:
-            rewardedAd.OnShowed += AdShown;
-            rewardedAd.OnFailedShow += AdFailedToShow;
-            rewardedAd.OnUserRewarded += UserRewarded;
-            rewardedAd.OnClosed += AdClosed;
-            rewardedAd.LoadAsync();
+            //Add AdInfo Rewarded Video Events
+            IronSourceRewardedVideoEvents.onAdOpenedEvent += RewardedVideoOnAdOpenedEvent;
+            IronSourceRewardedVideoEvents.onAdClosedEvent += RewardedVideoOnAdClosedEvent;
+            IronSourceRewardedVideoEvents.onAdAvailableEvent += RewardedVideoOnAdAvailable;
+            IronSourceRewardedVideoEvents.onAdUnavailableEvent += RewardedVideoOnAdUnavailable;
+            IronSourceRewardedVideoEvents.onAdShowFailedEvent += RewardedVideoOnAdShowFailedEvent;
+            IronSourceRewardedVideoEvents.onAdRewardedEvent += RewardedVideoOnAdRewardedEvent;
+            IronSourceRewardedVideoEvents.onAdClickedEvent += RewardedVideoOnAdClickedEvent;
         }
-        
-        public bool IsInterstitialAvailable()
+        public void Show()
         {
-            return rewardedAd.AdState == AdState.Loaded;
+                
         }
 
-        // Implement load event callback methods:
-        void AdLoaded(object sender, EventArgs args)
-        {
-            Debug.Log("rewardedAd loaded.");
-           // _eventManager.SendMessage(Events.Ads.OnRewardedAdAdReady);
 
-            // Execute logic for when the ad has loaded
+/************* RewardedVideo AdInfo Delegates *************/
+// Indicates that there’s an available ad.
+// The adInfo object includes information about the ad that was loaded successfully
+// This replaces the RewardedVideoAvailabilityChangedEvent(true) event
+        void RewardedVideoOnAdAvailable(IronSourceAdInfo adInfo)
+        {
         }
 
-        void AdFailedToLoad(object sender, LoadErrorEventArgs args)
+// Indicates that no ads are available to be displayed
+// This replaces the RewardedVideoAvailabilityChangedEvent(false) event
+        void RewardedVideoOnAdUnavailable()
         {
-            Debug.Log("rewardedAd failed to load.");
-            // Execute logic for the ad failing to load.
-            rewardedAd.LoadAsync();
         }
 
-        // Implement show event callback methods:
-        void AdShown(object sender, EventArgs args)
+// The Rewarded Video ad view has opened. Your activity will loose focus.
+        void RewardedVideoOnAdOpenedEvent(IronSourceAdInfo adInfo)
         {
-            Debug.Log("rewardedAd shown successfully.");
-            // Execute logic for the ad showing successfully.
         }
 
-        void UserRewarded(object sender, RewardEventArgs args)
+// The Rewarded Video ad view is about to be closed. Your activity will regain its focus.
+        void RewardedVideoOnAdClosedEvent(IronSourceAdInfo adInfo)
         {
-            Debug.Log("rewardedAd has rewarded user.");
-            rewardedAd.LoadAsync();
-           // _eventManager.SendMessage(Events.Ads.OnRewardedAdComplete);
-            // Execute logic for rewarding the user.
         }
 
-        void AdFailedToShow(object sender, ShowErrorEventArgs args)
+// The user completed to watch the video, and should be rewarded.
+// The placement parameter will include the reward data.
+// When using server-to-server callbacks, you may ignore this event and wait for the ironSource server callback.
+        void RewardedVideoOnAdRewardedEvent(IronSourcePlacement placement, IronSourceAdInfo adInfo)
         {
-            Debug.Log("rewardedAd failed to show.");
-            // Execute logic for the ad failing to show.
         }
 
-        void AdClosed(object sender, EventArgs e)
+// The rewarded video ad was failed to show.
+        void RewardedVideoOnAdShowFailedEvent(IronSourceError error, IronSourceAdInfo adInfo)
         {
-            Debug.Log("rewardedAd is closed.");
-            // Execute logic for the user closing the ad.
-            rewardedAd.LoadAsync();
         }
 
-        public void ShowAd()
+// Invoked when the video ad was clicked.
+// This callback is not supported by all networks, and we recommend using it only if
+// it’s supported by all networks you included in your build.
+        void RewardedVideoOnAdClickedEvent(IronSourcePlacement placement, IronSourceAdInfo adInfo)
         {
-            // Ensure the ad has loaded, then show it.
-            if (rewardedAd.AdState == AdState.Loaded)
-            {
-                rewardedAd.ShowAsync();
-            }
         }
     }
 }
