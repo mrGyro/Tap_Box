@@ -1,12 +1,18 @@
 using System;
-using UnityEngine;
+using UniRx;
 
 namespace Ads
 {
-    public class InterstitialAds
+    public class InterstitialAds : IAdElement
     {
+        public ReactiveProperty<bool> IsReady { get; set; }
+
+        public Action<string> OnAddLoad { get; set; }
+
         public void Init()
         {
+            IsReady = new ReactiveProperty<bool>(false);
+
             //Add AdInfo Interstitial Events
             IronSourceInterstitialEvents.onAdReadyEvent += InterstitialOnAdReadyEvent;
             IronSourceInterstitialEvents.onAdLoadFailedEvent += InterstitialOnAdLoadFailed;
@@ -15,12 +21,32 @@ namespace Ads
             IronSourceInterstitialEvents.onAdShowSucceededEvent += InterstitialOnAdShowSucceededEvent;
             IronSourceInterstitialEvents.onAdShowFailedEvent += InterstitialOnAdShowFailedEvent;
             IronSourceInterstitialEvents.onAdClosedEvent += InterstitialOnAdClosedEvent;
+
         }
+
 
         public void Show()
         {
-                
+            IronSource.Agent.showInterstitial();
         }
+
+        public void Hide()
+        {
+        }
+
+        public void Load()
+        {
+            // if (IsReady())
+            //     return;
+
+            IronSource.Agent.loadInterstitial();
+            OnAddLoad?.Invoke(Constants.Ads.Interstitial);
+        }
+
+        // public bool IsReady()
+        // {
+        //     return IronSource.Agent.isInterstitialReady();
+        // }
 
 /************* Interstitial AdInfo Delegates *************/
 // Invoked when the interstitial ad was loaded succesfully.

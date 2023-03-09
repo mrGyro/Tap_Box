@@ -7,5 +7,6 @@
         public static string OnLevelCreated = "OnLevelCreated";
         public static string OnGameLoose = "OnGameLoose";
         public static string OnGetRandomSkin = "OnGetRandomSkin";
+        public static string OnRewardedClosed = "OnRewardedClosed";
     }
 }

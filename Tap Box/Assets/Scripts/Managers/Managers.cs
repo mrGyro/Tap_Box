@@ -1,4 +1,5 @@
 using System.Linq;
+using Ads;
 using Currency;
 using LevelCreator;
 using PlayerLevel;
@@ -15,6 +16,7 @@ public class Managers : MonoBehaviour
     public CurrencyController CurrencyController;
     public UIManager UIManager;
     public PlayerLevelManager PlayerLevelManager;
+    public Mediation Mediation;
 
     private async void Awake()
     {
@@ -31,6 +33,7 @@ public class Managers : MonoBehaviour
         GameField.Initialize();
         PlayerLevelManager.Initialize();
         UIManager.Initialize();
+        Mediation.Initialize();
 
         Progress.LastStartedLevelID = 
             string.IsNullOrEmpty(Progress.LastStartedLevelID) 

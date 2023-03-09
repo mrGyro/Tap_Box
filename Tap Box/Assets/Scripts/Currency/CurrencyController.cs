@@ -16,7 +16,8 @@ namespace Currency
             BackgroundSkin,
             FlowSkin,
             VFXSkin,
-            Ads
+            RewardedAds,
+            InterstitialAds
         }
 
         public Action<Type, int> OnCurrencyCountChanged;
