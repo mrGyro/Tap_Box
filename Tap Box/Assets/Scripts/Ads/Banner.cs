@@ -22,7 +22,7 @@ namespace Ads
             IronSourceBannerEvents.onAdLeftApplicationEvent += BannerOnAdLeftApplicationEvent;
         }
 
-        public void Show()
+        public void Show(string place)
         {
             IronSource.Agent.displayBanner();
         }

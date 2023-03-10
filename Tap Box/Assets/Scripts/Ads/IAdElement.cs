@@ -5,7 +5,7 @@ namespace Ads
     public interface IAdElement
     {
         ReactiveProperty<bool> IsReady { get; set; }
-        void Show();
+        void Show(string place);
         void Hide();
         void Load();
         void Init();

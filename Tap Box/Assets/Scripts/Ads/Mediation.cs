@@ -29,7 +29,7 @@ namespace Ads
             LoadAddCycle();
         }
 
-        public void Show(string adType)
+        public void Show(string adType, string place)
         {
             if (!IsReady(adType))
             {
@@ -38,7 +38,7 @@ namespace Ads
             }
 
             if (_adElements.ContainsKey(adType))
-                _adElements[adType].Show();
+                _adElements[adType].Show(place);
         }
 
         public IAdElement GetAddElement(string adType)

@@ -19,6 +19,7 @@ namespace UI.Skins
         [Space] [SerializeField] private SkinData data;
 
         private IDisposable _isReady;
+        private string _skinButton = "skin_button_";
 
         public SkinData GetSkinData()
             => data;
@@ -89,18 +90,16 @@ namespace UI.Skins
                     if (!Managers.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
                         return;
 
-                    Messenger<bool>.AddListener(Constants.Events.OnRewardedClosed, OnRewardedDone);
-                    Managers.Instance.Mediation.Show(Constants.Ads.Rewarded);
+                    Messenger<string>.AddListener(Constants.Events.OnRewardedVideoReward, OnRewardedDone);
+                    Managers.Instance.Mediation.Show(Constants.Ads.Rewarded, _skinButton + data.SkinAddressableName);
 
-                    Setup();
-                    await Managers.Instance.Progress.Save();
 
                     return;
                 case CurrencyController.Type.InterstitialAds:
                     if (!Managers.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
                         return;
-                    
-                    Managers.Instance.Mediation.Show(Constants.Ads.Interstitial);
+
+                    Managers.Instance.Mediation.Show(Constants.Ads.Interstitial, _skinButton + data.SkinAddressableName);
                     BuySkin();
                     Setup();
                     await Managers.Instance.Progress.Save();
@@ -108,17 +107,22 @@ namespace UI.Skins
             }
         }
 
-        private void OnRewardedDone(bool value)
+        private async void OnRewardedDone(string value)
         {
-            if (value)
-                BuySkin();
+            if (value != _skinButton + data.SkinAddressableName)
+            {
+                return;
+            }
+            BuySkin();
+            Setup();
+            await Managers.Instance.Progress.Save();
 
-            Messenger<bool>.RemoveListener(Constants.Events.OnRewardedClosed, OnRewardedDone);
+            Messenger<string>.RemoveListener(Constants.Events.OnRewardedVideoReward, OnRewardedDone);
         }
 
         private void OnSiReadyStatusChanged(bool value)
         {
-            button.interactable = value;
+            button.interactable = data.IsOpen || value;
         }
 
         private async void BuySkin()

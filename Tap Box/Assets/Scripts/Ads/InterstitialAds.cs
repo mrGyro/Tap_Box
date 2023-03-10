@@ -21,11 +21,9 @@ namespace Ads
             IronSourceInterstitialEvents.onAdShowSucceededEvent += InterstitialOnAdShowSucceededEvent;
             IronSourceInterstitialEvents.onAdShowFailedEvent += InterstitialOnAdShowFailedEvent;
             IronSourceInterstitialEvents.onAdClosedEvent += InterstitialOnAdClosedEvent;
-
         }
 
-
-        public void Show()
+        public void Show(string place)
         {
             IronSource.Agent.showInterstitial();
         }
@@ -36,32 +34,31 @@ namespace Ads
 
         public void Load()
         {
-            // if (IsReady())
-            //     return;
+            if (!IsReady.Value)
+                return;
 
             IronSource.Agent.loadInterstitial();
             OnAddLoad?.Invoke(Constants.Ads.Interstitial);
         }
-
-        // public bool IsReady()
-        // {
-        //     return IronSource.Agent.isInterstitialReady();
-        // }
+        
 
 /************* Interstitial AdInfo Delegates *************/
 // Invoked when the interstitial ad was loaded succesfully.
         private void InterstitialOnAdReadyEvent(IronSourceAdInfo adInfo)
         {
+            IsReady.SetValueAndForceNotify(true);
         }
 
 // Invoked when the initialization process has failed.
         private void InterstitialOnAdLoadFailed(IronSourceError ironSourceError)
         {
+            IsReady.SetValueAndForceNotify(false);
         }
 
 // Invoked when the Interstitial Ad Unit has opened. This is the impression indication. 
         private void InterstitialOnAdOpenedEvent(IronSourceAdInfo adInfo)
         {
+            IsReady.SetValueAndForceNotify(false);
         }
 
 // Invoked when end user clicked on the interstitial ad

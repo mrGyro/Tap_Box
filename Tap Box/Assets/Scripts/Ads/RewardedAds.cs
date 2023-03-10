@@ -8,6 +8,8 @@ namespace Ads
     {
         public ReactiveProperty<bool> IsReady { get; set; }
 
+        private string _place = string.Empty;
+
         public void Init()
         {
             IsReady = new ReactiveProperty<bool>(false);
@@ -20,11 +22,14 @@ namespace Ads
             IronSourceRewardedVideoEvents.onAdShowFailedEvent += RewardedVideoOnAdShowFailedEvent;
             IronSourceRewardedVideoEvents.onAdRewardedEvent += RewardedVideoOnAdRewardedEvent;
             IronSourceRewardedVideoEvents.onAdClickedEvent += RewardedVideoOnAdClickedEvent;
-
         }
 
-        public void Show()
+        public void Show(string place)
         {
+            if (!IsReady.Value)
+                return;
+
+            _place = place;
             IronSource.Agent.showRewardedVideo();
         }
 
@@ -34,15 +39,12 @@ namespace Ads
 
         public void Load()
         {
-            Debug.LogError("---Rewarded   Load");
-
+            if (!IsReady.Value)
+                return;
+            
             IronSource.Agent.loadRewardedVideo();
         }
 
-        public bool IsReady2()
-        {
-            return IronSource.Agent.isRewardedVideoAvailable();
-        }
 
 /************* RewardedVideo AdInfo Delegates *************/
 // Indicates that there’s an available ad.
@@ -52,7 +54,6 @@ namespace Ads
         {
             IsReady.SetValueAndForceNotify(true);
             Debug.LogError("---RewardedVideoOnAdAvailable");
-
         }
 
 // Indicates that no ads are available to be displayed
@@ -61,21 +62,18 @@ namespace Ads
         {
             IsReady.SetValueAndForceNotify(false);
             Debug.LogError("---RewardedVideoOnAdUnavailable");
-
         }
 
 // The Rewarded Video ad view has opened. Your activity will loose focus.
         void RewardedVideoOnAdOpenedEvent(IronSourceAdInfo adInfo)
-        {            
+        {
             Debug.LogError("---RewardedVideoOnAdOpenedEvent");
-
         }
 
 // The Rewarded Video ad view is about to be closed. Your activity will regain its focus.
         void RewardedVideoOnAdClosedEvent(IronSourceAdInfo adInfo)
         {
             Debug.LogError("---RewardedVideoOnAdClosedEvent");
-            Messenger<bool>.Broadcast(Constants.Events.OnRewardedClosed, false);
         }
 
 // The user completed to watch the video, and should be rewarded.
@@ -84,16 +82,13 @@ namespace Ads
         void RewardedVideoOnAdRewardedEvent(IronSourcePlacement placement, IronSourceAdInfo adInfo)
         {
             Debug.LogError("---RewardedVideoOnAdRewardedEvent");
-            Messenger<bool>.Broadcast(Constants.Events.OnRewardedClosed, true);
-
+            Messenger<string>.Broadcast(Constants.Events.OnRewardedVideoReward, _place);
         }
 
 // The rewarded video ad was failed to show.
         void RewardedVideoOnAdShowFailedEvent(IronSourceError error, IronSourceAdInfo adInfo)
         {
             Debug.LogError("---RewardedVideoOnAdShowFailedEvent");
-            Messenger<bool>.Broadcast(Constants.Events.OnRewardedClosed, false);
-
         }
 
 // Invoked when the video ad was clicked.
