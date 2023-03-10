@@ -1,6 +1,7 @@
 using System.Linq;
 using Ads;
 using Currency;
+using Cysharp.Threading.Tasks;
 using LevelCreator;
 using PlayerLevel;
 using SaveLoad_progress;
@@ -33,7 +34,6 @@ public class Managers : MonoBehaviour
         GameField.Initialize();
         PlayerLevelManager.Initialize();
         UIManager.Initialize();
-        Mediation.Initialize();
 
         Progress.LastStartedLevelID = 
             string.IsNullOrEmpty(Progress.LastStartedLevelID) 
@@ -41,6 +41,14 @@ public class Managers : MonoBehaviour
             : Progress.LastStartedLevelID;
         
         LoadLevelById(Progress.LastStartedLevelID);
+        sdfsdf();
+    }
+
+    private async void sdfsdf()
+    {
+        await UniTask.Delay(1000);
+        Mediation.Initialize();
+
     }
 
     public async void SaveLevel(LevelData level)

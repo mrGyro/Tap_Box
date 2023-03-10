@@ -11,7 +11,7 @@ namespace Ads
         private readonly Dictionary<string, IAdElement> _adElements = new();
         private bool _isInitialized;
 
-        public void Initialize()
+        public async void Initialize()
         {
             _adElements.Add(Constants.Ads.Interstitial, new InterstitialAds());
             _adElements.Add(Constants.Ads.Rewarded, new RewardedAds());
@@ -21,11 +21,16 @@ namespace Ads
             {
                 adElement.Value.Init();
             }
-
-            IronSource.Agent.init(YOUR_APP_KEY);
-            Debug.LogError("start init");
+            
             IronSourceEvents.onSdkInitializationCompletedEvent += SdkInitializationCompletedEvent;
+            //For Rewarded Video
+            IronSource.Agent.init(YOUR_APP_KEY, IronSourceAdUnits.REWARDED_VIDEO);
+            IronSource.Agent.init(YOUR_APP_KEY, IronSourceAdUnits.INTERSTITIAL);
+            IronSource.Agent.init(YOUR_APP_KEY, IronSourceAdUnits.BANNER);
+            Debug.LogError("start init");
 
+            await UniTask.Delay(1000);
+            IronSource.Agent.validateIntegration();
             LoadAddCycle();
         }
 
@@ -63,27 +68,31 @@ namespace Ads
 
         private async void LoadAddCycle()
         {
+            while (!_isInitialized)
+            {
+                await UniTask.Delay(2000);
+            }
+
             while (true)
             {
                 await UniTask.Delay(2000);
 
-                if (!_isInitialized)
-                    continue;
-
                 foreach (var adElement in _adElements)
                 {
+                    Debug.LogError(adElement.Key + " " + adElement.Value.IsReady);
+
                     if (adElement.Value.IsReady.Value)
-                        adElement.Value.Load();
+                        continue;
+
+                    Debug.LogError("Load");
+                    adElement.Value.Load();
                 }
             }
         }
 
         private void SdkInitializationCompletedEvent()
         {
-            // foreach (var adElement in _adElements)
-            // {
-            //     adElement.Value.Init();
-            // }
+
 
             Debug.LogError("Init complete");
             _isInitialized = true;

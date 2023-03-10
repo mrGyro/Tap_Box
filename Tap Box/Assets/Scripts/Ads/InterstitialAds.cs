@@ -1,13 +1,11 @@
-using System;
 using UniRx;
+using UnityEngine;
 
 namespace Ads
 {
     public class InterstitialAds : IAdElement
     {
         public ReactiveProperty<bool> IsReady { get; set; }
-
-        public Action<string> OnAddLoad { get; set; }
 
         public void Init()
         {
@@ -25,6 +23,10 @@ namespace Ads
 
         public void Show(string place)
         {
+            if (!IsReady.Value)
+                return;
+            
+            IsReady.SetValueAndForceNotify(false);
             IronSource.Agent.showInterstitial();
         }
 
@@ -34,11 +36,14 @@ namespace Ads
 
         public void Load()
         {
-            if (!IsReady.Value)
+            if (IronSource.Agent.isInterstitialReady())
+            {
+                IsReady.SetValueAndForceNotify(true);
                 return;
-
+            }
+            
+            Debug.LogError("load inters");
             IronSource.Agent.loadInterstitial();
-            OnAddLoad?.Invoke(Constants.Ads.Interstitial);
         }
         
 
@@ -46,34 +51,43 @@ namespace Ads
 // Invoked when the interstitial ad was loaded succesfully.
         private void InterstitialOnAdReadyEvent(IronSourceAdInfo adInfo)
         {
+            Debug.LogError("InterstitialOnAdReadyEvent");
             IsReady.SetValueAndForceNotify(true);
         }
 
 // Invoked when the initialization process has failed.
         private void InterstitialOnAdLoadFailed(IronSourceError ironSourceError)
         {
-            IsReady.SetValueAndForceNotify(false);
+            Debug.LogError("InterstitialOnAdLoadFailed");
+
         }
 
 // Invoked when the Interstitial Ad Unit has opened. This is the impression indication. 
         private void InterstitialOnAdOpenedEvent(IronSourceAdInfo adInfo)
         {
-            IsReady.SetValueAndForceNotify(false);
+            Debug.LogError("InterstitialOnAdOpenedEvent");
+
         }
 
 // Invoked when end user clicked on the interstitial ad
         private void InterstitialOnAdClickedEvent(IronSourceAdInfo adInfo)
         {
+            Debug.LogError("InterstitialOnAdClickedEvent");
+
         }
 
 // Invoked when the ad failed to show.
         void InterstitialOnAdShowFailedEvent(IronSourceError ironSourceError, IronSourceAdInfo adInfo)
         {
+            Debug.LogError("InterstitialOnAdShowFailedEvent");
+
         }
 
 // Invoked when the interstitial ad closed and the user went back to the application screen.
         void InterstitialOnAdClosedEvent(IronSourceAdInfo adInfo)
         {
+            Debug.LogError("InterstitialOnAdClosedEvent");
+
         }
 
 // Invoked before the interstitial ad was opened, and before the InterstitialOnAdOpenedEvent is reported.
@@ -81,6 +95,8 @@ namespace Ads
 // it's supported by all networks you included in your build. 
         private void InterstitialOnAdShowSucceededEvent(IronSourceAdInfo adInfo)
         {
+            Debug.LogError("InterstitialOnAdShowSucceededEvent");
+
         }
     }
 }

@@ -39,9 +39,6 @@ namespace Ads
 
         public void Load()
         {
-            if (!IsReady.Value)
-                return;
-            
             IronSource.Agent.loadRewardedVideo();
         }
 

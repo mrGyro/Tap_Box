@@ -46,17 +46,24 @@ namespace UI.Skins
                 case CurrencyController.Type.RewardedAds:
                     getTypeIcon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{Constants.Currency.Ads}_icon");
                     getTypeText.text = "Open";
-                    var adElement = Managers.Instance.Mediation.GetAddElement(Constants.Ads.Rewarded);
-                    if (adElement != null)
+                    var rewardedAd = Managers.Instance.Mediation.GetAddElement(Constants.Ads.Rewarded);
+                    if (rewardedAd != null)
                     {
-                        button.interactable = adElement.IsReady.Value;
-                        _isReady = adElement.IsReady.Subscribe(OnSiReadyStatusChanged);
+                        button.interactable = rewardedAd.IsReady.Value;
+                        _isReady = rewardedAd.IsReady.Subscribe(OnSiReadyStatusChanged);
                     }
 
                     break;
                 case CurrencyController.Type.InterstitialAds:
                     getTypeIcon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{Constants.Currency.Ads}_icon");
                     getTypeText.text = "Open";
+                    
+                    var interstitialAd = Managers.Instance.Mediation.GetAddElement(Constants.Ads.Interstitial);
+                    if (interstitialAd != null)
+                    {
+                        button.interactable = interstitialAd.IsReady.Value;
+                        _isReady = interstitialAd.IsReady.Subscribe(OnSiReadyStatusChanged);
+                    }
                     break;
             }
         }
@@ -134,7 +141,7 @@ namespace UI.Skins
 
         private void OnDestroy()
         {
-            _isReady.Dispose();
+            _isReady?.Dispose();
         }
     }
 }
