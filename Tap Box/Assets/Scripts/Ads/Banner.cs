@@ -1,13 +1,10 @@
-﻿using System;
-using UniRx;
+﻿using UniRx;
 
 namespace Ads
 {
     public class Banner : IAdElement
     {
         public ReactiveProperty<bool> IsReady { get; set; }
-
-        public Action<string> OnAddLoad { get; set; }
 
         public void Init()
         {
@@ -35,24 +32,20 @@ namespace Ads
         public void Load()
         {
             IronSource.Agent.loadBanner(IronSourceBannerSize.SMART, IronSourceBannerPosition.BOTTOM);
-            OnAddLoad?.Invoke(Constants.Ads.Banner);
         }
-
-        // public bool IsReady()
-        // {
-        //     return _isReady;
-        // }
 
         /************* Banner AdInfo Delegates *************/
 //Invoked once the banner has loaded
         void BannerOnAdLoadedEvent(IronSourceAdInfo adInfo)
         {
-           // _isReady = true;
+            IsReady.SetValueAndForceNotify(true);
         }
 
 //Invoked when the banner loading process has failed.
         void BannerOnAdLoadFailedEvent(IronSourceError ironSourceError)
         {
+            IsReady.SetValueAndForceNotify(false);
+
            // _isReady = false;
         }
 

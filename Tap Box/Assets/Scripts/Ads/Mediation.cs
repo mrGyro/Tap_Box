@@ -23,10 +23,7 @@ namespace Ads
             }
             
             IronSourceEvents.onSdkInitializationCompletedEvent += SdkInitializationCompletedEvent;
-            //For Rewarded Video
-            IronSource.Agent.init(YOUR_APP_KEY, IronSourceAdUnits.REWARDED_VIDEO);
-            IronSource.Agent.init(YOUR_APP_KEY, IronSourceAdUnits.INTERSTITIAL);
-            IronSource.Agent.init(YOUR_APP_KEY, IronSourceAdUnits.BANNER);
+            IronSource.Agent.init(YOUR_APP_KEY);
             Debug.LogError("start init");
 
             await UniTask.Delay(1000);
@@ -68,23 +65,16 @@ namespace Ads
 
         private async void LoadAddCycle()
         {
-            while (!_isInitialized)
-            {
-                await UniTask.Delay(2000);
-            }
-
             while (true)
             {
                 await UniTask.Delay(2000);
 
                 foreach (var adElement in _adElements)
                 {
-                    Debug.LogError(adElement.Key + " " + adElement.Value.IsReady);
-
                     if (adElement.Value.IsReady.Value)
                         continue;
 
-                    Debug.LogError("Load");
+                    Debug.LogError("Load " + adElement.Key);
                     adElement.Value.Load();
                 }
             }
@@ -92,8 +82,6 @@ namespace Ads
 
         private void SdkInitializationCompletedEvent()
         {
-
-
             Debug.LogError("Init complete");
             _isInitialized = true;
         }
