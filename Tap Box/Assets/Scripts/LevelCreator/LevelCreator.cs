@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Boxes;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -25,7 +26,6 @@ namespace LevelCreator
         private int _layerMask;
         private const string GameFieldElement = "GameFieldElement";
 
-        private Vector2 newPos;
         private int _currentIndex = 0;
         private bool _isActive = true;
 
@@ -33,7 +33,7 @@ namespace LevelCreator
         {
             Upd();
             _currentSelectedBoxForInstantiate = prefabs[_currentIndex];
-            SelectBlockForInstantoate();
+            SelectBlockForInstantiate();
             shadowBox.gameObject.SetActive(true);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -77,6 +77,7 @@ namespace LevelCreator
                 SelectBlock(Input.mousePosition);
                 return;
             }
+
             shadowBox.gameObject.SetActive(true);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -91,14 +92,6 @@ namespace LevelCreator
 
             if (Input.GetKeyDown(KeyCode.G))
                 ShowAll();
-        }
-
-        private void CreateBox()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                LeftMouseButton(Input.mousePosition);
-            }
         }
 
         private void RemoveBox()
@@ -118,7 +111,7 @@ namespace LevelCreator
                     _currentIndex = 0;
                 _currentSelectedBoxForInstantiate = prefabs[_currentIndex];
 
-                SelectBlockForInstantoate();
+                SelectBlockForInstantiate();
             }
 
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
@@ -128,7 +121,7 @@ namespace LevelCreator
                     _currentIndex = prefabs.Count - 1;
                 _currentSelectedBoxForInstantiate = prefabs[_currentIndex];
 
-                SelectBlockForInstantoate();
+                SelectBlockForInstantiate();
             }
         }
 
@@ -190,20 +183,22 @@ namespace LevelCreator
             while (true)
             {
                 if (_currentTargetBox == null)
-                    GetNewBoxPosition(newPos);
-                await UniTask.WaitForEndOfFrame(this);
+                    GetNewBoxPosition(Input.mousePosition);
+
+                await UniTask.Delay(100);
             }
         }
 
-        private void SelectBlockForInstantoate()
+        private void SelectBlockForInstantiate()
         {
             var sprite = loadableSprites.Find(x => x.name == _currentSelectedBoxForInstantiate.Data.Type.ToString());
             currentBoxIcon.sprite = sprite;
         }
 
-        private void LeftMouseButton(Vector2 pos)
+        private void CreateBox()
         {
-            newPos = pos;
+            if (!Input.GetMouseButtonDown(0))
+                return;
 
             if (Level.Count == 0)
             {
@@ -213,11 +208,10 @@ namespace LevelCreator
                 return;
             }
 
-            var box = RaycastBox(pos);
+            var box = RaycastBox(Input.mousePosition);
 
             if (box == null)
                 return;
-
 
             Create();
         }
@@ -283,9 +277,13 @@ namespace LevelCreator
         private async void Create()
         {
             Level ??= new List<BaseBox>();
+            if (Level.FirstOrDefault(x => x.IsBoxInPosition(_currentSelectedBoxForInstantiate.Data.ArrayPosition.ToVector3() )) != null)
+                return;
 
             var boxGameObject = await InstantiateAssetAsync("Default_" + _currentSelectedBoxForInstantiate.Data.Type);
             var box = boxGameObject.GetComponent<BaseBox>();
+
+
             box.transform.position = _currentSelectedBoxForInstantiate.Data.ArrayPosition.ToVector3() * size;
             box.transform.rotation = Quaternion.Euler(_currentSelectedBoxForInstantiate.Data.Rotation);
             box.Data = new BoxData()
@@ -294,6 +292,7 @@ namespace LevelCreator
                 ArrayPosition = _currentSelectedBoxForInstantiate.Data.ArrayPosition,
                 Rotation = _currentSelectedBoxForInstantiate.Data.Rotation,
             };
+
             Level.Add(box);
         }
 
