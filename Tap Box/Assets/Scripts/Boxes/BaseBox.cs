@@ -10,7 +10,8 @@ namespace Boxes
             None = 0,
             TapFlowBox = 10,
             RotateRoadBox = 20,
-            SwipedBox = 30
+            SwipedBox = 30,
+            BigBoxTapFlowBox = 40
         }
 
         public BoxData Data;
@@ -29,6 +30,11 @@ namespace Boxes
         
         public virtual async UniTask BoxReactionEnd()
         {
+        }
+        
+        public virtual bool IsBoxInPosition(Vector3 position)
+        {
+            return Data.ArrayPosition.ToVector3() == position;
         }
     }
 }

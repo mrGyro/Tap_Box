@@ -41,14 +41,7 @@ public class Managers : MonoBehaviour
             : Progress.LastStartedLevelID;
         
         LoadLevelById(Progress.LastStartedLevelID);
-        sdfsdf();
-    }
-
-    private async void sdfsdf()
-    {
-        await UniTask.Delay(1000);
         Mediation.Initialize();
-
     }
 
     public async void SaveLevel(LevelData level)
