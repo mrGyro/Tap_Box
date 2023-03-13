@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Boxes.BigBoxTapFlowBox
 {
-    [RequireComponent(typeof(BaseReaction))]
     public class BigBoxTapFlowBox : BaseBox
     {
         [SerializeField] private BaseReaction _reaction;

@@ -158,11 +158,11 @@ public class FreeFlyCamera : MonoBehaviour
             if (Input.GetKey(KeyCode.D))
                 deltaPosition += transform.right;
 
-            if (Input.GetKey(_moveUp))
-                deltaPosition += transform.up;
-            
-            if (Input.GetKey(_moveDown))
-                deltaPosition -= transform.up;
+            // if (Input.GetKey(_moveUp))
+            //     deltaPosition += transform.up;
+            //
+            // if (Input.GetKey(_moveDown))
+            //     deltaPosition -= transform.up;
 
             // Calc acceleration
             CalculateCurrentIncrease(deltaPosition != Vector3.zero);

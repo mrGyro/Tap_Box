@@ -14,10 +14,8 @@ namespace LevelCreator
         [SerializeField] Transform root;
         [SerializeField] Transform shadowBox;
         [SerializeField] private Image currentBoxIcon;
-        [SerializeField] private Button upButton;
-        [SerializeField] private Button downButton;
-        [SerializeField] private Button leftButton;
-        [SerializeField] private Button rightButton;
+        [SerializeField] private BoxRotator boxRotator;
+
         [SerializeField] List<BaseBox> prefabs;
         [SerializeField] List<Sprite> loadableSprites;
         public List<BaseBox> Level;
@@ -36,10 +34,10 @@ namespace LevelCreator
             Upd();
             _currentSelectedBoxForInstantiate = prefabs[_currentIndex];
             SelectBlockForInstantoate();
-            upButton.onClick.AddListener(RotateUp);
-            downButton.onClick.AddListener(RotateDown);
-            leftButton.onClick.AddListener(RotateLeft);
-            rightButton.onClick.AddListener(RotateRight);
+            shadowBox.gameObject.SetActive(true);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            _currentTargetBox = null;
         }
 
         private void Update()
@@ -53,37 +51,66 @@ namespace LevelCreator
                 Cursor.visible = true;
                 return;
             }
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                if (_currentTargetBox == null)
-                {
-                    SelectBlock(Input.mousePosition);
-                }
-                else
-                {
-                    _currentTargetBox = null;
-                }
-            }
 
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                HideBox(Input.mousePosition);
-            } 
-            
-            if (Input.GetKeyDown(KeyCode.G))
-                ShowAll();
+            BoxSelecting();
+            BoxesVisibility();
 
             if (_currentTargetBox != null)
+                return;
+
+
+            MouseWheelSelectBox();
+            CreateBox();
+            RemoveBox();
+        }
+
+        private void BoxSelecting()
+        {
+            if (!Input.GetKeyDown(KeyCode.E))
+                return;
+
+            if (_currentTargetBox == null)
             {
                 shadowBox.gameObject.SetActive(false);
                 Cursor.lockState = CursorLockMode.Confined;
                 Cursor.visible = true;
-
+                SelectBlock(Input.mousePosition);
                 return;
             }
-
+            shadowBox.gameObject.SetActive(true);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            _currentTargetBox = null;
+            boxRotator.SetBox(_currentTargetBox);
+        }
+
+        private void BoxesVisibility()
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+                HideBox(Input.mousePosition);
+
+            if (Input.GetKeyDown(KeyCode.G))
+                ShowAll();
+        }
+
+        private void CreateBox()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                LeftMouseButton(Input.mousePosition);
+            }
+        }
+
+        private void RemoveBox()
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                RemoveBlock(Input.mousePosition);
+            }
+        }
+
+        private void MouseWheelSelectBox()
+        {
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
             {
                 _currentIndex++;
@@ -103,16 +130,6 @@ namespace LevelCreator
 
                 SelectBlockForInstantoate();
             }
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                LeftMouseButton(Input.mousePosition);
-            }
-
-            if (Input.GetMouseButtonDown(1))
-            {
-                RemoveBlock(Input.mousePosition);
-            }
         }
 
         private void HideBox(Vector3 mousePosition)
@@ -123,7 +140,7 @@ namespace LevelCreator
             {
                 return;
             }
-            
+
             box.gameObject.SetActive(false);
         }
 
@@ -135,38 +152,6 @@ namespace LevelCreator
             }
         }
 
-        private void RotateLeft()
-        {
-            if (_currentTargetBox == null)
-                return;
-
-            _currentTargetBox.transform.Rotate(Vector3.up, -90);
-            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
-        }
-
-        private void RotateRight()
-        {
-            if (_currentTargetBox == null)
-                return;
-            _currentTargetBox.transform.Rotate(Vector3.up, 90);
-            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
-        }
-
-        private void RotateUp()
-        {
-            if (_currentTargetBox == null)
-                return;
-            _currentTargetBox.transform.Rotate(Vector3.left, 90);
-            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
-        }
-
-        private void RotateDown()
-        {
-            if (_currentTargetBox == null)
-                return;
-            _currentTargetBox.transform.Rotate(Vector3.left, -90);
-            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
-        }
 
         private void SelectBlock(Vector2 mousePosition)
         {
@@ -175,10 +160,12 @@ namespace LevelCreator
             if (box == null)
             {
                 _currentTargetBox = null;
+                boxRotator.SetBox(_currentTargetBox);
                 return;
             }
 
             _currentTargetBox = box;
+            boxRotator.SetBox(_currentTargetBox);
         }
 
         void OnEnable()
@@ -202,8 +189,9 @@ namespace LevelCreator
         {
             while (true)
             {
-                GetNewBoxPosition(newPos);
-                await UniTask.Delay(50);
+                if (_currentTargetBox == null)
+                    GetNewBoxPosition(newPos);
+                await UniTask.WaitForEndOfFrame(this);
             }
         }
 
@@ -296,7 +284,7 @@ namespace LevelCreator
         {
             Level ??= new List<BaseBox>();
 
-            var boxGameObject = await InstantiateAssetAsync(_currentSelectedBoxForInstantiate.Data.Type.ToString());
+            var boxGameObject = await InstantiateAssetAsync("Default_" + _currentSelectedBoxForInstantiate.Data.Type);
             var box = boxGameObject.GetComponent<BaseBox>();
             box.transform.position = _currentSelectedBoxForInstantiate.Data.ArrayPosition.ToVector3() * size;
             box.transform.rotation = Quaternion.Euler(_currentSelectedBoxForInstantiate.Data.Rotation);
@@ -313,7 +301,7 @@ namespace LevelCreator
         {
             Level ??= new List<BaseBox>();
 
-            var boxGameObject = await InstantiateAssetAsync(data.Type.ToString());
+            var boxGameObject = await InstantiateAssetAsync("Default_" + data.Type);
             var box = boxGameObject.GetComponent<BaseBox>();
             box.transform.position = data.ArrayPosition.ToVector3() * size;
             box.transform.rotation = Quaternion.Euler(data.Rotation);
@@ -331,7 +319,7 @@ namespace LevelCreator
                 VARIABLE.gameObject.SetActive(false);
                 Destroy(VARIABLE.gameObject);
             }
-            
+
             Level = new List<BaseBox>();
         }
 
