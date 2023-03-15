@@ -74,7 +74,6 @@ namespace Ads
                     if (adElement.Value.IsReady.Value)
                         continue;
 
-                    Debug.LogError("Load " + adElement.Key);
                     adElement.Value.Load();
                 }
             }

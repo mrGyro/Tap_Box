@@ -42,7 +42,6 @@ namespace Ads
                 return;
             }
             
-            Debug.LogError("load inters");
             IronSource.Agent.loadInterstitial();
         }
         
