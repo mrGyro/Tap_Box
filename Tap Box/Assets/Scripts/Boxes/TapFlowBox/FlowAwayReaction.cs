@@ -22,7 +22,7 @@ namespace Boxes.TapFlowBox
 
             _isMove = true;
 
-            var box = Managers.Instance.GameField.GetNearestBoxInDirection(_box.Data.ArrayPosition, _parent.forward);
+            var box = Managers.Instance.GameField.GetNearestBoxInDirection(new[] { _box.Data.ArrayPosition.ToVector3() } , _parent.forward, _box);
             if (box == null)
             {
                 Managers.Instance.GameField.RemoveBox(_box);

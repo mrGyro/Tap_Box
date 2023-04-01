@@ -15,7 +15,7 @@ namespace Boxes
         }
 
         public BoxData Data;
-        
+
         public virtual async UniTask Init()
         {
         }
@@ -23,15 +23,24 @@ namespace Boxes
         public virtual async UniTask BoxReactionStart()
         {
         }
-        
+
         public virtual async UniTask BoxReactionProcess()
         {
         }
-        
+
         public virtual async UniTask BoxReactionEnd()
         {
         }
-        
+
+        public virtual void Rotate(Vector3 direction, float angle)
+        {
+            transform.Rotate(direction, angle);
+            Data.Rotation = new SerializedVector3(
+                (int)transform.rotation.eulerAngles.x,
+                (int)transform.rotation.eulerAngles.y,
+                (int)transform.rotation.eulerAngles.z);
+        }
+
         public virtual bool IsBoxInPosition(Vector3 position)
         {
             return Data.ArrayPosition.ToVector3() == position;

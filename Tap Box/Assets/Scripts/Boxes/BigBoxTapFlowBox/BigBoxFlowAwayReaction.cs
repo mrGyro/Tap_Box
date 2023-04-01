@@ -23,7 +23,8 @@ namespace Boxes.BigBoxTapFlowBox
 
             _isMove = true;
 
-            var box = Managers.Instance.GameField.GetNearestBoxInDirection(_box.Data.ArrayPosition, _parent.forward);
+            var box = Managers.Instance.GameField.GetNearestBoxInDirection(new[] { _box.Data.ArrayPosition.ToVector3() }, _parent.forward, _box);
+            Debug.LogError("reaction");
             if (box == null)
             {
                 Managers.Instance.GameField.RemoveBox(_box);
@@ -47,7 +48,7 @@ namespace Boxes.BigBoxTapFlowBox
             {
                 boxCollider.enabled = false;
             }
-           
+
             var isPlayDie = false;
             var startPos = _parent.position;
             while (Vector3.Distance(_parent.position, startPos) < _distanse)
@@ -68,9 +69,20 @@ namespace Boxes.BigBoxTapFlowBox
 
         private async UniTask MoveToAndBack(BaseBox box)
         {
-            Vector3 startPos = _parent.position;
-            while (Vector3.Distance(_parent.position, box.transform.position) > 1.03f)
+            var startPos = _parent.position;
+            var bigBox = box as BigBoxTapFlowBox;
+            bool isMove = true;
+            while (isMove)
             {
+                foreach (var VARIABLE in bigBox.GetBoxPositions())
+                {
+                    if (Vector3.Distance(_parent.position, VARIABLE.transform.position) > 1.03f)
+                    {
+                        isMove = false;
+                        break;
+                    }
+                }
+
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
                 await UniTask.WaitForEndOfFrame(this);
             }

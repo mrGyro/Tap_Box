@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Boxes;
+using Boxes.BigBoxTapFlowBox;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,7 @@ namespace LevelCreator
         [SerializeField] Transform shadowBox;
         [SerializeField] private Image currentBoxIcon;
         [SerializeField] private BoxRotator boxRotator;
+        [SerializeField] private BoxMover boxMover;
 
         [SerializeField] List<BaseBox> prefabs;
         [SerializeField] List<Sprite> loadableSprites;
@@ -43,12 +45,15 @@ namespace LevelCreator
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Tab))
+            {
                 _isActive = !_isActive;
+                Cursor.lockState = _isActive ? CursorLockMode.Locked : CursorLockMode.Confined;
+                Cursor.visible = !_isActive;
+                Debug.LogError(Cursor.visible);
+            }
 
             if (!_isActive)
             {
-                Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = true;
                 return;
             }
 
@@ -83,6 +88,7 @@ namespace LevelCreator
             Cursor.visible = false;
             _currentTargetBox = null;
             boxRotator.SetBox(_currentTargetBox);
+            boxMover.SetBox(_currentTargetBox);
         }
 
         private void BoxesVisibility()
@@ -154,11 +160,13 @@ namespace LevelCreator
             {
                 _currentTargetBox = null;
                 boxRotator.SetBox(_currentTargetBox);
+                boxMover.SetBox(_currentTargetBox);
                 return;
             }
 
             _currentTargetBox = box;
             boxRotator.SetBox(_currentTargetBox);
+            boxMover.SetBox(_currentTargetBox);
         }
 
         void OnEnable()
@@ -236,27 +244,43 @@ namespace LevelCreator
                 return;
             }
 
+            Vector3 position = Vector3.zero;
+            var box = hit.transform.GetComponent<BaseBox>();
+            switch (box.Data.Type)
+            {
+                case BaseBox.BlockType.None:
+                case BaseBox.BlockType.TapFlowBox:
+                case BaseBox.BlockType.RotateRoadBox:
+                case BaseBox.BlockType.SwipedBox:
+                    position = box.Data.ArrayPosition;
+
+                    break;
+                case BaseBox.BlockType.BigBoxTapFlowBox:
+                    var bigBox = hit.transform.GetComponent<BigBoxTapFlowBox>();
+                    position = bigBox.GetNearestPosition(hit.point) * size;
+                    break;
+            }
+
             shadowBox.gameObject.SetActive(true);
-            Vector3 pos = hit.transform.position;
 
             float halfSize = size / 2;
-            const float difference = 0.01f;
+            const float difference = 0.05f;
 
 
-            if (Math.Abs(hit.point.x - (pos.x + halfSize)) < difference || Math.Abs(hit.point.x - (pos.x - halfSize)) < difference)
-                pos.x = hit.point.x >= pos.x ? pos.x + size : pos.x - size;
+            if (Math.Abs(hit.point.x - (position.x + halfSize)) < difference || Math.Abs(hit.point.x - (position.x - halfSize)) < difference)
+                position.x = hit.point.x >= position.x ? position.x + size : position.x - size;
 
-            if (Math.Abs(hit.point.y - (pos.y + halfSize)) < difference || Math.Abs(hit.point.y - (pos.y - halfSize)) < difference)
-                pos.y = hit.point.y >= pos.y ? pos.y + size : pos.y - size;
+            if (Math.Abs(hit.point.y - (position.y + halfSize)) < difference || Math.Abs(hit.point.y - (position.y - halfSize)) < difference)
+                position.y = hit.point.y >= position.y ? position.y + size : position.y - size;
 
-            if (Math.Abs(hit.point.z - (pos.z + halfSize)) < difference || Math.Abs(hit.point.z - (pos.z - halfSize)) < difference)
-                pos.z = hit.point.z >= pos.z ? pos.z + size : pos.z - size;
+            if (Math.Abs(hit.point.z - (position.z + halfSize)) < difference || Math.Abs(hit.point.z - (position.z - halfSize)) < difference)
+                position.z = hit.point.z >= position.z ? position.z + size : position.z - size;
 
-            if (pos != hit.transform.position)
-            {
-                shadowBox.position = pos;
-                _currentSelectedBoxForInstantiate.Data.ArrayPosition = new Vector3(pos.x / size, pos.y / size, pos.z / size);
-            }
+            if (position == hit.transform.position)
+                return;
+
+            shadowBox.position = position;
+            _currentSelectedBoxForInstantiate.Data.ArrayPosition = new Vector3(position.x / size, position.y / size, position.z / size);
         }
 
         private RaycastHit RaycastBox(Vector2 screenPosition, int layerMask)
@@ -277,15 +301,17 @@ namespace LevelCreator
         private async void Create()
         {
             Level ??= new List<BaseBox>();
-            if (Level.FirstOrDefault(x => x.IsBoxInPosition(_currentSelectedBoxForInstantiate.Data.ArrayPosition.ToVector3() )) != null)
+
+            if (Level.FirstOrDefault(x => x.IsBoxInPosition(_currentSelectedBoxForInstantiate.Data.ArrayPosition.ToVector3())) != null)
                 return;
 
             var boxGameObject = await InstantiateAssetAsync("Default_" + _currentSelectedBoxForInstantiate.Data.Type);
             var box = boxGameObject.GetComponent<BaseBox>();
 
-
-            box.transform.position = _currentSelectedBoxForInstantiate.Data.ArrayPosition.ToVector3() * size;
+            Vector3 boxPosition = _currentSelectedBoxForInstantiate.Data.ArrayPosition.ToVector3();
+            box.transform.position = boxPosition * size;
             box.transform.rotation = Quaternion.Euler(_currentSelectedBoxForInstantiate.Data.Rotation);
+            
             box.Data = new BoxData()
             {
                 Type = _currentSelectedBoxForInstantiate.Data.Type,
@@ -294,7 +320,23 @@ namespace LevelCreator
             };
 
             Level.Add(box);
+            
+            switch (box.Data.Type)
+            {
+                case BaseBox.BlockType.None:
+                case BaseBox.BlockType.TapFlowBox:
+                case BaseBox.BlockType.RotateRoadBox:
+                case BaseBox.BlockType.SwipedBox:
+                    await box.Init();
+                    break;
+                case BaseBox.BlockType.BigBoxTapFlowBox:
+                    var bigBox = box.transform.GetComponent<BigBoxTapFlowBox>();
+                    await bigBox.Init();
+                    break;
+            }
         }
+
+
 
         public async void CreateBox(BoxData data)
         {

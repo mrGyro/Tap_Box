@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Boxes;
+using Boxes.BigBoxTapFlowBox;
 using Boxes.SwipableBox;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
@@ -85,19 +87,65 @@ public class GameField : MonoBehaviour, IInitializable
         return arrayPosition * size;
     }
 
-    public BaseBox GetNearestBoxInDirection(Vector3 boxArrayPosition, Vector3 direction)
+    public BaseBox GetNearestBoxInDirection(Vector3[] boxArrayPosition, Vector3 direction, BaseBox currentBox)
     {
-        Vector3 currentPosition = boxArrayPosition;
-        currentPosition += direction;
-        while (CheckMaxLevelSize(currentPosition) && CheckMinLevelSize(currentPosition))
+        Vector3[] arrayPosition = boxArrayPosition;
+
+        for (int i = 0; i < arrayPosition.Length; i++)
         {
-            var box = _boxes.FirstOrDefault(x => x.IsBoxInPosition(currentPosition));
-            if (box != null)
+            arrayPosition[i] += direction;
+        }
+
+        bool notOutOfRange = true;
+        while (notOutOfRange)
+        {
+            BaseBox box = null;
+
+            for (int i = 0; i < arrayPosition.Length; i++)
             {
+                notOutOfRange = CheckMaxLevelSize(arrayPosition[i]) && CheckMinLevelSize(arrayPosition[i]);
+                if (!notOutOfRange)
+                {
+                    return null;
+                }
+                
+                foreach (var VARIABLE in _boxes)
+                {
+                    bool isBoxInPosition = false;
+                    switch (VARIABLE.Data.Type)
+                    {
+                        case BaseBox.BlockType.None:
+                        case BaseBox.BlockType.TapFlowBox:
+                        case BaseBox.BlockType.RotateRoadBox:
+                        case BaseBox.BlockType.SwipedBox:
+                            isBoxInPosition = VARIABLE.IsBoxInPosition(arrayPosition[i]);
+                            break;
+                        case BaseBox.BlockType.BigBoxTapFlowBox:
+                            var bigBox = (VARIABLE as BigBoxTapFlowBox);
+                            if (bigBox != null)
+                            {
+                                isBoxInPosition = bigBox.IsBoxInPosition(arrayPosition[i]);
+                            }
+                            break;
+                    }
+                    if (isBoxInPosition && currentBox != box)
+                    {
+                        box = VARIABLE;
+                        break;
+                    }
+                }
+            }
+
+            if (box != null && currentBox != box)
+            {
+                Debug.LogError(box.name);
                 return box;
             }
 
-            currentPosition += direction;
+            for (int i = 0; i < arrayPosition.Length; i++)
+            {
+                arrayPosition[i] += direction;
+            }
         }
 
         return null;
@@ -148,6 +196,7 @@ public class GameField : MonoBehaviour, IInitializable
 
         return result.Count == 0 ? null : result;
     }
+
 
     private void ClearGameField()
     {
@@ -201,6 +250,7 @@ public class GameField : MonoBehaviour, IInitializable
             box.transform.position = data.ArrayPosition.ToVector3() * size;
             box.transform.rotation = Quaternion.Euler(data.Rotation);
             box.Data = data;
+            box.name = box.Data.Type + "_" + _boxes.Count;
             _boxes.Add(box);
         }
 

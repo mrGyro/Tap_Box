@@ -1,5 +1,5 @@
-﻿using System;
-using Boxes;
+﻿using Boxes;
+using Boxes.BigBoxTapFlowBox;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,33 +31,45 @@ namespace LevelCreator
         {
             if (_currentTargetBox == null)
                 return;
-
-            _currentTargetBox.transform.Rotate(Vector3.up, -90);
-            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
+            
+            _currentTargetBox.Rotate(Vector3.up, -90);
+            UpdatePosition();
         }
 
         private void RotateRight()
         {
             if (_currentTargetBox == null)
                 return;
-            _currentTargetBox.transform.Rotate(Vector3.up, 90);
-            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
+            
+            _currentTargetBox.Rotate(Vector3.up, 90);
+            UpdatePosition();
         }
 
         private void RotateUp()
         {
             if (_currentTargetBox == null)
                 return;
-            _currentTargetBox.transform.Rotate(Vector3.left, 90);
-            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
+            
+            _currentTargetBox.Rotate(Vector3.left, 90);
+            UpdatePosition();
+
         }
 
         private void RotateDown()
         {
             if (_currentTargetBox == null)
                 return;
-            _currentTargetBox.transform.Rotate(Vector3.left, -90);
-            _currentTargetBox.Data.Rotation = _currentTargetBox.transform.rotation.eulerAngles;
+            
+            _currentTargetBox.Rotate(Vector3.left, -90);
+            UpdatePosition();
+        }
+
+        private void UpdatePosition()
+        {
+            if (_currentTargetBox.Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
+            {
+                (_currentTargetBox as BigBoxTapFlowBox)?.UpdatePositions();
+            }
         }
     }
 }

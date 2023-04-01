@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class DieDissolve : MonoBehaviour, IDieAction
 {
-    [SerializeField] private Renderer[] renderers = new Renderer[0];
+    [SerializeField] private Renderer renderer;
     [SerializeField] private float waitBeforeDissolve;
     [SerializeField] private float dissolveSpeed = 1.0f;
     [SerializeField] private AnimationCurve dissolveCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
@@ -18,17 +18,17 @@ public class DieDissolve : MonoBehaviour, IDieAction
 
     public async UniTask DieAction()
     {
-        List<Material> materials = new List<Material>();
-
-        foreach (var VARIABLE in renderers)
-        {
-            foreach (var VARIABLE2 in VARIABLE.materials)
-            {
-                materials.Add(VARIABLE2);
-            }
-            
-        }
-        await WaitAndDissolve(materials.ToArray());
+        // List<Material> materials = new List<Material>();
+        //
+        // foreach (var VARIABLE in renderers)
+        // {
+        //     foreach (var VARIABLE2 in VARIABLE.materials)
+        //     {
+        //         materials.Add(VARIABLE2);
+        //     }
+        //     
+        // }
+        await WaitAndDissolve(renderer.materials);
     }
 
     private async UniTask WaitAndDissolve(Material[] materials)

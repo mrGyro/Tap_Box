@@ -8,7 +8,9 @@ namespace Boxes.BigBoxTapFlowBox
     public class BigBoxTapFlowBox : BaseBox
     {
         [SerializeField] private BaseReaction _reaction;
-        [SerializeField] private List<BaseBox> boxes;
+        [SerializeField] private BaseBox boxe;
+        [SerializeField] private BigBoxPart[] boxePositions;
+        private float _size = 1.03f;
 
         public override async UniTask BoxReactionStart()
         {
@@ -16,15 +18,65 @@ namespace Boxes.BigBoxTapFlowBox
             await _reaction.ReactionEnd();
         }
 
+        public async override UniTask Init()
+        {
+            foreach (var VARIABLE in boxePositions)
+            {
+                VARIABLE.UpdateArrayPosition();
+            }
+        }
+
         public override bool IsBoxInPosition(Vector3 position)
         {
-            foreach (var baseBox in boxes)
+            foreach (var VARIABLE in boxePositions)
             {
-                if (baseBox.IsBoxInPosition(position))
+                if (position == VARIABLE.ArrayPosition)
+                {
                     return true;
+                }
+            }
+
+            return false;
+        }
+
+        public BigBoxPart[] GetBoxPositions()
+        {
+            return boxePositions;
+        }
+
+        public Vector3 GetNearestPosition(Vector3 checkPosition)
+        {
+            BigBoxPart part = null;
+            float distance = float.MaxValue;
+
+            foreach (var VARIABLE in boxePositions)
+            {
+                float currentDistance = Vector3.Distance(VARIABLE.ArrayPosition, checkPosition);
+                if (currentDistance < distance)
+                {
+                    distance = currentDistance;
+
+                    part = VARIABLE;
+                }
+            }
+
+            return part.ArrayPosition;
+        }
+
+        public override void Rotate(Vector3 direction, float angle)
+        {
+            base.Rotate(direction, angle);
+            UpdatePositions();
+        }
+
+        public void UpdatePositions()
+        {
+            foreach (var bigBoxPart in boxePositions)
+            {
+                bigBoxPart.UpdateArrayPosition();
             }
             
-            return false;
+            boxe.Data.ArrayPosition = boxePositions[0].ArrayPosition;
         }
     }
 }
