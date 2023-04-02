@@ -49,7 +49,6 @@ namespace LevelCreator
                 _isActive = !_isActive;
                 Cursor.lockState = _isActive ? CursorLockMode.Locked : CursorLockMode.Confined;
                 Cursor.visible = !_isActive;
-                Debug.LogError(Cursor.visible);
             }
 
             if (!_isActive)
@@ -199,8 +198,8 @@ namespace LevelCreator
 
         private void SelectBlockForInstantiate()
         {
-            var sprite = loadableSprites.Find(x => x.name == _currentSelectedBoxForInstantiate.Data.Type.ToString());
-            currentBoxIcon.sprite = sprite;
+            //var sprite = loadableSprites[_currentIndex];
+            currentBoxIcon.sprite = loadableSprites[_currentIndex];
         }
 
         private void CreateBox()
@@ -244,7 +243,7 @@ namespace LevelCreator
                 return;
             }
 
-            Vector3 position = Vector3.zero;
+            Vector3 arrayPosition = Vector3.zero;
             var box = hit.transform.GetComponent<BaseBox>();
             switch (box.Data.Type)
             {
@@ -252,33 +251,42 @@ namespace LevelCreator
                 case BaseBox.BlockType.TapFlowBox:
                 case BaseBox.BlockType.RotateRoadBox:
                 case BaseBox.BlockType.SwipedBox:
-                    position = box.Data.ArrayPosition;
+                    arrayPosition = box.Data.ArrayPosition.ToVector3();
 
                     break;
                 case BaseBox.BlockType.BigBoxTapFlowBox:
                     var bigBox = hit.transform.GetComponent<BigBoxTapFlowBox>();
-                    position = bigBox.GetNearestPosition(hit.point) * size;
+                    arrayPosition = bigBox.GetNearestPosition(hit.point);
                     break;
             }
 
             shadowBox.gameObject.SetActive(true);
 
-            float halfSize = size / 2;
-            const float difference = 0.05f;
+            List<Vector3> nearBoxPositions = new List<Vector3>()
+            {
+                 Vector3.up,
+                 Vector3.down,
+                 Vector3.left,
+                 Vector3.right,
+                 Vector3.forward,
+                 Vector3.back
+            };
 
+            float distance = float.MaxValue;
+            Vector3 dir = Vector3.zero;
+            foreach (var VARIABLE in nearBoxPositions)
+            {
+                float currentDistance = Vector3.Distance((arrayPosition + VARIABLE) * size, hit.point);
+                if (currentDistance < distance)
+                {
+                    distance = currentDistance;
+                    dir = VARIABLE;
+                }
+            }
 
-            if (Math.Abs(hit.point.x - (position.x + halfSize)) < difference || Math.Abs(hit.point.x - (position.x - halfSize)) < difference)
-                position.x = hit.point.x >= position.x ? position.x + size : position.x - size;
+            Vector3 position = (arrayPosition + dir) * size;
 
-            if (Math.Abs(hit.point.y - (position.y + halfSize)) < difference || Math.Abs(hit.point.y - (position.y - halfSize)) < difference)
-                position.y = hit.point.y >= position.y ? position.y + size : position.y - size;
-
-            if (Math.Abs(hit.point.z - (position.z + halfSize)) < difference || Math.Abs(hit.point.z - (position.z - halfSize)) < difference)
-                position.z = hit.point.z >= position.z ? position.z + size : position.z - size;
-
-            if (position == hit.transform.position)
-                return;
-
+//            Debug.LogError(hit.point + " " + dir + " " + arrayPosition + " " + position + " " + distance);
             shadowBox.position = position;
             _currentSelectedBoxForInstantiate.Data.ArrayPosition = new Vector3(position.x / size, position.y / size, position.z / size);
         }
@@ -305,22 +313,23 @@ namespace LevelCreator
             if (Level.FirstOrDefault(x => x.IsBoxInPosition(_currentSelectedBoxForInstantiate.Data.ArrayPosition.ToVector3())) != null)
                 return;
 
-            var boxGameObject = await InstantiateAssetAsync("Default_" + _currentSelectedBoxForInstantiate.Data.Type);
+            var boxGameObject = await InstantiateAssetAsync(GetAddressableName(_currentSelectedBoxForInstantiate.Data));
             var box = boxGameObject.GetComponent<BaseBox>();
 
             Vector3 boxPosition = _currentSelectedBoxForInstantiate.Data.ArrayPosition.ToVector3();
             box.transform.position = boxPosition * size;
             box.transform.rotation = Quaternion.Euler(_currentSelectedBoxForInstantiate.Data.Rotation);
-            
+
             box.Data = new BoxData()
             {
                 Type = _currentSelectedBoxForInstantiate.Data.Type,
                 ArrayPosition = _currentSelectedBoxForInstantiate.Data.ArrayPosition,
                 Rotation = _currentSelectedBoxForInstantiate.Data.Rotation,
+                Size = _currentSelectedBoxForInstantiate.Data.Size
             };
 
             Level.Add(box);
-            
+
             switch (box.Data.Type)
             {
                 case BaseBox.BlockType.None:
@@ -336,7 +345,24 @@ namespace LevelCreator
             }
         }
 
+        private string GetAddressableName(BoxData box)
+        {
+            switch (box.Type)
+            {
+                case BaseBox.BlockType.None:
 
+                case BaseBox.BlockType.TapFlowBox:
+
+                case BaseBox.BlockType.RotateRoadBox:
+
+                case BaseBox.BlockType.SwipedBox:
+                    return $"Default_{box.Type}";
+                case BaseBox.BlockType.BigBoxTapFlowBox:
+                    return $"Default_{box.Type}_{box.Size.x}_{box.Size.y}_{box.Size.z}";
+            }
+
+            return String.Empty;
+        }
 
         public async void CreateBox(BoxData data)
         {

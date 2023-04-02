@@ -245,7 +245,7 @@ public class GameField : MonoBehaviour, IInitializable
             if (data.Type == BaseBox.BlockType.None)
                 continue;
 
-            var boxGameObject = await InstantiateAssetAsync($"{Managers.Instance.Progress.CurrentSkin}_{data.Type}");
+            var boxGameObject = await InstantiateAssetAsync(GetAddressableName(data));
             var box = boxGameObject.GetComponent<BaseBox>();
             box.transform.position = data.ArrayPosition.ToVector3() * size;
             box.transform.rotation = Quaternion.Euler(data.Rotation);
@@ -258,6 +258,25 @@ public class GameField : MonoBehaviour, IInitializable
         {
             await baseBox.Init();
         }
+    }
+
+    private string GetAddressableName(BoxData box)
+    {
+        switch (box.Type)
+        {
+            case BaseBox.BlockType.None:
+
+            case BaseBox.BlockType.TapFlowBox:
+
+            case BaseBox.BlockType.RotateRoadBox:
+
+            case BaseBox.BlockType.SwipedBox:
+                return $"{Managers.Instance.Progress.CurrentSkin}_{box.Type}";
+            case BaseBox.BlockType.BigBoxTapFlowBox:
+                return $"{Managers.Instance.Progress.CurrentSkin}_{box.Type}_{box.Size.x}_{box.Size.y}_{box.Size.z}";
+        }
+        
+        return String.Empty;
     }
 
     public BaseBox GetBoxFromArrayPosition(Vector3 position)

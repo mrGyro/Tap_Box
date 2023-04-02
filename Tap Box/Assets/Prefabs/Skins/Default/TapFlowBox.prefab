@@ -100,8 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa88d07d10c4f30b6ab03520fb84552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderers:
-  - {fileID: 1587457903907968186}
+  renderer: {fileID: 0}
   waitBeforeDissolve: 0
   dissolveSpeed: 0.2
   dissolveCurve:
@@ -150,6 +149,10 @@ MonoBehaviour:
       x: 0
       y: 0
       z: 0
+    Size:
+      x: 1
+      y: 1
+      z: 1
   _reaction: {fileID: 2768281898110618046}
 --- !u!114 &2768281898110618046
 MonoBehaviour:

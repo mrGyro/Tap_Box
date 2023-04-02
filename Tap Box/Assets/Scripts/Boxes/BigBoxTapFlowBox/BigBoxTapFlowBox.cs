@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Boxes.Reactions;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -20,6 +19,7 @@ namespace Boxes.BigBoxTapFlowBox
 
         public async override UniTask Init()
         {
+            await UniTask.Yield();
             foreach (var VARIABLE in boxePositions)
             {
                 VARIABLE.UpdateArrayPosition();
@@ -51,15 +51,15 @@ namespace Boxes.BigBoxTapFlowBox
 
             foreach (var VARIABLE in boxePositions)
             {
-                float currentDistance = Vector3.Distance(VARIABLE.ArrayPosition, checkPosition);
+                float currentDistance = Vector3.Distance(VARIABLE.transform.position, checkPosition);
                 if (currentDistance < distance)
                 {
                     distance = currentDistance;
-
                     part = VARIABLE;
                 }
             }
 
+            //Debug.LogError(part.ArrayPosition);
             return part.ArrayPosition;
         }
 

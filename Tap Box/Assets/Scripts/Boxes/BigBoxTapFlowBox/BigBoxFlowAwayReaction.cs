@@ -24,7 +24,6 @@ namespace Boxes.BigBoxTapFlowBox
             _isMove = true;
 
             var box = Managers.Instance.GameField.GetNearestBoxInDirection(new[] { _box.Data.ArrayPosition.ToVector3() }, _parent.forward, _box);
-            Debug.LogError("reaction");
             if (box == null)
             {
                 Managers.Instance.GameField.RemoveBox(_box);

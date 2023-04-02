@@ -53,7 +53,6 @@ namespace LevelCreator
             foreach (var variable in levelCreator.Level)
             {
                 data.Add(variable.Data);
-                Debug.LogError(variable.Data.ArrayPosition.ToVector3() + " " + variable.Data.Rotation.ToVector3());
             }
 
             int.TryParse(reward.text, out var rewardCount);
