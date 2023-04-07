@@ -11,6 +11,7 @@ namespace LevelCreator
 {
     public class LevelCreator : MonoBehaviour
     {
+        public static Action OnLevelChanged;
         [SerializeField] Camera camera;
         [SerializeField] float size;
         [SerializeField] Transform root;
@@ -30,6 +31,8 @@ namespace LevelCreator
 
         private int _currentIndex = 0;
         private bool _isActive = true;
+        private List<BaseBox> _collisions = new();
+
 
         private void Start()
         {
@@ -40,6 +43,8 @@ namespace LevelCreator
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             _currentTargetBox = null;
+            OnLevelChanged += OnLevelChangedValidation;
+            ShowRedColor();
         }
 
         private void Update()
@@ -144,9 +149,9 @@ namespace LevelCreator
 
         private void ShowAll()
         {
-            foreach (var VARIABLE in Level)
+            foreach (var variable in Level)
             {
-                VARIABLE.gameObject.SetActive(true);
+                variable.gameObject.SetActive(true);
             }
         }
 
@@ -264,23 +269,23 @@ namespace LevelCreator
 
             List<Vector3> nearBoxPositions = new List<Vector3>()
             {
-                 Vector3.up,
-                 Vector3.down,
-                 Vector3.left,
-                 Vector3.right,
-                 Vector3.forward,
-                 Vector3.back
+                Vector3.up,
+                Vector3.down,
+                Vector3.left,
+                Vector3.right,
+                Vector3.forward,
+                Vector3.back
             };
 
             float distance = float.MaxValue;
             Vector3 dir = Vector3.zero;
-            foreach (var VARIABLE in nearBoxPositions)
+            foreach (var variable in nearBoxPositions)
             {
-                float currentDistance = Vector3.Distance((arrayPosition + VARIABLE) * size, hit.point);
+                float currentDistance = Vector3.Distance((arrayPosition + variable) * size, hit.point);
                 if (currentDistance < distance)
                 {
                     distance = currentDistance;
-                    dir = VARIABLE;
+                    dir = variable;
                 }
             }
 
@@ -343,6 +348,8 @@ namespace LevelCreator
                     await bigBox.Init();
                     break;
             }
+
+            OnLevelChanged?.Invoke();
         }
 
         private string GetAddressableName(BoxData box)
@@ -374,6 +381,7 @@ namespace LevelCreator
             box.transform.rotation = Quaternion.Euler(data.Rotation);
             box.Data = data;
             Level.Add(box);
+            OnLevelChanged?.Invoke();
         }
 
         public void RemoveAllBoxes()
@@ -381,10 +389,11 @@ namespace LevelCreator
             if (Level == null || Level.Count == 0)
                 return;
 
-            foreach (var VARIABLE in Level)
+            foreach (var variable in Level)
             {
-                VARIABLE.gameObject.SetActive(false);
-                Destroy(VARIABLE.gameObject);
+                GameObject o = variable.gameObject;
+                o.SetActive(false);
+                Destroy(o);
             }
 
             Level = new List<BaseBox>();
@@ -394,6 +403,116 @@ namespace LevelCreator
         {
             var x = await AssetProvider.LoadAssetAsync<GameObject>(assetName);
             return x == null ? null : Instantiate(x, root);
+        }
+
+        private void OnLevelChangedValidation()
+        {
+            foreach (var variable in _collisions)
+            {
+                var meshRenderer = variable.transform.GetChild(0).GetComponent<MeshRenderer>();
+                if (meshRenderer == null)
+                    continue;
+
+                meshRenderer.materials[0].SetFloat(DissolveSlider, -1);
+                meshRenderer.materials[1].SetFloat(DissolveSlider, -1);
+            }
+
+            _collisions = new List<BaseBox>();
+            foreach (var box in Level)
+            {
+                foreach (var box2 in Level)
+                {
+                    if (box == box2)
+                        continue;
+
+
+                    if (!IsBlockCrossPosition(box, box2))
+                    {
+                        continue;
+                    }
+
+                    if (!_collisions.Contains(box))
+                        _collisions.Add(box);
+
+                    if (!_collisions.Contains(box2))
+                        _collisions.Add(box2);
+                }
+            }
+
+            if (_collisions.Count > 0)
+                Debug.LogError("Has collisions: " + _collisions.Count);
+        }
+
+        private bool IsBlockCrossPosition(BaseBox box, BaseBox box2)
+        {
+            List<Vector3> positions = new List<Vector3>();
+            switch (box2.Data.Type)
+            {
+                case BaseBox.BlockType.None:
+                case BaseBox.BlockType.TapFlowBox:
+                case BaseBox.BlockType.RotateRoadBox:
+                case BaseBox.BlockType.SwipedBox:
+                    positions.Add(box2.Data.ArrayPosition.ToVector3());
+                    break;
+                case BaseBox.BlockType.BigBoxTapFlowBox:
+                    var bigBox = box2.transform.GetComponent<BigBoxTapFlowBox>();
+                    foreach (var bigBoxPosition in bigBox.GetBoxPositions())
+                    {
+                        positions.Add(bigBoxPosition.ArrayPosition);
+                    }
+
+                    break;
+            }
+
+            foreach (var position in positions)
+            {
+                switch (box.Data.Type)
+                {
+                    case BaseBox.BlockType.None:
+                    case BaseBox.BlockType.TapFlowBox:
+                    case BaseBox.BlockType.RotateRoadBox:
+                    case BaseBox.BlockType.SwipedBox:
+                        if (box.IsBoxInPosition(position))
+                            return true;
+                        break;
+                    case BaseBox.BlockType.BigBoxTapFlowBox:
+                        var bigBox = box.transform.GetComponent<BigBoxTapFlowBox>();
+                        if (bigBox.IsBoxInPosition(position))
+                            return true;
+                        break;
+                }
+            }
+
+            return false;
+        }
+
+        private static readonly int DissolveSlider = Shader.PropertyToID("Dissolve_Slider_Reference");
+
+        private async UniTask ShowRedColor()
+        {
+            float value = 0;
+            bool direction = false;
+            while (true)
+            {
+                await UniTask.WaitForEndOfFrame(this);
+                if (_collisions.Count == 0)
+                    continue;
+
+                value += direction ? -0.01f : 0.01f;
+
+                if (value < -1 || value > 0)
+                    direction = !direction;
+
+                foreach (var variable in _collisions)
+                {
+                    var meshRenderer = variable.transform.GetChild(0).GetComponent<MeshRenderer>();
+                    if (meshRenderer == null)
+                        continue;
+
+                    meshRenderer.materials[0].SetFloat(DissolveSlider, value);
+                    meshRenderer.materials[1].SetFloat(DissolveSlider, value);
+                }
+            }
         }
     }
 }
