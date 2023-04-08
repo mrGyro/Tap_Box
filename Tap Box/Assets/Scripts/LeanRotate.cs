@@ -15,7 +15,8 @@ namespace DefaultNamespace
         [SerializeField] private float distanceToTarget = 10;
         [SerializeField] private float decriceSpeed = 0.1f;
 
-        private Vector3 _previousPosition = Vector3.positiveInfinity;
+        private Vector3 maxVector = new Vector3(10000,10000,10000);
+        private Vector3 _previousPosition = new Vector3(10000, 10000, 10000);
         private float _rotationAroundYAxis;
         private float _rotationAroundXAxis;
 
@@ -24,7 +25,8 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            Velocity();
+            if (_isActive)
+                Velocity();
             //  _centr.position = Vector3.Lerp(_centr.position, _newPosition, 0.01f);
         }
 
@@ -35,10 +37,13 @@ namespace DefaultNamespace
 
         public void SetStartPosition(Vector3 position)
         {
-            rot.position = position;
+            Debug.LogError("---1----" +position);
 
             float distance = Vector3.Distance(position, _centr.position);
             SetDistanceToTarget(distance);
+            rot.position = position;
+
+           rot.LookAt(_centr.position);
         }
 
         public virtual void Rotate(List<LeanFinger> fingers)
@@ -49,30 +54,34 @@ namespace DefaultNamespace
             if (fingers[0].Age == 0)
             {
                 _previousPosition = Camera.ScreenToViewportPoint(fingers[0].LastScreenPosition);
+               // _previousPosition *= 0.999f;
                 distanceToTarget = Vector3.Distance(rot.transform.position, _centr.position);
             }
             else
             {
-                Vector3 newPosition2 = Camera.ScreenToViewportPoint(fingers[0].ScreenPosition);
-                Vector3 direction = _previousPosition - newPosition2;
+                if (_previousPosition == maxVector)
+                {
+                    _previousPosition = Camera.ScreenToViewportPoint(fingers[0].LastScreenPosition);
+                }
 
-                _rotationAroundYAxis = -direction.x * 180; // camera moves horizontally
-                _rotationAroundXAxis = direction.y * 180; // camera moves vertically
-
+                SetAxises(fingers[0].ScreenPosition);
                 Move();
-                _previousPosition = newPosition2;
             }
+        }
+
+        private void SetAxises(Vector3 position)
+        {
+            Vector3 newPosition2 = Camera.ScreenToViewportPoint(position);
+
+            Vector3 direction = _previousPosition - newPosition2;
+            _rotationAroundYAxis = -direction.x * 180; // camera moves horizontally
+            _rotationAroundXAxis = direction.y * 180; // camera moves vertically
+            _previousPosition = newPosition2;
         }
 
         public void SetTargetPosition(Vector3 position)
         {
-            // _newPosition = position;
             _centr.position = position;
-        }
-
-        public void SetTargetPositionMove(Vector3 position)
-        {
-            //   _newPosition = position;
         }
 
         private void SetDistanceToTarget(float distance)
@@ -82,11 +91,11 @@ namespace DefaultNamespace
 
         private void Move()
         {
-            rot.transform.position = _centr.position;
+            rot.position = _centr.position;
 
-            rot.transform.Rotate(new Vector3(0, 1, 0), _rotationAroundYAxis);
-            rot.transform.Rotate(new Vector3(1, 0, 0), _rotationAroundXAxis);
-            rot.transform.Translate(new Vector3(0, 0, -distanceToTarget));
+            rot.Rotate(new Vector3(0, 1, 0), _rotationAroundYAxis);
+            rot.Rotate(new Vector3(1, 0, 0), _rotationAroundXAxis);
+            rot.Translate(new Vector3(0, 0, -distanceToTarget));
         }
 
         private void Velocity()

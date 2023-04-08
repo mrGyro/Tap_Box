@@ -33,14 +33,12 @@ public class InputController : MonoBehaviour
     public async void SetStartLevelSettings(Vector3 targetPosition, Vector3 cameraPosition)
     {
         _rotate.SetActive(false);
-        _rotate.SetStartPosition(cameraPosition);
         _rotate.SetTargetPosition(targetPosition);
+        _rotate.SetStartPosition(cameraPosition);
         await UniTask.WaitForEndOfFrame(this);
         _rotate.SetActive(true);
     }
     
-    
-
     private void Swipe(List<LeanFinger> fingers)
     {
         switch (fingers.Count)
