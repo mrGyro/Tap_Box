@@ -63,6 +63,7 @@ public class Managers : MonoBehaviour
 
         await Progress.Save();
         Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
+        
     }
 
     public float GetWinProgress()

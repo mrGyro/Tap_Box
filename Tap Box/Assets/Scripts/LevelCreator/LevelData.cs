@@ -13,6 +13,7 @@ namespace LevelCreator
         public int BestResult;
         public Reqirement Reqirement;
         public List<BoxData> Data;
+        public SerializedVector3 CameraPosition;
 
         public void UpdateData(LevelData data)
         {

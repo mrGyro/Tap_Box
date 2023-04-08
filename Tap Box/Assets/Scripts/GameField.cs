@@ -67,14 +67,14 @@ public class GameField : MonoBehaviour, IInitializable
         SetNewMaxMinSize();
     }
 
-    private void SetNewCameraTargetPosition()
+    private void SetNewCameraTargetPosition(Vector3 cameraPosition)
     {
         Vector3 newPosition = new Vector3(
             _maxLevelSize.x - (_maxLevelSize.x + Mathf.Abs(_minLevelSize.x)) / 2,
             _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
             _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
 
-        Managers.Instance.InputController.SetStartLevelSettings(newPosition);
+        Managers.Instance.InputController.SetStartLevelSettings(newPosition, cameraPosition);
     }
 
     public bool ExistBox(Vector3 boxArrayPosition)
@@ -223,7 +223,7 @@ public class GameField : MonoBehaviour, IInitializable
         }
 
         SetNewMaxMinSize();
-        SetNewCameraTargetPosition();
+        SetNewCameraTargetPosition(_data.CameraPosition.ToVector3());
         GetBoxCount = _boxes.Count + AddedTurns();
     }
 

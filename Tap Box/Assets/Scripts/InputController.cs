@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Boxes;
+using Cysharp.Threading.Tasks;
 using DefaultNamespace;
 using Lean.Touch;
 using UnityEngine;
@@ -26,13 +27,19 @@ public class InputController : MonoBehaviour
         _nativeVibration = new AndroidNativeVibrationService();
         _layerMask = LayerMask.GetMask(GameFieldElement);
         _zoom.SetZomValue(100);
+        _rotate.SetActive(false);
     }
 
-    public void SetStartLevelSettings(Vector3 position)
+    public async void SetStartLevelSettings(Vector3 targetPosition, Vector3 cameraPosition)
     {
-        _rotate.SetTargetPosition(position);
-        _rotate.SetDistanceToTarget(10);
+        _rotate.SetActive(false);
+        _rotate.SetStartPosition(cameraPosition);
+        _rotate.SetTargetPosition(targetPosition);
+        await UniTask.WaitForEndOfFrame(this);
+        _rotate.SetActive(true);
     }
+    
+    
 
     private void Swipe(List<LeanFinger> fingers)
     {

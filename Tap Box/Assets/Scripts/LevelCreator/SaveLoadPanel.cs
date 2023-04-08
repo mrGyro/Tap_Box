@@ -16,6 +16,7 @@ namespace LevelCreator
         [SerializeField] private TMP_InputField requirementValue;
         [SerializeField] private FilePrefab filePrefab;
         [SerializeField] private LevelCreator levelCreator;
+        [SerializeField] private Transform _camera;
 
         private string _currentSelected;
         private Status _status;
@@ -44,6 +45,9 @@ namespace LevelCreator
             {
                 levelCreator.CreateBox(variable);
             }
+
+            _camera.position = levelData.CameraPosition;
+            _camera.transform.LookAt(Vector3.zero);
         }
 
         public void Save()
@@ -62,6 +66,7 @@ namespace LevelCreator
                 ID = id.text,
                 LevelStatus = _status,
                 Reward = rewardCount,
+                CameraPosition = _camera.position,
                 Reqirement = new Reqirement()
                 {
                     Type = _requirement,

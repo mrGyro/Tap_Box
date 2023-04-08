@@ -375,12 +375,27 @@ namespace LevelCreator
         {
             Level ??= new List<BaseBox>();
 
-            var boxGameObject = await InstantiateAssetAsync("Default_" + data.Type);
+            var boxGameObject = await InstantiateAssetAsync(GetAddressableName(data));
             var box = boxGameObject.GetComponent<BaseBox>();
             box.transform.position = data.ArrayPosition.ToVector3() * size;
             box.transform.rotation = Quaternion.Euler(data.Rotation);
             box.Data = data;
             Level.Add(box);
+            
+            switch (box.Data.Type)
+            {
+                case BaseBox.BlockType.None:
+                case BaseBox.BlockType.TapFlowBox:
+                case BaseBox.BlockType.RotateRoadBox:
+                case BaseBox.BlockType.SwipedBox:
+                    await box.Init();
+                    break;
+                case BaseBox.BlockType.BigBoxTapFlowBox:
+                    var bigBox = box.transform.GetComponent<BigBoxTapFlowBox>();
+                    await bigBox.Init();
+                    break;
+            }
+            
             OnLevelChanged?.Invoke();
         }
 

@@ -19,19 +19,33 @@ namespace DefaultNamespace
         private float _rotationAroundYAxis;
         private float _rotationAroundXAxis;
 
-        private Vector3 newPosition;
+        // private Vector3 _newPosition;
+        private bool _isActive = false;
+
         private void Update()
         {
             Velocity();
-            _centr.position = Vector3.Lerp(_centr.position, newPosition, 0.01f);
+            //  _centr.position = Vector3.Lerp(_centr.position, _newPosition, 0.01f);
         }
 
-        public void SetDistanceToTarget(float distance)
+        public void SetActive(bool value)
         {
-            distanceToTarget = distance;
+            _isActive = value;
         }
+
+        public void SetStartPosition(Vector3 position)
+        {
+            rot.position = position;
+
+            float distance = Vector3.Distance(position, _centr.position);
+            SetDistanceToTarget(distance);
+        }
+
         public virtual void Rotate(List<LeanFinger> fingers)
         {
+            if (!_isActive)
+                return;
+
             if (fingers[0].Age == 0)
             {
                 _previousPosition = Camera.ScreenToViewportPoint(fingers[0].LastScreenPosition);
@@ -52,13 +66,18 @@ namespace DefaultNamespace
 
         public void SetTargetPosition(Vector3 position)
         {
-            newPosition = position;
+            // _newPosition = position;
             _centr.position = position;
         }
-        
+
         public void SetTargetPositionMove(Vector3 position)
         {
-            newPosition = position;
+            //   _newPosition = position;
+        }
+
+        private void SetDistanceToTarget(float distance)
+        {
+            distanceToTarget = distance;
         }
 
         private void Move()
@@ -74,7 +93,7 @@ namespace DefaultNamespace
         {
             if (_rotationAroundYAxis != 0 || _rotationAroundXAxis != 0)
                 Move();
-            
+
             var xDirection = _rotationAroundXAxis < 0 ? decriceSpeed : -decriceSpeed;
             var yDirection = _rotationAroundYAxis < 0 ? decriceSpeed : -decriceSpeed;
 
