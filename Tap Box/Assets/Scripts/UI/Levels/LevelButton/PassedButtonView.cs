@@ -7,10 +7,10 @@ namespace UI.Levels.LevelButton
 {
     public class PassedButtonView : MonoBehaviour
     {
-        [SerializeField] private Image background;
+      //  [SerializeField] private Image background;
         [SerializeField] private TMP_Text levelNumber;
-        [SerializeField] private Image icon;
-        [SerializeField] private TMP_Text bestTitle;
+        //[SerializeField] private Image icon;
+       // [SerializeField] private TMP_Text bestTitle;
 
         [SerializeField] private TMP_Text bestScoreCount;
         [SerializeField] private Button actionButton;
@@ -19,12 +19,12 @@ namespace UI.Levels.LevelButton
         public async void Setup(LevelData data)
         {
             _data = data;
-            background.color = Color.gray;
+          //  background.color = Color.gray;
 
             levelNumber.text = _data.ID;
-            icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>("PassedIcon");
+          //  icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>("PassedIcon");
 
-            bestTitle.text = "Best result";
+           // bestTitle.text = "Best result";
             bestScoreCount.text = _data.BestResult.ToString();
             
             actionButton.onClick.RemoveAllListeners();

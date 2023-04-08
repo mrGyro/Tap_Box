@@ -7,8 +7,8 @@ namespace UI.Levels.LevelButton
 {
     public class OpenButtonView : MonoBehaviour
     {
-        [SerializeField] private Image icon;
-        [SerializeField] private Image background;
+       // [SerializeField] private Image icon;
+       // [SerializeField] private Image background;
         [SerializeField] private TMP_Text levelNumber;
         [SerializeField] private TMP_Text rewardTitle;
         [SerializeField] private Image rewardIcon;
@@ -21,9 +21,9 @@ namespace UI.Levels.LevelButton
         public async void Setup(LevelData data)
         {
             _data = data;
-            background.color = Color.gray;
+          //  background.color = Color.gray;
             levelNumber.text = _data.ID;
-            icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>("OpenIcon");
+          //  icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>("OpenIcon");
 
             rewardTitle.text = "Reward";
             rewardIcon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{Constants.Currency.Coins}_icon");
