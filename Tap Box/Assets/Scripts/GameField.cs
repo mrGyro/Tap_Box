@@ -138,7 +138,6 @@ public class GameField : MonoBehaviour, IInitializable
 
             if (box != null && currentBox != box)
             {
-                Debug.LogError(box.name);
                 return box;
             }
 

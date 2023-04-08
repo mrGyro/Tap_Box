@@ -24,7 +24,6 @@ namespace UI
         public override void Close()
         {
             gameObject.SetActive(false);
-            
         }
 
         private void LevelChanged(int obj)
