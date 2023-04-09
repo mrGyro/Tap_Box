@@ -23,7 +23,16 @@ namespace Boxes.BigBoxTapFlowBox
 
             _isMove = true;
 
-            var box = Managers.Instance.GameField.GetNearestBoxInDirection(new[] { _box.Data.ArrayPosition.ToVector3() }, _parent.forward, _box);
+            var boxes = _box as BigBoxTapFlowBox;
+            var positions = boxes.GetBoxPositions();
+            Vector3[] array = new Vector3[positions.Length];
+
+            for (int i = 0; i < positions.Length; i++)
+            {
+                array[i] = positions[i].ArrayPosition;
+            }
+
+            var box = Managers.Instance.GameField.GetNearestBoxInDirection(array, _parent.forward, _box);
             if (box == null)
             {
                 Managers.Instance.GameField.RemoveBox(_box);
@@ -70,23 +79,54 @@ namespace Boxes.BigBoxTapFlowBox
         {
             var startPos = _parent.position;
             var bigBox = box as BigBoxTapFlowBox;
-            bool isMove = true;
-            while (isMove)
+            var currentBox = _box as BigBoxTapFlowBox;
+            BigBoxPart nearestBox = null;
+            float minDistance = float.MaxValue;
+            float distance;
+            foreach (var currentBoxPart in currentBox.GetBoxPositions())
             {
-                foreach (var VARIABLE in bigBox.GetBoxPositions())
+                switch (box.Data.Type)
                 {
-                    if (Vector3.Distance(_parent.position, VARIABLE.transform.position) > 1.03f)
-                    {
-                        isMove = false;
+                    case BaseBox.BlockType.None:
+                    case BaseBox.BlockType.TapFlowBox:
+                    case BaseBox.BlockType.RotateRoadBox:
+                    case BaseBox.BlockType.SwipedBox:
+                         distance = Vector3.Distance(box.transform.position, currentBoxPart.transform.position);
+                        if (minDistance > distance)
+                        {
+                            minDistance = distance;
+                            nearestBox = currentBoxPart;
+                        }
                         break;
-                    }
+                    case BaseBox.BlockType.BigBoxTapFlowBox:
+                        foreach (var currentBigBoxPart in bigBox.GetBoxPositions())
+                        {
+                             distance = Vector3.Distance(currentBigBoxPart.transform.position, currentBoxPart.transform.position);
+                            if (minDistance > distance)
+                            {
+                                minDistance = distance;
+                                nearestBox = currentBoxPart;
+                            }
+                        }
+
+                        break;
+                }
+               
+            }
+            
+            while (true)
+            {
+                distance = Vector3.Distance(nearestBox.transform.position, box.transform.position);
+                if (distance < 1.03f)
+                {
+                    break;
                 }
 
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
                 await UniTask.WaitForEndOfFrame(this);
             }
 
-            while (Vector3.Distance(_parent.position, startPos) > 1.03f)
+            while (Vector3.Distance(_parent.position, startPos) > 0.2f)
             {
                 _parent.Translate(-_parent.forward * Time.deltaTime * _speed, Space.World);
                 await UniTask.WaitForEndOfFrame(this);

@@ -17,9 +17,9 @@ namespace DefaultNamespace.UI.WinWindow
         
         public async UniTask Setup(RewardViewSetting setting)
         {
-            _getSprite = await AssetProvider.LoadAssetAsync<Sprite>(setting.RewardType.ToString());
+            _getSprite = await AssetProvider.LoadAssetAsync<Sprite>(setting.RewardType + "_icon");
             _notGetSprite = await AssetProvider.LoadAssetAsync<Sprite>(setting.RewardType + "_notGet");
-            rewardProgressImage.sprite = await AssetProvider.LoadAssetAsync<Sprite>(setting.RewardType.ToString());
+            rewardProgressImage.sprite = _getSprite;
             SetActiveVFX(false);
         }
 

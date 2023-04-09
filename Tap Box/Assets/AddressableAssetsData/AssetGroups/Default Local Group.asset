@@ -81,14 +81,6 @@ MonoBehaviour:
     m_Address: CoinsCurrency_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: ff466b8421cd23848846f0f1ec81a4e0
-    m_Address: RandomSkin
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 21c685d326eba75449174b3ef3efa911
-    m_Address: RandomSkin_notGet
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 394c0b82b56efc643a3dfe9aebf348f2
     m_Address: Coin_notGet
     m_ReadOnly: 0
@@ -167,6 +159,18 @@ MonoBehaviour:
     m_SerializedLabels: []
   - m_GUID: ef742cde37ee2b24eb2555bce6dfc0ae
     m_Address: Default_BigBoxTapFlowBox_3_1_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a18ea4709e5e25848b2f9db971c9e5d4
+    m_Address: Coin_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 32ca7b2777dccb840bc51ef93d0d4532
+    m_Address: RandomSkin_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 75957692ff3444047a413ad65022528d
+    m_Address: RandomSkin_notGet
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

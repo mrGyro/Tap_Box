@@ -34,7 +34,6 @@ public class GameField : MonoBehaviour, IInitializable
         {
             _boxesCount = value;
 
-
             if (_boxesCount == 0 && _boxes.Count != 0)
             {
                 _boxesCount = 0;
@@ -108,29 +107,31 @@ public class GameField : MonoBehaviour, IInitializable
                 {
                     return null;
                 }
-                
-                foreach (var VARIABLE in _boxes)
+
+                foreach (var variable in _boxes)
                 {
                     bool isBoxInPosition = false;
-                    switch (VARIABLE.Data.Type)
+                    switch (variable.Data.Type)
                     {
                         case BaseBox.BlockType.None:
                         case BaseBox.BlockType.TapFlowBox:
                         case BaseBox.BlockType.RotateRoadBox:
                         case BaseBox.BlockType.SwipedBox:
-                            isBoxInPosition = VARIABLE.IsBoxInPosition(arrayPosition[i]);
+                            isBoxInPosition = variable.IsBoxInPosition(arrayPosition[i]);
                             break;
                         case BaseBox.BlockType.BigBoxTapFlowBox:
-                            var bigBox = (VARIABLE as BigBoxTapFlowBox);
+                            var bigBox = (variable as BigBoxTapFlowBox);
                             if (bigBox != null)
                             {
                                 isBoxInPosition = bigBox.IsBoxInPosition(arrayPosition[i]);
                             }
+
                             break;
                     }
+
                     if (isBoxInPosition && currentBox != box)
                     {
-                        box = VARIABLE;
+                        box = variable;
                         break;
                     }
                 }
@@ -264,17 +265,14 @@ public class GameField : MonoBehaviour, IInitializable
         switch (box.Type)
         {
             case BaseBox.BlockType.None:
-
             case BaseBox.BlockType.TapFlowBox:
-
             case BaseBox.BlockType.RotateRoadBox:
-
             case BaseBox.BlockType.SwipedBox:
                 return $"{Managers.Instance.Progress.CurrentSkin}_{box.Type}";
             case BaseBox.BlockType.BigBoxTapFlowBox:
                 return $"{Managers.Instance.Progress.CurrentSkin}_{box.Type}_{box.Size.x}_{box.Size.y}_{box.Size.z}";
         }
-        
+
         return String.Empty;
     }
 
@@ -293,8 +291,29 @@ public class GameField : MonoBehaviour, IInitializable
         _minLevelSize = Vector3.positiveInfinity;
         foreach (var baseBox in _boxes)
         {
-            SetMaxLevelSize(baseBox.Data.ArrayPosition);
-            SetMinLevelSize(baseBox.Data.ArrayPosition);
+            switch (baseBox.Data.Type)
+            {
+                case BaseBox.BlockType.None:
+                case BaseBox.BlockType.TapFlowBox:
+                case BaseBox.BlockType.RotateRoadBox:
+                case BaseBox.BlockType.SwipedBox:
+                    SetMaxLevelSize(baseBox.Data.ArrayPosition);
+                    SetMinLevelSize(baseBox.Data.ArrayPosition);
+                    break;
+                case BaseBox.BlockType.BigBoxTapFlowBox:
+                    var bigBox = (baseBox as BigBoxTapFlowBox);
+                    if (bigBox != null)
+                    {
+                        var positions = bigBox.GetBoxPositions();
+                        foreach (var pos in positions)
+                        {
+                            SetMaxLevelSize(pos.ArrayPosition);
+                            SetMinLevelSize(pos.ArrayPosition);
+                        }
+                    }
+
+                    break;
+            }
         }
     }
 
