@@ -41,16 +41,12 @@ namespace UI
 
         private void OnEnable()
         {
-            Debug.LogError("--1");
             Initialize();
         }
 
         private void OnDisable()
         {
-            Debug.LogError("--2");
-
             Managers.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
-
         }
 
         private void OnDestroy()

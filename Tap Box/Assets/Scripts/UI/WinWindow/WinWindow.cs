@@ -49,6 +49,7 @@ public class WinWindow : PopUpBase
         await UniTask.Delay(1000);
 
         var nearestPercent = SetNextNearestPercent();
+        
         rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
 
         var yVelocity = 0f;
@@ -60,7 +61,7 @@ public class WinWindow : PopUpBase
             if (progress.value > nearestPercent.Percent)
             {
                 await GetRewardFromSettings(nearestPercent);
-                nearestPercent = SetNextNearestPercent();
+                break;
             }
 
             rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardPercentText(((int)GetPercents()).ToString());
@@ -129,7 +130,9 @@ public class WinWindow : PopUpBase
             _sliderProgressTarget -= progress.maxValue;
 
             for (var i = 0; i < _settings.Count; i++)
+            {
                 rewardViews[i].SetTokState(progress.value >= _settings[i].Percent);
+            }
 
             return _settings[0];
         }

@@ -37,6 +37,11 @@ public class GameField : MonoBehaviour, IInitializable
     {
         return _data.Reward;
     }
+    
+    public string GetCurrentLevelID()
+    {
+        return _data.ID;
+    }
     public async UniTask LoadLevelByName(string levelName)
     {
         await CreateLevel(levelName);

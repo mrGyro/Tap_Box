@@ -34,11 +34,11 @@ public class Managers : MonoBehaviour
         PlayerLevelManager.Initialize();
         UIManager.Initialize();
 
-        Progress.LastStartedLevelID = 
-            string.IsNullOrEmpty(Progress.LastStartedLevelID) 
-            ? GetNextLevelId() 
-            : Progress.LastStartedLevelID;
-        
+        Progress.LastStartedLevelID =
+            string.IsNullOrEmpty(Progress.LastStartedLevelID)
+                ? GetNextLevelId()
+                : Progress.LastStartedLevelID;
+
         LoadLevelById(Progress.LastStartedLevelID);
         Mediation.Initialize();
     }
@@ -52,25 +52,24 @@ public class Managers : MonoBehaviour
 
     public void LoadNextLevel()
     {
-         LoadLevelById(GetNextLevelId());
+        LoadLevelById(GetNextLevelId());
     }
 
     public async void LoadLevelById(string id)
     {
         Progress.LastStartedLevelID = id;
-        
+
         await GameField.LoadLevelByName(Progress.LastStartedLevelID);
 
         await Progress.Save();
         Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
-        
     }
 
     public float GetWinProgress()
     {
-        return 20;
+        return GameField.GetCurrentLevelID() == "1" ? 8 : Random.Range(10, 20);
     }
-    
+
     public void SetActiveGlobalInput(bool value)
     {
         InputController.SetActiveInput(value);
