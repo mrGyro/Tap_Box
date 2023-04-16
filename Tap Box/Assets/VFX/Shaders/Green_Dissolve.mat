@@ -71,13 +71,13 @@ Material:
     - Dissolve_Slider_Reference: -1.01
     - Vector1_2ef77b82c2e14c349f0de6077b53b6b4: 1
     - Vector1_8e10d8c49407494eab49bf8104bbe444: 0
-    - Vector1_d8ad7202fd1f4a8c92e8bb38b88a876f: 0
+    - Vector1_d8ad7202fd1f4a8c92e8bb38b88a876f: -1
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - Color_3263df3fd9e24ce6a4c100b6cb7bd43f: {r: 1, g: 0.54973066, b: 0, a: 0}
+    - Color_3263df3fd9e24ce6a4c100b6cb7bd43f: {r: 1, g: 0, b: 0.095599174, a: 0}
     - Color_4e884cc0dce641248bce29841c842228: {r: 0.18867922, g: 0.18867922, b: 0.18867922,
         a: 0}
-    - Color_b83af9cc7985423d871f02f8c96f30bf: {r: 0.42315578, g: 1, b: 0, a: 0}
+    - Color_b83af9cc7985423d871f02f8c96f30bf: {r: 0.4235294, g: 1, b: 0, a: 0}
     - _Cube_Color: {r: 0.22078538, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
