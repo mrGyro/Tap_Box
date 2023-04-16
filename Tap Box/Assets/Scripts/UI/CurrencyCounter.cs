@@ -20,9 +20,9 @@ namespace UI
             icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>(type.ToString());
             count.text = Managers.Instance.CurrencyController.GetCurrency(type).ToString();
             Managers.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;
-            await UpdateLayout();
+            UpdateLayout();
         }
-        
+
         public async UniTask UpdateLayout()
         {
             LayoutRebuilder.ForceRebuildLayoutImmediate(countRectTransform);
@@ -39,9 +39,22 @@ namespace UI
             await UpdateLayout();
         }
 
+        private void OnEnable()
+        {
+            Debug.LogError("--1");
+            Initialize();
+        }
+
+        private void OnDisable()
+        {
+            Debug.LogError("--2");
+
+            Managers.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
+
+        }
+
         private void OnDestroy()
         {
-            Managers.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
         }
     }
 }

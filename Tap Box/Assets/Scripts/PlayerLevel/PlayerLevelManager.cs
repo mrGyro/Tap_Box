@@ -17,7 +17,7 @@ namespace PlayerLevel
 
         private void Handler(BaseBox obj)
         {
-            AddExperience(10);
+            AddExperience(5);
         }
 
         public void AddExperience(float value)
@@ -38,6 +38,7 @@ namespace PlayerLevel
             Managers.Instance.Progress.CurrentPlayerLevelProgress = 0;
             OnLevelChanged?.Invoke(Managers.Instance.Progress.CurrentPlayerLevel);
             OnLevelProgressChanged?.Invoke(Managers.Instance.Progress.CurrentPlayerLevelProgress);
+            Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.NewLevelPopUp);
         }
     }
 }

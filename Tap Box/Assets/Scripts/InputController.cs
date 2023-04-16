@@ -67,7 +67,13 @@ public class InputController : MonoBehaviour
         _nativeVibration.Vibrate(30);
 
         box.BoxReactionStart();
-        Managers.Instance.GameField.GetBoxCount--;
+        Managers.Instance.GameField.GetTurnsCount--;
+        Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnBoxClicked);
+        if (Managers.Instance.GameField.IsNotWinCondition())
+        {
+            Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
+            Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnGameLoose);
+        }
     }
     
     private BaseBox RaycastBox(Vector2 screenPosition)

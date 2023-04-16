@@ -24,6 +24,11 @@ public class UIManager : MonoBehaviour, IInitializable
             variable.Initialize();
     }
 
+    public void ShowTurns()
+    {
+        turnsLeftCounter.SetTurnsText();
+    }
+
     public void ShowPopUp(string id)
     {
         var popup = popups.Find(x => x.ID == id);

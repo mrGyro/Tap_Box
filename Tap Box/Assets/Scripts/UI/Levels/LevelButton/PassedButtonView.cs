@@ -12,7 +12,7 @@ namespace UI.Levels.LevelButton
         [SerializeField] private Button actionButton;
         
         private LevelData _data;
-        public async void Setup(LevelData data)
+        public void Setup(LevelData data)
         {
             _data = data;
             levelNumber.text = _data.ID;

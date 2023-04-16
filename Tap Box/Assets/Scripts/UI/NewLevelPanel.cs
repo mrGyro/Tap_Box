@@ -1,4 +1,6 @@
+using Currency;
 using DefaultNamespace.Managers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +9,8 @@ namespace UI
     public class NewLevelPanel : PopUpBase
     {
         [SerializeField] private Button button;
+        [SerializeField] private TMP_Text _countOfReward;
+
         public override void Initialize()
         {
             ID = Constants.PopUps.NewLevelPopUp;
@@ -28,7 +32,9 @@ namespace UI
 
         private void LevelChanged(int obj)
         {
-            Managers.Instance.UIManager.ShowPopUp(ID);
+            int count = Managers.Instance.GameField.GetCountOfReward() / 10;
+            _countOfReward.text = $"+{count}";
+            Managers.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, count);
         }
 
         private void OnDestroy()

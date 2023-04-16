@@ -157,7 +157,6 @@ namespace SaveLoad_progress
             BinaryFormatter bf = new BinaryFormatter();
 
             string path = Application.persistentDataPath + "/GameProgress.dat";
-            Debug.LogError(path);
             if (File.Exists(path))
             {
                 FileStream file = File.Open(path, FileMode.Open);

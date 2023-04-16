@@ -19,7 +19,7 @@ public class GameField : MonoBehaviour, IInitializable
     private List<BaseBox> _boxes;
     private LevelData _data;
 
-    private int _boxesCount;
+    private int _turnsesCount;
 
     public void Initialize()
     {
@@ -27,24 +27,16 @@ public class GameField : MonoBehaviour, IInitializable
         _boxes = new List<BaseBox>();
     }
 
-    public int GetBoxCount
+    public int GetTurnsCount
     {
-        get { return _boxesCount; }
-        set
-        {
-            _boxesCount = value;
-
-            if (_boxesCount == 0 && _boxes.Count != 0)
-            {
-                _boxesCount = 0;
-                Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
-                Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnGameLoose);
-            }
-
-            Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnBoxClicked);
-        }
+        get => _turnsesCount;
+        set => _turnsesCount = value;
     }
 
+    public int GetCountOfReward()
+    {
+        return _data.Reward;
+    }
     public async UniTask LoadLevelByName(string levelName)
     {
         await CreateLevel(levelName);
@@ -76,6 +68,12 @@ public class GameField : MonoBehaviour, IInitializable
         Managers.Instance.InputController.SetStartLevelSettings(newPosition, cameraPosition);
     }
 
+
+    public bool IsNotWinCondition()
+    {
+        return GetTurnsCount == 0 && _boxes.Count != 0; 
+
+    }
     public bool ExistBox(Vector3 boxArrayPosition)
     {
         return _boxes.Exists(x => x.Data.ArrayPosition.ToVector3() == boxArrayPosition);
@@ -225,7 +223,7 @@ public class GameField : MonoBehaviour, IInitializable
 
         SetNewMaxMinSize();
         SetNewCameraTargetPosition(_data.CameraPosition.ToVector3());
-        GetBoxCount = _boxes.Count + AddedTurns();
+        GetTurnsCount = _boxes.Count + AddedTurns();
     }
 
     private int AddedTurns()

@@ -83,7 +83,9 @@ public class WinWindow : PopUpBase
     private async UniTask GiveReward(RewardViewSetting settings)
     {
         if (settings.RewardType == CurrencyController.Type.Coin)
+        {
             Managers.Instance.CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
+        }
         else if (settings.RewardType == CurrencyController.Type.RandomSkin)
             GetSkinRandomSkin();
 
@@ -97,7 +99,8 @@ public class WinWindow : PopUpBase
         {
             var settings = Managers.Instance.CurrencyController.GetRewardSettings();
             var max = settings.Max(x => x.RewardCount) * 1.5f;
-            Managers.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, (int)max);
+            var rewardCount = (Managers.Instance.GameField.GetCountOfReward() / 100) * max;
+            Managers.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, (int)rewardCount);
             return;
         }
 
