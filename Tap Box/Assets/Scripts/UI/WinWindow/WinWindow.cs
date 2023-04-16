@@ -4,6 +4,7 @@ using Currency;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace.Managers;
 using DefaultNamespace.UI.WinWindow;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ public class WinWindow : PopUpBase
     [SerializeField] private GameObject winVFX;
     [SerializeField] private GameObject winCoinVFX;
     [SerializeField] private List<RewardView> rewardViews;
+    [SerializeField] private CurrencyCounter _currencyCounter;
 
     private List<RewardViewSetting> _settings;
     private float _sliderProgressTarget;
@@ -24,9 +26,10 @@ public class WinWindow : PopUpBase
         Priority = 1;
     }
 
-    public override void Show()
+    public override async void Show()
     {
         SetActive(true);
+
     }
 
     public override void Close()
@@ -40,16 +43,18 @@ public class WinWindow : PopUpBase
         if (!value) return;
 
         Setup();
+
         await MakeProgress();
         goNextButton.interactable = true;
     }
 
     private async UniTask MakeProgress()
     {
+        await _currencyCounter.UpdateLayout();
         await UniTask.Delay(1000);
 
         var nearestPercent = SetNextNearestPercent();
-        
+
         rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
 
         var yVelocity = 0f;
@@ -83,14 +88,16 @@ public class WinWindow : PopUpBase
 
     private async UniTask GiveReward(RewardViewSetting settings)
     {
-        if (settings.RewardType == CurrencyController.Type.Coin)
+        switch (settings.RewardType)
         {
-            Managers.Instance.CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
+            case CurrencyController.Type.Coin:
+                Managers.Instance.CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
+                await UniTask.WaitUntil(_currencyCounter.IsAnimationComplete);
+                break;
+            case CurrencyController.Type.RandomSkin:
+                GetSkinRandomSkin();
+                break;
         }
-        else if (settings.RewardType == CurrencyController.Type.RandomSkin)
-            GetSkinRandomSkin();
-
-        await UniTask.Delay(2000);
     }
 
     private void GetSkinRandomSkin()
@@ -107,7 +114,6 @@ public class WinWindow : PopUpBase
 
         Managers.Instance.CurrencyController.AddSkin(randomSkin.Type, randomSkin.SkinAddressableName);
         Core.MessengerStatic.Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, randomSkin.Type, randomSkin.SkinAddressableName);
-
     }
 
     private float GetPercents()

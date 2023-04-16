@@ -63,10 +63,10 @@ namespace UI.Skins
             Priority = 1;
         }
 
-        public override void Show()
+        public override async void Show()
         {
             gameObject.SetActive(true);
-            counter.UpdateLayout();
+            await counter.UpdateLayout();
         }
 
         public override void Close()
