@@ -71,7 +71,7 @@ Material:
     - Dissolve_Slider_Reference: -1.01
     - Vector1_2ef77b82c2e14c349f0de6077b53b6b4: 1
     - Vector1_8e10d8c49407494eab49bf8104bbe444: 0
-    - Vector1_d8ad7202fd1f4a8c92e8bb38b88a876f: -1
+    - Vector1_d8ad7202fd1f4a8c92e8bb38b88a876f: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
