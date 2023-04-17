@@ -33,7 +33,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3383660546327718122}
-  - {fileID: 2397192980004020722}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -49,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa88d07d10c4f30b6ab03520fb84552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderer: {fileID: 3535227356277693085}
+  renderer: {fileID: 4521052769288835973}
   waitBeforeDissolve: 0
   dissolveSpeed: 0.2
   dissolveCurve:
@@ -216,6 +215,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BigBoxTapFlowBox_1_1_1_Line
       objectReference: {fileID: 0}
+    - target: {fileID: 4279713301593497462, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b42af2ee6da38df478c0b1a7d6b41c33, type: 3}
 --- !u!4 &3383660546327718122 stripped
@@ -224,104 +228,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2223200867087084838}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &5113188662503923156
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 453988699643703253}
-    m_Modifications:
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7852847300800587420, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_Name
-      value: BigBoxTapFlowBox_1_1_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7852847300800587420, guid: 40740d376641d1a4f9cd7dcbcb508325,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 40740d376641d1a4f9cd7dcbcb508325, type: 3}
---- !u!4 &2397192980004020722 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
-    type: 3}
-  m_PrefabInstance: {fileID: 5113188662503923156}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &3535227356277693085 stripped
+--- !u!23 &4521052769288835973 stripped
 MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8645248220487026505, guid: 40740d376641d1a4f9cd7dcbcb508325,
+  m_CorrespondingSourceObject: {fileID: 2334101431383047843, guid: b42af2ee6da38df478c0b1a7d6b41c33,
     type: 3}
-  m_PrefabInstance: {fileID: 5113188662503923156}
+  m_PrefabInstance: {fileID: 2223200867087084838}
   m_PrefabAsset: {fileID: 0}

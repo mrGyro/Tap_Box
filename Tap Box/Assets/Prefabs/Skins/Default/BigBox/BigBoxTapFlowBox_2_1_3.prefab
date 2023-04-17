@@ -420,7 +420,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8068222529304869873}
+  - {fileID: 5012356771709197979}
   - {fileID: 1322403578967423322}
   - {fileID: 2158186144958743431}
   - {fileID: 5164344764841570011}
@@ -442,7 +442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa88d07d10c4f30b6ab03520fb84552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderer: {fileID: 9201761651342885022}
+  renderer: {fileID: 6180164858116302324}
   waitBeforeDissolve: 0
   dissolveSpeed: 0.2
   dissolveCurve:
@@ -730,104 +730,84 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1001 &4776849253608862238
+--- !u!1001 &3696350409284746199
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 6105717079193990228}
     m_Modifications:
-    - target: {fileID: 2808278172196885333, guid: 10c150800f4c8e74cb384f7cc263c903,
-        type: 3}
-      propertyPath: m_Name
-      value: BigBoxTapFlowBox_2_1_3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2808278172196885333, guid: 10c150800f4c8e74cb384f7cc263c903,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+    - target: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
         type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+    - target: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.515
       objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+    - target: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+    - target: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 1.03
       objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+    - target: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+    - target: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+    - target: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+    - target: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+    - target: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 90
       objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+    - target: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
       objectReference: {fileID: 0}
-    - target: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+    - target: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9045678163320455158, guid: b616c99ac67804e48be60d6bff4ce008,
+        type: 3}
+      propertyPath: m_Name
+      value: BigBoxTapFlowBox_2_1_3_Line
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 10c150800f4c8e74cb384f7cc263c903, type: 3}
---- !u!4 &8068222529304869873 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: b616c99ac67804e48be60d6bff4ce008, type: 3}
+--- !u!4 &5012356771709197979 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 3292925943784868335, guid: 10c150800f4c8e74cb384f7cc263c903,
+  m_CorrespondingSourceObject: {fileID: 8557794705726334284, guid: b616c99ac67804e48be60d6bff4ce008,
     type: 3}
-  m_PrefabInstance: {fileID: 4776849253608862238}
+  m_PrefabInstance: {fileID: 3696350409284746199}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &9201761651342885022 stripped
+--- !u!23 &6180164858116302324 stripped
 MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 4465880255305413248, guid: 10c150800f4c8e74cb384f7cc263c903,
+  m_CorrespondingSourceObject: {fileID: 7388234547811753507, guid: b616c99ac67804e48be60d6bff4ce008,
     type: 3}
-  m_PrefabInstance: {fileID: 4776849253608862238}
+  m_PrefabInstance: {fileID: 3696350409284746199}
   m_PrefabAsset: {fileID: 0}

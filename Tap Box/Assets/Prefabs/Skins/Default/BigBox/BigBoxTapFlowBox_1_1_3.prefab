@@ -129,7 +129,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7663245323904311906}
+  - {fileID: 2465505348120926493}
   - {fileID: 1322403578967423322}
   - {fileID: 2158186144958743431}
   - {fileID: 5164344764841570011}
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa88d07d10c4f30b6ab03520fb84552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderer: {fileID: 8796231395616921869}
+  renderer: {fileID: 3637801091234341490}
   waitBeforeDissolve: 0
   dissolveSpeed: 0.2
   dissolveCurve:
@@ -433,99 +433,84 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1001 &4623975771419792015
+--- !u!1001 &7194694336096806538
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 6105717079193990228}
     m_Modifications:
-    - target: {fileID: 2393989614062824023, guid: c22c6ff400227f4498eff44c4ce3c018,
-        type: 3}
-      propertyPath: m_Name
-      value: BigBoxTapFlowBox_1_1_3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+    - target: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
         type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+    - target: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+    - target: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+    - target: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 1.03
       objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+    - target: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+    - target: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+    - target: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+    - target: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+    - target: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+    - target: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
       objectReference: {fileID: 0}
-    - target: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+    - target: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5378525837151839533, guid: 5ebd5667ce62d58469a3cf3a380fac75,
+        type: 3}
+      propertyPath: m_Name
+      value: BigBoxTapFlowBox_1_1_3_Line
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c22c6ff400227f4498eff44c4ce3c018, type: 3}
---- !u!4 &7663245323904311906 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: 5ebd5667ce62d58469a3cf3a380fac75, type: 3}
+--- !u!4 &2465505348120926493 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 3058780266060329197, guid: c22c6ff400227f4498eff44c4ce3c018,
+  m_CorrespondingSourceObject: {fileID: 4751170527517900695, guid: 5ebd5667ce62d58469a3cf3a380fac75,
     type: 3}
-  m_PrefabInstance: {fileID: 4623975771419792015}
+  m_PrefabInstance: {fileID: 7194694336096806538}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &8796231395616921869 stripped
+--- !u!23 &3637801091234341490 stripped
 MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 4195618373953899394, guid: c22c6ff400227f4498eff44c4ce3c018,
+  m_CorrespondingSourceObject: {fileID: 5883003693780796664, guid: 5ebd5667ce62d58469a3cf3a380fac75,
     type: 3}
-  m_PrefabInstance: {fileID: 4623975771419792015}
+  m_PrefabInstance: {fileID: 7194694336096806538}
   m_PrefabAsset: {fileID: 0}

@@ -132,8 +132,10 @@ public class WinWindow : PopUpBase
 
     private RewardViewSetting SetNextNearestPercent()
     {
-        if (progress.value >= progress.maxValue )
+        var setting = _settings.FirstOrDefault(x => x.Percent >= progress.value);
+        if (progress.value >= progress.maxValue || setting == null)
         {
+            Debug.Log("------------" + 0);
             SetNextIndex(0);
             progress.value = progress.minValue;
             _sliderProgressTarget -= progress.maxValue;
@@ -146,21 +148,24 @@ public class WinWindow : PopUpBase
             return _settings[0];
         }
 
-        var setting = _settings.FirstOrDefault(x => x.Percent >= progress.value);
-        if (setting == null)
-        {
-            progress.value = progress.minValue;
-            _sliderProgressTarget -= progress.maxValue;
-            SetNextIndex(0);
-
-            for (var i = 0; i < _settings.Count; i++)
-                rewardViews[i].SetTokState(progress.value >= _settings[i].Percent);
-
-            return _settings[0];
-        }
+        // var setting = _settings.FirstOrDefault(x => x.Percent >= progress.value);
+        // if (setting == null)
+        // {
+        //     progress.value = progress.minValue;
+        //     _sliderProgressTarget -= progress.maxValue;
+        //     SetNextIndex(0);
+        //
+        //     for (var i = 0; i < _settings.Count; i++)
+        //     {
+        //         rewardViews[i].SetTokState(progress.value >= _settings[i].Percent);
+        //     }
+        //
+        //     return _settings[0];
+        // }
 
         var x = _settings.IndexOf(setting);
         SetNextIndex(x);
+        Debug.Log("------------" + x);
 
         return _settings[x];
     }
@@ -169,7 +174,7 @@ public class WinWindow : PopUpBase
     {
         rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(false);
         rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveVFX(false);
-        Managers.Instance.Progress.NextRewardIndexWinWindow = index >= _settings.Count ? 0 : index;
+        Managers.Instance.Progress.NextRewardIndexWinWindow = index;
         rewardViews[Managers.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
     }
 
