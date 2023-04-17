@@ -10,6 +10,7 @@ namespace UI
     {
         [SerializeField] private Button button;
         [SerializeField] private TMP_Text _countOfReward;
+        [SerializeField] private CurrencyCounter _currencyCounter;
 
         public override void Initialize()
         {
@@ -20,9 +21,10 @@ namespace UI
             button.onClick.AddListener((() => Managers.Instance.UIManager.ClosePopUp(ID)));
         }
 
-        public override void Show()
+        public override async void Show()
         {
             gameObject.SetActive(true);
+            await _currencyCounter.UpdateLayout();
         }
 
         public override void Close()

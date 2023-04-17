@@ -32,6 +32,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3383660546327718122}
   - {fileID: 2397192980004020722}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -133,6 +134,96 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.03, y: 1.03, z: 1.03}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &2223200867087084838
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 453988699643703253}
+    m_Modifications:
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4279713301593497462, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+        type: 3}
+      propertyPath: m_Name
+      value: BigBoxTapFlowBox_1_1_1_Line
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b42af2ee6da38df478c0b1a7d6b41c33, type: 3}
+--- !u!4 &3383660546327718122 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3472073269711914444, guid: b42af2ee6da38df478c0b1a7d6b41c33,
+    type: 3}
+  m_PrefabInstance: {fileID: 2223200867087084838}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5113188662503923156
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -143,7 +234,7 @@ PrefabInstance:
     - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7471818879944817702, guid: 40740d376641d1a4f9cd7dcbcb508325,
         type: 3}
@@ -214,6 +305,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BigBoxTapFlowBox_1_1_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7852847300800587420, guid: 40740d376641d1a4f9cd7dcbcb508325,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40740d376641d1a4f9cd7dcbcb508325, type: 3}

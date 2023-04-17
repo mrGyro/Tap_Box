@@ -1,9 +1,12 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Linq;
+using Currency;
+using Cysharp.Threading.Tasks;
+using DefaultNamespace.UI.WinWindow;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DefaultNamespace.UI.WinWindow
+namespace UI.WinWindow
 {
     public class RewardView : MonoBehaviour
     {
@@ -14,11 +17,15 @@ namespace DefaultNamespace.UI.WinWindow
         [SerializeField] private GameObject VFX;
         private Sprite _notGetSprite;
         private Sprite _getSprite;
-        
+
         public async UniTask Setup(RewardViewSetting setting)
         {
-            _getSprite = await AssetProvider.LoadAssetAsync<Sprite>(setting.RewardType + "_icon");
-            _notGetSprite = await AssetProvider.LoadAssetAsync<Sprite>(setting.RewardType + "_notGet");
+            var randomSkin = Managers.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.IsRandom && !skin.IsOpen);
+
+            Debug.LogError(randomSkin == null);
+            var rewardType = randomSkin == null ? CurrencyController.Type.Coin : setting.RewardType;
+            _getSprite = await AssetProvider.LoadAssetAsync<Sprite>(rewardType + "_icon");
+            _notGetSprite = await AssetProvider.LoadAssetAsync<Sprite>(rewardType + "_notGet");
             rewardProgressImage.sprite = _getSprite;
             SetActiveVFX(false);
         }
@@ -27,7 +34,7 @@ namespace DefaultNamespace.UI.WinWindow
         {
             gameObject.SetActive(value);
         }
-        
+
         public void SetActiveVFX(bool value)
         {
             VFX.SetActive(value);
@@ -45,7 +52,7 @@ namespace DefaultNamespace.UI.WinWindow
 
         public void UpdateRewardPercentText(string text)
         {
-            rewardPercents.text = $"{text}%";
+            rewardPercents.text = $"{text}";
         }
     }
 }

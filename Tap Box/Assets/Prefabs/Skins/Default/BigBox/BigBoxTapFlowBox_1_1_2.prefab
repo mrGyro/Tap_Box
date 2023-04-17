@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6105717079193990228}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6109716146863259008
 MonoBehaviour:
@@ -130,6 +130,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1037313403960008861}
+  - {fileID: 8733519280914801830}
   - {fileID: 1322403578967423322}
   - {fileID: 2158186144958743431}
   m_Father: {fileID: 0}
@@ -147,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa88d07d10c4f30b6ab03520fb84552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderer: {fileID: 2174794242031246322}
+  renderer: {fileID: 7599997403171413961}
   waitBeforeDissolve: 0
   dissolveSpeed: 0.2
   dissolveCurve:
@@ -269,7 +270,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6105717079193990228}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4075511924385423440
 MonoBehaviour:
@@ -334,6 +335,87 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1001 &1400952610343060172
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6105717079193990228}
+    m_Modifications:
+    - target: {fileID: 6992207681002175696, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_Name
+      value: BigBoxTapFlowBox_1_1_2_Line
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.515
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f3ebcfbb489340a4787c7191e0d84fb3, type: 3}
+--- !u!23 &7599997403171413961 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8793757276642729221, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1400952610343060172}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8733519280914801830 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7656857664820094570, guid: f3ebcfbb489340a4787c7191e0d84fb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1400952610343060172}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7077521478366843379
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -345,6 +427,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BigBoxTapFlowBox_1_1_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7428406034424212436, guid: 0da28ffd72a2fc04ab42feffb6c8ff84,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7808449292859437422, guid: 0da28ffd72a2fc04ab42feffb6c8ff84,
         type: 3}
@@ -421,12 +508,6 @@ PrefabInstance:
 --- !u!4 &1037313403960008861 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7808449292859437422, guid: 0da28ffd72a2fc04ab42feffb6c8ff84,
-    type: 3}
-  m_PrefabInstance: {fileID: 7077521478366843379}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &2174794242031246322 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8941338089068333569, guid: 0da28ffd72a2fc04ab42feffb6c8ff84,
     type: 3}
   m_PrefabInstance: {fileID: 7077521478366843379}
   m_PrefabAsset: {fileID: 0}
