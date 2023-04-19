@@ -115,8 +115,8 @@ public class WinWindow : PopUpBase
             return;
         }
 
-        Managers.Instance.CurrencyController.AddSkin(randomSkin.Type, randomSkin.SkinAddressableName);
-        Core.MessengerStatic.Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, randomSkin.Type, randomSkin.SkinAddressableName);
+        Managers.Instance.CurrencyController.AddSkin(randomSkin.WayToGet, randomSkin.SkinAddressableName);
+        Core.MessengerStatic.Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, randomSkin.WayToGet, randomSkin.SkinAddressableName);
     }
 
     private float GetPercents()

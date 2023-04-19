@@ -39,7 +39,7 @@ namespace UI.Skins
                         IsOpen = forCopy.IsOpen,
                         Price = forCopy.Price,
                         SkinAddressableName = forCopy.SkinAddressableName,
-                        Type = forCopy.Type,
+                        WayToGet = forCopy.WayToGet,
                         IsRandom = forCopy.IsRandom
                     });
 

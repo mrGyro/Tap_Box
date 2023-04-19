@@ -49,7 +49,7 @@ namespace Currency
                 IsOpen = true,
                 Price = 0,
                 SkinAddressableName = value,
-                Type = type,
+                WayToGet = type,
                 IsRandom = false
             });
         } 

@@ -1,6 +1,7 @@
 using System;
 using Core.MessengerStatic;
 using Currency;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -37,7 +38,7 @@ namespace UI.Skins
             if (data.IsOpen)
                 return;
 
-            switch (data.Type)
+            switch (data.WayToGet)
             {
                 case CurrencyController.Type.Coin:
                     getTypeIcon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{Constants.Currency.Coins}_icon");
@@ -57,13 +58,14 @@ namespace UI.Skins
                 case CurrencyController.Type.InterstitialAds:
                     getTypeIcon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{Constants.Currency.Ads}_icon");
                     getTypeText.text = "Open";
-                    
+
                     var interstitialAd = Managers.Instance.Mediation.GetAddElement(Constants.Ads.Interstitial);
                     if (interstitialAd != null)
                     {
                         button.interactable = interstitialAd.IsReady.Value;
                         _isReady = interstitialAd.IsReady.Subscribe(OnSiReadyStatusChanged);
                     }
+
                     break;
             }
         }
@@ -72,20 +74,20 @@ namespace UI.Skins
         {
             if (data.IsOpen)
             {
-                await Managers.Instance.Progress.ChangeBlock(data.SkinAddressableName);
-                await Managers.Instance.Progress.Save();
+                await ChangeSkin();
+
                 return;
             }
 
-            switch (data.Type)
+            switch (data.WayToGet)
             {
                 case CurrencyController.Type.Coin:
-                    if (!Managers.Instance.Progress.Currencies.ContainsKey(data.Type))
+                    if (!Managers.Instance.Progress.Currencies.ContainsKey(data.WayToGet))
                         return;
 
-                    if (Managers.Instance.Progress.Currencies[data.Type] >= data.Price)
+                    if (Managers.Instance.Progress.Currencies[data.WayToGet] >= data.Price)
                     {
-                        Managers.Instance.CurrencyController.RemoveCurrency(data.Type, data.Price);
+                        Managers.Instance.CurrencyController.RemoveCurrency(data.WayToGet, data.Price);
                         BuySkin();
                         Setup();
                         await Managers.Instance.Progress.Save();
@@ -114,12 +116,30 @@ namespace UI.Skins
             }
         }
 
+        private async UniTask ChangeSkin()
+        {
+            switch (data.Type)
+            {
+                case CurrencyController.Type.BoxSkin:
+                    await Managers.Instance.Progress.ChangeBlock(data.SkinAddressableName);
+                    await Managers.Instance.Progress.Save();
+                    break;
+                case CurrencyController.Type.BackgroundSkin:
+                    break;
+                case CurrencyController.Type.FlowSkin:
+                    break;
+                case CurrencyController.Type.VFXSkin:
+                    break;
+            }
+        }
+
         private async void OnRewardedDone(string value)
         {
             if (value != _skinButton + data.SkinAddressableName)
             {
                 return;
             }
+
             BuySkin();
             Setup();
             await Managers.Instance.Progress.Save();
@@ -135,7 +155,7 @@ namespace UI.Skins
         private async void BuySkin()
         {
             data.IsOpen = true;
-            Managers.Instance.CurrencyController.AddSkin(data.Type, data.SkinAddressableName);
+            Managers.Instance.CurrencyController.AddSkin(data.WayToGet, data.SkinAddressableName);
             await Managers.Instance.Progress.ChangeBlock(data.SkinAddressableName);
         }
 
