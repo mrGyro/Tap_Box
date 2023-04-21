@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,6 @@ public class ClosePopUpButton : MonoBehaviour
 
     private void OnClick()
     {
-        Managers.Instance.UIManager.ClosePopUp(popupID);
+        GameManager.Instance.UIManager.ClosePopUp(popupID);
     }
 }

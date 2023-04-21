@@ -2,11 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace.Managers;
 using LevelCreator;
+using Managers;
 using UI.Levels;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelsWindiw : PopUpBase
 {
+    [SerializeField] private Image _background;
     [SerializeField] private LevelsPool levelsPool;
     public List<UILevelItem> uiLevelItems = new();
 
@@ -15,6 +18,8 @@ public class LevelsWindiw : PopUpBase
         ID = Constants.PopUps.LevelListPopUp;
         Priority = 1;
         CreateLevelButtons();
+        GameManager.Instance.SkinsManager.AddBackground(_background);
+        GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
     }
 
     public override void Close()
@@ -30,7 +35,7 @@ public class LevelsWindiw : PopUpBase
 
     private void UpdateLevel()
     {
-        foreach (var data in Managers.Instance.Progress.LevelDatas)
+        foreach (var data in GameManager.Instance.Progress.LevelDatas)
         {
             var level = uiLevelItems.FirstOrDefault(x => x.Data.ID == data.ID);
             if (level == null)
@@ -48,9 +53,9 @@ public class LevelsWindiw : PopUpBase
 
     private async void CreateLevelButtons()
     {
-        Managers.Instance.Progress.LevelDatas.Sort(Compare);
+        GameManager.Instance.Progress.LevelDatas.Sort(Compare);
 
-        foreach (var levelData in Managers.Instance.Progress.LevelDatas)
+        foreach (var levelData in GameManager.Instance.Progress.LevelDatas)
         {
             var level = await levelsPool.Get();
             level.Setup(levelData);

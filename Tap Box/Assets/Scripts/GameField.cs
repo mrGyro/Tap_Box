@@ -6,6 +6,7 @@ using Boxes.BigBoxTapFlowBox;
 using Boxes.SwipableBox;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
+using Managers;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -52,10 +53,10 @@ public class GameField : MonoBehaviour, IInitializable
         if (_boxes.Count == 0)
         {
             await UniTask.Delay(1000);
-            Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.WinPopUp);
+            GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.WinPopUp);
             _data.LevelStatus = Status.Passed;
             _data.Data = null;
-            Managers.Instance.SaveLevel(_data);
+            GameManager.Instance.SaveLevel(_data);
 
             return;
         }
@@ -70,7 +71,7 @@ public class GameField : MonoBehaviour, IInitializable
             _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
             _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
 
-        Managers.Instance.InputController.SetStartLevelSettings(newPosition, cameraPosition);
+        GameManager.Instance.InputController.SetStartLevelSettings(newPosition, cameraPosition);
     }
 
 
@@ -213,9 +214,9 @@ public class GameField : MonoBehaviour, IInitializable
 
     private async UniTask CreateLevel(string levelName)
     {
-        _data = await Managers.Instance.Progress.LoadLevelData(levelName);
+        _data = await GameManager.Instance.Progress.LoadLevelData(levelName);
 
-        var level = Managers.Instance.Progress.LevelDatas.FirstOrDefault(x => x.ID == Managers.Instance.Progress.LastStartedLevelID);
+        var level = GameManager.Instance.Progress.LevelDatas.FirstOrDefault(x => x.ID == GameManager.Instance.Progress.LastStartedLevelID);
 
         if (level != null && level.Data != null)
         {
@@ -271,9 +272,9 @@ public class GameField : MonoBehaviour, IInitializable
             case BaseBox.BlockType.TapFlowBox:
             case BaseBox.BlockType.RotateRoadBox:
             case BaseBox.BlockType.SwipedBox:
-                return $"{Managers.Instance.Progress.CurrentSkin}_{box.Type}";
+                return $"{GameManager.Instance.Progress.CurrentBoxSkin}_{box.Type}";
             case BaseBox.BlockType.BigBoxTapFlowBox:
-                return $"{Managers.Instance.Progress.CurrentSkin}_{box.Type}_{box.Size.x}_{box.Size.y}_{box.Size.z}";
+                return $"{GameManager.Instance.Progress.CurrentBoxSkin}_{box.Type}_{box.Size.x}_{box.Size.y}_{box.Size.z}";
         }
 
         return String.Empty;

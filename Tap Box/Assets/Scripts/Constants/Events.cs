@@ -8,5 +8,9 @@
         public static string OnGameLoose = "OnGameLoose";
         public static string OnGetRandomSkin = "OnGetRandomSkin";
         public static string OnRewardedVideoReward = "OnRewardedVideoReward";
+        
+        
+        public static string OnBackgroundSpriteChanged = "OnBackgroundSpriteChanged";
+        public static string OnBackgroundMaterialChanged = "OnBackgroundMaterialChanged";
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace.UI.WinWindow;
+using Managers;
 using UI.Skins;
 
 namespace Currency
@@ -14,8 +15,8 @@ namespace Currency
             BoxSkin,
             RandomSkin,
             BackgroundSkin,
-            FlowSkin,
-            VFXSkin,
+            TailSkin,
+            TapSkin,
             RewardedAds,
             InterstitialAds
         }
@@ -24,19 +25,23 @@ namespace Currency
 
         public void AddCurrency(Type type, int value)
         {
-            Managers.Instance.Progress.Currencies ??= new Dictionary<Type, int>();
-            
-            if (Managers.Instance.Progress.Currencies.ContainsKey(type))
-                Managers.Instance.Progress.Currencies[type] += value;
-            else
-                Managers.Instance.Progress.Currencies.Add(type, value);
+            GameManager.Instance.Progress.Currencies ??= new Dictionary<Type, int>();
 
-            OnCurrencyCountChanged?.Invoke(type, Managers.Instance.Progress.Currencies[type]);
+            if (GameManager.Instance.Progress.Currencies.ContainsKey(type))
+            {
+                GameManager.Instance.Progress.Currencies[type] += value;
+            }
+            else
+            {
+                GameManager.Instance.Progress.Currencies.Add(type, value);
+            }
+
+            OnCurrencyCountChanged?.Invoke(type, GameManager.Instance.Progress.Currencies[type]);
         }
 
-        public void AddSkin(Type type, string value)
+        public void AddSkin(Type wayToGet,Type type, string value)
         {
-            var skinData = Managers.Instance.Progress.SkinDatas.FirstOrDefault(x => x.SkinAddressableName == value);
+            var skinData = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(x => x.SkinAddressableName == value);
            
             if (skinData != null)
             {
@@ -44,41 +49,42 @@ namespace Currency
                 return;
             }
             
-            Managers.Instance.Progress.SkinDatas.Add(new SkinData()
+            GameManager.Instance.Progress.SkinDatas.Add(new SkinData()
             {
                 IsOpen = true,
                 Price = 0,
                 SkinAddressableName = value,
-                WayToGet = type,
+                WayToGet = wayToGet,
+                Type = type,
                 IsRandom = false
             });
         } 
 
         public void RemoveCurrency(Type type, int value)
         {
-            if (Managers.Instance.Progress.Currencies == null)
+            if (GameManager.Instance.Progress.Currencies == null)
                 return;
 
-            if (Managers.Instance.Progress.Currencies.ContainsKey(type))
+            if (GameManager.Instance.Progress.Currencies.ContainsKey(type))
             {
-                Managers.Instance.Progress.Currencies[type] -= value;
-                if (Managers.Instance.Progress.Currencies[type] < 0)
+                GameManager.Instance.Progress.Currencies[type] -= value;
+                if (GameManager.Instance.Progress.Currencies[type] < 0)
                 {
-                    Managers.Instance.Progress.Currencies[type] = 0;
+                    GameManager.Instance.Progress.Currencies[type] = 0;
                 }
             }
             else
-                Managers.Instance.Progress.Currencies.Add(type, 0);
+                GameManager.Instance.Progress.Currencies.Add(type, 0);
 
-            OnCurrencyCountChanged?.Invoke(type, Managers.Instance.Progress.Currencies[type]);
+            OnCurrencyCountChanged?.Invoke(type, GameManager.Instance.Progress.Currencies[type]);
         }
 
         public int GetCurrency(Type type)
         {
-            if (Managers.Instance.Progress.Currencies == null)
+            if (GameManager.Instance.Progress.Currencies == null)
                 return 0;
             
-            return Managers.Instance.Progress.Currencies.ContainsKey(type) ? Managers.Instance.Progress.Currencies[type] : 0;
+            return GameManager.Instance.Progress.Currencies.ContainsKey(type) ? GameManager.Instance.Progress.Currencies[type] : 0;
         }
 
         public List<RewardViewSetting> GetRewardSettings()

@@ -1,4 +1,5 @@
 ﻿using LevelCreator;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,8 +30,8 @@ namespace UI.Levels.LevelButton
         
         private void OnButtonClick()
         {
-            Managers.Instance.LoadLevelById(_data.ID);
-            Managers.Instance.UIManager.ClosePopUp(Constants.PopUps.LevelListPopUp);
+            GameManager.Instance.LoadLevelById(_data.ID);
+            GameManager.Instance.UIManager.ClosePopUp(Constants.PopUps.LevelListPopUp);
         }
     }
 }

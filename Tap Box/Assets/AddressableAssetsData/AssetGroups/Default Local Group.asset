@@ -173,6 +173,26 @@ MonoBehaviour:
     m_Address: RandomSkin_notGet
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 5433de3a099913f4ca5681ce1ccbeba0
+    m_Address: Default_bg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2ec3b31d5ca696b47b61526dabaeaff8
+    m_Address: Default3_bg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 629c194e8da77d9448b00fff04f106b8
+    m_Address: Default2_bg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 87154ead5fbddc84aaf999dc1d12b1cd
+    m_Address: Default_tap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: fb09c3b154cc10b47ad649811da8d16b
+    m_Address: Default2_tap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d2092fe1ab8035d4192c7661d5d020b3, type: 2}
   m_SchemaSet:

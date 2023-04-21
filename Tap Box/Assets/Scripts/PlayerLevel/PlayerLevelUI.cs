@@ -1,3 +1,4 @@
+using Managers;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -11,12 +12,12 @@ public class PlayerLevelUI : MonoBehaviour, IInitializable
 
     public void Initialize()
     {
-        currentLevel.text = Managers.Instance.Progress.CurrentPlayerLevel.ToString();
-        nextLevel.text = (Managers.Instance.Progress.CurrentPlayerLevel + 1).ToString();
-        progress.value = Managers.Instance.Progress.CurrentPlayerLevelProgress;
+        currentLevel.text = GameManager.Instance.Progress.CurrentPlayerLevel.ToString();
+        nextLevel.text = (GameManager.Instance.Progress.CurrentPlayerLevel + 1).ToString();
+        progress.value = GameManager.Instance.Progress.CurrentPlayerLevelProgress;
 
-        Managers.Instance.PlayerLevelManager.OnLevelChanged += LevelChanged;
-        Managers.Instance.PlayerLevelManager.OnLevelProgressChanged += LevelProgressChanged;
+        GameManager.Instance.PlayerLevelManager.OnLevelChanged += LevelChanged;
+        GameManager.Instance.PlayerLevelManager.OnLevelProgressChanged += LevelProgressChanged;
     }
 
     private void LevelProgressChanged(float value)

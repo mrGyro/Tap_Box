@@ -6,9 +6,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Currency;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
+using Managers;
 using UI.Skins;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -25,7 +27,11 @@ namespace SaveLoad_progress
         public int NextRewardIndexWinWindow;
         public int CurrentPlayerLevel;
         public float CurrentPlayerLevelProgress;
-        public string CurrentSkin;
+       
+        public string CurrentBoxSkin;
+        public string CurrentBackgroundSkin;
+        public string CurrentTapSkin;
+        [FormerlySerializedAs("CurrentTrailSkin")] public string CurrentTailSkin;
 
         public Dictionary<CurrencyController.Type, int> Currencies;
 
@@ -49,7 +55,10 @@ namespace SaveLoad_progress
             CurrentPlayerLevel = progress.CurrentPlayerLevel;
             CurrentPlayerLevelProgress = progress.CurrentPlayerLevelProgress;
             SkinDatas = progress.SkinDatas ?? new List<SkinData>();
-            CurrentSkin = string.IsNullOrEmpty(progress.CurrentSkin) ? "Default" : progress.CurrentSkin;
+            CurrentBoxSkin = string.IsNullOrEmpty(progress.CurrentBoxSkin) ? "Default" : progress.CurrentBoxSkin;
+            CurrentBackgroundSkin = string.IsNullOrEmpty(progress.CurrentBackgroundSkin) ? "Default_bg" : progress.CurrentBackgroundSkin;
+            CurrentTapSkin = string.IsNullOrEmpty(progress.CurrentTapSkin) ? "Default_tap" : progress.CurrentTapSkin;
+            CurrentTailSkin = string.IsNullOrEmpty(progress.CurrentTailSkin) ? "Default_tail" : progress.CurrentTailSkin;
         }
 
         public async UniTask SaveGameProgress(GameProgress progress)
@@ -67,20 +76,23 @@ namespace SaveLoad_progress
             var level = LevelDatas.FirstOrDefault(x => x.ID == LastStartedLevelID);
 
             if (level != null)
-                level.Data = Managers.Instance.GameField.GetDataForSave();
+            {
+                level.Data = GameManager.Instance.GameField.GetDataForSave();
+            }
 
             await SaveGameProgress(this);
         }
 
-        public async UniTask Load() =>
-            await LoadGameProgress();
+        public async UniTask Load() => await LoadGameProgress();
 
         public void CheckRequirement()
         {
             foreach (var levelData in LevelDatas)
             {
                 if (levelData.Reqirement.CheckForDone() && levelData.LevelStatus != Status.Passed)
+                {
                     levelData.LevelStatus = Status.Open;
+                }
             }
         }
 
@@ -94,7 +106,9 @@ namespace SaveLoad_progress
                 var levelData = await LoadLevelData(assetName);
 
                 if (levelData == null)
+                {
                     continue;
+                }
 
                 levelDataList.Add(levelData);
             }
@@ -122,7 +136,9 @@ namespace SaveLoad_progress
             }
 
             if (buffer.Count > 0)
+            {
                 gameProgress.LevelDatas.AddRange(buffer);
+            }
 
             SetValues(gameProgress);
         }
@@ -139,10 +155,43 @@ namespace SaveLoad_progress
 
         public async UniTask ChangeBlock(string name)
         {
-            if (CurrentSkin == name)
+            if (CurrentBoxSkin == name)
+            {
                 return;
-            CurrentSkin = name;
-            await Managers.Instance.GameField.ChangeSkin();
+            }
+            
+            CurrentBoxSkin = name;
+            await GameManager.Instance.GameField.ChangeSkin();
+        }
+        
+        public async UniTask ChangeBackground(string name)
+        {
+            if (CurrentBackgroundSkin == name)
+            {
+                return;
+            }
+            
+            CurrentBackgroundSkin = name;
+            GameManager.Instance.SkinsManager.ChangeBackgroundSkin(name);
+        }
+        
+        public async UniTask ChangeTap(string name)
+        {
+            if (CurrentTapSkin == name)
+            {
+                return;
+            }
+            
+            CurrentTapSkin = name;
+            GameManager.Instance.SkinsManager.ChangeTapSkin(name);
+        }
+        
+        public async UniTask ChangeTrail(string name)
+        {
+            if (CurrentTailSkin == name)
+                return;
+            CurrentTailSkin = name;
+            //await GameManager.Instance.SkinsManager.t();
         }
 
         private async UniTask<List<string>> LoadLevelsName()

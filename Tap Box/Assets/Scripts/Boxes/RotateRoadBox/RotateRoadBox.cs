@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Boxes.Reactions;
 using Cysharp.Threading.Tasks;
+using Managers;
 using UnityEngine;
 
 namespace Boxes.RotateRoadBox
@@ -63,7 +64,7 @@ namespace Boxes.RotateRoadBox
 
                 foreach (var box in list)
                 {
-                    Managers.Instance.GameField.RemoveBox(box);
+                    GameManager.Instance.GameField.RemoveBox(box);
                 }
             }
             else
@@ -71,7 +72,7 @@ namespace Boxes.RotateRoadBox
                 _collider.enabled = true;
             }
 
-            Managers.Instance.GameField.CheckForWin();
+            GameManager.Instance.GameField.CheckForWin();
         }
 
         private List<RotateRoadBox> GetNearestAndCanConnected(List<RotateRoadBox> nearestBoxes)
@@ -145,7 +146,7 @@ namespace Boxes.RotateRoadBox
             var result = new List<RotateRoadBox>();
             foreach (var pos in positions)
             {
-                var nearBox = Managers.Instance.GameField.GetBoxFromArrayPosition(pos) as RotateRoadBox;
+                var nearBox = GameManager.Instance.GameField.GetBoxFromArrayPosition(pos) as RotateRoadBox;
                 if (nearBox == null)
                     continue;
 

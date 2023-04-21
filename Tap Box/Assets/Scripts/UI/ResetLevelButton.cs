@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ namespace UI
 
         private void OnClick()
         {
-            Managers.Instance.LoadLevelById(Managers.Instance.Progress.LastStartedLevelID);
+            GameManager.Instance.LoadLevelById(GameManager.Instance.Progress.LastStartedLevelID);
         }
     }
 }

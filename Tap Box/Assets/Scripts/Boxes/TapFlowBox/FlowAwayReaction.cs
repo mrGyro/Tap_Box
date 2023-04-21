@@ -1,5 +1,6 @@
 using Boxes.Reactions;
 using Cysharp.Threading.Tasks;
+using Managers;
 using UnityEngine;
 
 namespace Boxes.TapFlowBox
@@ -22,11 +23,11 @@ namespace Boxes.TapFlowBox
 
             _isMove = true;
 
-            var box = Managers.Instance.GameField.GetNearestBoxInDirection(new[] { _box.Data.ArrayPosition.ToVector3() } , _parent.forward, _box);
+            var box = GameManager.Instance.GameField.GetNearestBoxInDirection(new[] { _box.Data.ArrayPosition.ToVector3() } , _parent.forward, _box);
             if (box == null)
             {
-                Managers.Instance.GameField.RemoveBox(_box);
-                Managers.Instance.GameField.CheckForWin();
+                GameManager.Instance.GameField.RemoveBox(_box);
+                GameManager.Instance.GameField.CheckForWin();
                 await MoveOut();
             }
             else

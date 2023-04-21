@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using DefaultNamespace.Managers;
 using DefaultNamespace.UI.Popup;
+using Managers;
 using UI;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour, IInitializable
 {
+    [SerializeField] private Image _background;
     [SerializeField] private CurrencyCounter coinCounter;
     [SerializeField] private PlayerLevelUI playerLevelUI;
     [SerializeField] private TurnsLeftCounter turnsLeftCounter;
@@ -16,6 +19,9 @@ public class UIManager : MonoBehaviour, IInitializable
 
     public void Initialize()
     {
+        GameManager.Instance.SkinsManager.AddBackground(_background);
+        GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
+
         coinCounter.Initialize();
         playerLevelUI.Initialize();
         turnsLeftCounter.Initialize();
@@ -50,7 +56,7 @@ public class UIManager : MonoBehaviour, IInitializable
         popup.IsShowing = false;
 
         RemoveFromPopUpQueue(popup);
-        Managers.Instance.SetActiveGlobalInput(true);
+        GameManager.Instance.SetActiveGlobalInput(true);
         ShowNext();
     }
 
@@ -76,7 +82,7 @@ public class UIManager : MonoBehaviour, IInitializable
         if (_popUpsQueue.Find(x => x.IsShowing) != null)
             return;
 
-        Managers.Instance.SetActiveGlobalInput(false);
+        GameManager.Instance.SetActiveGlobalInput(false);
         _popUpsQueue[^1].Show();
         _popUpsQueue[^1].IsShowing = true;
 

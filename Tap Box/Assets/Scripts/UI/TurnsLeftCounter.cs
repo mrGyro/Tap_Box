@@ -1,3 +1,4 @@
+using Managers;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace UI
 
         private void OnLoose()
         {
-            Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
+            GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
         }
 
         private void OnLevelCreated(string obj)
@@ -32,7 +33,7 @@ namespace UI
 
         public void SetTurnsText()
         {
-            counter.text = $"{Managers.Instance.GameField.GetTurnsCount} turns";
+            counter.text = $"{GameManager.Instance.GameField.GetTurnsCount} turns";
         }
 
         private void OnDestroy()

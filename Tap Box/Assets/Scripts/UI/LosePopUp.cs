@@ -1,4 +1,5 @@
 ﻿using DefaultNamespace.Managers;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ namespace UI
 {
     public class LosePopUp : PopUpBase
     {
+        [SerializeField] private Image _background;
         [SerializeField] private Image _smileImage;
         [SerializeField] private Button _closePopup;
         [SerializeField] private Button _addMoreTurns;
@@ -15,21 +17,24 @@ namespace UI
         [SerializeField] private TMP_Text _tapToCloseText;
         public override void Initialize()
         {
+            GameManager.Instance.SkinsManager.AddBackground(_background);
+            GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
+
             ID = Constants.PopUps.LosePopUp;
             Priority = 100;
             _closePopup.onClick.RemoveAllListeners();
             _closePopup.onClick.AddListener(() =>
             {
-                Managers.Instance.LoadLevelById(Managers.Instance.Progress.LastStartedLevelID);
-                Managers.Instance.UIManager.ClosePopUp(ID);
+                GameManager.Instance.LoadLevelById(GameManager.Instance.Progress.LastStartedLevelID);
+                GameManager.Instance.UIManager.ClosePopUp(ID);
             });
             
             _addMoreTurns.onClick.RemoveAllListeners();
             _addMoreTurns.onClick.AddListener((() =>
             {
-                Managers.Instance.GameField.GetTurnsCount += 10;
-                Managers.Instance.UIManager.ShowTurns();
-                Managers.Instance.UIManager.ClosePopUp(ID);
+                GameManager.Instance.GameField.GetTurnsCount += 10;
+                GameManager.Instance.UIManager.ShowTurns();
+                GameManager.Instance.UIManager.ClosePopUp(ID);
             }));
         }
 

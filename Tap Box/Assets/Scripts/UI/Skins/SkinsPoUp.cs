@@ -1,21 +1,29 @@
 using System.Collections.Generic;
 using System.Linq;
+using Core.MessengerStatic;
 using Currency;
 using DefaultNamespace.Managers;
+using Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Skins
 {
     public class SkinsPoUp : PopUpBase
     {
+        [SerializeField] private Image _background;
         [SerializeField] private CurrencyCounter counter;
-        [SerializeField] private List<SkinsButton> skinsButtons;
+        [SerializeField] private List<SkinsButton> _boxesSkinsButtons;
+        [SerializeField] private List<SkinsButton> _backgroundsSkinsButtons;
+        [SerializeField] private List<SkinsButton> _tailButtons;
+        [SerializeField] private List<SkinsButton> _tapButtons;
 
         public override void Initialize()
         {
             Setup();
-            Core.MessengerStatic.Messenger<CurrencyController.Type, string>.AddListener(Constants.Events.OnGetRandomSkin, OnGetRandomSkin);
-
+            Messenger<CurrencyController.Type, string>.AddListener(Constants.Events.OnGetRandomSkin, OnGetRandomSkin);
+            GameManager.Instance.SkinsManager.AddBackground(_background);
+            GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
         }
 
         private void OnGetRandomSkin(CurrencyController.Type arg1, string arg2)
@@ -25,35 +33,48 @@ namespace UI.Skins
 
         private void Setup()
         {
-            var buffer = new List<SkinData>();
+            SetPage(_boxesSkinsButtons);
+            SetPage(_backgroundsSkinsButtons);
+            SetPage(_tailButtons);
+            SetPage(_tapButtons);
+        }
 
-            foreach (var button in skinsButtons)
+        private void SetPage(List<SkinsButton> buttons)
+        {
+            foreach (var button in buttons)
             {
-                var data = Managers.Instance.Progress.SkinDatas.FirstOrDefault(x
-                    => x.SkinAddressableName == button.GetSkinData().SkinAddressableName);
-                if (data == null)
-                {
-                    var forCopy = button.GetSkinData();
-                    buffer.Add(new SkinData()
-                    {
-                        IsOpen = forCopy.IsOpen,
-                        Price = forCopy.Price,
-                        SkinAddressableName = forCopy.SkinAddressableName,
-                        WayToGet = forCopy.WayToGet,
-                        IsRandom = forCopy.IsRandom
-                    });
-
-                    continue;
-                }
-
-                button.SetSkinData(data);
+                SetSkinData(button);
             }
 
-            Managers.Instance.Progress.SkinDatas.AddRange(buffer);
-
-            foreach (var button in skinsButtons)
+            foreach (var button in buttons)
             {
                 button.Setup();
+            }
+        }
+
+        private void SetSkinData(SkinsButton button)
+        {
+            var data = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(x
+                => x.SkinAddressableName == button.GetSkinData().SkinAddressableName);
+            if (data == null)
+            {
+                var forCopy = button.GetSkinData();
+
+                GameManager.Instance.Progress.SkinDatas.Add(new SkinData()
+                {
+                    IsOpen = forCopy.IsOpen,
+                    Price = forCopy.Price,
+                    SkinAddressableName = forCopy.SkinAddressableName,
+                    WayToGet = forCopy.WayToGet,
+                    Type = forCopy.Type,
+                    IsRandom = forCopy.IsRandom
+                });
+            }
+            else
+            {
+                data = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(x
+                    => x.SkinAddressableName == button.GetSkinData().SkinAddressableName);
+                button.SetSkinData(data);
             }
         }
 
@@ -76,8 +97,7 @@ namespace UI.Skins
 
         private void OnDestroy()
         {
-            Core.MessengerStatic.Messenger<CurrencyController.Type, string>.RemoveListener(Constants.Events.OnGetRandomSkin, OnGetRandomSkin);
-
+            Messenger<CurrencyController.Type, string>.RemoveListener(Constants.Events.OnGetRandomSkin, OnGetRandomSkin);
         }
     }
 }

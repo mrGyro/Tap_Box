@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using LevelCreator;
+using Managers;
 using UnityEngine;
 
 [Serializable]
@@ -19,7 +20,7 @@ public class Reqirement
         switch (Type)
         {
             case RequirementType.PassedLevel:
-                var level = Managers.Instance.Progress.LevelDatas.FirstOrDefault(x => x.ID == Value);
+                var level = GameManager.Instance.Progress.LevelDatas.FirstOrDefault(x => x.ID == Value);
                 if (level == null)
                     return false;
 

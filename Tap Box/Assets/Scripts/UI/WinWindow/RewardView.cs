@@ -2,6 +2,7 @@
 using Currency;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace.UI.WinWindow;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,7 @@ namespace UI.WinWindow
 
         public async UniTask Setup(RewardViewSetting setting)
         {
-            var randomSkin = Managers.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.IsRandom && !skin.IsOpen);
+            var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.IsRandom && !skin.IsOpen);
 
             Debug.LogError(randomSkin == null);
             var rewardType = randomSkin == null ? CurrencyController.Type.Coin : setting.RewardType;

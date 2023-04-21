@@ -3,6 +3,7 @@ using Boxes;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace;
 using Lean.Touch;
+using Managers;
 using UnityEngine;
 
 
@@ -67,11 +68,11 @@ public class InputController : MonoBehaviour
         _nativeVibration.Vibrate(30);
 
         box.BoxReactionStart();
-        Managers.Instance.GameField.GetTurnsCount--;
+        GameManager.Instance.GameField.GetTurnsCount--;
         Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnBoxClicked);
-        if (Managers.Instance.GameField.IsNotWinCondition())
+        if (GameManager.Instance.GameField.IsNotWinCondition())
         {
-            Managers.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
+            GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
             Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnGameLoose);
         }
     }

@@ -1,5 +1,6 @@
 using Currency;
 using Cysharp.Threading.Tasks;
+using Managers;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -23,10 +24,10 @@ namespace UI
         public async void Initialize()
         {
             icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{type}_icon");
-            _currentValue = Managers.Instance.CurrencyController.GetCurrency(type);
+            _currentValue = GameManager.Instance.CurrencyController.GetCurrency(type);
             count.text = _currentValue.ToString();
-            Managers.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
-            Managers.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;
+            GameManager.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
+            GameManager.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;
         }
 
         public bool IsAnimationComplete()
@@ -68,7 +69,7 @@ namespace UI
 
         private void OnDisable()
         {
-            Managers.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
+            GameManager.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
         }
 
         private async UniTask IncrementGold()

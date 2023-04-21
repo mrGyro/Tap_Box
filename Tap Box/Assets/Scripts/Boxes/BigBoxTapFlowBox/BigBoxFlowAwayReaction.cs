@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Boxes.Reactions;
 using Cysharp.Threading.Tasks;
+using Managers;
 using UnityEngine;
 
 namespace Boxes.BigBoxTapFlowBox
@@ -32,11 +33,11 @@ namespace Boxes.BigBoxTapFlowBox
                 array[i] = positions[i].ArrayPosition;
             }
 
-            var box = Managers.Instance.GameField.GetNearestBoxInDirection(array, _parent.forward, _box);
+            var box = GameManager.Instance.GameField.GetNearestBoxInDirection(array, _parent.forward, _box);
             if (box == null)
             {
-                Managers.Instance.GameField.RemoveBox(_box);
-                Managers.Instance.GameField.CheckForWin();
+                GameManager.Instance.GameField.RemoveBox(_box);
+                GameManager.Instance.GameField.CheckForWin();
                 await MoveOut();
             }
             else

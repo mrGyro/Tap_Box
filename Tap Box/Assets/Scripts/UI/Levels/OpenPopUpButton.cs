@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,6 @@ public class OpenPopUpButton : MonoBehaviour
 
     private void OnClick()
     {
-        Managers.Instance.UIManager.ShowPopUp(popupID);
+        GameManager.Instance.UIManager.ShowPopUp(popupID);
     }
 }

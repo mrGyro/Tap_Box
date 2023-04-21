@@ -1,5 +1,6 @@
 using Currency;
 using DefaultNamespace.Managers;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,17 +9,20 @@ namespace UI
 {
     public class NewLevelPanel : PopUpBase
     {
+        [SerializeField] private Image _background;
         [SerializeField] private Button button;
         [SerializeField] private TMP_Text _countOfReward;
         [SerializeField] private CurrencyCounter _currencyCounter;
 
         public override void Initialize()
         {
+            GameManager.Instance.SkinsManager.AddBackground(_background);
+            GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
             ID = Constants.PopUps.NewLevelPopUp;
             Priority = 100;
-            Managers.Instance.PlayerLevelManager.OnLevelChanged += LevelChanged;
+            GameManager.Instance.PlayerLevelManager.OnLevelChanged += LevelChanged;
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener((() => Managers.Instance.UIManager.ClosePopUp(ID)));
+            button.onClick.AddListener((() => GameManager.Instance.UIManager.ClosePopUp(ID)));
         }
 
         public override async void Show()
@@ -34,14 +38,14 @@ namespace UI
 
         private void LevelChanged(int obj)
         {
-            int count = Managers.Instance.GameField.GetCountOfReward() / 10;
+            int count = GameManager.Instance.GameField.GetCountOfReward() / 10;
             _countOfReward.text = $"+{count}";
-            Managers.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, count);
+            GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, count);
         }
 
         private void OnDestroy()
         {
-            Managers.Instance.PlayerLevelManager.OnLevelChanged -= LevelChanged;
+            GameManager.Instance.PlayerLevelManager.OnLevelChanged -= LevelChanged;
         }
     }
 }
