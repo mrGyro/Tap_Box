@@ -103,8 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa88d07d10c4f30b6ab03520fb84552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderers:
-  - {fileID: 5205659266403309170}
+  renderer: {fileID: 0}
   waitBeforeDissolve: 0
   dissolveSpeed: 1
   dissolveCurve:
@@ -208,6 +207,10 @@ MonoBehaviour:
       y: 0
       z: 0
     Rotation:
+      x: 1
+      y: 1
+      z: 1
+    Size:
       x: 0
       y: 0
       z: 0

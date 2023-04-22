@@ -1,5 +1,10 @@
+using System.Linq;
 using Boxes.Reactions;
 using Cysharp.Threading.Tasks;
+using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.Compilation;
 using UnityEngine;
 
 namespace Boxes.BigBoxTapFlowBox
@@ -75,7 +80,7 @@ namespace Boxes.BigBoxTapFlowBox
             {
                 bigBoxPart.UpdateArrayPosition();
             }
-            
+
             boxe.Data.ArrayPosition = boxePositions[0].ArrayPosition;
         }
     }

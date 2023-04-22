@@ -81,7 +81,9 @@ namespace UI.Skins
             {
                 case CurrencyController.Type.Coin:
                     if (!GameManager.Instance.Progress.Currencies.ContainsKey(data.WayToGet))
+                    {
                         return;
+                    }
 
                     if (GameManager.Instance.Progress.Currencies[data.WayToGet] >= data.Price)
                     {
@@ -95,7 +97,9 @@ namespace UI.Skins
                 case CurrencyController.Type.RewardedAds:
 
                     if (!GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
+                    {
                         return;
+                    }
 
                     Messenger<string>.AddListener(Constants.Events.OnRewardedVideoReward, OnRewardedDone);
                     GameManager.Instance.Mediation.Show(Constants.Ads.Rewarded, _skinButton + data.SkinAddressableName);
@@ -103,7 +107,9 @@ namespace UI.Skins
                     return;
                 case CurrencyController.Type.InterstitialAds:
                     if (!GameManager.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
+                    {
                         return;
+                    }
 
                     GameManager.Instance.Mediation.Show(Constants.Ads.Interstitial, _skinButton + data.SkinAddressableName);
                     BuySkin();
