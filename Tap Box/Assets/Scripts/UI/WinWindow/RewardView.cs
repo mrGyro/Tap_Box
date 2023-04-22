@@ -23,7 +23,6 @@ namespace UI.WinWindow
         {
             var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.IsRandom && !skin.IsOpen);
 
-            Debug.LogError(randomSkin == null);
             var rewardType = randomSkin == null ? CurrencyController.Type.Coin : setting.RewardType;
             _getSprite = await AssetProvider.LoadAssetAsync<Sprite>(rewardType + "_icon");
             _notGetSprite = await AssetProvider.LoadAssetAsync<Sprite>(rewardType + "_notGet");

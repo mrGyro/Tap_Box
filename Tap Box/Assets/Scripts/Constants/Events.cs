@@ -12,5 +12,9 @@
         
         public static string OnBackgroundSpriteChanged = "OnBackgroundSpriteChanged";
         public static string OnBackgroundMaterialChanged = "OnBackgroundMaterialChanged";
+        
+        
+        public static string OnTapSkinChanged = "OnTapSkinChanged";
+        public static string OnTapShow = "OnTapShow";
     }
 }

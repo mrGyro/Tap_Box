@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Boxes;
+using Core.MessengerStatic;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace;
 using Lean.Touch;
@@ -64,16 +65,17 @@ public class InputController : MonoBehaviour
 
         if (box == null)
             return;
+        
 
         _nativeVibration.Vibrate(30);
 
         box.BoxReactionStart();
         GameManager.Instance.GameField.GetTurnsCount--;
-        Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnBoxClicked);
+        Messenger.Broadcast(Constants.Events.OnBoxClicked);
         if (GameManager.Instance.GameField.IsNotWinCondition())
         {
             GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
-            Core.MessengerStatic.Messenger.Broadcast(Constants.Events.OnGameLoose);
+            Messenger.Broadcast(Constants.Events.OnGameLoose);
         }
     }
     
@@ -81,9 +83,16 @@ public class InputController : MonoBehaviour
     {
         var hit = RaycastBox(screenPosition, _layerMask);
         if (hit.collider == null)
+        {
             return null;
+        }
         
         var box = hit.collider.GetComponent<BaseBox>();
+
+        if (box != null)
+        {
+            Messenger<Vector3>.Broadcast(Constants.Events.OnTapShow, hit.point);
+        }
 
         return box == null ? null : box;
     }

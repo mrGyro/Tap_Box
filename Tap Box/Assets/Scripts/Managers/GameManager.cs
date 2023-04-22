@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using System.Linq;
 using Ads;
 using Currency;
 using LevelCreator;
 using PlayerLevel;
 using SaveLoad_progress;
+using Unity.VisualScripting;
 using UnityEngine;
+using VFX;
 
 namespace Managers
 {
@@ -20,6 +23,7 @@ namespace Managers
         public PlayerLevelManager PlayerLevelManager;
         public Mediation Mediation;
         public SkinsManager SkinsManager;
+        [SerializeField] private TapEffectController _tapEffectController;
 
         private async void Awake()
         {
@@ -46,6 +50,7 @@ namespace Managers
             LoadLevelById(Progress.LastStartedLevelID);
             Mediation.Initialize();
             SkinsManager.Initialize();
+            _tapEffectController.Initialize();
         }
 
         public async void SaveLevel(LevelData level)

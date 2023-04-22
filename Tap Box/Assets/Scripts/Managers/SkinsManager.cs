@@ -24,9 +24,16 @@ namespace Managers
 
         public async void ChangeTapSkin(string key)
         {
-            
+            var x = await AssetProvider.LoadAssetAsync<GameObject>($"{key}");
+            Messenger<GameObject>.Broadcast(Constants.Events.OnTapSkinChanged, x);
         }
         
+        public async UniTask<GameObject> GetTapSkin()
+        {
+            var x = await AssetProvider.LoadAssetAsync<GameObject>($"{GameManager.Instance.Progress.CurrentTapSkin}");
+            return x;
+        }
+
         public async UniTask ChangeBackgroundSkin(string key)
         {
             if (AssetProvider.AddressableResourceExists(key, typeof(Sprite)))
@@ -35,7 +42,7 @@ namespace Managers
                 Messenger<Sprite>.Broadcast(Constants.Events.OnBackgroundSpriteChanged, x);
                 GameManager.Instance.Progress.CurrentBackgroundSkin = key;
             }
-                    
+
             if (AssetProvider.AddressableResourceExists(key, typeof(Material)))
             {
                 var x = await AssetProvider.LoadAssetAsync<Material>($"{key}");
@@ -43,14 +50,14 @@ namespace Managers
                 GameManager.Instance.Progress.CurrentBackgroundSkin = key;
             }
         }
-        
+
         public void SetBackgroundSkinSprite(Image bg)
         {
             if (_currentSpriteBg == null)
             {
                 bg.sprite = _currentSpriteBg;
             }
-            
+
             if (_currentMaterialBg == null)
             {
                 bg.material = _currentMaterialBg;
