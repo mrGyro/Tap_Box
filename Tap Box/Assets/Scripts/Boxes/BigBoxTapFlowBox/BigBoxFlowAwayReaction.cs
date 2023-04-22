@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Boxes.Reactions;
+using Core.MessengerStatic;
 using Cysharp.Threading.Tasks;
 using Managers;
 using UnityEngine;
@@ -58,6 +59,9 @@ namespace Boxes.BigBoxTapFlowBox
                 boxCollider.enabled = false;
             }
 
+            Vector3 size = ((BoxCollider)colliders[0]).size;
+            Messenger<Transform, Vector3>.Broadcast(Constants.Events.OnTailStart, transform.GetChild(0), size);
+
             var isPlayDie = false;
             var startPos = _parent.position;
             while (Vector3.Distance(_parent.position, startPos) < _distanse)
@@ -92,17 +96,18 @@ namespace Boxes.BigBoxTapFlowBox
                     case BaseBox.BlockType.TapFlowBox:
                     case BaseBox.BlockType.RotateRoadBox:
                     case BaseBox.BlockType.SwipedBox:
-                         distance = Vector3.Distance(box.transform.position, currentBoxPart.transform.position);
+                        distance = Vector3.Distance(box.transform.position, currentBoxPart.transform.position);
                         if (minDistance > distance)
                         {
                             minDistance = distance;
                             nearestBox = currentBoxPart;
                         }
+
                         break;
                     case BaseBox.BlockType.BigBoxTapFlowBox:
                         foreach (var currentBigBoxPart in bigBox.GetBoxPositions())
                         {
-                             distance = Vector3.Distance(currentBigBoxPart.transform.position, currentBoxPart.transform.position);
+                            distance = Vector3.Distance(currentBigBoxPart.transform.position, currentBoxPart.transform.position);
                             if (minDistance > distance)
                             {
                                 minDistance = distance;
@@ -112,9 +117,8 @@ namespace Boxes.BigBoxTapFlowBox
 
                         break;
                 }
-               
             }
-            
+
             while (true)
             {
                 distance = Vector3.Distance(nearestBox.transform.position, box.transform.position);

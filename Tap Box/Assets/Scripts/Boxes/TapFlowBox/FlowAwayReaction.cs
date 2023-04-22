@@ -1,4 +1,5 @@
 using Boxes.Reactions;
+using Core.MessengerStatic;
 using Cysharp.Threading.Tasks;
 using Managers;
 using UnityEngine;
@@ -43,6 +44,8 @@ namespace Boxes.TapFlowBox
 
         private async UniTask MoveOut()
         {
+            Messenger<Transform, Vector3>.Broadcast(Constants.Events.OnTailStart, transform.GetChild(0), ((BoxCollider)_collider).size);
+
             _collider.enabled = false;
             var isPlayDie = false;
             var startPos = _parent.position;

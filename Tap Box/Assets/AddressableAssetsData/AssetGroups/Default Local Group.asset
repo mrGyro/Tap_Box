@@ -193,6 +193,14 @@ MonoBehaviour:
     m_Address: Default2_tap
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 16b28c4561f7bac4baaeb8b22d0e5415
+    m_Address: Default2_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 624c3dafe13e11d4b9593cec922968c0
+    m_Address: Default_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d2092fe1ab8035d4192c7661d5d020b3, type: 2}
   m_SchemaSet:

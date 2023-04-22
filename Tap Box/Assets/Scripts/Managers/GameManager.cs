@@ -37,19 +37,20 @@ namespace Managers
             }
 
             await Progress.Load();
+            SkinsManager.Initialize();
+            UIManager.Initialize();
 
             GameField.Initialize();
             PlayerLevelManager.Initialize();
-            UIManager.Initialize();
 
             Progress.LastStartedLevelID =
                 string.IsNullOrEmpty(Progress.LastStartedLevelID)
                     ? GetNextLevelId()
                     : Progress.LastStartedLevelID;
+            
 
             LoadLevelById(Progress.LastStartedLevelID);
             Mediation.Initialize();
-            SkinsManager.Initialize();
             _tapEffectController.Initialize();
         }
 

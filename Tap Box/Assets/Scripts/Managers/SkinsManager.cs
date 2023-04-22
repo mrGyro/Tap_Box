@@ -13,13 +13,31 @@ namespace Managers
 
         private Sprite _currentSpriteBg;
         private Material _currentMaterialBg;
+        private GameObject _currentTail;
+        private ParticleSystem _currentTailParticles;
 
-        public void Initialize()
+        public async void Initialize()
         {
             Messenger<Sprite>.AddListener(Constants.Events.OnBackgroundSpriteChanged, OnBackgroundChanged);
             Messenger<Material>.AddListener(Constants.Events.OnBackgroundMaterialChanged, OnBackgroundChanged);
-            ChangeBackgroundSkin(GameManager.Instance.Progress.CurrentBackgroundSkin);
+            Messenger<Transform, Vector3>.AddListener(Constants.Events.OnTailStart, CreateTail);
+
+            await ChangeBackgroundSkin(GameManager.Instance.Progress.CurrentBackgroundSkin);
             ChangeTapSkin(GameManager.Instance.Progress.CurrentTapSkin);
+            ChangeTailSkin(GameManager.Instance.Progress.CurrentTailSkin);
+        }
+
+        private void CreateTail(Transform arg1, Vector3 arg2)
+        {
+            if (_currentTailParticles == null)
+                return;
+
+            var shape = _currentTailParticles.shape;
+            shape.scale = arg2;
+
+            GameObject x = Object.Instantiate(_currentTail, arg1);
+            x.transform.localPosition = Vector3.zero;
+            x.transform.LookAt(arg1.transform.position - arg1.transform.parent.forward * 10);
         }
 
         public async void ChangeTapSkin(string key)
@@ -27,7 +45,15 @@ namespace Managers
             var x = await AssetProvider.LoadAssetAsync<GameObject>($"{key}");
             Messenger<GameObject>.Broadcast(Constants.Events.OnTapSkinChanged, x);
         }
-        
+
+        public async void ChangeTailSkin(string key)
+        {
+            GameManager.Instance.Progress.CurrentTailSkin = key;
+            var x = await AssetProvider.LoadAssetAsync<GameObject>($"{key}");
+            _currentTail = x;
+            _currentTailParticles = x.GetComponent<ParticleSystem>();
+        }
+
         public async UniTask<GameObject> GetTapSkin()
         {
             var x = await AssetProvider.LoadAssetAsync<GameObject>($"{GameManager.Instance.Progress.CurrentTapSkin}");
@@ -39,15 +65,15 @@ namespace Managers
             if (AssetProvider.AddressableResourceExists(key, typeof(Sprite)))
             {
                 var x = await AssetProvider.LoadAssetAsync<Sprite>($"{key}");
-                Messenger<Sprite>.Broadcast(Constants.Events.OnBackgroundSpriteChanged, x);
                 GameManager.Instance.Progress.CurrentBackgroundSkin = key;
+                OnBackgroundChanged(x);
             }
 
             if (AssetProvider.AddressableResourceExists(key, typeof(Material)))
             {
                 var x = await AssetProvider.LoadAssetAsync<Material>($"{key}");
-                Messenger<Material>.Broadcast(Constants.Events.OnBackgroundMaterialChanged, x);
                 GameManager.Instance.Progress.CurrentBackgroundSkin = key;
+                OnBackgroundChanged(x);
             }
         }
 
@@ -66,11 +92,11 @@ namespace Managers
 
         public void AddBackground(Image bg)
         {
-            if (_backgrounds == null)
-            {
-                _backgrounds = new List<Image>();
-            }
+            _backgrounds ??= new List<Image>();
 
+            if (_backgrounds.Exists(x => x == bg))
+                return;
+            
             _backgrounds.Add(bg);
         }
 

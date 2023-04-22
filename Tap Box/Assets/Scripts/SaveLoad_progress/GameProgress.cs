@@ -31,7 +31,7 @@ namespace SaveLoad_progress
         public string CurrentBoxSkin;
         public string CurrentBackgroundSkin;
         public string CurrentTapSkin;
-        [FormerlySerializedAs("CurrentTrailSkin")] public string CurrentTailSkin;
+        public string CurrentTailSkin;
 
         public Dictionary<CurrencyController.Type, int> Currencies;
 
@@ -164,36 +164,6 @@ namespace SaveLoad_progress
             await GameManager.Instance.GameField.ChangeSkin();
         }
         
-        public async UniTask ChangeBackground(string name)
-        {
-            if (CurrentBackgroundSkin == name)
-            {
-                return;
-            }
-            
-            CurrentBackgroundSkin = name;
-            GameManager.Instance.SkinsManager.ChangeBackgroundSkin(name);
-        }
-        
-        public async UniTask ChangeTap(string name)
-        {
-            if (CurrentTapSkin == name)
-            {
-                return;
-            }
-            
-            CurrentTapSkin = name;
-            GameManager.Instance.SkinsManager.ChangeTapSkin(name);
-        }
-        
-        public async UniTask ChangeTrail(string name)
-        {
-            if (CurrentTailSkin == name)
-                return;
-            CurrentTailSkin = name;
-            //await GameManager.Instance.SkinsManager.t();
-        }
-
         private async UniTask<List<string>> LoadLevelsName()
         {
             List<string> result = new List<string>();

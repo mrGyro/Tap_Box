@@ -29,6 +29,7 @@ public class WinWindow : PopUpBase
         Priority = 1;
         GameManager.Instance.SkinsManager.AddBackground(_background);
         GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
+        Debug.LogError("-----");
     }
 
     public override async void Show()

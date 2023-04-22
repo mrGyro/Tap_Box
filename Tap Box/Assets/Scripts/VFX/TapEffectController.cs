@@ -32,7 +32,5 @@ namespace VFX
             Messenger<GameObject>.RemoveListener(Constants.Events.OnTapSkinChanged, OnTapSkinChanged);
             Messenger<Vector3>.RemoveListener(Constants.Events.OnTapShow, OnTapShow);
         }
-
-
     }
 }

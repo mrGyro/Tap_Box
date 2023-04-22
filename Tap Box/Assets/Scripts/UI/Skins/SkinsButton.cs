@@ -128,6 +128,8 @@ namespace UI.Skins
                     await GameManager.Instance.Progress.Save();
                     break;
                 case CurrencyController.Type.TailSkin:
+                    GameManager.Instance.SkinsManager.ChangeTailSkin(data.SkinAddressableName);
+                    await GameManager.Instance.Progress.Save();
                     break;
                 case CurrencyController.Type.TapSkin:
                     GameManager.Instance.SkinsManager.ChangeTapSkin(data.SkinAddressableName);

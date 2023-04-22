@@ -16,5 +16,9 @@
         
         public static string OnTapSkinChanged = "OnTapSkinChanged";
         public static string OnTapShow = "OnTapShow";
+        
+        public static string OnTailSkinChanged = "OnTailSkinChanged";
+        public static string OnTailStart = "OnTailStart";
+
     }
 }
