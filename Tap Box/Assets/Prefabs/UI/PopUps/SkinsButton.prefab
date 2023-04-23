@@ -104,7 +104,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2966394368520667575}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -176,10 +176,11 @@ MonoBehaviour:
   getTypeIcon: {fileID: 2966394368325174987}
   getTypeText: {fileID: 2966394369088190498}
   data:
-    Type: 0
-    Price: 20
+    WayToGet: 0
+    Type: 1
+    Price: 0
     SkinAddressableName: Default
-    IsOpen: 0
+    IsOpen: 1
     IsRandom: 0
 --- !u!114 &2966394368520667570
 MonoBehaviour:
@@ -439,14 +440,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.3446331, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 32ca7b2777dccb840bc51ef93d0d4532, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 75957692ff3444047a413ad65022528d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
