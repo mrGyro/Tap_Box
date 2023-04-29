@@ -2,7 +2,6 @@
 using Boxes;
 using Managers;
 using Unity.VisualScripting;
-using UnityEngine;
 
 namespace PlayerLevel
 {

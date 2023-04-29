@@ -25,7 +25,7 @@ public class WinWindow : PopUpBase
 
     private List<RewardViewSetting> _settings;
     private float _sliderProgressTarget;
-    private bool _reset = false;
+    private bool _reset;
 
     public override void Initialize()
     {
@@ -68,7 +68,7 @@ public class WinWindow : PopUpBase
 
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
         float duration = 20f;
-        float startTime = Time.time;;
+        float startTime = Time.time;
         while (progress.value < _sliderProgressTarget)
         {
             var t = (Time.time - startTime) / duration;
@@ -141,16 +141,31 @@ public class WinWindow : PopUpBase
 
     private void GetCoinsRewardInLastSlot()
     {
+        ProgressToEnd();
         var settings = GameManager.Instance.CurrencyController.GetRewardSettings();
         var max = settings.Max(x => x.RewardCount) * 1.5f;
         var rewardCount = (GameManager.Instance.GameField.GetCountOfReward() / 100) * max;
         GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, (int)rewardCount);
+        goNextButton.gameObject.SetActive(true);
+    }
+
+    private async void ProgressToEnd()
+    {
+        float duration = 10f;
+        float startTime = Time.time;
+        while (progress.value < progress.maxValue)
+        {
+            var t = (Time.time - startTime) / duration;
+            await UniTask.WaitForEndOfFrame(this);
+            progress.value = Mathf.SmoothStep(progress.value, progress.maxValue, t);
+        }
     }
 
     private void OnRewardAdClick()
     {
         _getForAds.gameObject.SetActive(false);
         _loseButton.gameObject.SetActive(false);
+        ProgressToEnd();
 
         if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
         {
@@ -177,7 +192,7 @@ public class WinWindow : PopUpBase
         var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen);
         GameManager.Instance.CurrencyController.AddSkin(randomSkin.WayToGet, randomSkin.Type, randomSkin.SkinAddressableName);
         Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, randomSkin.WayToGet, randomSkin.SkinAddressableName);
-
+        ProgressToEnd();
         goNextButton.gameObject.SetActive(true);
     }
 
