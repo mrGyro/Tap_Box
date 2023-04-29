@@ -273,7 +273,6 @@ GameObject:
   - component: {fileID: 8907119704302382425}
   - component: {fileID: 2333014821350021467}
   - component: {fileID: 1936299510584508802}
-  - component: {fileID: 9198415322698549358}
   m_Layer: 5
   m_Name: SmalRewardView
   m_TagString: Untagged
@@ -297,10 +296,10 @@ RectTransform:
   m_Father: {fileID: 6114497864728293383}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8907119704302382425
 CanvasRenderer:
@@ -355,23 +354,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 5, y: -5}
   m_UseGraphicAlpha: 1
---- !u!114 &9198415322698549358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2624784868593710841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 092e49436c5d404db4f9097f98b8aa6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  image: {fileID: 0}
-  rewardProgressImage: {fileID: 0}
-  reward: {fileID: 0}
-  rewardPercents: {fileID: 0}
-  VFX: {fileID: 0}
 --- !u!1 &4096731155450441340
 GameObject:
   m_ObjectHideFlags: 0
@@ -5381,7 +5363,6 @@ GameObject:
   - component: {fileID: 6114497864728293383}
   - component: {fileID: 6114497864728293400}
   - component: {fileID: 6114497864728293401}
-  - component: {fileID: 6114497864728293382}
   - component: {fileID: 1659770883483298965}
   m_Layer: 5
   m_Name: SmalRewardView
@@ -5450,21 +5431,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6114497864728293382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6114497864728293380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 5, y: -5}
-  m_UseGraphicAlpha: 1
 --- !u!114 &1659770883483298965
 MonoBehaviour:
   m_ObjectHideFlags: 0

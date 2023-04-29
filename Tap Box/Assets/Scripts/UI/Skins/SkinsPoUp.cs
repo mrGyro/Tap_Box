@@ -67,7 +67,6 @@ namespace UI.Skins
                     SkinAddressableName = forCopy.SkinAddressableName,
                     WayToGet = forCopy.WayToGet,
                     Type = forCopy.Type,
-                    IsRandom = forCopy.IsRandom
                 });
             }
             else

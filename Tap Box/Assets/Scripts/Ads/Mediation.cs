@@ -61,7 +61,13 @@ namespace Ads
         }
 
         public bool IsReady(string adType)
-            => _adElements.ContainsKey(adType) && _adElements[adType].IsReady.Value;
+        {
+#if UNITY_EDITOR
+            return true;
+#endif 
+          
+            return _adElements.ContainsKey(adType) && _adElements[adType].IsReady.Value;
+        } 
 
         private async void LoadAddCycle()
         {

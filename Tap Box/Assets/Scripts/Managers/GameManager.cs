@@ -78,6 +78,7 @@ namespace Managers
 
         public float GetWinProgress()
         {
+            return 25;
             return GameField.GetCurrentLevelID() == "1" ? 8 : Random.Range(10, 20);
         }
 

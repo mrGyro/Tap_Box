@@ -14,6 +14,7 @@ namespace UI.Skins
     {
         [SerializeField] private Button button;
         [SerializeField] private GameObject getTypeGameObject;
+        [SerializeField] private GameObject _uunounBg;
         [SerializeField] private Image icon;
         [SerializeField] private Image getTypeBg;
         [SerializeField] private Image getTypeIcon;
@@ -35,7 +36,10 @@ namespace UI.Skins
             getTypeGameObject.SetActive(!data.IsOpen);
 
             if (data.IsOpen)
+            {
+                _uunounBg.SetActive(false);
                 return;
+            }
 
             switch (data.WayToGet)
             {
@@ -65,6 +69,9 @@ namespace UI.Skins
                         _isReady = interstitialAd.IsReady.Subscribe(OnSiReadyStatusChanged);
                     }
 
+                    break;
+                case CurrencyController.Type.RandomSkin:
+                    _uunounBg.SetActive(true);
                     break;
             }
         }
@@ -121,8 +128,6 @@ namespace UI.Skins
 
         private async UniTask ChangeSkin()
         {
-            Debug.LogError("---" + data.Type);
-
             switch (data.Type)
             {
                 case CurrencyController.Type.BoxSkin:
@@ -142,8 +147,6 @@ namespace UI.Skins
                     await GameManager.Instance.Progress.Save();
                     break;
             }
-            
-            
         }
 
         private async void OnRewardedDone(string value)

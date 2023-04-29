@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Core.MessengerStatic;
 using Currency;
 using Cysharp.Threading.Tasks;
 using DefaultNamespace.Managers;
@@ -15,13 +16,16 @@ public class WinWindow : PopUpBase
     [SerializeField] private Image _background;
     [SerializeField] private Slider progress;
     [SerializeField] private Button goNextButton;
+    [SerializeField] private Button _getForAds;
     [SerializeField] private GameObject winVFX;
+    [SerializeField] private Button _loseButton;
     [SerializeField] private GameObject winCoinVFX;
     [SerializeField] private List<RewardView> rewardViews;
     [SerializeField] private CurrencyCounter _currencyCounter;
 
     private List<RewardViewSetting> _settings;
     private float _sliderProgressTarget;
+    private bool _reset = false;
 
     public override void Initialize()
     {
@@ -29,7 +33,8 @@ public class WinWindow : PopUpBase
         Priority = 1;
         GameManager.Instance.SkinsManager.AddBackground(_background);
         GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
-        Debug.LogError("-----");
+
+        Messenger<string>.AddListener(Constants.Events.OnRewardedVideoReward, OnRewardedAdDone);
     }
 
     public override async void Show()
@@ -51,7 +56,7 @@ public class WinWindow : PopUpBase
         Setup();
 
         await MakeProgress();
-        goNextButton.interactable = true;
+        goNextButton.gameObject.SetActive(true);
     }
 
     private async UniTask MakeProgress()
@@ -62,13 +67,14 @@ public class WinWindow : PopUpBase
         var nearestPercent = SetNextNearestPercent();
 
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
-
-        var yVelocity = 0f;
+        float duration = 20f;
+        float startTime = Time.time;;
         while (progress.value < _sliderProgressTarget)
         {
+            var t = (Time.time - startTime) / duration;
             await UniTask.WaitForEndOfFrame(this);
-            progress.value = Mathf.SmoothDamp(progress.value, nearestPercent.Percent + 1, ref yVelocity, 2);
-
+            progress.value = Mathf.SmoothStep(progress.value, nearestPercent.Percent + 1, t);
+            //progress.value = Mathf.SmoothDamp(progress.value, nearestPercent.Percent + 1, ref yVelocity, 2);
             if (progress.value > nearestPercent.Percent)
             {
                 await GetRewardFromSettings(nearestPercent);
@@ -95,6 +101,7 @@ public class WinWindow : PopUpBase
 
     private async UniTask GiveReward(RewardViewSetting settings)
     {
+        Debug.LogError(settings.RewardType);
         switch (settings.RewardType)
         {
             case CurrencyController.Type.Coin:
@@ -102,26 +109,76 @@ public class WinWindow : PopUpBase
                 await UniTask.WaitUntil(_currencyCounter.IsAnimationComplete);
                 break;
             case CurrencyController.Type.RandomSkin:
+                Debug.LogError(settings.RewardType);
+
                 GetSkinRandomSkin();
                 break;
         }
     }
 
-    private void GetSkinRandomSkin()
+    private async void GetSkinRandomSkin()
     {
-        var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.IsRandom && !skin.IsOpen);
-        var settings = GameManager.Instance.CurrencyController.GetRewardSettings();
-        
-        if (randomSkin == null) 
+        if (!GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded) && !GameManager.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
         {
-            var max = settings.Max(x => x.RewardCount) * 1.5f;
-            var rewardCount = (GameManager.Instance.GameField.GetCountOfReward() / 100) * max;
-            GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, (int)rewardCount);
+            _getForAds.gameObject.SetActive(false);
             return;
         }
 
+        var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen);
+
+        if (randomSkin == null)
+        {
+            GetCoinsRewardInLastSlot();
+        }
+        else
+        {
+            _reset = true;
+            _getForAds.gameObject.SetActive(true);
+            await UniTask.Delay(1000);
+            _loseButton.gameObject.SetActive(true);
+        }
+    }
+
+    private void GetCoinsRewardInLastSlot()
+    {
+        var settings = GameManager.Instance.CurrencyController.GetRewardSettings();
+        var max = settings.Max(x => x.RewardCount) * 1.5f;
+        var rewardCount = (GameManager.Instance.GameField.GetCountOfReward() / 100) * max;
+        GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, (int)rewardCount);
+    }
+
+    private void OnRewardAdClick()
+    {
+        _getForAds.gameObject.SetActive(false);
+        _loseButton.gameObject.SetActive(false);
+
+        if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
+        {
+            Debug.LogError("----show r");
+            GameManager.Instance.Mediation.Show(Constants.Ads.Rewarded, ID);
+            return;
+        }
+
+        if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
+        {
+            Debug.LogError("----show i");
+            GameManager.Instance.Mediation.Show(Constants.Ads.Interstitial, ID);
+            return;
+        }
+    }
+
+    private void OnRewardedAdDone(string placeId)
+    {
+        if (placeId != ID)
+        {
+            return;
+        }
+
+        var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen);
         GameManager.Instance.CurrencyController.AddSkin(randomSkin.WayToGet, randomSkin.Type, randomSkin.SkinAddressableName);
-        Core.MessengerStatic.Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, randomSkin.WayToGet, randomSkin.SkinAddressableName);
+        Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, randomSkin.WayToGet, randomSkin.SkinAddressableName);
+
+        goNextButton.gameObject.SetActive(true);
     }
 
     private float GetPercents()
@@ -153,21 +210,6 @@ public class WinWindow : PopUpBase
             return _settings[0];
         }
 
-        // var setting = _settings.FirstOrDefault(x => x.Percent >= progress.value);
-        // if (setting == null)
-        // {
-        //     progress.value = progress.minValue;
-        //     _sliderProgressTarget -= progress.maxValue;
-        //     SetNextIndex(0);
-        //
-        //     for (var i = 0; i < _settings.Count; i++)
-        //     {
-        //         rewardViews[i].SetTokState(progress.value >= _settings[i].Percent);
-        //     }
-        //
-        //     return _settings[0];
-        // }
-
         var x = _settings.IndexOf(setting);
         SetNextIndex(x);
         Debug.Log("------------" + x);
@@ -183,15 +225,44 @@ public class WinWindow : PopUpBase
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
     }
 
+    private void OnClose()
+    {
+        GameManager.Instance.LoadNextLevel();
+        GameManager.Instance.UIManager.ClosePopUp(ID);
+
+        if (_reset)
+        {
+            ResetToDefault();
+            _reset = false;
+        }
+    }
+
+    private void ResetToDefault()
+    {
+        progress.value = 0;
+        for (var i = 0; i < _settings.Count; i++)
+        {
+            rewardViews[i].SetTokState(false);
+            rewardViews[i].SetActiveReward(false);
+        }
+
+        GameManager.Instance.Progress.CurrentWinWindowsProgress = 0;
+        GameManager.Instance.Progress.NextRewardIndexWinWindow = 0;
+    }
+
     private async void Setup()
     {
-        goNextButton.interactable = false;
+        goNextButton.gameObject.SetActive(false);
         goNextButton.onClick.RemoveAllListeners();
-        goNextButton.onClick.AddListener(() =>
-        {
-            GameManager.Instance.LoadNextLevel();
-            GameManager.Instance.UIManager.ClosePopUp(ID);
-        });
+        goNextButton.onClick.AddListener(OnClose);
+
+        _getForAds.onClick.RemoveAllListeners();
+        _getForAds.onClick.AddListener(OnRewardAdClick);
+        _getForAds.gameObject.SetActive(false);
+
+        _loseButton.onClick.RemoveAllListeners();
+        _loseButton.onClick.AddListener(OnClose);
+        _loseButton.gameObject.SetActive(false);
 
         var scrollRect = progress.GetComponent<RectTransform>();
 
@@ -202,10 +273,11 @@ public class WinWindow : PopUpBase
         _sliderProgressTarget = GameManager.Instance.Progress.CurrentWinWindowsProgress;
         _sliderProgressTarget += GameManager.Instance.GetWinProgress();
 
-        for (var i = _settings.Count; i < _settings.Count; i++)
+        for (var i = 0; i < _settings.Count; i++)
         {
             rewardViews[i].SetActiveObject(false);
             rewardViews[i].SetActiveVFX(false);
+            rewardViews[i].SetActiveReward(false);
         }
 
         for (var i = 0; i < _settings.Count; i++)

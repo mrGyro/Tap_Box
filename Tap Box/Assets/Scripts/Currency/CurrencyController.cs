@@ -56,7 +56,6 @@ namespace Currency
                 SkinAddressableName = value,
                 WayToGet = wayToGet,
                 Type = type,
-                IsRandom = false
             });
         } 
 

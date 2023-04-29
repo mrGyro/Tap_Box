@@ -21,7 +21,7 @@ namespace UI.WinWindow
 
         public async UniTask Setup(RewardViewSetting setting)
         {
-            var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.IsRandom && !skin.IsOpen);
+            var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen);
 
             var rewardType = randomSkin == null ? CurrencyController.Type.Coin : setting.RewardType;
             _getSprite = await AssetProvider.LoadAssetAsync<Sprite>(rewardType + "_icon");
