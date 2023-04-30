@@ -1,6 +1,7 @@
 using Currency;
 using DefaultNamespace.Managers;
 using Managers;
+using Sounds;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +17,6 @@ namespace UI
 
         public override void Initialize()
         {
-            GameManager.Instance.SkinsManager.AddBackground(_background);
-            GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
             ID = Constants.PopUps.NewLevelPopUp;
             Priority = 100;
             GameManager.Instance.PlayerLevelManager.OnLevelChanged += LevelChanged;
@@ -27,6 +26,7 @@ namespace UI
 
         public override async void Show()
         {
+            GameManager.Instance.SoundManager.Play(new ClipDataMessage() { Id = Constants.Sounds.UI.NewLevelWindowShow, SoundType = SoundData.SoundType.UI });
             gameObject.SetActive(true);
             await _currencyCounter.UpdateLayout();
         }

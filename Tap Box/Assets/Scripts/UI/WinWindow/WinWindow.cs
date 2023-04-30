@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using DefaultNamespace.Managers;
 using DefaultNamespace.UI.WinWindow;
 using Managers;
+using Sounds;
 using UI;
 using UI.WinWindow;
 using UnityEngine;
@@ -31,9 +32,6 @@ public class WinWindow : PopUpBase
     {
         ID = Constants.PopUps.WinPopUp;
         Priority = 1;
-        GameManager.Instance.SkinsManager.AddBackground(_background);
-        GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
-
         Messenger<string>.AddListener(Constants.Events.OnRewardedVideoReward, OnRewardedAdDone);
     }
 
@@ -50,6 +48,7 @@ public class WinWindow : PopUpBase
 
     private async void Setup()
     {
+        GameManager.Instance.SoundManager.Play(new ClipDataMessage() { Id = Constants.Sounds.UI.WinWindowShow, SoundType = SoundData.SoundType.UI });
         goNextButton.gameObject.SetActive(false);
         goNextButton.onClick.RemoveAllListeners();
         goNextButton.onClick.AddListener(OnClose);
@@ -214,7 +213,7 @@ public class WinWindow : PopUpBase
         _getForAds.gameObject.SetActive(false);
         _loseButton.gameObject.SetActive(false);
         ProgressToEnd();
-        
+
         if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
         {
             GameManager.Instance.Mediation.Show(Constants.Ads.Rewarded, ID);

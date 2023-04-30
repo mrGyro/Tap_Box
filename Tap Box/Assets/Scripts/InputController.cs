@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using DefaultNamespace;
 using Lean.Touch;
 using Managers;
+using Sounds;
 using UnityEngine;
 
 public class InputController : MonoBehaviour
@@ -68,6 +69,7 @@ public class InputController : MonoBehaviour
         
 
         _nativeVibration.Vibrate(30);
+        GameManager.Instance.SoundManager.Play(new ClipDataMessage() { Id = Constants.Sounds.Game.TapOnBox, SoundType = SoundData.SoundType.Game });
 
         box.BoxReactionStart();
         GameManager.Instance.GameField.GetTurnsCount--;

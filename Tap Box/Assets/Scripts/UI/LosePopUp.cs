@@ -1,5 +1,6 @@
 ﻿using DefaultNamespace.Managers;
 using Managers;
+using Sounds;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,9 +18,6 @@ namespace UI
         [SerializeField] private TMP_Text _tapToCloseText;
         public override void Initialize()
         {
-            GameManager.Instance.SkinsManager.AddBackground(_background);
-            GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
-
             ID = Constants.PopUps.LosePopUp;
             Priority = 100;
             _closePopup.onClick.RemoveAllListeners();
@@ -40,6 +38,7 @@ namespace UI
 
         public override void Show()
         {
+            GameManager.Instance.SoundManager.Play(new ClipDataMessage() { Id = Constants.Sounds.UI.LoseWindowShow, SoundType = SoundData.SoundType.UI });
             gameObject.SetActive(true);
         }
 

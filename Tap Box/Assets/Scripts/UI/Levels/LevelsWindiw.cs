@@ -18,8 +18,6 @@ public class LevelsWindiw : PopUpBase
         ID = Constants.PopUps.LevelListPopUp;
         Priority = 1;
         CreateLevelButtons();
-        GameManager.Instance.SkinsManager.AddBackground(_background);
-        GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
     }
 
     public override void Close()

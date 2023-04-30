@@ -22,8 +22,6 @@ namespace UI.Skins
         {
             Setup();
             Messenger<CurrencyController.Type, string>.AddListener(Constants.Events.OnGetRandomSkin, OnGetRandomSkin);
-            GameManager.Instance.SkinsManager.AddBackground(_background);
-            GameManager.Instance.SkinsManager.SetBackgroundSkinSprite(_background);
         }
 
         private void OnGetRandomSkin(CurrencyController.Type arg1, string arg2)

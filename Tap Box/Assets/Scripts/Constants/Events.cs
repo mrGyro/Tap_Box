@@ -24,4 +24,22 @@
 
 
     }
+
+    public static class Sounds
+    {
+        public static class UI
+        {
+            public static string WinWindowShow = "WinWindowShow";
+            public static string LoseWindowShow = "LoseWindowShow";
+            public static string NewLevelWindowShow = "NewLevelWindowShow";
+        }
+        
+        public static class Game
+        {
+            public static string TapOnBox = "TapOnBox";
+
+        }
+
+        
+    }
 }

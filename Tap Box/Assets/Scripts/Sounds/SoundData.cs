@@ -10,7 +10,7 @@ namespace Sounds
         public enum SoundType
         {
             None,
-            Taps,
+            Game,
             Collisions,
             BackgroundMusic,
             UI
