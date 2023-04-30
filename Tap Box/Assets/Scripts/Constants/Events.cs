@@ -19,6 +19,9 @@
         
         public static string OnTailSkinChanged = "OnTailSkinChanged";
         public static string OnTailStart = "OnTailStart";
+        
+        public static string OnPlaySound = "OnPlaySound";
+
 
     }
 }

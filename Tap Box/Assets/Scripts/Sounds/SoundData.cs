@@ -18,7 +18,9 @@ namespace Sounds
 
         public SoundType TypeOfSound;
         public AudioSource AudioSource;
+        public ClipsDictionary Dictionary;
 
-        public List<AudioClip> Clips;
     }
+
+
 }
