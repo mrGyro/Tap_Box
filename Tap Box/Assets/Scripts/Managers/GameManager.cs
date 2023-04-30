@@ -4,6 +4,7 @@ using Currency;
 using LevelCreator;
 using PlayerLevel;
 using SaveLoad_progress;
+using Sounds;
 using UnityEngine;
 using VFX;
 
@@ -21,6 +22,7 @@ namespace Managers
         public PlayerLevelManager PlayerLevelManager;
         public Mediation Mediation;
         public SkinsManager SkinsManager;
+        public SoundController SoundManager;
         [SerializeField] private TapEffectController _tapEffectController;
 
         private async void Awake()

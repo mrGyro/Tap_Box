@@ -11,10 +11,14 @@ namespace Sounds
         {
             None,
             Taps,
-            Collisions
+            Collisions,
+            BackgroundMusic,
+            UI
         }
 
         public SoundType TypeOfSound;
+        public AudioSource AudioSource;
+
         public List<AudioClip> Clips;
     }
 }
