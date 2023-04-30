@@ -42,12 +42,15 @@ namespace Managers
 
         public async void ChangeTapSkin(string key)
         {
+            GameManager.Instance.Progress.CurrentTapSkin = key;
             var x = await AssetProvider.LoadAssetAsync<GameObject>($"{key}");
             Messenger<GameObject>.Broadcast(Constants.Events.OnTapSkinChanged, x);
         }
 
         public async void ChangeTailSkin(string key)
         {
+            GameManager.Instance.Progress.CurrentTailSkin = key;
+
             GameManager.Instance.Progress.CurrentTailSkin = key;
             var x = await AssetProvider.LoadAssetAsync<GameObject>($"{key}");
             _currentTail = x;

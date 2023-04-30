@@ -12,11 +12,13 @@ namespace UI.Skins
 {
     public class SkinsButton : MonoBehaviour
     {
+        private static Action OnSelectionChanged;
         [SerializeField] private Button button;
         [SerializeField] private GameObject getTypeGameObject;
         [SerializeField] private GameObject _uunounBg;
         [SerializeField] private Image icon;
         [SerializeField] private Image getTypeBg;
+        [SerializeField] private Image _selector;
         [SerializeField] private Image getTypeIcon;
         [SerializeField] private TMP_Text getTypeText;
         [Space] [SerializeField] private SkinData data;
@@ -32,12 +34,13 @@ namespace UI.Skins
         {
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(OnClick);
-            
-            getTypeGameObject.SetActive(!data.IsOpen);
 
+            getTypeGameObject.SetActive(!data.IsOpen);
+            OnSelectionChanged += SetSelector;
             if (data.IsOpen)
             {
                 _uunounBg.SetActive(false);
+                SetSelector();
                 return;
             }
 
@@ -135,7 +138,7 @@ namespace UI.Skins
                     await GameManager.Instance.Progress.Save();
                     break;
                 case CurrencyController.Type.BackgroundSkin:
-                   await GameManager.Instance.SkinsManager.ChangeBackgroundSkin(data.SkinAddressableName);
+                    await GameManager.Instance.SkinsManager.ChangeBackgroundSkin(data.SkinAddressableName);
                     await GameManager.Instance.Progress.Save();
                     break;
                 case CurrencyController.Type.TailSkin:
@@ -147,6 +150,8 @@ namespace UI.Skins
                     await GameManager.Instance.Progress.Save();
                     break;
             }
+
+            OnSelectionChanged?.Invoke();
         }
 
         private async void OnRewardedDone(string value)
@@ -159,6 +164,25 @@ namespace UI.Skins
             BuySkin();
             Setup();
             await GameManager.Instance.Progress.Save();
+        }
+
+        public void SetSelector()
+        {
+            switch (data.Type)
+            {
+                case CurrencyController.Type.BoxSkin:
+                    _selector.enabled = data.SkinAddressableName == GameManager.Instance.Progress.CurrentBoxSkin;
+                    break;
+                case CurrencyController.Type.BackgroundSkin:
+                    _selector.enabled = data.SkinAddressableName == GameManager.Instance.Progress.CurrentBackgroundSkin;
+                    break;
+                case CurrencyController.Type.TailSkin:
+                    _selector.enabled = data.SkinAddressableName == GameManager.Instance.Progress.CurrentTailSkin;
+                    break;
+                case CurrencyController.Type.TapSkin:
+                    _selector.enabled = data.SkinAddressableName == GameManager.Instance.Progress.CurrentTapSkin;
+                    break;
+            }
         }
 
         private void OnSiReadyStatusChanged(bool value)
