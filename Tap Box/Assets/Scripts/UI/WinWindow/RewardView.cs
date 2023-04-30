@@ -30,6 +30,11 @@ namespace UI.WinWindow
             SetActiveVFX(false);
         }
 
+        public void SetRewardSprite(Sprite sprite)
+        {
+            rewardProgressImage.sprite = sprite;
+        }
+
         public void SetActiveObject(bool value)
         {
             gameObject.SetActive(value);

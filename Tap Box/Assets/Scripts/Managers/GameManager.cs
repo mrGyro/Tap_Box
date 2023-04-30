@@ -61,6 +61,7 @@ namespace Managers
 
         public void LoadNextLevel()
         {
+            Instance.SetActiveGlobalInput(false);
             LoadLevelById(GetNextLevelId());
         }
 
@@ -72,6 +73,7 @@ namespace Managers
 
             await Progress.Save();
             Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
+            Instance.SetActiveGlobalInput(true);
         }
 
         public float GetWinProgress()

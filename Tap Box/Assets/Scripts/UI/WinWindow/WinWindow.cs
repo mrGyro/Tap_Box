@@ -153,7 +153,6 @@ public class WinWindow : PopUpBase
 
     private async UniTask GiveReward(RewardViewSetting settings)
     {
-        Debug.LogError(settings.RewardType);
         switch (settings.RewardType)
         {
             case CurrencyController.Type.Coin:
@@ -186,14 +185,14 @@ public class WinWindow : PopUpBase
         _getForAds.gameObject.SetActive(true);
         await UniTask.Delay(1000);
         _loseButton.gameObject.SetActive(true);
-    } 
-    
+    }
+
     private void GetCoinsRewardInLastSlot()
     {
         ProgressToEnd();
         var settings = GameManager.Instance.CurrencyController.GetRewardSettings();
         var max = settings.Max(x => x.RewardCount) * 1.5f;
-        var rewardCount = (GameManager.Instance.GameField.GetCountOfReward() / 100) * max;
+        var rewardCount = (GameManager.Instance.GameField.GetCountOfReward() / 100f) * max;
         GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, (int)rewardCount);
         goNextButton.gameObject.SetActive(true);
     }
@@ -215,7 +214,7 @@ public class WinWindow : PopUpBase
         _getForAds.gameObject.SetActive(false);
         _loseButton.gameObject.SetActive(false);
         ProgressToEnd();
-
+        
         if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
         {
             GameManager.Instance.Mediation.Show(Constants.Ads.Rewarded, ID);
@@ -229,7 +228,7 @@ public class WinWindow : PopUpBase
         }
     }
 
-    private void OnRewardedAdDone(string placeId)
+    private async void OnRewardedAdDone(string placeId)
     {
         if (placeId != ID)
         {
@@ -241,6 +240,9 @@ public class WinWindow : PopUpBase
         Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, randomSkin.WayToGet, randomSkin.SkinAddressableName);
         ProgressToEnd();
         goNextButton.gameObject.SetActive(true);
+
+        var sprite = await AssetProvider.LoadAssetAsync<Sprite>(randomSkin.SkinAddressableName + "_icon");
+        rewardViews[^1].SetRewardSprite(sprite);
     }
 
     private float GetPercents()

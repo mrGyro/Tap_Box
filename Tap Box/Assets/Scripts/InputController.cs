@@ -7,7 +7,6 @@ using Lean.Touch;
 using Managers;
 using UnityEngine;
 
-
 public class InputController : MonoBehaviour
 {
     [SerializeField] Camera camera;
@@ -18,6 +17,7 @@ public class InputController : MonoBehaviour
     private int _layerMask;
     private const string GameFieldElement = "GameFieldElement";
     private AndroidNativeVibrationService _nativeVibration;
+    
     public void SetActiveInput(bool value)
     {
         LeanTouch.Fingers.Clear();
