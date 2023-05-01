@@ -19,7 +19,6 @@ namespace UI
         [SerializeField] private CurrencyCounter _currencyCounter;
         [SerializeField] private Transform _image;
 
-
         public override void Initialize()
         {
             ID = Constants.PopUps.NewLevelPopUp;
