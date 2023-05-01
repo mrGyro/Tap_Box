@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Currency;
 using Cysharp.Threading.Tasks;
 using Managers;
@@ -16,6 +17,8 @@ namespace UI
         [SerializeField] private Image icon;
         [SerializeField] private TMP_Text count;
         [SerializeField] private CurrencyController.Type type;
+        [SerializeField] private CoinsCounterObject animationObject;
+        [SerializeField] private int animationObjectCount;
 
         private int _targetValue = 0;
         private int _currentValue;
@@ -26,13 +29,33 @@ namespace UI
             icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{type}_icon");
             _currentValue = GameManager.Instance.CurrencyController.GetCurrency(type);
             count.text = _currentValue.ToString();
-            GameManager.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
+            //GameManager.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
             GameManager.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;
         }
 
         public bool IsAnimationComplete()
         {
             return _isAnimationCompleate;
+        }
+
+        public async void CoinsAnimation(Transform startPosition)
+        {
+            List<CoinsCounterObject> objects = new List<CoinsCounterObject>();
+            for (int i = 0; i < animationObjectCount; i++)
+            {
+                CoinsCounterObject x = Instantiate(animationObject, Vector3.zero, Quaternion.identity, startPosition);
+                x.transform.localPosition = Vector3.zero;
+                x.transform.SetParent(iconTransform);
+                x.transform.localScale = Vector3.zero;
+                objects.Add(x);
+            }
+
+            foreach (var VARIABLE in objects)
+            {
+                await UniTask.Delay(100);
+                VARIABLE.PlayScaleAnimation();
+                VARIABLE.PlayAnimation(iconTransform.position);
+            }
         }
 
         public async UniTask UpdateLayout()
@@ -52,19 +75,12 @@ namespace UI
             {
                 return;
             }
-
+            
             _isAnimationCompleate = false;
 
             _targetValue = newValue;
             await IncrementGold();
             _isAnimationCompleate = true;
-        }
-
-        private async void OnEnable()
-        {
-            Initialize();
-            await UniTask.Delay(50);
-           // UpdateLayout();
         }
 
         private void OnDisable()
@@ -74,12 +90,18 @@ namespace UI
 
         private async UniTask IncrementGold()
         {
+            int time = 50;
+            int differance = _targetValue - _currentValue;
+            if (differance < 100)
+            {
+                time = 100;
+            }
+            
             while (_targetValue >= _currentValue)
             {
                 count.text = _currentValue.ToString();
                 _currentValue++;
-                await UniTask.Delay(50);
-               // await UpdateLayout();
+                await UniTask.Delay(time);
             }
         }
     }

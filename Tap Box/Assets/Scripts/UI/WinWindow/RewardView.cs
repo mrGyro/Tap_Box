@@ -30,6 +30,11 @@ namespace UI.WinWindow
             SetActiveVFX(false);
         }
 
+        public Transform GetCurrencyRoot()
+        {
+            return rewardProgressImage.transform;
+        }
+
         public void SetRewardSprite(Sprite sprite)
         {
             rewardProgressImage.sprite = sprite;

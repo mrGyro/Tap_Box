@@ -1,4 +1,5 @@
 using Currency;
+using Cysharp.Threading.Tasks;
 using DefaultNamespace.Managers;
 using Managers;
 using Sounds;
@@ -13,7 +14,11 @@ namespace UI
         [SerializeField] private Image _background;
         [SerializeField] private Button button;
         [SerializeField] private TMP_Text _countOfReward;
+        [SerializeField] private GameObject _reward;
+        [SerializeField] private TMP_Text _levelText;
         [SerializeField] private CurrencyCounter _currencyCounter;
+        [SerializeField] private Transform _image;
+
 
         public override void Initialize()
         {
@@ -22,10 +27,13 @@ namespace UI
             GameManager.Instance.PlayerLevelManager.OnLevelChanged += LevelChanged;
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener((() => GameManager.Instance.UIManager.ClosePopUp(ID)));
+            _currencyCounter.Initialize();
+
         }
 
         public override async void Show()
         {
+            button.gameObject.SetActive(false);
             GameManager.Instance.SoundManager.Play(new ClipDataMessage() { Id = Constants.Sounds.UI.NewLevelWindowShow, SoundType = SoundData.SoundType.UI });
             gameObject.SetActive(true);
             await _currencyCounter.UpdateLayout();
@@ -36,11 +44,19 @@ namespace UI
             gameObject.SetActive(false);
         }
 
-        private void LevelChanged(int obj)
+        private async void LevelChanged(int obj)
         {
             int count = GameManager.Instance.GameField.GetCountOfReward() / 10;
+            _reward.SetActive(true);
             _countOfReward.text = $"+{count}";
-            GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, count);
+            _levelText.text = $"You get {obj} level";
+            await UniTask.Delay(1000);
+             _currencyCounter.CoinsAnimation(_image.transform);
+             await UniTask.Delay(500);
+             GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, count);
+             await UniTask.Delay(500);
+             button.gameObject.SetActive(true);
+
         }
 
         private void OnDestroy()

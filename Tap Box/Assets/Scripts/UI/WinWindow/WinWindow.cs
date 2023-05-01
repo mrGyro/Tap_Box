@@ -33,6 +33,7 @@ public class WinWindow : PopUpBase
         ID = Constants.PopUps.WinPopUp;
         Priority = 1;
         Messenger<string>.AddListener(Constants.Events.OnRewardedVideoReward, OnRewardedAdDone);
+        _currencyCounter.Initialize();
     }
 
     public override void Show()
@@ -142,7 +143,8 @@ public class WinWindow : PopUpBase
     {
         //TODO skin name 
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardPercentText(
-            nearestPercent.RewardType == CurrencyController.Type.RandomSkin ? "New skin" : nearestPercent.RewardType.ToString());
+            nearestPercent.RewardType == CurrencyController.Type.RandomSkin ? "New skin" : $"+{nearestPercent.RewardCount}");
+                //nearestPercent.RewardType.ToString());
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetTokState(true);
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetActiveVFX(true);
         winVFX.SetActive(true);
@@ -156,6 +158,9 @@ public class WinWindow : PopUpBase
         {
             case CurrencyController.Type.Coin:
                 GameManager.Instance.CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
+                await UniTask.Delay(1000);
+                _currencyCounter.CoinsAnimation(rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].GetCurrencyRoot());
+                await UniTask.Delay(500);
                 await UniTask.WaitUntil(_currencyCounter.IsAnimationComplete);
                 break;
             case CurrencyController.Type.RandomSkin:
