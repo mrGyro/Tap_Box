@@ -56,7 +56,7 @@ namespace UI
              GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, count);
              await UniTask.Delay(500);
              button.gameObject.SetActive(true);
-
+             await GameManager.Instance.Progress.Save();
         }
 
         private void OnDestroy()
