@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Sounds
@@ -19,8 +18,5 @@ namespace Sounds
         public SoundType TypeOfSound;
         public AudioSource AudioSource;
         public ClipsDictionary Dictionary;
-
     }
-
-
 }

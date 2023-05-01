@@ -10,6 +10,8 @@ namespace Sounds
         [SerializeField] private AudioListener _audioListener;
         [SerializeField] private List<SoundData> _soundData;
 
+        private SoundData _sound;
+        private List<ClipData> _clipDatas;
         public void Initialize()
         {
         }
@@ -26,7 +28,7 @@ namespace Sounds
                 case SoundData.SoundType.None:
                     break;
                 case SoundData.SoundType.Game:
-                    PlayOneOfMeny(data);
+                    PlayTap(data);
                     break;
                 case SoundData.SoundType.Collisions:
                     PlayOne(data);
@@ -40,23 +42,19 @@ namespace Sounds
             }
         }
 
-        private void PlayOneOfMeny(ClipDataMessage data)
+        private void PlayTap(ClipDataMessage data)
         {
-            var sound = _soundData.FirstOrDefault(x => x.TypeOfSound == data.SoundType);
-            if (sound == null)
+            _sound ??= _soundData.FirstOrDefault(x => x.TypeOfSound == data.SoundType);
+
+            if (_sound == null)
             {
                 return;
             }
 
-            var clips = sound.Dictionary.Clips.Where(x => x.Id == data.Id).ToList();
+            _clipDatas ??= _sound.Dictionary.Clips.Where(x => x.Id == data.Id).ToList();
 
-            if (clips.Count == 0)
-            {
-                return;
-            }
-
-            AudioClip clip = clips.Count == 1 ? clips[0].Clip : clips[Random.Range(0, clips.Count)].Clip;
-            sound.AudioSource.PlayOneShot(clip);
+            var clip = _clipDatas.Count == 1 ? _clipDatas[0].Clip : _clipDatas[Random.Range(0, _clipDatas.Count)].Clip;
+            _sound.AudioSource.PlayOneShot(clip);
         }
 
         private void PlayOne(ClipDataMessage data)
