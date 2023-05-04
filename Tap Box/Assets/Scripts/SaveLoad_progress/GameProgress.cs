@@ -32,6 +32,10 @@ namespace SaveLoad_progress
         public string CurrentBackgroundSkin;
         public string CurrentTapSkin;
         public string CurrentTailSkin;
+        
+        public bool CurrentSoundSetting = true;
+        public bool CurrentVibroSetting = true;
+
 
         public Dictionary<CurrencyController.Type, int> Currencies;
 
@@ -59,6 +63,8 @@ namespace SaveLoad_progress
             CurrentBackgroundSkin = string.IsNullOrEmpty(progress.CurrentBackgroundSkin) ? "Default_bg" : progress.CurrentBackgroundSkin;
             CurrentTapSkin = string.IsNullOrEmpty(progress.CurrentTapSkin) ? "Default_tap" : progress.CurrentTapSkin;
             CurrentTailSkin = string.IsNullOrEmpty(progress.CurrentTailSkin) ? "Default_tail" : progress.CurrentTailSkin;
+            CurrentSoundSetting = progress.CurrentSoundSetting;
+            CurrentVibroSetting = progress.CurrentVibroSetting;
         }
 
         public async UniTask SaveGameProgress(GameProgress progress)

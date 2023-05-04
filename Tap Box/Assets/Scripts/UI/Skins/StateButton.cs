@@ -16,11 +16,15 @@ namespace UI.Skins
             SetState(!_state);
         }
 
+        public bool GetValue()
+        {
+            return _state;
+        }
+
         public void OnClickEvent()
         {
             OnClick?.Invoke(this, _state);
         }
-        
         
         public void SetState(bool value)
         {
@@ -28,7 +32,6 @@ namespace UI.Skins
             {
                 return;
             }
-            Debug.LogError(name + " " + value);
 
             _state = value;
             _defaultState.SetActive(!value);

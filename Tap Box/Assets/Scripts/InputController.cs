@@ -66,9 +66,8 @@ public class InputController : MonoBehaviour
 
         if (box == null)
             return;
-        
 
-        _nativeVibration.Vibrate(30);
+        Vibration();
         GameManager.Instance.SoundManager.Play(new ClipDataMessage() { Id = Constants.Sounds.Game.TapOnBox, SoundType = SoundData.SoundType.Game });
 
         box.BoxReactionStart();
@@ -79,6 +78,16 @@ public class InputController : MonoBehaviour
             GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
             Messenger.Broadcast(Constants.Events.OnGameLoose);
         }
+    }
+
+    private void Vibration()
+    {
+        if (!GameManager.Instance.Progress.CurrentVibroSetting)
+        {
+            return;
+        }
+        
+        _nativeVibration.Vibrate(30);
     }
     
     private BaseBox RaycastBox(Vector2 screenPosition)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Managers;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -18,11 +19,21 @@ namespace Sounds
 
         public void Play(ClipDataMessage data)
         {
+            if (!GameManager.Instance.Progress.CurrentSoundSetting)
+            {
+                return;
+            }
+            
             OnSoundPlay(data);
         }
 
         private void OnSoundPlay(ClipDataMessage data)
         {
+            if (!GameManager.Instance.Progress.CurrentSoundSetting)
+            {
+                return;
+            }
+            
             switch (data.SoundType)
             {
                 case SoundData.SoundType.None:
