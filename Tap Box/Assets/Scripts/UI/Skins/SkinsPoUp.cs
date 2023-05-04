@@ -17,6 +17,7 @@ namespace UI.Skins
         [SerializeField] private List<SkinsButton> _backgroundsSkinsButtons;
         [SerializeField] private List<SkinsButton> _tailButtons;
         [SerializeField] private List<SkinsButton> _tapButtons;
+        [SerializeField] private List<StateButton> _topButtons;
 
         public override void Initialize()
         {
@@ -31,10 +32,24 @@ namespace UI.Skins
 
         private void Setup()
         {
+            foreach (var button in _topButtons)
+            {
+                button.Initialize();
+                button.OnClick += OnTopButtonStateChanged;
+            }
+
             SetPage(_boxesSkinsButtons);
             SetPage(_backgroundsSkinsButtons);
             SetPage(_tailButtons);
             SetPage(_tapButtons);
+        }
+
+        private void OnTopButtonStateChanged(StateButton arg1, bool arg2)
+        {
+            foreach (var button in _topButtons)
+            {
+                button.SetState(button == arg1);
+            }
         }
 
         private void SetPage(List<SkinsButton> buttons)
