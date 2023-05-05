@@ -2,6 +2,7 @@ using DefaultNamespace.Managers;
 using Managers;
 using UI.Skins;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI.Settings
@@ -13,7 +14,7 @@ namespace UI.Settings
         [SerializeField] private StateButton _soundButton;
         [SerializeField] private StateButton _vibrationButton;
         [SerializeField] private Button _restoreButton;
-        [SerializeField] private Button _privaceButton;
+        [SerializeField] private Button _privacyButton;
 
         public override void Initialize()
         {
@@ -26,7 +27,7 @@ namespace UI.Settings
             _soundButton.OnClick += OnSoundClick;
             _vibrationButton.OnClick += OnVibrationClick;
             _restoreButton.onClick.AddListener(OnRestoreClick);
-            _privaceButton.onClick.AddListener(OnPrvaciClick);
+            _privacyButton.onClick.AddListener(OnPrivacyClick);
             
             _soundButton.SetState(GameManager.Instance.Progress.CurrentSoundSetting);
             _vibrationButton.SetState(GameManager.Instance.Progress.CurrentVibroSetting);
@@ -54,8 +55,9 @@ namespace UI.Settings
         {
         }
         
-        private void OnPrvaciClick()
+        private void OnPrivacyClick()
         {
+            Application.OpenURL("https://www.mindom.com.ua/privacy-policy/");
         }
 
         public override async void Show()
