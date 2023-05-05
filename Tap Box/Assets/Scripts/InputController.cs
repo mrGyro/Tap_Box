@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Boxes;
 using Core.MessengerStatic;
@@ -18,6 +19,7 @@ public class InputController : MonoBehaviour
     private int _layerMask;
     private const string GameFieldElement = "GameFieldElement";
     private AndroidNativeVibrationService _nativeVibration;
+    private Vector3 _newTarget;
     
     public void SetActiveInput(bool value)
     {
@@ -31,12 +33,30 @@ public class InputController : MonoBehaviour
         _layerMask = LayerMask.GetMask(GameFieldElement);
         _zoom.SetZomValue(100);
         _rotate.SetActive(false);
+        _newTarget = Vector3.zero;
+        MoveCameraTarget();
+    }
+
+    private async UniTask MoveCameraTarget()
+    {
+        while (true)
+        {
+            await UniTask.WaitForEndOfFrame(this);
+            Vector3 newPosition = Vector3.Lerp(_rotate.GetTargetPosition(), _newTarget, 0.01f);
+            _rotate.SetTargetPosition(newPosition);
+        }
+    }
+
+    public void SetCameraTarget(Vector3 targetPosition)
+    {
+        _newTarget = targetPosition;
     }
 
     public async void SetStartLevelSettings(Vector3 targetPosition, Vector3 cameraPosition)
     {
         _rotate.SetActive(false);
-        _rotate.SetTargetPosition(targetPosition);
+        SetCameraTarget(targetPosition);
+        //_rotate.SetTargetPosition(targetPosition);
         _rotate.SetStartPosition(cameraPosition);
         await UniTask.WaitForEndOfFrame(this);
         _rotate.SetActive(true);
@@ -71,6 +91,8 @@ public class InputController : MonoBehaviour
         GameManager.Instance.SoundManager.Play(new ClipDataMessage() { Id = Constants.Sounds.Game.TapOnBox, SoundType = SoundData.SoundType.Game });
 
         box.BoxReactionStart();
+        _newTarget = GameManager.Instance.GameField.GetNewCenter();
+
         GameManager.Instance.GameField.GetTurnsCount--;
         Messenger.Broadcast(Constants.Events.OnBoxClicked);
         if (GameManager.Instance.GameField.IsNotWinCondition())

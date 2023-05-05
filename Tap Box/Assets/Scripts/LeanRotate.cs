@@ -77,6 +77,11 @@ namespace DefaultNamespace
             _centr.position = position;
         }
 
+        public Vector3 GetTargetPosition()
+        {
+            return _centr.position;
+        }
+
         private void SetDistanceToTarget(float distance)
         {
             distanceToTarget = distance;

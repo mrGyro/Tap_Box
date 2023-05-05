@@ -27,7 +27,6 @@ namespace UI
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener((() => GameManager.Instance.UIManager.ClosePopUp(ID)));
             _currencyCounter.Initialize();
-
         }
 
         public override async void Show()

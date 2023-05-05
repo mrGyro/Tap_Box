@@ -38,11 +38,12 @@ public class GameField : MonoBehaviour, IInitializable
     {
         return _data.Reward;
     }
-    
+
     public string GetCurrentLevelID()
     {
         return _data.ID;
     }
+
     public async UniTask LoadLevelByName(string levelName)
     {
         await CreateLevel(levelName);
@@ -61,25 +62,31 @@ public class GameField : MonoBehaviour, IInitializable
             return;
         }
 
-        SetNewMaxMinSize();
+        //S SetNewMaxMinSize();
     }
 
-    private void SetNewCameraTargetPosition(Vector3 cameraPosition)
+    private void SetNewCameraTargetPosition(Vector3 target, Vector3 cameraPosition)
     {
+        GameManager.Instance.InputController.SetStartLevelSettings(target, cameraPosition);
+    }
+
+    public Vector3 GetNewCenter()
+    {
+        SetNewMaxMinSize();
         Vector3 newPosition = new Vector3(
             _maxLevelSize.x - (_maxLevelSize.x + Mathf.Abs(_minLevelSize.x)) / 2,
             _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
             _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
 
-        GameManager.Instance.InputController.SetStartLevelSettings(newPosition, cameraPosition);
+        return newPosition;
     }
 
 
     public bool IsNotWinCondition()
     {
-        return GetTurnsCount == 0 && _boxes.Count != 0; 
-
+        return GetTurnsCount == 0 && _boxes.Count != 0;
     }
+
     public bool ExistBox(Vector3 boxArrayPosition)
     {
         return _boxes.Exists(x => x.Data.ArrayPosition.ToVector3() == boxArrayPosition);
@@ -201,7 +208,6 @@ public class GameField : MonoBehaviour, IInitializable
         return result.Count == 0 ? null : result;
     }
 
-
     private void ClearGameField()
     {
         for (int i = _boxes.Count - 1; i >= 0; i--)
@@ -215,9 +221,9 @@ public class GameField : MonoBehaviour, IInitializable
     private async UniTask CreateLevel(string levelName)
     {
         _data = await GameManager.Instance.Progress.LoadLevelData(levelName);
+        SetNewCameraTargetPosition(Vector3.zero, _data.CameraPosition.ToVector3());
 
         var level = GameManager.Instance.Progress.LevelDatas.FirstOrDefault(x => x.ID == GameManager.Instance.Progress.LastStartedLevelID);
-
         if (level != null && level.Data != null)
         {
             await CreateBoxes(level.Data);
@@ -228,8 +234,8 @@ public class GameField : MonoBehaviour, IInitializable
         }
 
         SetNewMaxMinSize();
-        SetNewCameraTargetPosition(_data.CameraPosition.ToVector3());
         GetTurnsCount = _boxes.Count + AddedTurns();
+        GameManager.Instance.InputController.SetCameraTarget(GetNewCenter());
     }
 
     private int AddedTurns()
@@ -291,8 +297,8 @@ public class GameField : MonoBehaviour, IInitializable
 
     private void SetNewMaxMinSize()
     {
-        _maxLevelSize = Vector3.negativeInfinity;
-        _minLevelSize = Vector3.positiveInfinity;
+        _maxLevelSize = _boxes.Count == 0 ? Vector3.zero : _boxes[0].Data.ArrayPosition;
+        _minLevelSize = _boxes.Count == 0 ? Vector3.zero : _boxes[0].Data.ArrayPosition;
         foreach (var baseBox in _boxes)
         {
             switch (baseBox.Data.Type)
