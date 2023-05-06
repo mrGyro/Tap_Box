@@ -2,7 +2,6 @@ using DefaultNamespace.Managers;
 using Managers;
 using UI.Skins;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI.Settings

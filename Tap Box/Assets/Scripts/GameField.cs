@@ -73,10 +73,14 @@ public class GameField : MonoBehaviour, IInitializable
     public Vector3 GetNewCenter()
     {
         SetNewMaxMinSize();
-        Vector3 newPosition = new Vector3(
-            _maxLevelSize.x - (_maxLevelSize.x + Mathf.Abs(_minLevelSize.x)) / 2,
-            _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
-            _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
+        Debug.DrawLine(_minLevelSize, _maxLevelSize, Color.magenta, 10);
+        float x = _maxLevelSize.x + (_minLevelSize.x - _maxLevelSize.x) / 2;
+        float y = _maxLevelSize.y + (_minLevelSize.y - _maxLevelSize.y) / 2;
+        float z = _maxLevelSize.z + (_minLevelSize.z - _maxLevelSize.z) / 2;
+        Vector3 newPosition = new Vector3(x, y, z);
+            // _maxLevelSize.x - (_maxLevelSize.x + Mathf.Abs(_minLevelSize.x)) / 2,
+            // _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
+            // _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
 
         return newPosition;
     }

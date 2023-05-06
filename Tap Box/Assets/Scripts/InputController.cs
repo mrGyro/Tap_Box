@@ -56,7 +56,6 @@ public class InputController : MonoBehaviour
     {
         _rotate.SetActive(false);
         SetCameraTarget(targetPosition);
-        //_rotate.SetTargetPosition(targetPosition);
         _rotate.SetStartPosition(cameraPosition);
         await UniTask.WaitForEndOfFrame(this);
         _rotate.SetActive(true);

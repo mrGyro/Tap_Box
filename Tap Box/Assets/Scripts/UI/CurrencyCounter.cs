@@ -29,7 +29,6 @@ namespace UI
             icon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{type}_icon");
             _currentValue = GameManager.Instance.CurrencyController.GetCurrency(type);
             count.text = _currentValue.ToString();
-            //GameManager.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
             GameManager.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;
         }
 
@@ -83,10 +82,10 @@ namespace UI
             _isAnimationCompleate = true;
         }
 
-        private void OnDisable()
-        {
-            GameManager.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
-        }
+        // private void OnDisable()
+        // {
+        //     GameManager.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
+        // }
 
         private async UniTask IncrementGold()
         {

@@ -14,7 +14,7 @@ using UnityEngine.UI;
 
 public class WinWindow : PopUpBase
 {
-    [SerializeField] private Image _background;
+    [SerializeField] private WinWindowSmileAnimation _smile;
     [SerializeField] private Slider progress;
     [SerializeField] private Button goNextButton;
     [SerializeField] private Button _getForAds;
@@ -39,10 +39,12 @@ public class WinWindow : PopUpBase
     public override void Show()
     {
         SetActive(true);
+        _smile.Play();
     }
 
     public override void Close()
     {
+        _smile.Stop();
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(false);
         SetActive(false);
     }
@@ -143,8 +145,10 @@ public class WinWindow : PopUpBase
     {
         //TODO skin name 
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardPercentText(
-            nearestPercent.RewardType == CurrencyController.Type.RandomSkin ? "New skin" : $"+{nearestPercent.RewardCount}");
-                //nearestPercent.RewardType.ToString());
+            nearestPercent.RewardType == CurrencyController.Type.RandomSkin 
+                ? "New skin" 
+                : $"+{nearestPercent.RewardCount}");
+        
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetTokState(true);
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetActiveVFX(true);
         winVFX.SetActive(true);
@@ -157,9 +161,10 @@ public class WinWindow : PopUpBase
         switch (settings.RewardType)
         {
             case CurrencyController.Type.Coin:
-                GameManager.Instance.CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
-                await UniTask.Delay(1000);
                 _currencyCounter.CoinsAnimation(rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].GetCurrencyRoot());
+                await UniTask.Delay(1000);
+                GameManager.Instance.CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
+
                 await UniTask.Delay(500);
                 await UniTask.WaitUntil(_currencyCounter.IsAnimationComplete);
                 break;
