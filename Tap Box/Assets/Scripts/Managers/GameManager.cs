@@ -1,5 +1,6 @@
 using System.Linq;
 using Ads;
+using Analytic;
 using Currency;
 using LevelCreator;
 using PlayerLevel;
@@ -23,6 +24,7 @@ namespace Managers
         public Mediation Mediation;
         public SkinsManager SkinsManager;
         public SoundController SoundManager;
+        public AnalyticManager AnalyticManager;
         [SerializeField] private TapEffectController _tapEffectController;
 
         private async void Awake()
@@ -35,7 +37,7 @@ namespace Managers
                 PlayerLevelManager = new PlayerLevelManager();
                 SkinsManager = new SkinsManager();
             }
-
+            AnalyticManager.Initialize();
             await Progress.Load();
             SkinsManager.Initialize();
             UIManager.Initialize();
