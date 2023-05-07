@@ -15,16 +15,38 @@ public class InputController : MonoBehaviour
     [SerializeField] LeanCameraZoom _zoom;
     [SerializeField] LeanRotate _rotate;
 
-    private bool _isEnable = true;
+    private bool _isTouchEnable = true;
+    private bool _isZoomEnable = true;
+    private bool _isSwipeEnable = true;
     private int _layerMask;
     private const string GameFieldElement = "GameFieldElement";
     private AndroidNativeVibrationService _nativeVibration;
     private Vector3 _newTarget;
     
-    public void SetActiveInput(bool value)
+    public void SetActiveAllInput(bool value)
     {
         LeanTouch.Fingers.Clear();
-        _isEnable = value;
+        _isTouchEnable = value;
+        _isZoomEnable = value;
+        _isSwipeEnable = value;
+    }
+    
+    public void SetActiveTouchInput(bool value)
+    {
+        LeanTouch.Fingers.Clear();
+        _isTouchEnable = value;
+    }
+    
+    public void SetActiveZoomInput(bool value)
+    {
+        LeanTouch.Fingers.Clear();
+        _isZoomEnable = value;
+    }
+    
+    public void SetActiveRotateInput(bool value)
+    {
+        LeanTouch.Fingers.Clear();
+        _isSwipeEnable = value;
     }
 
     private void Start()
@@ -67,18 +89,24 @@ public class InputController : MonoBehaviour
         {
             case 1:
             {
-                _rotate.Rotate(fingers);
+                if (_isSwipeEnable)
+                {
+                    _rotate.Rotate(fingers);
+                }
                 break;
             }
             case 2:
-                _zoom.SetZoom(fingers);
+                if (_isZoomEnable)
+                {
+                    _zoom.SetZoom(fingers);
+                }
                 break;
         }
     }
 
     private void HandleFingerTap(LeanFinger finger)
     {
-        if (!_isEnable)
+        if (!_isTouchEnable)
             return;
         
         var box = RaycastBox(finger.ScreenPosition);

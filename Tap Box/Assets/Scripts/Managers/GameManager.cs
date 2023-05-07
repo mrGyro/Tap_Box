@@ -25,6 +25,7 @@ namespace Managers
         public SkinsManager SkinsManager;
         public SoundController SoundManager;
         public AnalyticManager AnalyticManager;
+        public TutorialManager TutorialManager;
         [SerializeField] private TapEffectController _tapEffectController;
 
         private async void Awake()
@@ -37,6 +38,7 @@ namespace Managers
                 PlayerLevelManager = new PlayerLevelManager();
                 SkinsManager = new SkinsManager();
             }
+            TutorialManager.Initialize();
             AnalyticManager.Initialize();
             await Progress.Load();
             SkinsManager.Initialize();
@@ -65,7 +67,7 @@ namespace Managers
 
         public void LoadNextLevel()
         {
-            Instance.SetActiveGlobalInput(false);
+            Instance.InputController.SetActiveTouchInput(false);
             LoadLevelById(GetNextLevelId());
         }
 
@@ -77,18 +79,18 @@ namespace Managers
 
             await Progress.Save();
             Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
-            Instance.SetActiveGlobalInput(true);
+            Instance.InputController.SetActiveTouchInput(true);
         }
 
         public float GetWinProgress()
         {
-            return 25;
+            //return 25;
             return GameField.GetCurrentLevelID() == "1" ? 8 : Random.Range(10, 20);
         }
 
         public void SetActiveGlobalInput(bool value)
         {
-            InputController.SetActiveInput(value);
+            InputController.SetActiveAllInput(value);
         }
 
         private void UpdateLevel(LevelData level)

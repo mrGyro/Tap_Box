@@ -103,6 +103,7 @@ namespace UI
             {
                 count.text = _currentValue.ToString();
                 _currentValue++;
+                LayoutRebuilder.ForceRebuildLayoutImmediate(count.transform as RectTransform);
                 await UniTask.Delay(time);
             }
         }

@@ -1,0 +1,43 @@
+using System.Collections;
+using System.Collections.Generic;
+using Managers;
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class TutorialManager : MonoBehaviour, IInitializable
+{
+    [SerializeField] private TouchTutorial _touchTutorial;
+    [SerializeField] private TutorialRotate _rotateTutorial;
+
+    public void Initialize()
+    {
+        Core.MessengerStatic.Messenger<string>.AddListener(Constants.Events.OnLevelCreated, OnLEvelChanged);
+    }
+
+    private void OnLEvelChanged(string obj)
+    {
+        switch (obj)
+        {
+            case "1":
+                ShowFirstStage();
+                break;            
+            case "2":
+                ShowSecondStage();
+                break;
+        }
+    }
+
+    private void ShowFirstStage()
+    {
+        GameManager.Instance.InputController.SetActiveAllInput(false);
+        GameManager.Instance.InputController.SetActiveTouchInput(true);
+        _touchTutorial.gameObject.SetActive(true);
+    }    
+    
+    private void ShowSecondStage()
+    {
+        GameManager.Instance.InputController.SetActiveAllInput(false);
+        GameManager.Instance.InputController.SetActiveRotateInput(true);
+        _rotateTutorial.gameObject.SetActive(true);
+    }
+}
