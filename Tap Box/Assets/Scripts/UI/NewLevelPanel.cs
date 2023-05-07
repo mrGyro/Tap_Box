@@ -45,6 +45,8 @@ namespace UI
         private async void LevelChanged(int obj)
         {
             int count = GameManager.Instance.GameField.GetCountOfReward() / 10;
+            int minCountForLevel = 10;
+            count = Mathf.Clamp(count, minCountForLevel, int.MaxValue);
             _reward.SetActive(true);
             _countOfReward.text = $"+{count}";
             _levelText.text = $"You get {obj} level";

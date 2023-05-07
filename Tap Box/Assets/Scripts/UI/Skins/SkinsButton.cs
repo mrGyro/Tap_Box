@@ -194,7 +194,8 @@ namespace UI.Skins
         {
             data.IsOpen = true;
             GameManager.Instance.CurrencyController.AddSkin(data.WayToGet, data.Type, data.SkinAddressableName);
-            await GameManager.Instance.Progress.ChangeBlock(data.SkinAddressableName);
+            await ChangeSkin();
+            //await GameManager.Instance.Progress.ChangeBlock(data.SkinAddressableName);
         }
 
         private void OnDestroy()

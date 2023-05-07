@@ -78,20 +78,23 @@ namespace UI
             _isAnimationCompleate = false;
 
             _targetValue = newValue;
-            await IncrementGold();
+            if (newValue > _currentValue)
+            {
+                await IncrementGold();
+            }
+            else
+            {
+                _currentValue = GameManager.Instance.CurrencyController.GetCurrency(type);
+                count.text = _currentValue.ToString();
+            }
             _isAnimationCompleate = true;
         }
-
-        // private void OnDisable()
-        // {
-        //     GameManager.Instance.CurrencyController.OnCurrencyCountChanged -= CurrencyCountChanged;
-        // }
 
         private async UniTask IncrementGold()
         {
             int time = 50;
             int differance = _targetValue - _currentValue;
-            if (differance < 100)
+            if (differance < 20)
             {
                 time = 100;
             }
