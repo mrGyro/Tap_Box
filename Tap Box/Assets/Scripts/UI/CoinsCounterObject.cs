@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace UI
@@ -31,6 +32,11 @@ namespace UI
                 transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, t);
                 await UniTask.WaitForEndOfFrame(this);
             }
+        }
+
+        private void OnDisable()
+        {
+            Destroy(gameObject);
         }
     }
 }

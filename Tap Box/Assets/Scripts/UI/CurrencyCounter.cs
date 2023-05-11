@@ -49,11 +49,11 @@ namespace UI
                 objects.Add(x);
             }
 
-            foreach (var VARIABLE in objects)
+            foreach (var coinsCounterObject in objects)
             {
                 await UniTask.Delay(100);
-                VARIABLE.PlayScaleAnimation();
-                VARIABLE.PlayAnimation(iconTransform.position);
+                coinsCounterObject.PlayScaleAnimation();
+                coinsCounterObject.PlayAnimation(iconTransform.position);
             }
         }
 

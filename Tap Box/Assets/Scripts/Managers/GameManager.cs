@@ -78,8 +78,8 @@ namespace Managers
             await GameField.LoadLevelByName(Progress.LastStartedLevelID);
 
             await Progress.Save();
-            Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
             Instance.InputController.SetActiveTouchInput(true);
+            Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
         }
 
         public float GetWinProgress()
