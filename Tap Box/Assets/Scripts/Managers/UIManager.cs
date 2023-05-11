@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DefaultNamespace.Managers;
 using DefaultNamespace.UI.Popup;
 using Managers;
+using TMPro;
 using UI;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class UIManager : MonoBehaviour, IInitializable
     [SerializeField] private CurrencyCounter coinCounter;
     [SerializeField] private PlayerLevelUI playerLevelUI;
     [SerializeField] private TurnsLeftCounter turnsLeftCounter;
+    [SerializeField] private TMP_Text _currentLevelText;
 
     [SerializeField] private List<PopUpBase> popups;
     private List<PopUpBase> _popUpsQueue = new();
@@ -27,7 +29,16 @@ public class UIManager : MonoBehaviour, IInitializable
         turnsLeftCounter.Initialize();
 
         foreach (var variable in popups)
+        {
             variable.Initialize();
+        }
+        Core.MessengerStatic.Messenger<string>.AddListener(Constants.Events.OnLevelCreated, OnLevelChanged);
+        _currentLevelText.text = "Level " + GameManager.Instance.Progress.LastStartedLevelID;
+    }
+
+    private void OnLevelChanged(string obj)
+    {
+        _currentLevelText.text = "Level " + obj;
     }
 
     public void ShowTurns()
@@ -44,13 +55,24 @@ public class UIManager : MonoBehaviour, IInitializable
         AddToPopUpQueue(popup);
         ShowNext();
     }
+    
+    public void ShowUpToAllPopUp(string id)
+    {
+        var popup = popups.Find(x => x.ID == id);
+        if (popup == null)
+            return;
+        
+        
+        GameManager.Instance.SetActiveGlobalInput(false);
+        popup.Show();
+        popup.IsShowing = true;
+    }
 
     public void ClosePopUp(string id)
     {
         var popup = popups.Find(x => x.ID == id);
         if (popup == null)
             return;
-
 
         popup.Close();
         popup.IsShowing = false;
@@ -85,6 +107,5 @@ public class UIManager : MonoBehaviour, IInitializable
         GameManager.Instance.SetActiveGlobalInput(false);
         _popUpsQueue[^1].Show();
         _popUpsQueue[^1].IsShowing = true;
-
     }
 }

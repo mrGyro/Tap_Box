@@ -131,11 +131,17 @@ namespace UI.Skins
 
         private async UniTask ChangeSkin()
         {
+
             switch (data.Type)
             {
                 case CurrencyController.Type.BoxSkin:
+                    GameManager.Instance.UIManager.ShowUpToAllPopUp(Constants.PopUps.LoadingPopup);
+
+                    await UniTask.Delay(500);
                     await GameManager.Instance.Progress.ChangeBlock(data.SkinAddressableName);
                     await GameManager.Instance.Progress.Save();
+                    GameManager.Instance.UIManager.ClosePopUp(Constants.PopUps.LoadingPopup);
+                    
                     break;
                 case CurrencyController.Type.BackgroundSkin:
                     await GameManager.Instance.SkinsManager.ChangeBackgroundSkin(data.SkinAddressableName);
@@ -195,7 +201,6 @@ namespace UI.Skins
             data.IsOpen = true;
             GameManager.Instance.CurrencyController.AddSkin(data.WayToGet, data.Type, data.SkinAddressableName);
             await ChangeSkin();
-            //await GameManager.Instance.Progress.ChangeBlock(data.SkinAddressableName);
         }
 
         private void OnDestroy()

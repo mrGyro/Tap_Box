@@ -38,6 +38,7 @@ namespace Managers
                 PlayerLevelManager = new PlayerLevelManager();
                 SkinsManager = new SkinsManager();
             }
+            
             TutorialManager.Initialize();
             AnalyticManager.Initialize();
             await Progress.Load();
