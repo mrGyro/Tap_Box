@@ -44,6 +44,17 @@ namespace Boxes.BigBoxTapFlowBox
         {
             return boxePositions;
         }
+        
+        public Vector3[] GetBoxPositionsAsVectors()
+        {
+            Vector3[] array = new Vector3[boxePositions.Length];
+
+            for (int i = 0; i < boxePositions.Length; i++)
+            {
+                array[i] = boxePositions[i].ArrayPosition;
+            }
+            return array;
+        }
 
         public Vector3 GetNearestPosition(Vector3 checkPosition)
         {

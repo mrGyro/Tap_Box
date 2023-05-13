@@ -25,16 +25,10 @@ namespace Boxes.BigBoxTapFlowBox
 
             _isMove = true;
 
-            var boxes = _box as BigBoxTapFlowBox;
-            var positions = boxes.GetBoxPositions();
-            Vector3[] array = new Vector3[positions.Length];
+            var bigBoxTapFlowBox = _box as BigBoxTapFlowBox;
+            Vector3[] array = bigBoxTapFlowBox.GetBoxPositionsAsVectors();
 
-            for (int i = 0; i < positions.Length; i++)
-            {
-                array[i] = positions[i].ArrayPosition;
-            }
-
-            var box = GameManager.Instance.GameField.GetNearestBoxInDirection(array, _parent.forward, _box);
+            var box = GameManager.Instance.GameField.GetNearestBoxInDirection(array, GetDirection(), _box);
             if (box == null)
             {
                 GameManager.Instance.GameField.RemoveBox(_box);
@@ -45,6 +39,11 @@ namespace Boxes.BigBoxTapFlowBox
             {
                 await MoveToAndBack(box);
             }
+        }
+
+        public Vector3 GetDirection()
+        {
+            return _parent.forward;
         }
 
         private void OnDrawGizmosSelected()

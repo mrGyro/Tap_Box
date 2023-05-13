@@ -36,6 +36,11 @@ namespace Boxes.TapFlowBox
                 await MoveToAndBack(box);
             }
         }
+        
+        public Vector3 GetDirection()
+        {
+            return _parent.forward;
+        }
 
         private void OnDrawGizmosSelected()
         {

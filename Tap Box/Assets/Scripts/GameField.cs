@@ -85,7 +85,6 @@ public class GameField : MonoBehaviour, IInitializable
         return newPosition;
     }
 
-
     public bool IsNotWinCondition()
     {
         return GetTurnsCount == 0 && _boxes.Count != 0;

@@ -4,6 +4,7 @@ using System.Linq;
 using Boxes;
 using Boxes.BigBoxTapFlowBox;
 using Cysharp.Threading.Tasks;
+using LevelCreator.Validator;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ namespace LevelCreator
     {
         public static Action OnLevelChanged;
         [SerializeField] Camera camera;
+        [SerializeField] Button _validate;
         [SerializeField] float size;
         [SerializeField] Transform root;
         [SerializeField] Transform shadowBox;
@@ -44,7 +46,13 @@ namespace LevelCreator
             Cursor.visible = false;
             _currentTargetBox = null;
             OnLevelChanged += OnLevelChangedValidation;
+            _validate.onClick.AddListener(OnValidateAndHide);
             ShowRedColor();
+        }
+
+        private void OnValidateAndHide()
+        {
+            ValidatorController.HidePassed(Level);
         }
 
         private void Update()
@@ -350,6 +358,7 @@ namespace LevelCreator
             }
 
             OnLevelChanged?.Invoke();
+            //Validator.ValidatorController.Validate(Level);
         }
 
         private string GetAddressableName(BoxData box)
@@ -420,6 +429,7 @@ namespace LevelCreator
             return x == null ? null : Instantiate(x, root);
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         private void OnLevelChangedValidation()
         {
             foreach (var variable in _collisions)
@@ -455,7 +465,12 @@ namespace LevelCreator
             }
 
             if (_collisions.Count > 0)
+            {
                 Debug.LogError("Has collisions: " + _collisions.Count);
+            }
+
+            ValidatorController.Validate(Level);
+
         }
 
         private bool IsBlockCrossPosition(BaseBox box, BaseBox box2)
