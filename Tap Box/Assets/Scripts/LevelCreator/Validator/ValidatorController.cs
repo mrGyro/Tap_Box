@@ -73,9 +73,13 @@ namespace LevelCreator.Validator
             return level;
         }
 
-        private async static UniTask<BaseBox> GetNearestBoxInDirection(BaseBox[] boxes, Vector3[] boxArrayPosition, Vector3 direction, BaseBox currentBox)
+        private async static UniTask<BaseBox> GetNearestBoxInDirection(BaseBox[] level, Vector3[] boxArrayPosition, Vector3 direction, BaseBox currentBox)
         {
-            Vector3[] arrayPosition = boxArrayPosition;
+            Vector3[] arrayPosition = new Vector3[boxArrayPosition.Length];
+            for (int i = 0; i < boxArrayPosition.Length; i++)
+            {
+                arrayPosition[i] = boxArrayPosition[i];
+            }
 
             for (int i = 0; i < arrayPosition.Length; i++)
             {
@@ -94,7 +98,7 @@ namespace LevelCreator.Validator
                         return null;
                     }
 
-                    foreach (var variable in boxes)
+                    foreach (var variable in level)
                     {
                         bool isBoxInPosition = false;
                         switch (variable.Data.Type)
@@ -134,6 +138,7 @@ namespace LevelCreator.Validator
                 }
             }
 
+            Debug.LogError("----null");
             return null;
         }
 

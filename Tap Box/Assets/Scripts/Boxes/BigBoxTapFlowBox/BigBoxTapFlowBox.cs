@@ -89,7 +89,6 @@ namespace Boxes.BigBoxTapFlowBox
 
         public void UpdatePositions()
         {
-            Debug.LogError("+++++++++++++++++++++++");
             foreach (var bigBoxPart in boxePositions)
             {
                 bigBoxPart.UpdateArrayPosition();
