@@ -7,8 +7,8 @@ public class BigBoxPart : MonoBehaviour
 
     public void UpdateArrayPosition()
     {
-        ArrayPosition = new Vector3((transform.position.x / _size),
-            (transform.position.y / _size),
-            (transform.position.z / _size));
+        ArrayPosition = new Vector3(Mathf.Round((transform.position.x / _size)),
+            Mathf.Round((transform.position.y / _size)),
+            Mathf.Round((transform.position.z / _size)));
     }
 }

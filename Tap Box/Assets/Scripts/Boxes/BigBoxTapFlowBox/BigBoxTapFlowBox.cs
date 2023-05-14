@@ -18,13 +18,19 @@ namespace Boxes.BigBoxTapFlowBox
             await _reaction.ReactionEnd();
         }
 
-        public async override UniTask Init()
+        public override async UniTask Init()
         {
             await UniTask.Yield();
             foreach (var VARIABLE in boxePositions)
             {
                 VARIABLE.UpdateArrayPosition();
             }
+        }
+
+        [ContextMenu("Calculate Positions")]
+        private void CalculatePositions()
+        {
+            Init();
         }
 
         public override bool IsBoxInPosition(Vector3 position)
@@ -83,6 +89,7 @@ namespace Boxes.BigBoxTapFlowBox
 
         public void UpdatePositions()
         {
+            Debug.LogError("+++++++++++++++++++++++");
             foreach (var bigBoxPart in boxePositions)
             {
                 bigBoxPart.UpdateArrayPosition();

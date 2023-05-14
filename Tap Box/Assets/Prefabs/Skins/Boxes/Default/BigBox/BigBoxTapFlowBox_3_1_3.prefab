@@ -241,7 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 0, z: 2}
+  ArrayPosition: {x: 2, y: 0, z: 2}
 --- !u!33 &1191335913841187400
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1265,7 +1265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 0, z: 0}
+  ArrayPosition: {x: 2, y: 0, z: 0}
 --- !u!33 &1751730621564647779
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1362,7 +1362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 0, z: 1}
+  ArrayPosition: {x: 2, y: 0, z: 1}
 --- !u!33 &3351229120682612304
 MeshFilter:
   m_ObjectHideFlags: 0

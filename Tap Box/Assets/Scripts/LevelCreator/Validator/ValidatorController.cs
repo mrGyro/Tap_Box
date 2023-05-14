@@ -32,7 +32,6 @@ namespace LevelCreator.Validator
             SetNewMaxMinSize(copy);
 
             List<BaseBox> level = copy.ToList();
-            Debug.LogError("level.Count = " + level.Count);
 
             bool isBlockRemoved = true;
             while (isBlockRemoved)
