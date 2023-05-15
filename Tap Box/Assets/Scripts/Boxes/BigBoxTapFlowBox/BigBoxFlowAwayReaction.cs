@@ -79,23 +79,24 @@ namespace Boxes.BigBoxTapFlowBox
             Destroy(_parent.gameObject);
         }
 
-        private async UniTask MoveToAndBack(BaseBox box)
+        private async UniTask MoveToAndBack(BaseBox targetBaseBox)
         {
             var startPos = _parent.position;
-            var bigBox = box as BigBoxTapFlowBox;
-            var currentBox = _box as BigBoxTapFlowBox;
+            var currentBigBox = targetBaseBox as BigBoxTapFlowBox;
+            var currentBoxParts = currentBigBox.GetBoxPositions();
+
             BigBoxPart nearestBox = null;
             float minDistance = float.MaxValue;
             float distance;
-            foreach (var currentBoxPart in currentBox.GetBoxPositions())
+            foreach (var currentBoxPart in currentBoxParts)
             {
-                switch (box.Data.Type)
+                switch (targetBaseBox.Data.Type)
                 {
                     case BaseBox.BlockType.None:
                     case BaseBox.BlockType.TapFlowBox:
                     case BaseBox.BlockType.RotateRoadBox:
                     case BaseBox.BlockType.SwipedBox:
-                        distance = Vector3.Distance(box.transform.position, currentBoxPart.transform.position);
+                        distance = Vector3.Distance(targetBaseBox.transform.position, currentBoxPart.transform.position);
                         if (minDistance > distance)
                         {
                             minDistance = distance;
@@ -104,9 +105,11 @@ namespace Boxes.BigBoxTapFlowBox
 
                         break;
                     case BaseBox.BlockType.BigBoxTapFlowBox:
-                        foreach (var currentBigBoxPart in bigBox.GetBoxPositions())
+                        var targetBigBox = targetBaseBox as BigBoxTapFlowBox;
+                        var targetBoxParts = targetBigBox.GetBoxPositions();
+                        foreach (var targetBigBoxPart in targetBoxParts)
                         {
-                            distance = Vector3.Distance(currentBigBoxPart.transform.position, currentBoxPart.transform.position);
+                            distance = Vector3.Distance(targetBigBoxPart.transform.position, currentBoxPart.transform.position);
                             if (minDistance > distance)
                             {
                                 minDistance = distance;
@@ -120,7 +123,7 @@ namespace Boxes.BigBoxTapFlowBox
 
             while (true)
             {
-                distance = Vector3.Distance(nearestBox.transform.position, box.transform.position);
+                distance = Vector3.Distance(nearestBox.transform.position, targetBaseBox.transform.position);
                 if (distance < 1.03f)
                 {
                     break;

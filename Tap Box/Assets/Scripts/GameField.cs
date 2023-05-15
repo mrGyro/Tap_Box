@@ -78,9 +78,6 @@ public class GameField : MonoBehaviour, IInitializable
         float y = _maxLevelSize.y + (_minLevelSize.y - _maxLevelSize.y) / 2;
         float z = _maxLevelSize.z + (_minLevelSize.z - _maxLevelSize.z) / 2;
         Vector3 newPosition = new Vector3(x, y, z);
-            // _maxLevelSize.x - (_maxLevelSize.x + Mathf.Abs(_minLevelSize.x)) / 2,
-            // _maxLevelSize.y - (_maxLevelSize.y + Mathf.Abs(_minLevelSize.y)) / 2,
-            // _maxLevelSize.z - (_maxLevelSize.z + Mathf.Abs(_minLevelSize.z)) / 2);
 
         return newPosition;
     }
@@ -112,7 +109,7 @@ public class GameField : MonoBehaviour, IInitializable
         bool notOutOfRange = true;
         while (notOutOfRange)
         {
-            BaseBox box = null;
+            BaseBox nearestBoxInDirection = null;
 
             for (int i = 0; i < arrayPosition.Length; i++)
             {
@@ -122,19 +119,19 @@ public class GameField : MonoBehaviour, IInitializable
                     return null;
                 }
 
-                foreach (var variable in _boxes)
+                foreach (var box in _boxes)
                 {
                     bool isBoxInPosition = false;
-                    switch (variable.Data.Type)
+                    switch (box.Data.Type)
                     {
                         case BaseBox.BlockType.None:
                         case BaseBox.BlockType.TapFlowBox:
                         case BaseBox.BlockType.RotateRoadBox:
                         case BaseBox.BlockType.SwipedBox:
-                            isBoxInPosition = variable.IsBoxInPosition(arrayPosition[i]);
+                            isBoxInPosition = box.IsBoxInPosition(arrayPosition[i]);
                             break;
                         case BaseBox.BlockType.BigBoxTapFlowBox:
-                            var bigBox = (variable as BigBoxTapFlowBox);
+                            var bigBox = (box as BigBoxTapFlowBox);
                             if (bigBox != null)
                             {
                                 isBoxInPosition = bigBox.IsBoxInPosition(arrayPosition[i]);
@@ -143,17 +140,17 @@ public class GameField : MonoBehaviour, IInitializable
                             break;
                     }
 
-                    if (isBoxInPosition && currentBox != box)
+                    if (isBoxInPosition && currentBox != nearestBoxInDirection)
                     {
-                        box = variable;
+                        nearestBoxInDirection = box;
                         break;
                     }
                 }
             }
 
-            if (box != null && currentBox != box)
+            if (nearestBoxInDirection != null && currentBox != nearestBoxInDirection)
             {
-                return box;
+                return nearestBoxInDirection;
             }
 
             for (int i = 0; i < arrayPosition.Length; i++)
@@ -346,17 +343,17 @@ public class GameField : MonoBehaviour, IInitializable
 
     private bool CheckMaxLevelSize(Vector3 arrayPosition)
     {
-        if ((int)_maxLevelSize.x < (int)arrayPosition.x)
+        if ((int)_maxLevelSize.x + 1 < (int)arrayPosition.x)
         {
             return false;
         }
 
-        if ((int)_maxLevelSize.y < (int)arrayPosition.y)
+        if ((int)_maxLevelSize.y + 1 < (int)arrayPosition.y)
         {
             return false;
         }
 
-        if ((int)_maxLevelSize.z < (int)arrayPosition.z)
+        if ((int)_maxLevelSize.z + 1 < (int)arrayPosition.z)
         {
             return false;
         }
@@ -366,20 +363,21 @@ public class GameField : MonoBehaviour, IInitializable
 
     private bool CheckMinLevelSize(Vector3 arrayPosition)
     {
-        if ((int)_minLevelSize.x > (int)arrayPosition.x)
+        if ((int)_minLevelSize.x - 1 > (int)arrayPosition.x)
         {
             return false;
         }
 
-        if ((int)_minLevelSize.y > (int)arrayPosition.y)
+        if ((int)_minLevelSize.y - 1 > (int)arrayPosition.y)
         {
             return false;
         }
 
-        if ((int)_minLevelSize.z > (int)arrayPosition.z)
+        if ((int)_minLevelSize.z - 1 > (int)arrayPosition.z)
         {
             return false;
         }
+
 
         return true;
     }

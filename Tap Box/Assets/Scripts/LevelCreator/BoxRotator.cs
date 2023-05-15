@@ -66,8 +66,6 @@ namespace LevelCreator
 
         private void UpdatePosition()
         {
-            Debug.LogError("----UpdatePosition");
-
             if (_currentTargetBox.Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
             {
                 (_currentTargetBox as BigBoxTapFlowBox)?.UpdatePositions();
@@ -76,7 +74,6 @@ namespace LevelCreator
             
             (_currentTargetBox as BigBoxTapFlowBox)?.UpdatePositions();
             LevelCreator.OnLevelChanged?.Invoke();
-            Debug.LogError("----onchange");
         }
     }
 }

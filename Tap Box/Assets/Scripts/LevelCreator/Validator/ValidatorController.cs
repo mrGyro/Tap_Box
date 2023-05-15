@@ -20,7 +20,7 @@ namespace LevelCreator.Validator
             foreach (var VARIABLE in levelInput)
             {
                 if (result.Contains(VARIABLE))
-                    continue;   
+                    continue;
                 VARIABLE.gameObject.SetActive(false);
             }
         }
@@ -45,10 +45,11 @@ namespace LevelCreator.Validator
                     var bigBox = level[i] as BigBoxTapFlowBox;
                     if (bigBox != null)
                     {
-                        var reaction = bigBox.GetComponent<BigBoxFlowAwayReaction>();
-                        Vector3[] array = bigBox.GetBoxPositionsAsVectors();
-                        var boxForRemove = await GetNearestBoxInDirection(level.ToArray(), array, reaction.GetDirection(), level[i]);
-                        if (boxForRemove == null)
+                        // var reaction = bigBox.GetComponent<BigBoxFlowAwayReaction>();
+                        // Vector3[] array = bigBox.GetBoxPositionsAsVectors();
+                      //  var boxForRemove = await GetNearestBoxInDirection(level.ToArray(), array, reaction.GetDirection(), level[i]);
+                       // if (boxForRemove == null)
+                        if (IsBoxesInDirection(bigBox))
                         {
                             level.Remove(level[i]);
                             isBlockRemoved = true;
@@ -57,10 +58,11 @@ namespace LevelCreator.Validator
                     }
                     else
                     {
-                        var reaction = level[i].GetComponent<FlowAwayReaction>();
-                        var box = await GetNearestBoxInDirection(level.ToArray(), new[] { level[i].Data.ArrayPosition.ToVector3() }, reaction.GetDirection(), level[i]);
+                      //  var reaction = level[i].GetComponent<FlowAwayReaction>();
+                       // var box = await GetNearestBoxInDirection(level.ToArray(), new[] { level[i].Data.ArrayPosition.ToVector3() }, reaction.GetDirection(), level[i]);
 
-                        if (box == null)
+                      //  if (box == null)
+                        if (IsBoxesInDirection(level[i]))
                         {
                             level.Remove(level[i]);
                             isBlockRemoved = true;
@@ -71,6 +73,45 @@ namespace LevelCreator.Validator
             }
 
             return level;
+        }
+
+        private static bool IsBoxesInDirection(BaseBox box)
+        {
+            var bigBox = box as BigBoxTapFlowBox;
+            if (bigBox != null)
+            {
+                var reaction = bigBox.GetComponent<BigBoxFlowAwayReaction>();
+                var array = bigBox.GetBoxPositions();
+                var direction = reaction.GetDirection();
+
+                foreach (var VARIABLE in array)
+                {
+                    RaycastHit[] hits;
+                    hits = Physics.RaycastAll(VARIABLE.transform.position, direction, 1000F);
+
+                    foreach (var hit in hits)
+                    {
+                        if (hit.transform == VARIABLE.transform || ((hit is BaseBox)) == null)
+                            continue;
+
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                RaycastHit[] hits;
+                hits = Physics.RaycastAll(box.transform.position, box.transform.forward, 1000F);
+                foreach (var hit in hits)
+                {
+                    if (hit.transform == box.transform || ((hit is BaseBox)) == null)
+                        continue;
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private async static UniTask<BaseBox> GetNearestBoxInDirection(BaseBox[] level, Vector3[] boxArrayPosition, Vector3 direction, BaseBox currentBox)
@@ -138,7 +179,6 @@ namespace LevelCreator.Validator
                 }
             }
 
-            Debug.LogError("----null");
             return null;
         }
 
