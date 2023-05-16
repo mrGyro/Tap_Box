@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Boxes.Reactions;
 using Core.MessengerStatic;
 using Cysharp.Threading.Tasks;
@@ -82,48 +83,11 @@ namespace Boxes.BigBoxTapFlowBox
         private async UniTask MoveToAndBack(BaseBox targetBaseBox)
         {
             var startPos = _parent.position;
-            var currentBigBox = targetBaseBox as BigBoxTapFlowBox;
-            var currentBoxParts = currentBigBox.GetBoxPositions();
-
-            BigBoxPart nearestBox = null;
-            float minDistance = float.MaxValue;
-            float distance;
-            foreach (var currentBoxPart in currentBoxParts)
-            {
-                switch (targetBaseBox.Data.Type)
-                {
-                    case BaseBox.BlockType.None:
-                    case BaseBox.BlockType.TapFlowBox:
-                    case BaseBox.BlockType.RotateRoadBox:
-                    case BaseBox.BlockType.SwipedBox:
-                        distance = Vector3.Distance(targetBaseBox.transform.position, currentBoxPart.transform.position);
-                        if (minDistance > distance)
-                        {
-                            minDistance = distance;
-                            nearestBox = currentBoxPart;
-                        }
-
-                        break;
-                    case BaseBox.BlockType.BigBoxTapFlowBox:
-                        var targetBigBox = targetBaseBox as BigBoxTapFlowBox;
-                        var targetBoxParts = targetBigBox.GetBoxPositions();
-                        foreach (var targetBigBoxPart in targetBoxParts)
-                        {
-                            distance = Vector3.Distance(targetBigBoxPart.transform.position, currentBoxPart.transform.position);
-                            if (minDistance > distance)
-                            {
-                                minDistance = distance;
-                                nearestBox = currentBoxPart;
-                            }
-                        }
-
-                        break;
-                }
-            }
+            var nearestBoxPosition = GetNearestPositionMoveAndBack(targetBaseBox, out var contactBox);
 
             while (true)
             {
-                distance = Vector3.Distance(nearestBox.transform.position, targetBaseBox.transform.position);
+                var distance = Vector3.Distance(nearestBoxPosition, contactBox.position);
                 if (distance < 1.03f)
                 {
                     break;
@@ -141,6 +105,52 @@ namespace Boxes.BigBoxTapFlowBox
 
             _parent.position = startPos;
             _isMove = false;
+        }
+
+        private Vector3 GetNearestPositionMoveAndBack(BaseBox targetBaseBox, out Transform contactBox)
+        {
+            var currentBigBox = _box as BigBoxTapFlowBox;
+            var currentBoxParts = currentBigBox.GetBoxPositions();
+            float minDistance = float.MaxValue;
+            float distance = 0;
+            Vector3 result = Vector3.zero;
+            List<Vector3> targetPosition = new List<Vector3>();
+
+            switch (targetBaseBox.Data.Type)
+            {
+                case BaseBox.BlockType.None:
+                case BaseBox.BlockType.TapFlowBox:
+                case BaseBox.BlockType.RotateRoadBox:
+                case BaseBox.BlockType.SwipedBox:
+                    targetPosition.Add(targetBaseBox.transform.position);
+                    break;
+                case BaseBox.BlockType.BigBoxTapFlowBox:
+                    var targetBigBox = targetBaseBox as BigBoxTapFlowBox;
+                    var targetBoxParts = targetBigBox.GetBoxPositions();
+                    foreach (var VARIABLE in targetBoxParts)
+                    {
+                        targetPosition.Add(VARIABLE.ArrayPosition * 1.03f);
+                    }
+
+                    break;
+            }
+
+            contactBox = null;
+            foreach (var currentBoxPart in currentBoxParts)
+            {
+                foreach (var targetBigBoxPart in targetPosition)
+                {
+                    distance = Vector3.Distance(targetBigBoxPart, currentBoxPart.transform.position);
+                    if (minDistance > distance)
+                    {
+                        contactBox = currentBoxPart.transform;
+                        minDistance = distance;
+                        result = targetBigBoxPart;
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

@@ -314,7 +314,6 @@ namespace LevelCreator
                 case BaseBox.BlockType.TapFlowBox:
                 case BaseBox.BlockType.RotateRoadBox:
                 case BaseBox.BlockType.SwipedBox:
-                    Debug.LogError(((position + direction) * size));
                     result = new List<Vector3>() { (position + direction) * size };
                     break;
 
