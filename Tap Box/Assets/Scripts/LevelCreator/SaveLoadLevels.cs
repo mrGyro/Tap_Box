@@ -68,7 +68,8 @@ namespace LevelCreator
             {
                 if (variable.Contains(".meta"))
                     continue;
-                Debug.LogError(variable);
+                
+                Debug.Log(variable);
                 var x = variable.Remove(0, variable.LastIndexOf('/') + 1);
                 var index = x.LastIndexOf('.');
                 var y = x.Remove(index, x.Length - index);

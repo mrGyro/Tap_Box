@@ -4,6 +4,7 @@ using Boxes;
 using Boxes.BigBoxTapFlowBox;
 using Cysharp.Threading.Tasks;
 using LevelCreator.Validator;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ namespace LevelCreator
     public class LevelCreator : MonoBehaviour
     {
         public static Action OnLevelChanged;
+        public static Action<BigBoxTapFlowBox> OnBoxChanged;
         [SerializeField] Camera camera;
         [SerializeField] Button _validate;
         [SerializeField] float size;
@@ -35,6 +37,7 @@ namespace LevelCreator
         private bool _isActive = true;
         private List<BaseBox> _collisions = new();
         private Vector3 _hit;
+        private int rotateIndex = 0;
 
         private readonly List<Vector3> _directions = new()
         {
@@ -52,12 +55,14 @@ namespace LevelCreator
             _currentSelectedBoxForInstantiate = prefabs[_currentIndex];
             SelectBlockForInstantiate();
             shadowBox.Setup(_currentSelectedBoxForInstantiate);
+            shadowBox.Hide();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             _currentTargetBox = null;
             OnLevelChanged += OnLevelChangedValidation;
+            OnBoxChanged += FindNewPositionForBox;
             _validate.onClick.AddListener(OnValidateAndHide);
-            ShowRedColor();
+            //ShowRedColor();
         }
 
         private void OnValidateAndHide()
@@ -85,8 +90,15 @@ namespace LevelCreator
             if (_currentTargetBox != null)
                 return;
 
+            if (Input.GetKey(KeyCode.Q))
+            {
+                MouseWheelRotateBox();
+            }
+            else
+            {
+                MouseWheelSelectBox();
+            }
 
-            MouseWheelSelectBox();
             CreateBox();
             RemoveBox();
         }
@@ -105,7 +117,6 @@ namespace LevelCreator
                 return;
             }
 
-            //shadowBox.SetActive(true);
             shadowBox.Setup(_currentSelectedBoxForInstantiate);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -142,6 +153,9 @@ namespace LevelCreator
 
                 SelectBlockForInstantiate();
                 shadowBox.Setup(_currentSelectedBoxForInstantiate);
+                rotateIndex = 0;
+                BoxRotator.Rotate(rotateIndex, shadowBox.GetTargetBox());
+                UpdatePosition();
             }
 
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
@@ -153,6 +167,44 @@ namespace LevelCreator
 
                 SelectBlockForInstantiate();
                 shadowBox.Setup(_currentSelectedBoxForInstantiate);
+                rotateIndex = 0;
+                BoxRotator.Rotate(rotateIndex, shadowBox.GetTargetBox());
+                UpdatePosition();
+            }
+        }
+
+        private void MouseWheelRotateBox()
+        {
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                rotateIndex++;
+                if (rotateIndex > 5)
+                    rotateIndex = 0;
+
+                BoxRotator.Rotate(rotateIndex, shadowBox.GetTargetBox());
+
+                UpdatePosition();
+            }
+
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                rotateIndex--;
+                if (rotateIndex <= 0)
+                    rotateIndex = 5;
+
+                BoxRotator.Rotate(rotateIndex, shadowBox.GetTargetBox());
+                UpdatePosition();
+            }
+        }
+
+        private void UpdatePosition()
+        {
+            (shadowBox.GetTargetBox() as BigBoxTapFlowBox)?.UpdatePositions();
+            OnLevelChanged?.Invoke();
+
+            if (shadowBox.GetTargetBox().Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
+            {
+                OnBoxChanged?.Invoke(shadowBox.GetTargetBox() as BigBoxTapFlowBox);
             }
         }
 
@@ -219,7 +271,7 @@ namespace LevelCreator
                     GetNewBoxPosition(Input.mousePosition);
                 }
 
-                await UniTask.Delay(100);
+                await UniTask.Delay(300);
             }
         }
 
@@ -280,7 +332,6 @@ namespace LevelCreator
                 case BaseBox.BlockType.RotateRoadBox:
                 case BaseBox.BlockType.SwipedBox:
                     arrayPosition = box.Data.ArrayPosition.ToVector3();
-
                     break;
                 case BaseBox.BlockType.BigBoxTapFlowBox:
                     var bigBox = hit.transform.GetComponent<BigBoxTapFlowBox>();
@@ -318,37 +369,56 @@ namespace LevelCreator
                     break;
 
                 case BaseBox.BlockType.BigBoxTapFlowBox:
-                    var bigBox = _currentSelectedBoxForInstantiate.transform.GetComponent<BigBoxTapFlowBox>();
-                    var arrayPositions = bigBox.GetBoxPositions();
-                    var pos = GetPossiblePositions(position, 10);
+                    List<Vector3> bufferResults = new List<Vector3>();
                     float maxDistance = float.MaxValue;
-                    List<Vector3> bufferResult = new List<Vector3>();
-                    foreach (var VARIABLE in pos)
+
+                    //var arrayPositions = _currentSelectedBoxForInstantiate.GetComponent<BigBoxTapFlowBox>().GetBoxPositions();
+                    var arrayPositions = GetRotationBoxPosition();
+                    var possiblePositions = GetPossiblePositions(position, 5);
+
+                    foreach (var posiblePosition in possiblePositions)
                     {
-                        bufferResult.Clear();
+                        bufferResults.Clear();
                         foreach (var bigBoxPart in arrayPositions)
                         {
-                            if (IsBoxInPosition(bigBoxPart.ArrayPosition + VARIABLE))
+                            if (IsBoxInPosition(bigBoxPart + posiblePosition))
                                 break;
-                            bufferResult.Add(bigBoxPart.ArrayPosition + VARIABLE);
+
+                            bufferResults.Add(bigBoxPart + posiblePosition);
                         }
 
-                        if (bufferResult.Count == arrayPositions.Length)
+                        if (bufferResults.Count == arrayPositions.Count)
                         {
-                            foreach (var re in bufferResult)
+                            foreach (var vector3 in bufferResults)
                             {
-                                if (Vector3.Distance(re * _size, _hit) < maxDistance)
+                                if (Vector3.Distance(vector3 * _size, _hit) < maxDistance)
                                 {
-                                    result = new List<Vector3>(bufferResult);
-                                    maxDistance = Vector3.Distance(re * _size, _hit);
+                                    result = new List<Vector3>(bufferResults);
+                                    maxDistance = Vector3.Distance(vector3 * _size, _hit);
                                 }
                             }
                         }
 
-                        bufferResult.Clear();
+                        bufferResults.Clear();
                     }
 
                     break;
+            }
+
+            return result;
+        }
+
+        private List<Vector3> GetRotationBoxPosition()
+        {
+            // var arrayPositions = _currentSelectedBoxForInstantiate.GetComponent<BigBoxTapFlowBox>().GetBoxPositions();
+            var shadowBoxPosition = (shadowBox.GetTargetBox() as BigBoxTapFlowBox).GetBoxPositions();
+
+            Vector3 dif = shadowBoxPosition[0].ArrayPosition;
+            List<Vector3> result = new List<Vector3>();
+
+            foreach (var VARIABLE in shadowBoxPosition)
+            {
+                result.Add(VARIABLE.ArrayPosition - dif);
             }
 
             return result;
@@ -370,7 +440,7 @@ namespace LevelCreator
                     }
                 }
             }
-            
+
             for (int i = 0; i < maxDistance; i++)
             {
                 for (int j = 0; j < maxDistance; j++)
@@ -404,23 +474,27 @@ namespace LevelCreator
         private async void Create()
         {
             Level ??= new List<BaseBox>();
-            List<Vector3> positionForCreate = shadowBox.GetPositionForCreate();
-            Vector3 starPos = positionForCreate[0];
-            // if (IsBoxInPosition(positionForCreate))
+            BaseBox shadowBaseBox = shadowBox.GetTargetBox();
+            Vector3 starPos = shadowBox.GetPositionForCreate();
+            // if (IsBoxInPosition(shadowBaseBox))
             //     return;
 
-            var boxGameObject = await InstantiateAssetAsync(GetAddressableName(_currentSelectedBoxForInstantiate.Data));
+            var boxGameObject = await InstantiateAssetAsync(GetAddressableName(shadowBaseBox.Data));
             var box = boxGameObject.GetComponent<BaseBox>();
 
             box.transform.position = starPos;
-            box.transform.rotation = Quaternion.Euler(_currentSelectedBoxForInstantiate.Data.Rotation);
+            box.transform.rotation = Quaternion.Euler(shadowBaseBox.Data.Rotation);
+            Vector3 Arrayposition = new Vector3(
+                starPos.x == 0 ? 0 : starPos.x / size,
+                starPos.y == 0 ? 0 : starPos.y / size,
+                starPos.z == 0 ? 0 : starPos.z / size);
 
             box.Data = new BoxData()
             {
-                Type = _currentSelectedBoxForInstantiate.Data.Type,
-                ArrayPosition = new Vector3(starPos.x / size, starPos.y / size, starPos.z / size),
-                Rotation = _currentSelectedBoxForInstantiate.Data.Rotation,
-                Size = _currentSelectedBoxForInstantiate.Data.Size
+                Type = shadowBaseBox.Data.Type,
+                ArrayPosition = Arrayposition,
+                Rotation = shadowBaseBox.Data.Rotation,
+                Size = shadowBaseBox.Data.Size
             };
 
             Level.Add(box);
@@ -443,11 +517,6 @@ namespace LevelCreator
             //Validator.ValidatorController.Validate(Level);
         }
 
-        private Vector3 GetBoxStart(List<Vector3> positions)
-        {
-            return Vector3.zero;
-        }
-
         private bool IsBoxInPosition(Vector3 arrayPosition)
         {
             foreach (var variable in Level)
@@ -460,7 +529,7 @@ namespace LevelCreator
                     case BaseBox.BlockType.SwipedBox:
                         if (variable.IsBoxInPosition(arrayPosition))
                             return true;
-                        break;
+                        continue;
                     case BaseBox.BlockType.BigBoxTapFlowBox:
                         var bigBox = (variable as BigBoxTapFlowBox);
                         if (bigBox != null)
@@ -469,7 +538,7 @@ namespace LevelCreator
                                 return true;
                         }
 
-                        break;
+                        continue;
                 }
             }
 
@@ -542,6 +611,10 @@ namespace LevelCreator
         {
             var x = await AssetProvider.LoadAssetAsync<GameObject>(assetName);
             return x == null ? null : Instantiate(x, root);
+        }
+
+        private void FindNewPositionForBox(BigBoxTapFlowBox box)
+        {
         }
 
         // ReSharper disable Unity.PerformanceAnalysis

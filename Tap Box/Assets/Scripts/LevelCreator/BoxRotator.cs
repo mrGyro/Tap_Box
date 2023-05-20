@@ -1,7 +1,10 @@
-﻿using Boxes;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Boxes;
 using Boxes.BigBoxTapFlowBox;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 
 namespace LevelCreator
 {
@@ -11,69 +14,36 @@ namespace LevelCreator
         [SerializeField] private Button downButton;
         [SerializeField] private Button leftButton;
         [SerializeField] private Button rightButton;
-        
+
         private BaseBox _currentTargetBox;
 
-        private void Start()
+        private static List<VectorDirection> VectorDirections = new()
         {
-            upButton.onClick.AddListener(RotateUp);
-            downButton.onClick.AddListener(RotateDown);
-            leftButton.onClick.AddListener(RotateLeft);
-            rightButton.onClick.AddListener(RotateRight);
-        }
+            new() { direction = Vector3.left, angle = 0 },
+            new() { direction = Vector3.left, angle = 90 },
+            new() { direction = Vector3.left, angle = 180 },
+            new VectorDirection() { direction = Vector3.left, angle = 270 },
+            new VectorDirection() { direction = Vector3.up, angle = 90 },
+            new VectorDirection() { direction = Vector3.up, angle = -90 },
+        };
 
         public void SetBox(BaseBox box)
         {
             _currentTargetBox = box;
         }
+
+        public static void Rotate(int index, BaseBox box)
+        {
+            box.transform.rotation = Quaternion.Euler(Vector3.zero);
+            box.Rotate(VectorDirections[index].direction, VectorDirections[index].angle);
+        }
+
+        private struct VectorDirection
+        {
+            public Vector3 direction;
+            public float angle;
+        }
+
         
-        private void RotateLeft()
-        {
-            if (_currentTargetBox == null)
-                return;
-            
-            _currentTargetBox.Rotate(Vector3.up, -90);
-            UpdatePosition();
-        }
-
-        private void RotateRight()
-        {
-            if (_currentTargetBox == null)
-                return;
-            
-            _currentTargetBox.Rotate(Vector3.up, 90);
-            UpdatePosition();
-        }
-
-        private void RotateUp()
-        {
-            if (_currentTargetBox == null)
-                return;
-            
-            _currentTargetBox.Rotate(Vector3.left, 90);
-            UpdatePosition();
-
-        }
-
-        private void RotateDown()
-        {
-            if (_currentTargetBox == null)
-                return;
-            
-            _currentTargetBox.Rotate(Vector3.left, -90);
-            UpdatePosition();
-        }
-
-        private void UpdatePosition()
-        {
-            if (_currentTargetBox.Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
-            {
-                (_currentTargetBox as BigBoxTapFlowBox)?.UpdatePositions();
-
-            }
-            
-            (_currentTargetBox as BigBoxTapFlowBox)?.UpdatePositions();
-            LevelCreator.OnLevelChanged?.Invoke();
-        }
     }
 }
