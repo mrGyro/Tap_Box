@@ -152,6 +152,7 @@ public class WinWindow : PopUpBase
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetTokState(true);
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetActiveVFX(true);
         winVFX.SetActive(true);
+
         await GiveReward(nearestPercent);
         winVFX.SetActive(false);
     }
@@ -161,6 +162,8 @@ public class WinWindow : PopUpBase
         switch (settings.RewardType)
         {
             case CurrencyController.Type.Coin:
+                GameManager.Instance.SoundManager.Play(new ClipDataMessage() { Id = Constants.Sounds.UI.WinWindowGetReward, SoundType = SoundData.SoundType.UI });
+
                 _currencyCounter.CoinsAnimation(rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].GetCurrencyRoot());
                 await UniTask.Delay(1000);
                 GameManager.Instance.CurrencyController.AddCurrency(settings.RewardType, settings.RewardCount);
@@ -169,6 +172,8 @@ public class WinWindow : PopUpBase
                 await UniTask.WaitUntil(_currencyCounter.IsAnimationComplete);
                 break;
             case CurrencyController.Type.RandomSkin:
+                GameManager.Instance.SoundManager.Play(new ClipDataMessage() { Id = Constants.Sounds.UI.WinWindowGetSkinReward, SoundType = SoundData.SoundType.UI });
+
                 GetSkinRandomSkin();
                 break;
         }

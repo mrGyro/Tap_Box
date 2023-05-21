@@ -32,6 +32,8 @@
             public static string WinWindowShow = "WinWindowShow";
             public static string LoseWindowShow = "LoseWindowShow";
             public static string NewLevelWindowShow = "NewLevelWindowShow";
+            public static string WinWindowGetReward = "WinWindowGetReward";
+            public static string WinWindowGetSkinReward = "WinWindowGetSkinReward";
         }
         
         public static class Game
