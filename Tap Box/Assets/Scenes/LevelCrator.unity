@@ -9561,11 +9561,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 102386986}
   _validate: {fileID: 1486343287}
+  _showAll: {fileID: 424575309}
   size: 1.03
   root: {fileID: 1266070995}
   shadowBox: {fileID: 1396079077}
   currentBoxIcon: {fileID: 518954603}
-  boxRotator: {fileID: 68458159}
   boxMover: {fileID: 2047981574}
   prefabs:
   - {fileID: 7940780056439262889, guid: 8bbff50bad1dcb74ba950424e443a1e2, type: 3}

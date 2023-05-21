@@ -21,6 +21,7 @@ namespace LevelCreator.Validator
             {
                 if (result.Contains(VARIABLE))
                     continue;
+
                 VARIABLE.gameObject.SetActive(false);
             }
         }
@@ -41,33 +42,11 @@ namespace LevelCreator.Validator
                 for (int i = level.Count - 1; i >= 0; i--)
                 {
                     await UniTask.Delay(10);
-
-                    var bigBox = level[i] as BigBoxTapFlowBox;
-                    if (bigBox != null)
+                    if (!IsBoxesInDirection(level[i], level))
                     {
-                        // var reaction = bigBox.GetComponent<BigBoxFlowAwayReaction>();
-                        // Vector3[] array = bigBox.GetBoxPositionsAsVectors();
-                      //  var boxForRemove = await GetNearestBoxInDirection(level.ToArray(), array, reaction.GetDirection(), level[i]);
-                       // if (boxForRemove == null)
-                        if (IsBoxesInDirection(bigBox))
-                        {
-                            level.Remove(level[i]);
-                            isBlockRemoved = true;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                      //  var reaction = level[i].GetComponent<FlowAwayReaction>();
-                       // var box = await GetNearestBoxInDirection(level.ToArray(), new[] { level[i].Data.ArrayPosition.ToVector3() }, reaction.GetDirection(), level[i]);
-
-                      //  if (box == null)
-                        if (IsBoxesInDirection(level[i]))
-                        {
-                            level.Remove(level[i]);
-                            isBlockRemoved = true;
-                            break;
-                        }
+                        level.Remove(level[i]);
+                        isBlockRemoved = true;
+                        break;
                     }
                 }
             }
@@ -75,7 +54,7 @@ namespace LevelCreator.Validator
             return level;
         }
 
-        private static bool IsBoxesInDirection(BaseBox box)
+        private static bool IsBoxesInDirection(BaseBox box, List<BaseBox> level)
         {
             var bigBox = box as BigBoxTapFlowBox;
             if (bigBox != null)
@@ -83,17 +62,14 @@ namespace LevelCreator.Validator
                 var reaction = bigBox.GetComponent<BigBoxFlowAwayReaction>();
                 var array = bigBox.GetBoxPositions();
                 var direction = reaction.GetDirection();
-
+                Debug.DrawLine(reaction.transform.position, reaction.transform.position + direction * 10, Color.magenta, 20);
                 foreach (var VARIABLE in array)
                 {
                     RaycastHit[] hits;
                     hits = Physics.RaycastAll(VARIABLE.transform.position, direction, 1000F);
 
-                    foreach (var hit in hits)
+                    if (IsHitBox(box, hits, level))
                     {
-                        if (hit.transform == VARIABLE.transform || ((hit is BaseBox)) == null)
-                            continue;
-
                         return true;
                     }
                 }
@@ -102,11 +78,22 @@ namespace LevelCreator.Validator
             {
                 RaycastHit[] hits;
                 hits = Physics.RaycastAll(box.transform.position, box.transform.forward, 1000F);
-                foreach (var hit in hits)
-                {
-                    if (hit.transform == box.transform || ((hit is BaseBox)) == null)
-                        continue;
+                Debug.DrawLine(box.transform.position, box.transform.position + box.transform.forward * 10, Color.green, 20);
+                return IsHitBox(box, hits, level);
+            }
 
+            return false;
+        }
+
+        private static bool IsHitBox(BaseBox box, RaycastHit[] hits, List<BaseBox> level)
+        {
+            foreach (var hit in hits)
+            {
+                if (hit.transform == box.transform || hit.transform.GetComponent<BaseBox>() == null)
+                    continue;
+
+                if (level.FirstOrDefault(x => x.transform == hit.transform))
+                {
                     return true;
                 }
             }

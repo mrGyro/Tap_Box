@@ -16,11 +16,11 @@ namespace LevelCreator2
         //public static Action<BigBoxTapFlowBox> OnBoxChanged;
         [SerializeField] Camera camera;
         [SerializeField] Button _validate;
+        [SerializeField] Button _showAll;
         [SerializeField] float size;
         [SerializeField] Transform root;
         [SerializeField] ShadowBox shadowBox;
         [SerializeField] private Image currentBoxIcon;
-        [SerializeField] private BoxRotator boxRotator;
         [SerializeField] private BoxMover boxMover;
 
         [SerializeField] List<BaseBox> prefabs;
@@ -61,6 +61,7 @@ namespace LevelCreator2
             _currentTargetBox = null;
             OnLevelChanged += OnLevelChangedValidation;
             _validate.onClick.AddListener(OnValidateAndHide);
+            _showAll.onClick.AddListener(ShowAll);
         }
 
         private void OnValidateAndHide()
