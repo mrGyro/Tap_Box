@@ -2,12 +2,13 @@
 using TMPro;
 using UnityEngine;
 
-namespace LevelCreator
+namespace LevelCreator2
 {
     public class FilePrefab : MonoBehaviour
     {
         [SerializeField] private TMP_Text _text;
         private Action<string> _onClick;
+
         public void Setup(string filename, Action<string> onClick)
         {
             _text.text = filename;

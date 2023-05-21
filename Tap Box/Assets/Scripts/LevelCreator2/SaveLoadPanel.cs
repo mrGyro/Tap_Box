@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using Boxes;
+using LevelCreator;
 using TMPro;
 using UnityEngine;
 
-namespace LevelCreator
+namespace LevelCreator2
 {
     public class SaveLoadPanel : MonoBehaviour
     {

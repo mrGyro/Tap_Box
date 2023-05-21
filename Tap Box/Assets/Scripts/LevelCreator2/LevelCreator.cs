@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using Boxes;
 using Boxes.BigBoxTapFlowBox;
 using Cysharp.Threading.Tasks;
+using LevelCreator;
 using LevelCreator.Validator;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace LevelCreator
+namespace LevelCreator2
 {
     public class LevelCreator : MonoBehaviour
     {
         public static Action OnLevelChanged;
-        public static Action<BigBoxTapFlowBox> OnBoxChanged;
+        //public static Action<BigBoxTapFlowBox> OnBoxChanged;
         [SerializeField] Camera camera;
         [SerializeField] Button _validate;
         [SerializeField] float size;
@@ -60,9 +60,7 @@ namespace LevelCreator
             Cursor.visible = false;
             _currentTargetBox = null;
             OnLevelChanged += OnLevelChangedValidation;
-            OnBoxChanged += FindNewPositionForBox;
             _validate.onClick.AddListener(OnValidateAndHide);
-            //ShowRedColor();
         }
 
         private void OnValidateAndHide()
@@ -121,8 +119,7 @@ namespace LevelCreator
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             _currentTargetBox = null;
-            boxRotator.SetBox(_currentTargetBox);
-            boxMover.SetBox(_currentTargetBox);
+            boxMover.SetBox(_currentTargetBox, this);
         }
 
         private void BoxesVisibility()
@@ -202,10 +199,10 @@ namespace LevelCreator
             (shadowBox.GetTargetBox() as BigBoxTapFlowBox)?.UpdatePositions();
             OnLevelChanged?.Invoke();
 
-            if (shadowBox.GetTargetBox().Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
-            {
-                OnBoxChanged?.Invoke(shadowBox.GetTargetBox() as BigBoxTapFlowBox);
-            }
+            // if (shadowBox.GetTargetBox().Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
+            // {
+            //     OnBoxChanged?.Invoke(shadowBox.GetTargetBox() as BigBoxTapFlowBox);
+            // }
         }
 
         private void HideBox(Vector3 mousePosition)
@@ -235,21 +232,18 @@ namespace LevelCreator
             if (box == null)
             {
                 _currentTargetBox = null;
-                boxRotator.SetBox(_currentTargetBox);
-                boxMover.SetBox(_currentTargetBox);
+                boxMover.SetBox(_currentTargetBox, this);
                 return;
             }
 
             _currentTargetBox = box;
-            boxRotator.SetBox(_currentTargetBox);
-            boxMover.SetBox(_currentTargetBox);
+            boxMover.SetBox(_currentTargetBox, this);
         }
 
         void OnEnable()
         {
             _layerMask = LayerMask.GetMask(GameFieldElement);
         }
-
 
         private void RemoveBlock(Vector2 mousePosition)
         {
@@ -277,7 +271,6 @@ namespace LevelCreator
 
         private void SelectBlockForInstantiate()
         {
-            //var sprite = loadableSprites[_currentIndex];
             currentBoxIcon.sprite = loadableSprites[_currentIndex];
         }
 
@@ -372,19 +365,18 @@ namespace LevelCreator
                     List<Vector3> bufferResults = new List<Vector3>();
                     float maxDistance = float.MaxValue;
 
-                    //var arrayPositions = _currentSelectedBoxForInstantiate.GetComponent<BigBoxTapFlowBox>().GetBoxPositions();
                     var arrayPositions = GetRotationBoxPosition();
                     var possiblePositions = GetPossiblePositions(position, 5);
 
-                    foreach (var posiblePosition in possiblePositions)
+                    foreach (var possiblePosition in possiblePositions)
                     {
                         bufferResults.Clear();
                         foreach (var bigBoxPart in arrayPositions)
                         {
-                            if (IsBoxInPosition(bigBoxPart + posiblePosition))
+                            if (IsBoxInPosition(bigBoxPart + possiblePosition))
                                 break;
 
-                            bufferResults.Add(bigBoxPart + posiblePosition);
+                            bufferResults.Add(bigBoxPart + possiblePosition);
                         }
 
                         if (bufferResults.Count == arrayPositions.Count)
@@ -544,6 +536,40 @@ namespace LevelCreator
 
             return false;
         }
+        
+        public bool IsBoxInPosition(Vector3 arrayPosition, BaseBox box)
+        {
+            foreach (var variable in Level)
+            {
+                if (variable == box)
+                {
+                    continue;
+                }
+                switch (variable.Data.Type)
+                {
+                    case BaseBox.BlockType.None:
+                    case BaseBox.BlockType.TapFlowBox:
+                    case BaseBox.BlockType.RotateRoadBox:
+                    case BaseBox.BlockType.SwipedBox:
+                        if (variable.IsBoxInPosition(arrayPosition))
+                        {
+                            return true;
+                        }
+                        continue;
+                    case BaseBox.BlockType.BigBoxTapFlowBox:
+                        var bigBox = (variable as BigBoxTapFlowBox);
+                        if (bigBox != null)
+                        {
+                            if (bigBox.IsBoxInPosition(arrayPosition))
+                                return true;
+                        }
+
+                        continue;
+                }
+            }
+
+            return false;
+        }
 
         private string GetAddressableName(BoxData box)
         {
@@ -613,11 +639,6 @@ namespace LevelCreator
             return x == null ? null : Instantiate(x, root);
         }
 
-        private void FindNewPositionForBox(BigBoxTapFlowBox box)
-        {
-        }
-
-        // ReSharper disable Unity.PerformanceAnalysis
         private void OnLevelChangedValidation()
         {
             foreach (var variable in _collisions)
@@ -704,32 +725,5 @@ namespace LevelCreator
         }
 
         private static readonly int DissolveSlider = Shader.PropertyToID("Dissolve_Slider_Reference");
-
-        private async UniTask ShowRedColor()
-        {
-            float value = 0;
-            bool direction = false;
-            while (true)
-            {
-                await UniTask.WaitForEndOfFrame(this);
-                if (_collisions.Count == 0)
-                    continue;
-
-                value += direction ? -0.01f : 0.01f;
-
-                if (value < -1 || value > 0)
-                    direction = !direction;
-
-                foreach (var variable in _collisions)
-                {
-                    var meshRenderer = variable.transform.GetChild(0).GetComponent<MeshRenderer>();
-                    if (meshRenderer == null)
-                        continue;
-
-                    meshRenderer.materials[0].SetFloat(DissolveSlider, value);
-                    meshRenderer.materials[1].SetFloat(DissolveSlider, value);
-                }
-            }
-        }
     }
 }

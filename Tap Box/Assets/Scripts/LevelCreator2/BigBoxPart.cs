@@ -11,4 +11,5 @@ public class BigBoxPart : MonoBehaviour
             Mathf.Round((transform.position.y / _size)),
             Mathf.Round((transform.position.z / _size)));
     }
+    
 }
