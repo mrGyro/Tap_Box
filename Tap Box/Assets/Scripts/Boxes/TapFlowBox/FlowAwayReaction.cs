@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Boxes.Reactions;
 using Core.MessengerStatic;
 using Cysharp.Threading.Tasks;
@@ -70,16 +71,24 @@ namespace Boxes.TapFlowBox
             Destroy(_parent.gameObject);
         }
 
-        private async UniTask MoveToAndBack(BaseBox box)
+        private async UniTask MoveToAndBack(BaseBox targetBaseBox)
         {
-            Vector3 startPos = _parent.position;
-            while (Vector3.Distance(_parent.position, box.transform.position) > 1.03f)
+            var startPos = _parent.position;
+            var nearestBoxPosition = GetNearestPositionMoveAndBack(targetBaseBox, out var contactBox);
+
+            while (true)
             {
+                var distance = Vector3.Distance(nearestBoxPosition, contactBox.position);
+                if (distance < 1.03f)
+                {
+                    break;
+                }
+
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
                 await UniTask.WaitForEndOfFrame(this);
             }
 
-            while (Vector3.Distance(_parent.position, startPos) > 1.03f)
+            while (Vector3.Distance(_parent.position, startPos) > 0.2f)
             {
                 _parent.Translate(-_parent.forward * Time.deltaTime * _speed, Space.World);
                 await UniTask.WaitForEndOfFrame(this);
@@ -87,6 +96,49 @@ namespace Boxes.TapFlowBox
 
             _parent.position = startPos;
             _isMove = false;
+        }
+        
+        private Vector3 GetNearestPositionMoveAndBack(BaseBox targetBaseBox, out Transform contactBox)
+        {
+            float minDistance = float.MaxValue;
+            float distance = 0;
+            Vector3 result = Vector3.zero;
+            List<Vector3> targetPosition = new List<Vector3>();
+
+            switch (targetBaseBox.Data.Type)
+            {
+                case BaseBox.BlockType.None:
+                case BaseBox.BlockType.TapFlowBox:
+                case BaseBox.BlockType.RotateRoadBox:
+                case BaseBox.BlockType.SwipedBox:
+                    targetPosition.Add(targetBaseBox.transform.position);
+                    break;
+                case BaseBox.BlockType.BigBoxTapFlowBox:
+                    var targetBigBox = targetBaseBox as BigBoxTapFlowBox.BigBoxTapFlowBox;
+                    var targetBoxParts = targetBigBox.GetBoxPositions();
+                    foreach (var VARIABLE in targetBoxParts)
+                    {
+                        targetPosition.Add(VARIABLE.ArrayPosition * 1.03f);
+                    }
+
+                    break;
+            }
+
+            contactBox = null;
+            {
+                foreach (var targetBigBoxPart in targetPosition)
+                {
+                    distance = Vector3.Distance(targetBigBoxPart, _box.transform.position);
+                    if (minDistance > distance)
+                    {
+                        contactBox = _box.transform;
+                        minDistance = distance;
+                        result = targetBigBoxPart;
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

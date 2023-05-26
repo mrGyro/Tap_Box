@@ -8,6 +8,7 @@ using Cysharp.Threading.Tasks;
 using LevelCreator;
 using Managers;
 using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class GameField : MonoBehaviour, IInitializable
@@ -99,67 +100,35 @@ public class GameField : MonoBehaviour, IInitializable
 
     public BaseBox GetNearestBoxInDirection(Vector3[] boxArrayPosition, Vector3 direction, BaseBox currentBox)
     {
-        Vector3[] arrayPosition = boxArrayPosition;
-
-        for (int i = 0; i < arrayPosition.Length; i++)
+        LayerMask mask = LayerMask.GetMask("GameFieldElement");
+        Transform results = null;
+        float minDistance = float.MaxValue;
+        foreach (var variable in boxArrayPosition)
         {
-            arrayPosition[i] += direction;
-        }
+            var hits = Physics.RaycastAll(variable, direction, 1000F, mask);
+            Debug.DrawLine(variable, direction * 100F, Color.magenta, 20);
+            var hitBox = hits.FirstOrDefault(x => x.transform != currentBox.transform);
 
-        bool notOutOfRange = true;
-        while (notOutOfRange)
-        {
-            BaseBox nearestBoxInDirection = null;
-
-            for (int i = 0; i < arrayPosition.Length; i++)
+            if (hitBox.transform == null)
             {
-                notOutOfRange = CheckMaxLevelSize(arrayPosition[i]) && CheckMinLevelSize(arrayPosition[i]);
-                if (!notOutOfRange)
-                {
-                    return null;
-                }
-
-                foreach (var box in _boxes)
-                {
-                    bool isBoxInPosition = false;
-                    switch (box.Data.Type)
-                    {
-                        case BaseBox.BlockType.None:
-                        case BaseBox.BlockType.TapFlowBox:
-                        case BaseBox.BlockType.RotateRoadBox:
-                        case BaseBox.BlockType.SwipedBox:
-                            isBoxInPosition = box.IsBoxInPosition(arrayPosition[i]);
-                            break;
-                        case BaseBox.BlockType.BigBoxTapFlowBox:
-                            var bigBox = (box as BigBoxTapFlowBox);
-                            if (bigBox != null)
-                            {
-                                isBoxInPosition = bigBox.IsBoxInPosition(arrayPosition[i]);
-                            }
-
-                            break;
-                    }
-
-                    if (isBoxInPosition && currentBox != nearestBoxInDirection)
-                    {
-                        nearestBoxInDirection = box;
-                        break;
-                    }
-                }
+                continue;
             }
 
-            if (nearestBoxInDirection != null && currentBox != nearestBoxInDirection)
+            float distance = Vector3.Distance(variable, hitBox.point);
+            if (distance < size)
             {
-                return nearestBoxInDirection;
+                results = hitBox.transform;
+                break;
             }
 
-            for (int i = 0; i < arrayPosition.Length; i++)
+            if (distance < minDistance)
             {
-                arrayPosition[i] += direction;
+                minDistance = distance;
+                results = hitBox.transform;
             }
         }
-
-        return null;
+        
+        return results == null ? null : results.GetComponent<BaseBox>();
     }
 
     public void RemoveBox(BaseBox box)

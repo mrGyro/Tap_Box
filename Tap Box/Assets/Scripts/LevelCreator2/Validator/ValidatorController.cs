@@ -56,6 +56,8 @@ namespace LevelCreator.Validator
 
         private static bool IsBoxesInDirection(BaseBox box, List<BaseBox> level)
         {
+            LayerMask mask = LayerMask.GetMask("GameFieldElement");
+
             var bigBox = box as BigBoxTapFlowBox;
             if (bigBox != null)
             {
@@ -66,7 +68,7 @@ namespace LevelCreator.Validator
                 foreach (var VARIABLE in array)
                 {
                     RaycastHit[] hits;
-                    hits = Physics.RaycastAll(VARIABLE.transform.position, direction, 1000F);
+                    hits = Physics.RaycastAll(VARIABLE.transform.position, direction, 1000F, mask);
 
                     if (IsHitBox(box, hits, level))
                     {
