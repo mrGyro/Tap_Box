@@ -40,6 +40,15 @@ namespace Boxes
                 (int)transform.rotation.eulerAngles.y,
                 (int)transform.rotation.eulerAngles.z);
         }
+        
+        public virtual void Rotate(Vector3 angle)
+        {
+            transform.rotation = Quaternion.Euler(angle);
+            Data.Rotation = new SerializedVector3(
+                (int)transform.rotation.eulerAngles.x,
+                (int)transform.rotation.eulerAngles.y,
+                (int)transform.rotation.eulerAngles.z);
+        }
 
         public virtual bool IsBoxInPosition(Vector3 position)
         {

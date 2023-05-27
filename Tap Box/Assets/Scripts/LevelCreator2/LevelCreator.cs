@@ -176,7 +176,7 @@ namespace LevelCreator2
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
             {
                 rotateIndex++;
-                if (rotateIndex > 5)
+                if (rotateIndex > BoxRotator.GetSize() - 1)
                     rotateIndex = 0;
 
                 BoxRotator.Rotate(rotateIndex, shadowBox.GetTargetBox());
@@ -187,8 +187,8 @@ namespace LevelCreator2
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
             {
                 rotateIndex--;
-                if (rotateIndex <= 0)
-                    rotateIndex = 5;
+                if (rotateIndex < 0)
+                    rotateIndex = BoxRotator.GetSize() - 1;
 
                 BoxRotator.Rotate(rotateIndex, shadowBox.GetTargetBox());
                 UpdatePosition();
