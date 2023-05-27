@@ -23,7 +23,7 @@ namespace UI.Levels.LevelButton
             var type = string.Empty;
             var value = string.Empty;
 
-          //  levelNumber.text = data.ID;
+            levelNumber.text = data.ID;
             switch (data.Reqirement.Type)
             {
                 case Reqirement.RequirementType.PassedLevel:
