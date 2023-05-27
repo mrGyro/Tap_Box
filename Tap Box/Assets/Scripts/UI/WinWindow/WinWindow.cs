@@ -256,6 +256,7 @@ public class WinWindow : PopUpBase
         goNextButton.gameObject.SetActive(true);
 
         var sprite = await AssetProvider.LoadAssetAsync<Sprite>(randomSkin.SkinAddressableName + "_icon");
+        Debug.LogError(sprite);
         rewardViews[^1].SetRewardSprite(sprite);
     }
 

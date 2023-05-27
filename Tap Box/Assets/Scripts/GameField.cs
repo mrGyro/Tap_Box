@@ -8,7 +8,6 @@ using Cysharp.Threading.Tasks;
 using LevelCreator;
 using Managers;
 using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class GameField : MonoBehaviour, IInitializable
@@ -58,12 +57,11 @@ public class GameField : MonoBehaviour, IInitializable
             GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.WinPopUp);
             _data.LevelStatus = Status.Passed;
             _data.Data = null;
+            _data.BestResult = _turnsesCount;
             GameManager.Instance.SaveLevel(_data);
 
             return;
         }
-
-        //S SetNewMaxMinSize();
     }
 
     private void SetNewCameraTargetPosition(Vector3 target, Vector3 cameraPosition)

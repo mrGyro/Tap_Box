@@ -17,7 +17,7 @@ namespace PlayerLevel
 
         private void Handler(BaseBox obj)
         {
-            AddExperience(5);
+            AddExperience(1);
         }
 
         public void AddExperience(float value)

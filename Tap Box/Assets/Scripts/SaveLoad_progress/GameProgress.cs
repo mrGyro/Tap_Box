@@ -27,12 +27,12 @@ namespace SaveLoad_progress
         public int NextRewardIndexWinWindow;
         public int CurrentPlayerLevel;
         public float CurrentPlayerLevelProgress;
-       
+
         public string CurrentBoxSkin;
         public string CurrentBackgroundSkin;
         public string CurrentTapSkin;
         public string CurrentTailSkin;
-        
+
         public bool CurrentSoundSetting = true;
         public bool CurrentVibroSetting = true;
 
@@ -115,7 +115,6 @@ namespace SaveLoad_progress
                 {
                     continue;
                 }
-
                 levelDataList.Add(levelData);
             }
 
@@ -131,14 +130,21 @@ namespace SaveLoad_progress
                 {
                     level = new LevelData();
                     buffer.Add(level);
+                    
+                    level.Data = !string.IsNullOrEmpty(gameProgress.LastStartedLevelID) && gameProgress.LastStartedLevelID.Equals(levelData.ID) ? level.Data : null;
+                    level.ID = levelData.ID;
+                    level.LevelStatus = levelData.LevelStatus;
+                    level.Reqirement = levelData.Reqirement;
+                    level.Reward = levelData.Reward;
+                    level.BestResult = levelData.BestResult;
                 }
-
-                level.Data = !string.IsNullOrEmpty(gameProgress.LastStartedLevelID) && gameProgress.LastStartedLevelID.Equals(levelData.ID) ? level.Data : null;
-                level.ID = levelData.ID;
-                level.LevelStatus = levelData.LevelStatus;
-                level.Reqirement = levelData.Reqirement;
-                level.Reward = levelData.Reward;
-                level.BestResult = levelData.BestResult;
+                else
+                {
+                    level.Data = !string.IsNullOrEmpty(gameProgress.LastStartedLevelID) && gameProgress.LastStartedLevelID.Equals(levelData.ID) ? level.Data : null;
+                    level.ID = levelData.ID;
+                    level.Reqirement = levelData.Reqirement;
+                    level.Reward = levelData.Reward;
+                }
             }
 
             if (buffer.Count > 0)
@@ -165,11 +171,11 @@ namespace SaveLoad_progress
             {
                 return;
             }
-            
+
             CurrentBoxSkin = name;
             await GameManager.Instance.GameField.ChangeSkin();
         }
-        
+
         private async UniTask<List<string>> LoadLevelsName()
         {
             List<string> result = new List<string>();

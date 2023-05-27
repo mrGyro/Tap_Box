@@ -6,6 +6,7 @@ public class TutorialRotate : MonoBehaviour
 {
     private Vector3 _startCameraPosition;
     private Camera _camera;
+    
     async void Start()
     {
         gameObject.SetActive(true);
@@ -14,12 +15,11 @@ public class TutorialRotate : MonoBehaviour
         await WaitForDistance();
         GameManager.Instance.InputController.SetActiveAllInput(true);
         gameObject.SetActive(false);
-
     }
 
     private async UniTask WaitForDistance()
     {
-        while (Vector3.Distance(_startCameraPosition, _camera.transform.position) < 20)
+        while (Vector3.Distance(_startCameraPosition, _camera.transform.position) < 10)
         {
             await UniTask.WaitForEndOfFrame(this);
         }

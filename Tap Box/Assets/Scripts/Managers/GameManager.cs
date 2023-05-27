@@ -100,7 +100,7 @@ namespace Managers
 
             if (updateLevelButton == -1)
                 return;
-
+            
             Progress.LevelDatas[updateLevelButton].LevelStatus = level.LevelStatus;
             Progress.LevelDatas[updateLevelButton].BestResult = level.BestResult;
         }
@@ -110,6 +110,7 @@ namespace Managers
             var index = Progress.LevelDatas.FirstOrDefault(x => x.LevelStatus == Status.Open)
                         ?? Progress.LevelDatas.Last(x => x.LevelStatus == Status.Passed);
 
+           
             return index.ID;
         }
     }
