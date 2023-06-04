@@ -87,6 +87,11 @@ namespace Boxes.BigBoxTapFlowBox
             UpdatePositions();
         }
         
+        public Vector3 GetDirection()
+        {
+            return _reaction.transform.forward;
+        }
+        
         public override void Rotate(Vector3 angle)
         {
             base.Rotate(angle);

@@ -47,23 +47,7 @@ namespace LevelCreator
             var bigBox = _basebox as BigBoxTapFlowBox;
             if (bigBox != null)
             {
-                // for (int i = 0; i < positions.Count; i++)
-                // {
-                //     positions[i] *= 1.03f;
-                // }
-                // Transform boxCenter = GetCenter(bigBox);
-                // Vector3 targetCenter = GetCenter(positions);
-                //   foreach (var VARIABLE in positions)
-                // {
-                //     Debug.DrawLine(VARIABLE, positions[0], Color.magenta, 0.3f);
-                //
-                // }
-                //
-                //     Debug.DrawLine(boxCenter.position, targetCenter, Color.blue, 0.3f);
-                //
-                // Vector3 differance = boxCenter.position - targetCenter;
-                // _basebox.transform.position -= differance;
-                _basebox.transform.position = positions[0]* 1.03f;;
+                _basebox.transform.position = positions[0] * 1.03f;
                 bigBox.UpdatePositions();
             }
             else

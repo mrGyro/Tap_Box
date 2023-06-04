@@ -16,9 +16,10 @@ public class AssetProvider
     {
         foreach (var l in Addressables.ResourceLocators)
         {
-            IList<IResourceLocation> locs;
-            if (l.Locate(key, type, out locs))
+            if (l.Locate(key, type, out _))
+            {
                 return true;
+            }
         }
 
         return false;

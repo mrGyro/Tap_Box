@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 2, z: 0}
+  ArrayPosition: {x: -2, y: 0, z: 0}
 --- !u!33 &4916328578974182709
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 0, z: 2}
+  ArrayPosition: {x: 0, y: 2, z: 0}
 --- !u!33 &7324552248545221879
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 1, z: 2}
+  ArrayPosition: {x: -1, y: 2, z: -2}
 --- !u!33 &7499431405562562973
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -337,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 1, z: 2}
+  ArrayPosition: {x: -1, y: 2, z: 0}
 --- !u!33 &318595929978234898
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -532,7 +532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 1, z: 0}
+  ArrayPosition: {x: -1, y: 0, z: -2}
 --- !u!33 &5533687404834194753
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -629,7 +629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 2, z: 2}
+  ArrayPosition: {x: -2, y: 2, z: -1}
 --- !u!33 &6129531119973909658
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -816,7 +816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 2, z: 0}
+  ArrayPosition: {x: -2, y: 0, z: -1}
 --- !u!33 &2330762481898213497
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -913,7 +913,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 2, z: 1}
+  ArrayPosition: {x: -2, y: 1, z: 0}
 --- !u!33 &3470515418766019466
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1010,7 +1010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 1, z: 0}
+  ArrayPosition: {x: -1, y: 0, z: 0}
 --- !u!33 &3743418846421280986
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1107,7 +1107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 2, z: 2}
+  ArrayPosition: {x: -2, y: 2, z: -2}
 --- !u!33 &5644570971556525294
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1204,7 +1204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 0, z: 2}
+  ArrayPosition: {x: 0, y: 2, z: -1}
 --- !u!33 &3719319338689846188
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1301,7 +1301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 0, z: 0}
+  ArrayPosition: {x: 0, y: 0, z: -1}
 --- !u!33 &2719343541784097508
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1593,7 +1593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 0, z: 2}
+  ArrayPosition: {x: 0, y: 2, z: -2}
 --- !u!33 &7073482752924280383
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1690,7 +1690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 1, z: 1}
+  ArrayPosition: {x: -1, y: 1, z: 0}
 --- !u!33 &3648312516690972578
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1768,7 +1768,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6105717079193990225}
-  m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1862,8 +1862,8 @@ MonoBehaviour:
       y: 0
       z: 0
     Rotation:
-      x: 0
-      y: 0
+      x: 270
+      y: 90
       z: 0
     Size:
       x: 3
@@ -1977,7 +1977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 0, z: 1}
+  ArrayPosition: {x: 0, y: 1, z: -2}
 --- !u!33 &1658404481797417961
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2074,7 +2074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 2, z: 2}
+  ArrayPosition: {x: -2, y: 2, z: 0}
 --- !u!33 &8359085455885735155
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2171,7 +2171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 2, z: 1}
+  ArrayPosition: {x: -2, y: 1, z: -1}
 --- !u!33 &279714270868474190
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2268,7 +2268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 2, z: 1}
+  ArrayPosition: {x: -2, y: 1, z: -2}
 --- !u!33 &6818548373729468685
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2463,7 +2463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 1, z: 2}
+  ArrayPosition: {x: -1, y: 2, z: -1}
 --- !u!33 &1814325238969943249
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2560,7 +2560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 0, z: 1}
+  ArrayPosition: {x: 0, y: 1, z: -1}
 --- !u!33 &6461089314835819459
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2657,7 +2657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 0, z: 0}
+  ArrayPosition: {x: 0, y: 0, z: -2}
 --- !u!33 &1932003047804349329
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2754,7 +2754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 1, z: 0}
+  ArrayPosition: {x: -1, y: 0, z: -1}
 --- !u!33 &2741913392965336269
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3145,7 +3145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 0, z: 1}
+  ArrayPosition: {x: 0, y: 1, z: 0}
 --- !u!33 &1151145485874204219
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3242,7 +3242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 1, z: 1}
+  ArrayPosition: {x: -1, y: 1, z: -2}
 --- !u!33 &1227314216782022208
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3339,7 +3339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 2, z: 0}
+  ArrayPosition: {x: -2, y: 0, z: -2}
 --- !u!33 &8835191930511930898
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3436,7 +3436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 1, z: 1}
+  ArrayPosition: {x: -1, y: 1, z: -1}
 --- !u!33 &6447228879049809800
 MeshFilter:
   m_ObjectHideFlags: 0
