@@ -14,6 +14,8 @@ namespace LevelCreator.Validator
         private static Vector3 _minLevelSize;
         private static LayerMask _mask = LayerMask.GetMask("GameFieldElement");
         private static List<BaseBox> level;
+        private static float _distanceToCheck = 1000f;
+        private static int _zero = 0;
 
         public static async void HidePassed(List<BaseBox> levelInput)
         {
@@ -47,7 +49,9 @@ namespace LevelCreator.Validator
                 foreach (var variable in level)
                 {
                     if (variable.gameObject.layer != layer)
+                    {
                         continue;
+                    }
 
                     variable.gameObject.layer = defaultLayer;
 
@@ -68,27 +72,26 @@ namespace LevelCreator.Validator
                 VARIABLE.gameObject.layer = layer;
             }
 
-            System.DateTime datevalue2 = System.DateTime.Now;
-            double hours = (datevalue2 - startTime).TotalSeconds;
+            DateTime date = DateTime.Now;
+            double hours = (date - startTime).TotalSeconds;
             Debug.LogError(hours);
             return result;
         }
 
+        private static RaycastHit[] results;
         private static bool IsBoxesInDirection(BaseBox box)
         {
             if (box.Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
             {
                 var bigBox = box as BigBoxTapFlowBox;
-
                 var array = bigBox.GetDirectionParts();
                 var direction = bigBox.GetDirection();
 
                 foreach (var bigBoxPart in array)
                 {
-                    RaycastHit[] results = new RaycastHit[1];
-                    var size = Physics.RaycastNonAlloc(bigBoxPart.transform.position, direction, results, 1000F, _mask);
+                    var size = Physics.RaycastNonAlloc(bigBoxPart.transform.position, direction, results, _distanceToCheck, _mask);
 
-                    if (size != 0)
+                    if (size != _zero)
                     {
                         return true;
                     }
@@ -96,9 +99,8 @@ namespace LevelCreator.Validator
             }
             else
             {
-                RaycastHit[] results = new RaycastHit[1];
-                var size = Physics.RaycastNonAlloc(box.transform.position, box.transform.forward, results, 1000F, _mask);
-                return size != 0;
+                var size = Physics.RaycastNonAlloc(box.transform.position, box.transform.forward, results, _distanceToCheck, _mask);
+                return size != _zero;
             }
 
             return false;
