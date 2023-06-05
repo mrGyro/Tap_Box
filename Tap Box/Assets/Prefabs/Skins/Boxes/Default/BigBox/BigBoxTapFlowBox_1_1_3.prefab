@@ -493,6 +493,8 @@ MonoBehaviour:
   - {fileID: 6109716146863259008}
   - {fileID: 4075511924385423440}
   - {fileID: 1585620931587101227}
+  boxeDirectionPositions:
+  - {fileID: 1585620931587101227}
 --- !u!114 &6105717079193990227
 MonoBehaviour:
   m_ObjectHideFlags: 0

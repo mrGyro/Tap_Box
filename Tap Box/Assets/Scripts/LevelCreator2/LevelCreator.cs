@@ -64,6 +64,19 @@ namespace LevelCreator2
             _showAll.onClick.AddListener(ShowAll);
         }
 
+        [ContextMenu("Tools/CreateLevelFromChildren")]
+        private void CreateLevelFromChildren()
+        {
+            foreach (Transform  VARIABLE in transform)
+            {
+                var box = VARIABLE.GetComponent<BaseBox>();
+                if (box != null)
+                {
+                    Level.Add(box);
+                }
+            }
+        }
+
         private void OnValidateAndHide()
         {
             ValidatorController.HidePassed(Level);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Boxes;
 using Boxes.BigBoxTapFlowBox;
@@ -36,35 +37,58 @@ namespace LevelCreator.Validator
             level = copy.ToList();
 
             bool isBlockRemoved = true;
+            int layer = level[0].gameObject.layer;
+            int defaultLayer = 0;
+            var startTime = DateTime.Now;
             while (isBlockRemoved)
             {
                 isBlockRemoved = false;
                 await UniTask.Yield();
-                for (int i = level.Count - 1; i >= 0; i--)
+                foreach (var variable in level)
                 {
-                    if (!IsBoxesInDirection(level[i]))
+                    if (variable.gameObject.layer != layer)
+                        continue;
+
+                    variable.gameObject.layer = defaultLayer;
+
+                    if (!IsBoxesInDirection(variable))
                     {
-                        level.Remove(level[i]);
+                        variable.gameObject.layer = defaultLayer;
                         isBlockRemoved = true;
                         break;
                     }
+
+                    variable.gameObject.layer = layer;
                 }
             }
 
-            return level;
+            var result = level.Where(x => x.gameObject.layer == layer).ToList();
+            foreach (var VARIABLE in level)
+            {
+                VARIABLE.gameObject.layer = layer;
+            }
+
+            System.DateTime datevalue2 = System.DateTime.Now;
+            double hours = (datevalue2 - startTime).TotalSeconds;
+            Debug.LogError(hours);
+            return result;
         }
 
         private static bool IsBoxesInDirection(BaseBox box)
         {
-            var bigBox = box as BigBoxTapFlowBox;
-            if (bigBox != null)
+            if (box.Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
             {
-                var array = bigBox.GetBoxPositions();
+                var bigBox = box as BigBoxTapFlowBox;
+
+                var array = bigBox.GetDirectionParts();
                 var direction = bigBox.GetDirection();
+
                 foreach (var bigBoxPart in array)
                 {
-                    RaycastHit[] hits = Physics.RaycastAll(bigBoxPart.transform.position, direction, 1000F, _mask);
-                    if (IsHitBox(box, hits))
+                    RaycastHit[] results = new RaycastHit[1];
+                    var size = Physics.RaycastNonAlloc(bigBoxPart.transform.position, direction, results, 1000F, _mask);
+
+                    if (size != 0)
                     {
                         return true;
                     }
@@ -72,8 +96,9 @@ namespace LevelCreator.Validator
             }
             else
             {
-                RaycastHit[] hits = Physics.RaycastAll(box.transform.position, box.transform.forward, 1000F);
-                return IsHitBox(box, hits);
+                RaycastHit[] results = new RaycastHit[1];
+                var size = Physics.RaycastNonAlloc(box.transform.position, box.transform.forward, results, 1000F, _mask);
+                return size != 0;
             }
 
             return false;
@@ -83,12 +108,8 @@ namespace LevelCreator.Validator
         {
             foreach (var hit in hits)
             {
-                if (hit.transform == box.transform
-                   // || hit.transform.GetComponent<BaseBox>() == null
-                    )
+                if (hit.transform == box.transform)
                     continue;
-
-                //return true;
 
                 if (level.FirstOrDefault(x => x.transform == hit.transform))
                 {
@@ -98,75 +119,6 @@ namespace LevelCreator.Validator
 
             return false;
         }
-
-        // private async static UniTask<BaseBox> GetNearestBoxInDirection(BaseBox[] level, Vector3[] boxArrayPosition, Vector3 direction, BaseBox currentBox)
-        // {
-        //     Vector3[] arrayPosition = new Vector3[boxArrayPosition.Length];
-        //     for (int i = 0; i < boxArrayPosition.Length; i++)
-        //     {
-        //         arrayPosition[i] = boxArrayPosition[i];
-        //     }
-        //
-        //     for (int i = 0; i < arrayPosition.Length; i++)
-        //     {
-        //         arrayPosition[i] += direction;
-        //     }
-        //
-        //     bool notOutOfRange = true;
-        //     while (notOutOfRange)
-        //     {
-        //         BaseBox box = null;
-        //         for (int i = 0; i < arrayPosition.Length; i++)
-        //         {
-        //             notOutOfRange = CheckMaxLevelSize(arrayPosition[i]) && CheckMinLevelSize(arrayPosition[i]);
-        //             if (!notOutOfRange)
-        //             {
-        //                 return null;
-        //             }
-        //
-        //             await UniTask.Yield();
-        //             foreach (var variable in level)
-        //             {
-        //                 bool isBoxInPosition = false;
-        //                 switch (variable.Data.Type)
-        //                 {
-        //                     case BaseBox.BlockType.None:
-        //                     case BaseBox.BlockType.TapFlowBox:
-        //                     case BaseBox.BlockType.RotateRoadBox:
-        //                     case BaseBox.BlockType.SwipedBox:
-        //                         isBoxInPosition = variable.IsBoxInPosition(arrayPosition[i]);
-        //                         break;
-        //                     case BaseBox.BlockType.BigBoxTapFlowBox:
-        //                         var bigBox = (variable as BigBoxTapFlowBox);
-        //                         if (bigBox != null)
-        //                         {
-        //                             isBoxInPosition = bigBox.IsBoxInPosition(arrayPosition[i]);
-        //                         }
-        //
-        //                         break;
-        //                 }
-        //
-        //                 if (isBoxInPosition && currentBox != box)
-        //                 {
-        //                     box = variable;
-        //                     break;
-        //                 }
-        //             }
-        //         }
-        //
-        //         if (box != null && currentBox != box)
-        //         {
-        //             return box;
-        //         }
-        //
-        //         for (int i = 0; i < arrayPosition.Length; i++)
-        //         {
-        //             arrayPosition[i] += direction;
-        //         }
-        //     }
-        //
-        //     return null;
-        // }
 
         private static void SetNewMaxMinSize(BaseBox[] boxes)
         {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Boxes.Reactions;
 using Cysharp.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace Boxes.BigBoxTapFlowBox
         [SerializeField] private BaseReaction _reaction;
         [SerializeField] private BaseBox boxe;
         [SerializeField] private BigBoxPart[] boxePositions;
+        [SerializeField] private BigBoxPart[] boxeDirectionPositions;
         private float _size = 1.03f;
 
         public override async UniTask BoxReactionStart()
@@ -96,6 +98,11 @@ namespace Boxes.BigBoxTapFlowBox
         {
             base.Rotate(angle);
             UpdatePositions();
+        }
+
+        public BigBoxPart[] GetDirectionParts()
+        {
+            return boxeDirectionPositions;
         }
 
         public void UpdatePositions()

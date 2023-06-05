@@ -18,14 +18,14 @@ using Vector3 = UnityEngine.Vector3;
 public class CreateFrom3dObject : MonoBehaviour
 {
     [SerializeField] private GameObject _baseBoxPlace;
-    [SerializeField] private List<Collider> _colliders;
     [SerializeField] private float _minDistance;
     [SerializeField] private Transform _rootGameField;
     [SerializeField] private Transform _rootPool;
+    [SerializeField] private Transform _objectsWithCollidersForCreate;
     [SerializeField] private TMP_Text _countOfEmptyCellsCountText;
     [SerializeField] private List<BoxProbability> _possibleBoxesProbability;
 
-    private List<GameObject> _list = new();
+    private List<Collider> _colliders;
     private Vector3 _maxLevelSize = Vector3.negativeInfinity;
     private Vector3 _minLevelSize = Vector3.positiveInfinity;
 
@@ -48,12 +48,12 @@ public class CreateFrom3dObject : MonoBehaviour
     [ContextMenu("Tools/CreateGameFieldFromArrayPositions")]
     public async void CreateGameFieldFromArrayPositions()
     {
-        CreateFrom3d();
         _level = new List<BaseBox>();
         _emptyArrayPositions = _arrayPositions.ToList();
         Shuffle(_emptyArrayPositions);
         _listOfPossibleBox = GetPossibleBoxes();
 
+        var startTime = System.DateTime.UtcNow;
         while (_emptyArrayPositions.Count > 0)
         {
             await UniTask.Yield();
@@ -63,18 +63,22 @@ public class CreateFrom3dObject : MonoBehaviour
             _countOfEmptyCellsCountText.text = _emptyArrayPositions.Count.ToString();
         }
 
+        System.TimeSpan ts = System.DateTime.UtcNow - startTime;
+        Debug.Log("--------------------------------------"+ts.TotalSeconds);
         _countOfEmptyCellsCountText.text = _emptyArrayPositions.Count.ToString();
     }
 
     private async UniTask TryPutBoxToField(int indexOfProbability)
     {
         int countOfOperations = 0;
+        var defaultPosition = Vector3.one * 1000;
         for (int i = indexOfProbability; i >= 0; i--)
         {
-            int lastIndexOfInstance = GetLastIndexWithSize(_listOfPossibleBox, _possibleBoxesProbability[i].Box.Data.Size.ToVector3());
             int firstIndexOfInstance = GetFirstIndexWithSize(_listOfPossibleBox, _possibleBoxesProbability[i].Box.Data.Size.ToVector3());
+            int lastIndexOfInstance = GetLastIndexWithSize(_listOfPossibleBox, _possibleBoxesProbability[i].Box.Data.Size.ToVector3());
             List<BaseBox> boxesForInstance = _listOfPossibleBox.GetRange(firstIndexOfInstance, lastIndexOfInstance - firstIndexOfInstance + 1);
             Shuffle(boxesForInstance);
+
             foreach (var boxForInstance in boxesForInstance)
             {
                 for (int j = 0; j < _emptyArrayPositions.Count; j++)
@@ -85,11 +89,11 @@ public class CreateFrom3dObject : MonoBehaviour
                     {
                         PutBoxInField(boxForInstance);
                         RemoveFilledCell();
-                        boxForInstance.transform.position = Vector3.one * 1000;
+                        boxForInstance.transform.position = defaultPosition;
                         return;
                     }
 
-                    boxForInstance.transform.position = Vector3.one * 1000;
+                    boxForInstance.transform.position = defaultPosition;
                 }
             }
         }
@@ -164,6 +168,7 @@ public class CreateFrom3dObject : MonoBehaviour
 
         return x.Count == 0;
     }
+
 
     private bool IsBoxInLevelShablon(BaseBox box)
     {
@@ -304,16 +309,24 @@ public class CreateFrom3dObject : MonoBehaviour
     [ContextMenu("Tools/CreateFrom3D")]
     public void CreateFrom3d()
     {
-        _list.Clear();
-
-        foreach (var VARIABLE in _colliders)
+        _colliders ??= new List<Collider>();
+        _colliders.Clear();
+        foreach (Transform variable in _objectsWithCollidersForCreate)
         {
-            Debug.LogError(VARIABLE.bounds);
-            SetMaxLevelSize(VARIABLE.bounds.min);
-            SetMinLevelSize(VARIABLE.bounds.min);
+            var item = variable.GetComponent<Collider>();
+            if (item != null)
+            {
+                _colliders.Add(item);
+            }
+        }
 
-            SetMaxLevelSize(VARIABLE.bounds.max);
-            SetMinLevelSize(VARIABLE.bounds.max);
+        foreach (var variable in _colliders)
+        {
+            SetMaxLevelSize(variable.bounds.min);
+            SetMinLevelSize(variable.bounds.min);
+
+            SetMaxLevelSize(variable.bounds.max);
+            SetMinLevelSize(variable.bounds.max);
         }
 
         for (int x = (int)(_minLevelSize.x - 1); x < _maxLevelSize.x + 1; x++)
@@ -335,6 +348,11 @@ public class CreateFrom3dObject : MonoBehaviour
                     }
                 }
             }
+        }
+
+        foreach (Transform variable in _objectsWithCollidersForCreate)
+        {
+            variable.gameObject.SetActive(false);
         }
     }
 
