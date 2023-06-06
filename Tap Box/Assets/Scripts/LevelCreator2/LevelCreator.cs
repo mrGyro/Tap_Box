@@ -64,8 +64,7 @@ namespace LevelCreator2
             _showAll.onClick.AddListener(ShowAll);
         }
 
-        [ContextMenu("Tools/CreateLevelFromChildren")]
-        private void CreateLevelFromChildren()
+        public void CreateLevelFromChildren()
         {
             foreach (Transform  VARIABLE in transform)
             {

@@ -38,6 +38,7 @@ public class CreateFrom3dObject : MonoBehaviour
 
     private static System.Random rng = new((int)DateTime.Now.Ticks & 0x0000FFFF);
     private float _size = 1.03f;
+    private bool _isGeneratorProccess;
 
     [Serializable]
     public class Vector3Class
@@ -45,6 +46,11 @@ public class CreateFrom3dObject : MonoBehaviour
         public Vector3 Value;
     }
 
+    public void StopGenerator()
+    {
+        _isGeneratorProccess = false;
+    }
+    
     [ContextMenu("Tools/CreateGameFieldFromArrayPositions")]
     public async void CreateGameFieldFromArrayPositions()
     {
@@ -52,9 +58,10 @@ public class CreateFrom3dObject : MonoBehaviour
         _emptyArrayPositions = _arrayPositions.ToList();
         Shuffle(_emptyArrayPositions);
         _listOfPossibleBox = GetPossibleBoxes();
+        _isGeneratorProccess = true;
 
         var startTime = System.DateTime.UtcNow;
-        while (_emptyArrayPositions.Count > 0)
+        while (_emptyArrayPositions.Count > 0 && _isGeneratorProccess)
         {
             await UniTask.Yield();
             int indexOfProbability = GetIndexForNextBox();
@@ -63,8 +70,9 @@ public class CreateFrom3dObject : MonoBehaviour
             _countOfEmptyCellsCountText.text = _emptyArrayPositions.Count.ToString();
         }
 
+        _isGeneratorProccess = false;
         System.TimeSpan ts = System.DateTime.UtcNow - startTime;
-        Debug.Log("--------------------------------------"+ts.TotalSeconds);
+        Debug.Log("--------------------------------------" + ts.TotalSeconds);
         _countOfEmptyCellsCountText.text = _emptyArrayPositions.Count.ToString();
     }
 
