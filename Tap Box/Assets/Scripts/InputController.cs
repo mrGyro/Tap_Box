@@ -48,6 +48,11 @@ public class InputController : MonoBehaviour
         _isSwipeEnable = value;
     }
 
+    public void CentreteCamera()
+    {
+        MoveCameraTarget();
+    }
+
     private void Start()
     {
         _nativeVibration = new AndroidNativeVibrationService();
@@ -55,12 +60,11 @@ public class InputController : MonoBehaviour
         _zoom.SetZomValue(100);
         _rotate.SetActive(false);
         _newTarget = Vector3.zero;
-        MoveCameraTarget();
     }
 
     private async UniTask MoveCameraTarget()
     {
-        while (true)
+        while (Vector3.Distance(_newTarget, _rotate.GetTargetPosition()) > 0.1f)
         {
             await UniTask.WaitForEndOfFrame(this);
             Vector3 newPosition = Vector3.Lerp(_rotate.GetTargetPosition(), _newTarget, 0.01f);
@@ -76,8 +80,9 @@ public class InputController : MonoBehaviour
     public async void SetStartLevelSettings(Vector3 targetPosition, Vector3 cameraPosition)
     {
         _rotate.SetActive(false);
-        SetCameraTarget(targetPosition);
+        _rotate.SetTargetPosition(targetPosition);
         _rotate.SetStartPosition(cameraPosition);
+        SetCameraTarget(targetPosition);
         await UniTask.WaitForEndOfFrame(this);
         _rotate.SetActive(true);
     }

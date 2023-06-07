@@ -188,7 +188,6 @@ public class GameField : MonoBehaviour, IInitializable
     private async UniTask CreateLevel(string levelName)
     {
         _data = await GameManager.Instance.Progress.LoadLevelData(levelName);
-        SetNewCameraTargetPosition(Vector3.zero, _data.CameraPosition.ToVector3());
 
         var level = GameManager.Instance.Progress.LevelDatas.FirstOrDefault(x => x.ID == GameManager.Instance.Progress.LastStartedLevelID);
         if (level != null && level.Data != null)
@@ -202,7 +201,9 @@ public class GameField : MonoBehaviour, IInitializable
 
         SetNewMaxMinSize();
         GetTurnsCount = _boxes.Count + AddedTurns();
-        GameManager.Instance.InputController.SetCameraTarget(GetNewCenter());
+        //GameManager.Instance.InputController.SetCameraTarget(GetNewCenter());
+        SetNewCameraTargetPosition(GetNewCenter(), _data.CameraPosition.ToVector3());
+
     }
 
     private int AddedTurns()
