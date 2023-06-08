@@ -105,6 +105,9 @@ namespace Managers
 
         private void OnBackgroundChanged(Sprite obj)
         {
+            int max = Screen.width > Screen.height ? Screen.width : Screen.height;
+            var size = new Vector2(max, max);
+            
             foreach (var bg in _backgrounds)
             {
                 if (bg == null)
@@ -114,6 +117,7 @@ namespace Managers
 
                 bg.sprite = obj;
                 bg.material = null;
+                bg.rectTransform.sizeDelta = size;
             }
         }
 
