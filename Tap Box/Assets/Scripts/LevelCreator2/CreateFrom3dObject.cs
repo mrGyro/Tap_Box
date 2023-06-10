@@ -17,6 +17,8 @@ using Vector3 = UnityEngine.Vector3;
 
 public class CreateFrom3dObject : MonoBehaviour
 {
+#if UNITY_EDITOR
+
     [SerializeField] private GameObject _baseBoxPlace;
     [SerializeField] private float _minDistance;
     [SerializeField] private Transform _rootGameField;
@@ -469,4 +471,6 @@ public class CreateFrom3dObject : MonoBehaviour
             (list[k], list[n]) = (list[n], list[k]);
         }
     }
+#endif
+
 }
