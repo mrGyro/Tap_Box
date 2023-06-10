@@ -1,17 +1,21 @@
+using System;
 using Core.MessengerStatic;
 using UnityEngine;
 
 public class TouchTutorial : MonoBehaviour
 {
-    void Start()
+    private void OnEnable()
     {
-
         Messenger.AddListener(Constants.Events.OnBoxClicked, OnClick);
+    }
+
+    private void OnDisable()
+    {
+        Messenger.RemoveListener(Constants.Events.OnBoxClicked, OnClick);
     }
 
     private void OnClick()
     {
-        Messenger.RemoveListener(Constants.Events.OnBoxClicked, OnClick);
         gameObject.SetActive(false);
     }
 }
