@@ -57,6 +57,7 @@ namespace LevelCreator.Validator
 
                     if (!IsBoxesInDirection(variable))
                     {
+                        Debug.LogError(variable.name, variable);
                         variable.gameObject.layer = defaultLayer;
                         isBlockRemoved = true;
                         break;
@@ -81,6 +82,7 @@ namespace LevelCreator.Validator
         private static RaycastHit[] results;
         private static bool IsBoxesInDirection(BaseBox box)
         {
+            results = new RaycastHit[5];
             if (box.Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
             {
                 var bigBox = box as BigBoxTapFlowBox;

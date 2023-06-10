@@ -694,7 +694,7 @@ namespace LevelCreator2
                 Debug.LogError("Has collisions: " + _collisions.Count);
             }
 
-            ValidatorController.Validate(Level);
+           // ValidatorController.Validate(Level);
         }
 
         private bool IsBlockCrossPosition(BaseBox box, BaseBox box2)
