@@ -22,6 +22,7 @@ namespace LevelCreator2
         [SerializeField] ShadowBox shadowBox;
         [SerializeField] private Image currentBoxIcon;
         [SerializeField] private BoxMover boxMover;
+        [SerializeField] private GameObject _3dObj;
 
         [SerializeField] List<BaseBox> prefabs;
         [SerializeField] List<Sprite> loadableSprites;
@@ -289,6 +290,8 @@ namespace LevelCreator2
 
         private void CreateBox()
         {
+            if(_3dObj.activeSelf)
+                return;
             if (!Input.GetMouseButtonDown(0))
                 return;
 

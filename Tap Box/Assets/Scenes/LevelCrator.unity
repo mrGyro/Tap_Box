@@ -2493,7 +2493,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Create boxes
+  m_text: 'Generate
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6578,7 +6580,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &694202154
 Transform:
   m_ObjectHideFlags: 0
@@ -11109,6 +11111,7 @@ MonoBehaviour:
   shadowBox: {fileID: 1396079077}
   currentBoxIcon: {fileID: 518954603}
   boxMover: {fileID: 2047981574}
+  _3dObj: {fileID: 694202153}
   prefabs:
   - {fileID: 7940780056439262889, guid: 8bbff50bad1dcb74ba950424e443a1e2, type: 3}
   - {fileID: 6105717079193990226, guid: b5fbe5a14d02dae478745b22a4a94fd4, type: 3}
