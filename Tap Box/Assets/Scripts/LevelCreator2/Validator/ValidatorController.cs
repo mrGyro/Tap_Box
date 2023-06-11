@@ -37,20 +37,21 @@ namespace LevelCreator.Validator
             // SetNewMaxMinSize(copy);
             //
             // level = copy.ToList();
-            level = levelInput;
-            SetNewMaxMinSize(level);
+            BaseBox[] levelNew = levelInput.ToArray();
+            SetNewMaxMinSize(levelNew);
 
-            int layer = level[0].gameObject.layer;
+            int layer = levelNew[0].gameObject.layer;
 
             bool isBlockRemoved = true;
             int defaultLayer = 0;
-            //      var startTime = DateTime.Now;
+            int length = levelNew.Length;
             while (isBlockRemoved)
             {
                 isBlockRemoved = false;
                 await UniTask.Yield();
-                foreach (var variable in level)
+                for (var index = 0; index < length; index++)
                 {
+                    var variable = levelNew[index];
                     if (variable.gameObject.layer != layer)
                     {
                         continue;
@@ -64,12 +65,14 @@ namespace LevelCreator.Validator
                         isBlockRemoved = true;
                         if (variable == newBox)
                         {
-                            foreach (var VARIABLE in level)
+                            for (var i = 0; i < levelNew.Length; i++)
                             {
-                                VARIABLE.gameObject.layer = layer;
+                                levelNew[i].gameObject.layer = layer;
                             }
+
                             return true;
                         }
+
                         break;
                     }
 
@@ -77,16 +80,13 @@ namespace LevelCreator.Validator
                 }
             }
 
-            var result = level.Where(x => x.gameObject.layer == layer).ToList();
-            foreach (var VARIABLE in level)
+            var result = levelNew.FirstOrDefault(x => x.gameObject.layer == layer);
+            for (var index = 0; index < levelNew.Length; index++)
             {
-                VARIABLE.gameObject.layer = layer;
+                levelNew[index].gameObject.layer = layer;
             }
 
-            //        DateTime date = DateTime.Now;
-            //          double hours = (date - startTime).TotalSeconds;
-//            Debug.LogError(hours);
-            return result.Count == 0;
+            return result == null;
         }
         public static async UniTask<List<BaseBox>> Validate(List<BaseBox> levelInput)
         {
@@ -95,6 +95,7 @@ namespace LevelCreator.Validator
             SetNewMaxMinSize(copy);
 
             level = copy.ToList();
+            int length = level.Count;
 
             bool isBlockRemoved = true;
             int layer = level[0].gameObject.layer;
@@ -104,8 +105,9 @@ namespace LevelCreator.Validator
             {
                 isBlockRemoved = false;
                 await UniTask.Yield();
-                foreach (var variable in level)
+                for (var index = 0; index < length; index++)
                 {
+                    var variable = level[index];
                     if (variable.gameObject.layer != layer)
                     {
                         continue;
