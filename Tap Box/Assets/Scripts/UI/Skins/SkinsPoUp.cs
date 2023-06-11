@@ -110,6 +110,7 @@ namespace UI.Skins
 
             GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, _coinsCountForWatchAd);
             await GameManager.Instance.Progress.Save();
+            SetBottomButtons(_selectedType);
         }
 
         private int GetPriceForRandomSkin()
@@ -122,7 +123,7 @@ namespace UI.Skins
             _selectedType = type;
             if (!GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded) && !GameManager.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
             {
-                _getCoinsByRewardedAd.gameObject.SetActive(false);
+                _getCoinsByRewardedAd.interactable = false;
                 return;
             }
 
