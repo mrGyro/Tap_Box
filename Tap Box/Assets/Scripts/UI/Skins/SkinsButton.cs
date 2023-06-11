@@ -58,6 +58,7 @@ namespace UI.Skins
                     {
                         button.interactable = rewardedAd.IsReady.Value;
                         _isReady = rewardedAd.IsReady.Subscribe(OnSiReadyStatusChanged);
+                        
                     }
 
                     break;

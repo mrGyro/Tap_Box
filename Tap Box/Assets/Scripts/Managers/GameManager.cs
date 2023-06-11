@@ -38,7 +38,8 @@ namespace Managers
                 PlayerLevelManager = new PlayerLevelManager();
                 SkinsManager = new SkinsManager();
             }
-            
+            Mediation.Initialize();
+
             TutorialManager.Initialize();
             AnalyticManager.Initialize();
             await Progress.Load();
@@ -55,7 +56,6 @@ namespace Managers
             
 
             LoadLevelById(Progress.LastStartedLevelID);
-            Mediation.Initialize();
             _tapEffectController.Initialize();
         }
 

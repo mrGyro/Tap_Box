@@ -98,6 +98,10 @@ namespace UI
             {
                 time = 100;
             }
+            else if (differance > 100)
+            {
+                time = 1;
+            }
             
             while (_targetValue >= _currentValue)
             {

@@ -9,6 +9,7 @@ namespace Currency
 {
     public class CurrencyController
     {
+        [Serializable]
         public enum Type
         {
             Coin,
