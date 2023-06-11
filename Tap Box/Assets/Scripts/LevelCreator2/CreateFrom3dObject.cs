@@ -52,7 +52,7 @@ public class CreateFrom3dObject : MonoBehaviour
     {
         _isGeneratorProccess = false;
     }
-    
+
     [ContextMenu("Tools/CreateGameFieldFromArrayPositions")]
     public async void CreateGameFieldFromArrayPositions()
     {
@@ -316,17 +316,22 @@ public class CreateFrom3dObject : MonoBehaviour
 
 
 #if UNITY_EDITOR
-    [ContextMenu("Tools/CreateFrom3D")]
-    public void CreateFrom3d()
+    public async void CreateFrom3d()
     {
         _colliders ??= new List<Collider>();
         _colliders.Clear();
         foreach (Transform variable in _objectsWithCollidersForCreate)
         {
-            var item = variable.GetComponent<Collider>();
-            if (item != null)
+            var item = variable.GetComponents<Collider>();
+            if (item != null && item.Length > 0)
             {
-                _colliders.Add(item);
+                _colliders.AddRange(item);
+            }
+
+            item = variable.GetComponentsInChildren<Collider>();
+            if (item != null && item.Length > 0)
+            {
+                _colliders.AddRange(item);
             }
         }
 
@@ -341,13 +346,15 @@ public class CreateFrom3dObject : MonoBehaviour
 
         for (int x = (int)(_minLevelSize.x - 1); x < _maxLevelSize.x + 1; x++)
         {
+            await UniTask.Yield();
+
             for (int y = (int)(_minLevelSize.y - 1); y < _maxLevelSize.y + 1; y++)
             {
                 for (int z = (int)(_minLevelSize.z - 1); z < _maxLevelSize.z + 1; z++)
                 {
                     Vector3 pos = new Vector3(x, y, z);
                     var closestPoint = GetColliderClosestPoint(pos);
-                    Debug.DrawLine(closestPoint, pos, Color.blue, 20);
+                   // Debug.DrawLine(closestPoint, pos, Color.blue, 2);
 
                     if (Vector3.Distance(closestPoint, pos) <= _minDistance)
                     {
@@ -472,5 +479,4 @@ public class CreateFrom3dObject : MonoBehaviour
         }
     }
 #endif
-
 }
