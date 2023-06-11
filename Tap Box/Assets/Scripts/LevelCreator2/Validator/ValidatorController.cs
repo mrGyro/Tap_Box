@@ -29,7 +29,65 @@ namespace LevelCreator.Validator
                 VARIABLE.gameObject.SetActive(false);
             }
         }
+        
+        public static async UniTask<bool> IsValidateLastAddedBlock(List<BaseBox> levelInput, BaseBox newBox)
+        {
+            // BaseBox[] copy = new BaseBox[levelInput.Count];
+            // levelInput.CopyTo(copy);
+            // SetNewMaxMinSize(copy);
+            //
+            // level = copy.ToList();
+            level = levelInput;
+            SetNewMaxMinSize(level);
 
+            int layer = level[0].gameObject.layer;
+
+            bool isBlockRemoved = true;
+            int defaultLayer = 0;
+            //      var startTime = DateTime.Now;
+            while (isBlockRemoved)
+            {
+                isBlockRemoved = false;
+                await UniTask.Yield();
+                foreach (var variable in level)
+                {
+                    if (variable.gameObject.layer != layer)
+                    {
+                        continue;
+                    }
+
+                    variable.gameObject.layer = defaultLayer;
+
+                    if (!IsBoxesInDirection(variable))
+                    {
+                        variable.gameObject.layer = defaultLayer;
+                        isBlockRemoved = true;
+                        if (variable == newBox)
+                        {
+                            foreach (var VARIABLE in level)
+                            {
+                                VARIABLE.gameObject.layer = layer;
+                            }
+                            return true;
+                        }
+                        break;
+                    }
+
+                    variable.gameObject.layer = layer;
+                }
+            }
+
+            var result = level.Where(x => x.gameObject.layer == layer).ToList();
+            foreach (var VARIABLE in level)
+            {
+                VARIABLE.gameObject.layer = layer;
+            }
+
+            //        DateTime date = DateTime.Now;
+            //          double hours = (date - startTime).TotalSeconds;
+//            Debug.LogError(hours);
+            return result.Count == 0;
+        }
         public static async UniTask<List<BaseBox>> Validate(List<BaseBox> levelInput)
         {
             BaseBox[] copy = new BaseBox[levelInput.Count];
@@ -74,7 +132,7 @@ namespace LevelCreator.Validator
 
             DateTime date = DateTime.Now;
             double hours = (date - startTime).TotalSeconds;
-//            Debug.LogError(hours);
+            Debug.LogError(hours);
             return result;
         }
 
@@ -127,6 +185,38 @@ namespace LevelCreator.Validator
         {
             _maxLevelSize = boxes.Length == 0 ? Vector3.zero : boxes[0].Data.ArrayPosition;
             _minLevelSize = boxes.Length == 0 ? Vector3.zero : boxes[0].Data.ArrayPosition;
+            foreach (var baseBox in boxes)
+            {
+                switch (baseBox.Data.Type)
+                {
+                    case BaseBox.BlockType.None:
+                    case BaseBox.BlockType.TapFlowBox:
+                    case BaseBox.BlockType.RotateRoadBox:
+                    case BaseBox.BlockType.SwipedBox:
+                        SetMaxLevelSize(baseBox.Data.ArrayPosition);
+                        SetMinLevelSize(baseBox.Data.ArrayPosition);
+                        break;
+                    case BaseBox.BlockType.BigBoxTapFlowBox:
+                        var bigBox = (baseBox as BigBoxTapFlowBox);
+                        if (bigBox != null)
+                        {
+                            var positions = bigBox.GetBoxPositions();
+                            foreach (var pos in positions)
+                            {
+                                SetMaxLevelSize(pos.ArrayPosition);
+                                SetMinLevelSize(pos.ArrayPosition);
+                            }
+                        }
+
+                        break;
+                }
+            }
+        }
+        
+        private static void SetNewMaxMinSize(List<BaseBox> boxes)
+        {
+            _maxLevelSize = boxes.Count == 0 ? Vector3.zero : boxes[0].Data.ArrayPosition;
+            _minLevelSize = boxes.Count == 0 ? Vector3.zero : boxes[0].Data.ArrayPosition;
             foreach (var baseBox in boxes)
             {
                 switch (baseBox.Data.Type)

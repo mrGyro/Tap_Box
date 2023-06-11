@@ -67,6 +67,7 @@ namespace LevelCreator2
 
         public void CreateLevelFromChildren()
         {
+            Level.Clear();
             foreach (Transform  VARIABLE in transform)
             {
                 var box = VARIABLE.GetComponent<BaseBox>();
