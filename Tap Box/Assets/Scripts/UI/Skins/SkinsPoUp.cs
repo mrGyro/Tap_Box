@@ -13,6 +13,8 @@ namespace UI.Skins
     {
         [SerializeField] private Image _background;
         [SerializeField] private CurrencyCounter counter;
+        [SerializeField] private Button _getRandomSkinByCoins;
+        [SerializeField] private Button _getCoinsByRewardedAd;
         [SerializeField] private List<SkinsButton> _boxesSkinsButtons;
         [SerializeField] private List<SkinsButton> _backgroundsSkinsButtons;
         [SerializeField] private List<SkinsButton> _tailButtons;
