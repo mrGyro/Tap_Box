@@ -57,7 +57,6 @@ namespace LevelCreator.Validator
 
                     if (!IsBoxesInDirection(variable))
                     {
-                        Debug.LogError(variable.name, variable);
                         variable.gameObject.layer = defaultLayer;
                         isBlockRemoved = true;
                         break;
@@ -75,7 +74,7 @@ namespace LevelCreator.Validator
 
             DateTime date = DateTime.Now;
             double hours = (date - startTime).TotalSeconds;
-            Debug.LogError(hours);
+//            Debug.LogError(hours);
             return result;
         }
 

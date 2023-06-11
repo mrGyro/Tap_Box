@@ -657,42 +657,42 @@ namespace LevelCreator2
 
         private void OnLevelChangedValidation()
         {
-            foreach (var variable in _collisions)
-            {
-                var meshRenderer = variable.transform.GetChild(0).GetComponent<MeshRenderer>();
-                if (meshRenderer == null)
-                    continue;
-
-                meshRenderer.materials[0].SetFloat(DissolveSlider, -1);
-                meshRenderer.materials[1].SetFloat(DissolveSlider, -1);
-            }
-
-            _collisions = new List<BaseBox>();
-            foreach (var box in Level)
-            {
-                foreach (var box2 in Level)
-                {
-                    if (box == box2)
-                        continue;
-
-
-                    if (!IsBlockCrossPosition(box, box2))
-                    {
-                        continue;
-                    }
-
-                    if (!_collisions.Contains(box))
-                        _collisions.Add(box);
-
-                    if (!_collisions.Contains(box2))
-                        _collisions.Add(box2);
-                }
-            }
-
-            if (_collisions.Count > 0)
-            {
-                Debug.LogError("Has collisions: " + _collisions.Count);
-            }
+            // foreach (var variable in _collisions)
+            // {
+            //     var meshRenderer = variable.transform.GetChild(0).GetComponent<MeshRenderer>();
+            //     if (meshRenderer == null)
+            //         continue;
+            //
+            //     meshRenderer.materials[0].SetFloat(DissolveSlider, -1);
+            //     meshRenderer.materials[1].SetFloat(DissolveSlider, -1);
+            // }
+            //
+            // _collisions = new List<BaseBox>();
+            // foreach (var box in Level)
+            // {
+            //     foreach (var box2 in Level)
+            //     {
+            //         if (box == box2)
+            //             continue;
+            //
+            //
+            //         if (!IsBlockCrossPosition(box, box2))
+            //         {
+            //             continue;
+            //         }
+            //
+            //         if (!_collisions.Contains(box))
+            //             _collisions.Add(box);
+            //
+            //         if (!_collisions.Contains(box2))
+            //             _collisions.Add(box2);
+            //     }
+            // }
+            //
+            // if (_collisions.Count > 0)
+            // {
+            //     Debug.LogError("Has collisions: " + _collisions.Count);
+            // }
 
            // ValidatorController.Validate(Level);
         }

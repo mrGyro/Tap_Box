@@ -25,6 +25,7 @@ public class CreateFrom3dObject : MonoBehaviour
     [SerializeField] private Transform _rootPool;
     [SerializeField] private Transform _objectsWithCollidersForCreate;
     [SerializeField] private TMP_Text _countOfEmptyCellsCountText;
+    [SerializeField] private AudioClip audioClip;
     [SerializeField] private List<BoxProbability> _possibleBoxesProbability;
 
     private List<Collider> _colliders;
@@ -41,6 +42,11 @@ public class CreateFrom3dObject : MonoBehaviour
     private static System.Random rng = new((int)DateTime.Now.Ticks & 0x0000FFFF);
     private float _size = 1.03f;
     private bool _isGeneratorProccess;
+
+    private void Awake()
+    {
+        Application.runInBackground = true;
+    }
 
     [Serializable]
     public class Vector3Class
@@ -75,6 +81,12 @@ public class CreateFrom3dObject : MonoBehaviour
         _isGeneratorProccess = false;
         System.TimeSpan ts = System.DateTime.UtcNow - startTime;
         Debug.Log("--------------------------------------" + ts.TotalSeconds);
+        var source = Camera.main.GetComponent<AudioSource>();
+        if (source != null)
+        {
+            source.PlayOneShot(audioClip);
+        }
+
         _countOfEmptyCellsCountText.text = _emptyArrayPositions.Count.ToString();
     }
 
