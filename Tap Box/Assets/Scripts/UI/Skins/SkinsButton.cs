@@ -63,6 +63,7 @@ namespace UI.Skins
 
                     break;
                 case CurrencyController.Type.InterstitialAds:
+
                     getTypeIcon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{Constants.Currency.Ads}_icon");
                     getTypeText.text = "Open";
 

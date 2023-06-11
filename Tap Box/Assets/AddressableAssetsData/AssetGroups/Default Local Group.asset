@@ -53,10 +53,6 @@ MonoBehaviour:
     m_Address: CloseIcon
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 8e659895f11130a458e453363316fb79
-    m_Address: asdIcon_icon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: bbe42065ff2702b4c800f53c8b61e2f1
     m_Address: BigRewardView
     m_ReadOnly: 0
@@ -163,6 +159,10 @@ MonoBehaviour:
     m_SerializedLabels: []
   - m_GUID: 3310e887828d759489254dee2faa6190
     m_Address: Default4_bg_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a84fed80221d9f446aed6e93d1f391c6
+    m_Address: asdIcon_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0
