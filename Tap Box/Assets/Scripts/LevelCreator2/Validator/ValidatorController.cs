@@ -32,11 +32,6 @@ namespace LevelCreator.Validator
         
         public static async UniTask<bool> IsValidateLastAddedBlock(List<BaseBox> levelInput, BaseBox newBox)
         {
-            // BaseBox[] copy = new BaseBox[levelInput.Count];
-            // levelInput.CopyTo(copy);
-            // SetNewMaxMinSize(copy);
-            //
-            // level = copy.ToList();
             BaseBox[] levelNew = levelInput.ToArray();
             SetNewMaxMinSize(levelNew);
 
@@ -65,7 +60,7 @@ namespace LevelCreator.Validator
                         isBlockRemoved = true;
                         if (variable == newBox)
                         {
-                            for (var i = 0; i < levelNew.Length; i++)
+                            for (var i = 0; i < length; i++)
                             {
                                 levelNew[i].gameObject.layer = layer;
                             }
@@ -81,7 +76,7 @@ namespace LevelCreator.Validator
             }
 
             var result = levelNew.FirstOrDefault(x => x.gameObject.layer == layer);
-            for (var index = 0; index < levelNew.Length; index++)
+            for (var index = 0; index < length; index++)
             {
                 levelNew[index].gameObject.layer = layer;
             }
