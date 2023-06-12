@@ -184,13 +184,15 @@ public class CreateFrom3dObject : MonoBehaviour
     private async UniTask<bool> IsValidationPassed(BaseBox box)
     {
         var level = new List<BaseBox>();
-        level.AddRange(_level);
         level.Add(box);
-        var x = await ValidatorController.Validate(level);
+        level.AddRange(_level);
 
-        return x.Count == 0;
+        //var x = await ValidatorController.Validate(level);
+        var x = await ValidatorController.IsValidateLastAddedBlock(level, box);
+
+        return x;
+        //return x.Count == 0;
     }
-
 
     private bool IsBoxInLevelShablon(BaseBox box)
     {

@@ -58,10 +58,12 @@ namespace UI.Skins
                     {
                         button.interactable = rewardedAd.IsReady.Value;
                         _isReady = rewardedAd.IsReady.Subscribe(OnSiReadyStatusChanged);
+                        
                     }
 
                     break;
                 case CurrencyController.Type.InterstitialAds:
+
                     getTypeIcon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{Constants.Currency.Ads}_icon");
                     getTypeText.text = "Open";
 
