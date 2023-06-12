@@ -22,10 +22,9 @@ namespace Boxes.BigBoxTapFlowBox
 
         public override async UniTask Init()
         {
-            await UniTask.Yield();
-            foreach (var VARIABLE in boxePositions)
+            foreach (var variable in boxePositions)
             {
-                VARIABLE.UpdateArrayPosition();
+                variable.UpdateArrayPosition();
             }
         }
 

@@ -187,6 +187,8 @@ public class GameField : MonoBehaviour, IInitializable
 
     private async UniTask CreateLevel(string levelName)
     {
+        GameManager.Instance.UIManager.ShowUpToAllPopUp(Constants.PopUps.LoadingPopup);
+
         _data = await GameManager.Instance.Progress.LoadLevelData(levelName);
 
         var level = GameManager.Instance.Progress.LevelDatas.FirstOrDefault(x => x.ID == GameManager.Instance.Progress.LastStartedLevelID);
@@ -201,9 +203,11 @@ public class GameField : MonoBehaviour, IInitializable
 
         SetNewMaxMinSize();
         GetTurnsCount = _boxes.Count + AddedTurns();
+        Debug.LogError(GetTurnsCount);
+
         //GameManager.Instance.InputController.SetCameraTarget(GetNewCenter());
         SetNewCameraTargetPosition(GetNewCenter(), _data.CameraPosition.ToVector3());
-
+        GameManager.Instance.UIManager.ClosePopUp(Constants.PopUps.LoadingPopup);
     }
 
     private int AddedTurns()
@@ -217,9 +221,9 @@ public class GameField : MonoBehaviour, IInitializable
     {
         ClearGameField();
         _boxes = new List<BaseBox>();
-
-        foreach (var data in dataList)
+        for (var i = 0; i < dataList.Count; i++)
         {
+            var data = dataList[i];
             if (data.Type == BaseBox.BlockType.None)
                 continue;
 
@@ -230,11 +234,23 @@ public class GameField : MonoBehaviour, IInitializable
             box.Data = data;
             box.name = box.Data.Type + "_" + _boxes.Count;
             _boxes.Add(box);
+
+            if (i % 10 == 0)
+            {
+                await UniTask.Yield();
+                GetTurnsCount = _boxes.Count;
+                GameManager.Instance.UIManager.ShowTurns();
+            }
         }
 
-        foreach (var baseBox in _boxes)
+        for (var index = 0; index < _boxes.Count; index++)
         {
+            var baseBox = _boxes[index];
             await baseBox.Init();
+            if (index % 10 == 0)
+            {
+                await UniTask.Yield();
+            }
         }
     }
 

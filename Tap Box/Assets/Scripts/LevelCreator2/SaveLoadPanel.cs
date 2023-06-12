@@ -78,7 +78,6 @@ namespace LevelCreator2
 
         public void StatusChanged()
         {
-            Debug.LogError(statusDropDown.value);
             switch (statusDropDown.value)
             {
                 case 0:
