@@ -20,7 +20,6 @@ public class WinWindow : PopUpBase
     [SerializeField] private Button _getForAds;
     [SerializeField] private GameObject winVFX;
     [SerializeField] private Button _loseButton;
-    [SerializeField] private GameObject winCoinVFX;
     [SerializeField] private List<RewardView> rewardViews;
     [SerializeField] private CurrencyCounter _currencyCounter;
 
