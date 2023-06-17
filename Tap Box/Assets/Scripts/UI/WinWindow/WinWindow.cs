@@ -304,6 +304,7 @@ public class WinWindow : PopUpBase
 
     private void OnClose()
     {
+        
         GameManager.Instance.LoadNextLevel();
         GameManager.Instance.UIManager.ClosePopUp(ID);
 

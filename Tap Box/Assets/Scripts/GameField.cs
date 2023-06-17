@@ -203,7 +203,6 @@ public class GameField : MonoBehaviour, IInitializable
 
         SetNewMaxMinSize();
         GetTurnsCount = _boxes.Count + AddedTurns();
-        Debug.LogError(GetTurnsCount);
 
         //GameManager.Instance.InputController.SetCameraTarget(GetNewCenter());
         SetNewCameraTargetPosition(GetNewCenter(), _data.CameraPosition.ToVector3());
