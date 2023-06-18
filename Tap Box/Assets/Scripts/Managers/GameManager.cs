@@ -74,6 +74,7 @@ namespace Managers
 
         public async void LoadLevelById(string id)
         {
+            Instance.InputController.SetDefaultZoom();
             Progress.LastStartedLevelID = id;
 
             await GameField.LoadLevelByName(Progress.LastStartedLevelID);

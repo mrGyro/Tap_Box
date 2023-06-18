@@ -1,12 +1,12 @@
 <dependencies>
   <packages>
-    <package>com.google.android.gms:play-services-ads:21.4.0</package>
+    <package>com.google.android.gms:play-services-ads:22.1.0</package>
     <package>com.google.android.gms:play-services-ads-identifier:18.0.1</package>
     <package>com.google.android.gms:play-services-basement:18.1.0</package>
-    <package>com.ironsource.adapters:admobadapter:4.3.34</package>
-    <package>com.ironsource.adapters:unityadsadapter:4.3.25</package>
-    <package>com.ironsource.sdk:mediationsdk:7.2.7</package>
-    <package>com.unity3d.ads:unity-ads:4.6.0</package>
+    <package>com.ironsource.adapters:admobadapter:4.3.38</package>
+    <package>com.ironsource.adapters:unityadsadapter:4.3.30</package>
+    <package>com.ironsource.sdk:mediationsdk:7.3.1</package>
+    <package>com.unity3d.ads:unity-ads:4.7.1</package>
     <package>com.unity3d.mediation:adcolony-adapter:[1.0,2.0[</package>
     <package>com.unity3d.mediation:admob-adapter:[1.0,2.0[</package>
     <package>com.unity3d.mediation:applovin-adapter:[1.0,2.0[</package>

@@ -53,11 +53,16 @@ public class InputController : MonoBehaviour
         MoveCameraTarget();
     }
 
+    public void SetDefaultZoom()
+    {
+        _zoom.SetZomValue(100);
+    }
+
     private void Start()
     {
         _nativeVibration = new AndroidNativeVibrationService();
         _layerMask = LayerMask.GetMask(GameFieldElement);
-        _zoom.SetZomValue(100);
+        SetDefaultZoom();
         _rotate.SetActive(false);
         _newTarget = Vector3.zero;
     }
