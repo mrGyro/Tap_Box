@@ -213,6 +213,46 @@ MonoBehaviour:
     m_Address: Skin7_BigBoxTapFlowBox_3_3_3
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 6f06ea88ef0ed4242b98d13cd7dc7568
+    m_Address: Skin8_BigBoxTapFlowBox_1_1_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5aaa8f9db1586ba4b844fb08a32275bd
+    m_Address: Skin8_BigBoxTapFlowBox_1_1_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 19587396ce5cd03458f3b9b7d5d9acb9
+    m_Address: Skin8_BigBoxTapFlowBox_2_1_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1aca9725f62216040bf426060154c406
+    m_Address: Skin8_BigBoxTapFlowBox_2_1_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 71502fe60246ffa47bdf8401aa850233
+    m_Address: Skin8_BigBoxTapFlowBox_2_2_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: caa2db167056ffc4a9b7db2a74be9182
+    m_Address: Skin8_BigBoxTapFlowBox_2_2_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3ad2c6be51c225c46affcf8d2e7bc00b
+    m_Address: Skin8_BigBoxTapFlowBox_3_1_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 30148cdd5b0ca844fb03070aaf326b1f
+    m_Address: Skin8_BigBoxTapFlowBox_3_2_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: c63da96b530256149b803cc5e521aec8
+    m_Address: Skin8_BigBoxTapFlowBox_3_3_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 123f5868d04cbe444b75b685c9c56d9b
+    m_Address: Skin8_TapFlowBox
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d2092fe1ab8035d4192c7661d5d020b3, type: 2}
   m_SchemaSet:
