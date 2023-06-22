@@ -12,7 +12,7 @@ using UnityEngine;
 
 public class GameField : MonoBehaviour, IInitializable
 {
-    [SerializeField] private float size;
+    public const float Size = 1.08f;
 
     private Transform _rootTransform;
     private Vector3 _maxLevelSize;
@@ -93,7 +93,7 @@ public class GameField : MonoBehaviour, IInitializable
 
     public Vector3 GetWorldPosition(Vector3 arrayPosition)
     {
-        return arrayPosition * size;
+        return arrayPosition * Size;
     }
 
     public BaseBox GetNearestBoxInDirection(Vector3[] boxArrayPosition, Vector3 direction, BaseBox currentBox)
@@ -113,7 +113,7 @@ public class GameField : MonoBehaviour, IInitializable
             }
 
             float distance = Vector3.Distance(variable, hitBox.point);
-            if (distance < size)
+            if (distance < Size)
             {
                 results = hitBox.transform;
                 break;
@@ -228,7 +228,7 @@ public class GameField : MonoBehaviour, IInitializable
 
             var boxGameObject = await InstantiateAssetAsync(GetAddressableName(data));
             var box = boxGameObject.GetComponent<BaseBox>();
-            box.transform.position = data.ArrayPosition.ToVector3() * size;
+            box.transform.position = data.ArrayPosition.ToVector3() * Size;
             box.transform.rotation = Quaternion.Euler(data.Rotation);
             box.Data = data;
             box.name = box.Data.Type + "_" + _boxes.Count;

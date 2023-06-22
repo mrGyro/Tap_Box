@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Boxes.Reactions;
 using Cysharp.Threading.Tasks;
 
@@ -12,7 +11,8 @@ namespace Boxes.BigBoxTapFlowBox
         [SerializeField] private BaseBox boxe;
         [SerializeField] private BigBoxPart[] boxePositions;
         [SerializeField] private BigBoxPart[] boxeDirectionPositions;
-        private float _size = 1.03f;
+        [SerializeField] private Transform renderer;
+
 
         public override async UniTask BoxReactionStart()
         {
@@ -32,6 +32,30 @@ namespace Boxes.BigBoxTapFlowBox
         private void CalculatePositions()
         {
             Init();
+        } 
+        
+        [ContextMenu("Reset positions")]
+        private void ResetPositionToLocalDefaultPlaces()
+        {
+            foreach (var VARIABLE in boxePositions)
+            {
+                VARIABLE.ResetPositionToLocalDefaultPlaces();
+            }
+        }
+        
+        [ContextMenu("Set By Center Position")]
+        private void SetByCenterPosition()
+        {
+            Vector3 result = Vector3.zero;
+
+            foreach (var VARIABLE in boxePositions)
+            {
+                result += VARIABLE.ArrayDirection * GameField.Size;
+            }
+
+            result /= boxePositions.Length;
+            renderer.localPosition = result;
+
         }
 
         public override bool IsBoxInPosition(Vector3 position)

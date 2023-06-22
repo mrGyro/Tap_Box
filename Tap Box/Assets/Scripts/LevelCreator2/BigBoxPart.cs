@@ -3,12 +3,17 @@ using UnityEngine;
 public class BigBoxPart : MonoBehaviour
 {
     public Vector3 ArrayPosition;
-    private float _size = 1.03f;
+    public Vector3 ArrayDirection;
 
     public void UpdateArrayPosition()
     {
-        ArrayPosition = new Vector3(Mathf.Round((transform.position.x / _size)),
-            Mathf.Round((transform.position.y / _size)),
-            Mathf.Round((transform.position.z / _size)));
+        ArrayPosition = new Vector3(Mathf.Round((transform.position.x / GameField.Size)),
+            Mathf.Round((transform.position.y / GameField.Size)),
+            Mathf.Round((transform.position.z / GameField.Size)));  
+    }
+
+    public void ResetPositionToLocalDefaultPlaces()
+    {
+        transform.localPosition = ArrayPosition * GameField.Size;
     }
 }

@@ -47,7 +47,7 @@ namespace LevelCreator
             var bigBox = _basebox as BigBoxTapFlowBox;
             if (bigBox != null)
             {
-                _basebox.transform.position = positions[0] * 1.03f;
+                _basebox.transform.position = positions[0] * GameField.Size;
                 bigBox.UpdatePositions();
             }
             else

@@ -40,7 +40,6 @@ public class CreateFrom3dObject : MonoBehaviour
     private List<BaseBox> _level;
 
     private static System.Random rng = new((int)DateTime.Now.Ticks & 0x0000FFFF);
-    private float _size = 1.03f;
     private bool _isGeneratorProccess;
 
     private void Awake()
@@ -160,7 +159,7 @@ public class CreateFrom3dObject : MonoBehaviour
 
     private async UniTask<bool> CanPutBoxInField(BaseBox box, Vector3 position)
     {
-        box.transform.position = position * _size;
+        box.transform.position = position * GameField.Size;
         box.Data.ArrayPosition = position;
         var x = box as BigBoxTapFlowBox;
         if (x != null)
@@ -374,7 +373,7 @@ public class CreateFrom3dObject : MonoBehaviour
                     {
                         GameObject g = Instantiate(_baseBoxPlace, pos, quaternion.identity, transform);
                         _arrayPositions.Add(new Vector3Class() { Value = g.transform.position });
-                        g.transform.position *= 1.03f;
+                        g.transform.position *= GameField.Size;
                         _gameObjects.Add(g);
                     }
                 }

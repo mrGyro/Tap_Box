@@ -34,7 +34,6 @@ namespace LevelCreator2
         private const string GameFieldElement = "GameFieldElement";
 
         private int _currentIndex = 0;
-        private float _size = 1.03f;
         private bool _isActive = true;
         private List<BaseBox> _collisions = new();
         private Vector3 _hit;
@@ -400,10 +399,10 @@ namespace LevelCreator2
                         {
                             foreach (var vector3 in bufferResults)
                             {
-                                if (Vector3.Distance(vector3 * _size, _hit) < maxDistance)
+                                if (Vector3.Distance(vector3 * GameField.Size, _hit) < maxDistance)
                                 {
                                     result = new List<Vector3>(bufferResults);
-                                    maxDistance = Vector3.Distance(vector3 * _size, _hit);
+                                    maxDistance = Vector3.Distance(vector3 * GameField.Size, _hit);
                                 }
                             }
                         }

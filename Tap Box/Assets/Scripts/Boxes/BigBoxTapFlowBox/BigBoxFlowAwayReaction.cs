@@ -88,7 +88,7 @@ namespace Boxes.BigBoxTapFlowBox
             while (true)
             {
                 var distance = Vector3.Distance(nearestBoxPosition, contactBox.position);
-                if (distance < 1.03f)
+                if (distance < GameField.Size)
                 {
                     break;
                 }
@@ -129,7 +129,7 @@ namespace Boxes.BigBoxTapFlowBox
                     var targetBoxParts = targetBigBox.GetBoxPositions();
                     foreach (var VARIABLE in targetBoxParts)
                     {
-                        targetPosition.Add(VARIABLE.ArrayPosition * 1.03f);
+                        targetPosition.Add(VARIABLE.ArrayPosition * GameField.Size);
                     }
 
                     break;

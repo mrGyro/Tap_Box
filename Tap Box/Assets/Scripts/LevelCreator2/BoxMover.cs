@@ -17,7 +17,6 @@ namespace LevelCreator2
         [SerializeField] private Button beckButton;
 
         private BaseBox _currentTargetBox;
-        private float _size = 1.03f;
         private LevelCreator _creator;
         private bool _isPossibleToMove;
 
@@ -46,9 +45,9 @@ namespace LevelCreator2
             if (!_isPossibleToMove)
                 return;
             _isPossibleToMove = false;
-            _currentTargetBox.transform.localPosition += Vector3.left * _size;
+            _currentTargetBox.transform.localPosition += Vector3.left * GameField.Size;
             UpdatePosition();
-            CheckForRevert(Vector3.left * _size);
+            CheckForRevert(Vector3.left * GameField.Size);
             _isPossibleToMove = true;
         }
 
@@ -59,10 +58,10 @@ namespace LevelCreator2
             if (!_isPossibleToMove)
                 return;
             _isPossibleToMove = false;
-            _currentTargetBox.transform.localPosition += Vector3.right * _size;
+            _currentTargetBox.transform.localPosition += Vector3.right * GameField.Size;
 
             UpdatePosition();
-            CheckForRevert(Vector3.right * _size);
+            CheckForRevert(Vector3.right * GameField.Size);
             _isPossibleToMove = true;
         }
 
@@ -75,10 +74,10 @@ namespace LevelCreator2
                 return;
             _isPossibleToMove = false;
 
-            _currentTargetBox.transform.localPosition += Vector3.up * _size;
+            _currentTargetBox.transform.localPosition += Vector3.up * GameField.Size;
 
             UpdatePosition();
-            CheckForRevert(Vector3.up * _size);
+            CheckForRevert(Vector3.up * GameField.Size);
             _isPossibleToMove = true;
         }
 
@@ -89,10 +88,10 @@ namespace LevelCreator2
             if (!_isPossibleToMove)
                 return;
             _isPossibleToMove = false;
-            _currentTargetBox.transform.localPosition += Vector3.down * _size;
+            _currentTargetBox.transform.localPosition += Vector3.down * GameField.Size;
 
             UpdatePosition();
-            CheckForRevert(Vector3.down * _size);
+            CheckForRevert(Vector3.down * GameField.Size);
             _isPossibleToMove = true;
         }
 
@@ -104,10 +103,10 @@ namespace LevelCreator2
             if (!_isPossibleToMove)
                 return;
             _isPossibleToMove = false;
-            _currentTargetBox.transform.position += Vector3.forward * _size;
+            _currentTargetBox.transform.position += Vector3.forward * GameField.Size;
 
             UpdatePosition();
-            CheckForRevert(Vector3.forward * _size);
+            CheckForRevert(Vector3.forward * GameField.Size);
             _isPossibleToMove = true;
         }
 
@@ -118,9 +117,9 @@ namespace LevelCreator2
             if (!_isPossibleToMove)
                 return;
             _isPossibleToMove = false;
-            _currentTargetBox.transform.position += Vector3.back * _size;
+            _currentTargetBox.transform.position += Vector3.back * GameField.Size;
             UpdatePosition();
-            CheckForRevert(Vector3.back * _size);
+            CheckForRevert(Vector3.back * GameField.Size);
             _isPossibleToMove = true;
         }
 
@@ -163,9 +162,9 @@ namespace LevelCreator2
             }
 
             var position = _currentTargetBox.transform.position;
-            _currentTargetBox.Data.ArrayPosition = new Vector3(Mathf.Round((position.x / _size)),
-                Mathf.Round((position.y / _size)),
-                Mathf.Round((position.z / _size)));
+            _currentTargetBox.Data.ArrayPosition = new Vector3(Mathf.Round((position.x / GameField.Size)),
+                Mathf.Round((position.y / GameField.Size)),
+                Mathf.Round((position.z / GameField.Size)));
             LevelCreator.OnLevelChanged?.Invoke();
         }
     }
