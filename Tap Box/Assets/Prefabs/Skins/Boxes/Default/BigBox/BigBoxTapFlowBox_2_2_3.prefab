@@ -242,7 +242,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 2, z: -1}
+  ArrayPosition: {x: 1, y: 0, z: 2}
+  ArrayDirection: {x: 1, y: 0, z: 2}
 --- !u!33 &6030384078317829280
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -339,7 +340,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: -1, y: 2, z: -1}
+  ArrayPosition: {x: 1, y: 1, z: 2}
+  ArrayDirection: {x: 1, y: 1, z: 2}
 --- !u!33 &4079831252054139324
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -632,7 +634,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: -1, y: 2, z: 0}
+  ArrayPosition: {x: 0, y: 1, z: 2}
+  ArrayDirection: {x: 0, y: 1, z: 2}
 --- !u!33 &8971258431204155591
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -729,7 +732,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 0, z: -1}
+  ArrayPosition: {x: 1, y: 0, z: 0}
+  ArrayDirection: {x: 1, y: 0, z: 0}
 --- !u!33 &2719343541784097508
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -827,6 +831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ArrayPosition: {x: 0, y: 0, z: 0}
+  ArrayDirection: {x: 0, y: 0, z: 0}
 --- !u!33 &4581390670399105694
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1002,7 +1007,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6105717079193990225}
-  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1108,6 +1113,8 @@ MonoBehaviour:
   - {fileID: 5508223459414919786}
   - {fileID: 658317824816097296}
   - {fileID: 8460298385914260617}
+  renderer: {fileID: 6233841942805081885}
+  size: 1.03
 --- !u!114 &6105717079193990227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1139,7 +1146,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.06, y: 2.06, z: 3.09}
-  m_Center: {x: 0.515, y: 0.515, z: 1.03}
+  m_Center: {x: 0.5149999, y: 0.5149999, z: 1.0299999}
 --- !u!1 &6542613212872489126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1186,7 +1193,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: -1, y: 0, z: 0}
+  ArrayPosition: {x: 0, y: 1, z: 0}
+  ArrayDirection: {x: 0, y: 1, z: 0}
 --- !u!33 &2847819765275285206
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1283,7 +1291,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: -1, y: 0, z: -1}
+  ArrayPosition: {x: 1, y: 1, z: 0}
+  ArrayDirection: {x: 1, y: 1, z: 0}
 --- !u!33 &6969273540424914527
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1360,7 +1369,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6757895999787873703}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.515, y: 0.515, z: 1.03}
+  m_LocalPosition: {x: 0.5149999, y: 0.5149999, z: 1.0299999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1568,7 +1577,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: -1, y: 1, z: 0}
+  ArrayPosition: {x: 0, y: 1, z: 1}
+  ArrayDirection: {x: 0, y: 1, z: 1}
 --- !u!33 &7931467386192685834
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1665,7 +1675,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 2, z: 0}
+  ArrayPosition: {x: 0, y: 0, z: 2}
+  ArrayDirection: {x: 0, y: 0, z: 2}
 --- !u!33 &5232823375962785278
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1762,7 +1773,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 1, z: -1}
+  ArrayPosition: {x: 1, y: 0, z: 1}
+  ArrayDirection: {x: 1, y: 0, z: 1}
 --- !u!33 &6461089314835819459
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1859,7 +1871,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 1, z: 0}
+  ArrayPosition: {x: 0, y: 0, z: 1}
+  ArrayDirection: {x: 0, y: 0, z: 1}
 --- !u!33 &1151145485874204219
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1956,7 +1969,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: -1, y: 1, z: -1}
+  ArrayPosition: {x: 1, y: 1, z: 1}
+  ArrayDirection: {x: 1, y: 1, z: 1}
 --- !u!33 &3640475628441526290
 MeshFilter:
   m_ObjectHideFlags: 0

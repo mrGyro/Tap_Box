@@ -10,6 +10,7 @@ namespace UI.Skins
         public CurrencyController.Type WayToGet;
         public CurrencyController.Type Type;
         public int Price;
+        public float Size;
         public string SkinAddressableName;
         public bool IsOpen;
     }

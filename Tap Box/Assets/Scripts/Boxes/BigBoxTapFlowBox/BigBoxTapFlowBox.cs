@@ -12,6 +12,7 @@ namespace Boxes.BigBoxTapFlowBox
         [SerializeField] private BigBoxPart[] boxePositions;
         [SerializeField] private BigBoxPart[] boxeDirectionPositions;
         [SerializeField] private Transform renderer;
+        [SerializeField] private float size = 1.03f;
 
 
         public override async UniTask BoxReactionStart()
@@ -24,25 +25,28 @@ namespace Boxes.BigBoxTapFlowBox
         {
             foreach (var variable in boxePositions)
             {
-                variable.UpdateArrayPosition();
+                variable.UpdateArrayPosition(size);
             }
         }
-
+        
         [ContextMenu("Calculate Positions")]
         private void CalculatePositions()
         {
             Init();
         } 
-        
+
+
         [ContextMenu("Reset positions")]
         private void ResetPositionToLocalDefaultPlaces()
         {
             foreach (var VARIABLE in boxePositions)
             {
-                VARIABLE.ResetPositionToLocalDefaultPlaces();
+                VARIABLE.ResetPositionToLocalDefaultPlaces(size);
+                VARIABLE.ResetDirections(size);
             }
         }
         
+
         [ContextMenu("Set By Center Position")]
         private void SetByCenterPosition()
         {
@@ -50,12 +54,25 @@ namespace Boxes.BigBoxTapFlowBox
 
             foreach (var VARIABLE in boxePositions)
             {
-                result += VARIABLE.ArrayDirection * GameField.Size;
+                result += VARIABLE.ArrayDirection * size;
             }
 
             result /= boxePositions.Length;
             renderer.localPosition = result;
 
+            var boxCollider = GetComponent<BoxCollider>();
+            if (!boxCollider) return;
+            boxCollider.size = new Vector3(Data.Size.x * size,Data.Size.y * size,Data.Size.z * size);
+            boxCollider.center = result;
+
+        }
+
+        [ContextMenu("AllThree")]
+        private void AllThree()
+        {
+            CalculatePositions();
+            ResetPositionToLocalDefaultPlaces();
+            SetByCenterPosition();
         }
 
         public override bool IsBoxInPosition(Vector3 position)
@@ -132,7 +149,7 @@ namespace Boxes.BigBoxTapFlowBox
         {
             foreach (var bigBoxPart in boxePositions)
             {
-                bigBoxPart.UpdateArrayPosition();
+                bigBoxPart.UpdateArrayPosition(size);
             }
 
             boxe.Data.ArrayPosition = boxePositions[0].ArrayPosition;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DefaultNamespace.Managers;
 using DefaultNamespace.UI.Popup;
 using Managers;
@@ -80,6 +81,11 @@ public class UIManager : MonoBehaviour, IInitializable
         RemoveFromPopUpQueue(popup);
         GameManager.Instance.SetActiveGlobalInput(true);
         ShowNext();
+    }
+
+    public PopUpBase GetPopupByID(string id)
+    {
+        return popups.FirstOrDefault(x => x.ID == id);
     }
 
     private void AddToPopUpQueue(PopUpBase popUpBase)

@@ -58,6 +58,16 @@ namespace UI.Skins
             _getCoinsByRewardedAd.interactable = true;
 #endif
         }
+
+        public void SetCurrentSize()
+        {
+            var skinButton = _boxesSkinsButtons.FirstOrDefault(x => x.GetSkinData().SkinAddressableName == GameManager.Instance.Progress.CurrentBoxSkin);
+            if (skinButton)
+            {
+                GameField.Size = skinButton.GetSkinData().Size;
+                Debug.LogError(GameField.Size);
+            }
+        }
         private void OnSiReadyStatusChanged(bool value)
         {
             _getCoinsByRewardedAd.interactable = value;
@@ -207,6 +217,7 @@ namespace UI.Skins
                 {
                     IsOpen = forCopy.IsOpen,
                     Price = forCopy.Price,
+                    Size = forCopy.Size,
                     SkinAddressableName = forCopy.SkinAddressableName,
                     WayToGet = forCopy.WayToGet,
                     Type = forCopy.Type,

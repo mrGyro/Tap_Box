@@ -133,7 +133,7 @@ namespace UI.Skins
 
         private async UniTask ChangeSkin()
         {
-
+Debug.LogError(data.SkinAddressableName);
             switch (data.Type)
             {
                 case CurrencyController.Type.BoxSkin:

@@ -7,12 +7,13 @@ using Boxes.SwipableBox;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
 using Managers;
+using UI.Skins;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameField : MonoBehaviour, IInitializable
 {
-    public const float Size = 1.08f;
+    public static float Size = 1.08f;
 
     private Transform _rootTransform;
     private Vector3 _maxLevelSize;
@@ -220,6 +221,12 @@ public class GameField : MonoBehaviour, IInitializable
     {
         ClearGameField();
         _boxes = new List<BaseBox>();
+        var skinPopup = GameManager.Instance.UIManager.GetPopupByID("SkinsPopUp");
+        if (skinPopup)
+        {
+            (skinPopup as SkinsPoUp)?.SetCurrentSize();
+        }
+        
         for (var i = 0; i < dataList.Count; i++)
         {
             var data = dataList[i];
