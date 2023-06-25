@@ -103,6 +103,17 @@ namespace Boxes.BigBoxTapFlowBox
             }
             return array;
         }
+        
+        public Vector3[] GetBoxWorldPositionsAsVectors()
+        {
+            Vector3[] array = new Vector3[boxePositions.Length];
+
+            for (int i = 0; i < boxePositions.Length; i++)
+            {
+                array[i] = boxePositions[i].ArrayPosition * size;
+            }
+            return array;
+        }
 
         public Vector3 GetNearestPosition(Vector3 checkPosition)
         {

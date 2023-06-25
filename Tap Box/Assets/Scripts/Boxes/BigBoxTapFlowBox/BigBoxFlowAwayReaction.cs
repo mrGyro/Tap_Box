@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Boxes.Reactions;
 using Core.MessengerStatic;
 using Cysharp.Threading.Tasks;
@@ -27,7 +26,7 @@ namespace Boxes.BigBoxTapFlowBox
             _isMove = true;
 
             var bigBoxTapFlowBox = _box as BigBoxTapFlowBox;
-            Vector3[] array = bigBoxTapFlowBox.GetBoxPositionsAsVectors();
+            Vector3[] array = bigBoxTapFlowBox.GetBoxWorldPositionsAsVectors();
 
             var box = GameManager.Instance.GameField.GetNearestBoxInDirection(array, GetDirection(), _box);
             if (box == null)
