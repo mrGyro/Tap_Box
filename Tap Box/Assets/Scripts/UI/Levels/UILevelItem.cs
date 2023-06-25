@@ -14,6 +14,7 @@ namespace UI.Levels
 
         public void Setup(LevelData data)
         {
+            Debug.LogError(data.ID + "  " + data.LevelStatus);
             switch (data.LevelStatus)
             {
                 case Status.None:

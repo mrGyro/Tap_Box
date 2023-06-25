@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Boxes;
 using LevelCreator;
 using TMPro;
@@ -117,6 +118,13 @@ namespace LevelCreator2
             var list = SaveLoadLevels.LoadLevelsFromFile();
             if (list == null || list.Count == 0)
                 return;
+            
+            list.Sort((x, y) =>
+            {
+                int ix, iy;
+                return int.TryParse(x, out ix) && int.TryParse(y, out iy)
+                    ? ix.CompareTo(iy) : string.Compare(x, y);
+            });
 
             foreach (var button in list)
             {
