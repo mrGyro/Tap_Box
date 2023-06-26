@@ -11,7 +11,9 @@ namespace LevelCreator2
 
         public void Setup(string filename, Action<string> onClick)
         {
-            _text.text = filename;
+            var levelData = SaveLoadLevels.LoadLevelFromFile(filename);
+
+            _text.text = $"id = {filename} size = {levelData.Data.Count}";
             _onClick = onClick;
         }
 

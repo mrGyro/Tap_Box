@@ -208,6 +208,7 @@ MonoBehaviour:
   - {fileID: 4075511924385423440}
   boxeDirectionPositions: []
   renderer: {fileID: 4752230059195518030}
+  size: 1.03
 --- !u!114 &6105717079193990227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,6 +401,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: e276803e1d2d5b044aba8d62b008484b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5d13aac7ae5a56a41bc5db7812b1a246, type: 2}
     - target: {fileID: 919132149155446097, guid: e276803e1d2d5b044aba8d62b008484b,
         type: 3}
       propertyPath: m_Name
