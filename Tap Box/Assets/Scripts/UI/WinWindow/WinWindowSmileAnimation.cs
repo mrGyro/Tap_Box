@@ -8,6 +8,7 @@ namespace UI.WinWindow
         [SerializeField] private float _distanceForJump;
         [SerializeField] private float _timeForJump;
         [SerializeField] private AnimationCurve _topDownSpeed;
+        [SerializeField] private AnimationCurve _scaleValue;
 
         [SerializeField] private float _angleForSideMove;
 
@@ -70,13 +71,15 @@ namespace UI.WinWindow
                 }
 
                 float speed = _topDownSpeed.Evaluate(currentJumpTime / _timeForJump);
+                Vector3 scale = Vector3.one;
+                scale.y = _scaleValue.Evaluate(currentJumpTime / _timeForJump);
                 Vector3 cur = _startPosition + new Vector3(0, _distanceForJump * speed, 0);
                 _transform.position = cur;
 
                 float time = isUp ? 1f - (currentRotateTime / _timeForRotate) : currentRotateTime / _timeForRotate;
                 float angle = 2 * _angleForSideMove * time;
                 _transform.rotation = Quaternion.Euler(_startRotation.eulerAngles + new Vector3(0, 0, -_angleForSideMove + angle));
-
+                _transform.localScale = scale;
 
                 await UniTask.WaitForEndOfFrame(this);
             }
