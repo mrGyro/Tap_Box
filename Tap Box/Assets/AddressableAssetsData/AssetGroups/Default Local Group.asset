@@ -389,6 +389,10 @@ MonoBehaviour:
     m_Address: skin4_tap
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 3a4fcc90624cb9a43bb1d6a2f7336d5e
+    m_Address: skin5_tap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d2092fe1ab8035d4192c7661d5d020b3, type: 2}
   m_SchemaSet:
