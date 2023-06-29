@@ -209,6 +209,7 @@ namespace UI.Skins
         {
             var data = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(x
                 => x.SkinAddressableName == button.GetSkinData().SkinAddressableName);
+            
             if (data == null)
             {
                 var forCopy = button.GetSkinData();
@@ -225,8 +226,12 @@ namespace UI.Skins
             }
             else
             {
-                data = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(x
-                    => x.SkinAddressableName == button.GetSkinData().SkinAddressableName);
+                var forCopy = button.GetSkinData();
+                data.Price = forCopy.Price;
+                data.Size = forCopy.Size;
+                data.SkinAddressableName = forCopy.SkinAddressableName;
+                data.WayToGet = forCopy.WayToGet;
+                data.Type = forCopy.Type;
                 button.SetSkinData(data);
             }
         }

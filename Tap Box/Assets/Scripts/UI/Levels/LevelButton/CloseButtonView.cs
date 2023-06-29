@@ -11,7 +11,6 @@ namespace UI.Levels.LevelButton
 
         public void Setup(LevelData data)
         {
-            Debug.LogError(data.ID + "---");
             levelNumber.text = data.ID;
             GetRequiredString(data);
         }
