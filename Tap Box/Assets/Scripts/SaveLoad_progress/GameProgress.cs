@@ -112,7 +112,6 @@ namespace SaveLoad_progress
 
         private async UniTask LoadGameProgress()
         {
-            Debug.LogError("---load");
             var levelDataList = new List<LevelData>();
 
             var loadLevelsFromFile = await LoadLevelsName();

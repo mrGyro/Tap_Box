@@ -65,7 +65,6 @@ namespace UI.Skins
             if (skinButton)
             {
                 GameField.Size = skinButton.GetSkinData().Size;
-                Debug.LogError(GameField.Size);
             }
         }
         private void OnSiReadyStatusChanged(bool value)
