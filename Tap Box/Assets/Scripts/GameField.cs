@@ -126,7 +126,7 @@ public class GameField : MonoBehaviour, IInitializable
                 results = hitBox.transform;
             }
         }
-        
+
         return results == null ? null : results.GetComponent<BaseBox>();
     }
 
@@ -193,9 +193,10 @@ public class GameField : MonoBehaviour, IInitializable
         _data = await GameManager.Instance.Progress.LoadLevelData(levelName);
 
         var level = GameManager.Instance.Progress.LevelDatas.FirstOrDefault(x => x.ID == GameManager.Instance.Progress.LastStartedLevelID);
-        if (level != null && level.Data != null)
+
+        if (level != null && GameManager.Instance.Progress.LastSavedLevelDataID == _data.ID && GameManager.Instance.Progress.LastLevelData != null)
         {
-            await CreateBoxes(level.Data);
+            await CreateBoxes(GameManager.Instance.Progress.LastLevelData);
         }
         else
         {
@@ -226,7 +227,7 @@ public class GameField : MonoBehaviour, IInitializable
         {
             (skinPopup as SkinsPoUp)?.SetCurrentSize();
         }
-        
+
         for (var i = 0; i < dataList.Count; i++)
         {
             var data = dataList[i];

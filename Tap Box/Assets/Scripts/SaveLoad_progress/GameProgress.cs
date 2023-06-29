@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using Boxes;
 using Currency;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
@@ -41,6 +42,10 @@ namespace SaveLoad_progress
 
         public List<LevelData> LevelDatas;
         public List<SkinData> SkinDatas;
+        
+        public string LastSavedLevelDataID;
+        public List<BoxData> LastLevelData;
+
 
 #if UNITY_EDITOR
         [MenuItem("Tools/GiroGame/RemoveSaves")]
@@ -65,6 +70,8 @@ namespace SaveLoad_progress
             CurrentTailSkin = string.IsNullOrEmpty(progress.CurrentTailSkin) ? "Default_tail" : progress.CurrentTailSkin;
             CurrentSoundSetting = progress.CurrentSoundSetting;
             CurrentVibroSetting = progress.CurrentVibroSetting;
+            LastLevelData = progress.LastLevelData;
+            LastSavedLevelDataID = progress.LastSavedLevelDataID;
         }
 
         public async UniTask SaveGameProgress(GameProgress progress)
@@ -83,7 +90,8 @@ namespace SaveLoad_progress
 
             if (level != null)
             {
-                level.Data = GameManager.Instance.GameField.GetDataForSave();
+                LastLevelData = GameManager.Instance.GameField.GetDataForSave();
+                LastSavedLevelDataID = LastStartedLevelID;
             }
 
             await SaveGameProgress(this);
@@ -104,6 +112,7 @@ namespace SaveLoad_progress
 
         private async UniTask LoadGameProgress()
         {
+            Debug.LogError("---load");
             var levelDataList = new List<LevelData>();
 
             var loadLevelsFromFile = await LoadLevelsName();
@@ -131,7 +140,7 @@ namespace SaveLoad_progress
                     level = new LevelData();
                     buffer.Add(level);
                     
-                    level.Data = !string.IsNullOrEmpty(gameProgress.LastStartedLevelID) && gameProgress.LastStartedLevelID.Equals(levelData.ID) ? level.Data : null;
+                    level.Data = null;
                     level.ID = levelData.ID;
                     level.LevelStatus = levelData.LevelStatus;
                     level.Reqirement = levelData.Reqirement;
@@ -140,7 +149,7 @@ namespace SaveLoad_progress
                 }
                 else
                 {
-                    level.Data = !string.IsNullOrEmpty(gameProgress.LastStartedLevelID) && gameProgress.LastStartedLevelID.Equals(levelData.ID) ? level.Data : null;
+                    level.Data = null;
                     level.ID = levelData.ID;
                     level.Reqirement = levelData.Reqirement;
                     level.Reward = levelData.Reward;
