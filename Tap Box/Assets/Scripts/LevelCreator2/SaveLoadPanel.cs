@@ -76,6 +76,24 @@ namespace LevelCreator2
                 }
             }, fileName.text);
         }
+        
+        public void Save(LevelData levelData, string fileName)
+        {
+            int.TryParse(reward.text, out var rewardCount);
+            SaveLoadLevels.SaveLevelToFile(new LevelData()
+            {
+                Data = levelData.Data,
+                ID = levelData.ID,
+                LevelStatus = levelData.LevelStatus,
+                Reward = levelData.Reward,
+                CameraPosition = levelData.CameraPosition,
+                Reqirement = new Reqirement()
+                {
+                    Type = levelData.Reqirement.Type,
+                    Value = levelData.Reqirement.Value,
+                }
+            }, fileName);
+        }
 
         public void StatusChanged()
         {
@@ -106,6 +124,41 @@ namespace LevelCreator2
                     break;
       
             }
+        }
+        
+        [ContextMenu("Load Levels Data From File")]
+        public List<LevelData> LoadLevelsDataFromFile()
+        {
+            var levelsNames = SaveLoadLevels.LoadLevelsFromFile();
+            List<LevelData> result = new List<LevelData>();
+            foreach (var fileName in levelsNames)
+            {
+                var level = SaveLoadLevels.LoadLevelFromFile(fileName);
+                if (level != null)
+                {
+                    result.Add(level);
+                }
+            }
+
+            result.Sort((x, y) =>
+            {
+                
+                if (x.Data.Count > y.Data.Count)
+                    return 1;
+                if (x.Data.Count < y.Data.Count)
+                    return -1;
+
+                return 0;
+            });
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                Debug.LogError(result[i].Data.Count);
+                Save(result[i], (i + 1).ToString());
+            }
+
+
+            return result;
         }
 
         private void LoadFiles()
