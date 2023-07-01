@@ -33,19 +33,20 @@ public class LevelsWindiw : PopUpBase
 
     private void UpdateLevel()
     {
-        foreach (var data in GameManager.Instance.Progress.LevelDatas)
+        for (var index = 0; index < GameManager.Instance.Progress.LevelDatas.Count; index++)
         {
+            var data = GameManager.Instance.Progress.LevelDatas[index];
             var level = uiLevelItems.FirstOrDefault(x => x.Data.ID == data.ID);
             if (level == null)
                 continue;
-            
+
             level.Data.UpdateData(level.Data);
-            UpdateLevelsButton(level.Data);
+            UpdateLevelsButton(level.Data, index);
 
             if (!level.Data.Reqirement.CheckForDone())
                 continue;
 
-            level.Setup(data);
+            level.Setup(data, index);
         }
     }
 
@@ -53,10 +54,11 @@ public class LevelsWindiw : PopUpBase
     {
         GameManager.Instance.Progress.LevelDatas.Sort(Compare);
 
-        foreach (var levelData in GameManager.Instance.Progress.LevelDatas)
+        for (var index = 0; index < GameManager.Instance.Progress.LevelDatas.Count; index++)
         {
+            var levelData = GameManager.Instance.Progress.LevelDatas[index];
             var level = await levelsPool.Get();
-            level.Setup(levelData);
+            level.Setup(levelData, index);
             uiLevelItems.Add(level);
         }
     }
@@ -72,14 +74,14 @@ public class LevelsWindiw : PopUpBase
         return 0;
     }
 
-    private void UpdateLevelsButton(LevelData levelData)
+    private void UpdateLevelsButton(LevelData levelData, int index)
     {
         var updateLevelButton = uiLevelItems.Find(x => x.Data.ID == levelData.ID);
 
         if (updateLevelButton == null)
             return;
 
-        updateLevelButton.Setup(levelData);
+        updateLevelButton.Setup(levelData, index);
     }
 
     // private bool CheckForDone(Reqirement requirement)

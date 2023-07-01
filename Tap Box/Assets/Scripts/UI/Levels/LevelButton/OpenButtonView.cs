@@ -17,10 +17,10 @@ namespace UI.Levels.LevelButton
 
         private LevelData _data;
 
-        public async void Setup(LevelData data)
+        public async void Setup(LevelData data, int levelNum)
         {
             _data = data;
-            levelNumber.text = _data.ID;
+            levelNumber.text = (levelNum + 1).ToString();
 
             rewardTitle.text = "Reward";
             rewardIcon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{Constants.Currency.Coins}_icon");
@@ -37,7 +37,7 @@ namespace UI.Levels.LevelButton
 
         private void OnButtonClick()
         {
-            GameManager.Instance.LoadLevelById(_data.ID);
+            GameManager.Instance.LoadLevelById(levelNumber.text);
             GameManager.Instance.UIManager.ClosePopUp(Constants.PopUps.LevelListPopUp);
         }
     }

@@ -210,7 +210,7 @@ MonoBehaviour:
   - {fileID: 1585620931587101227}
   boxeDirectionPositions: []
   renderer: {fileID: 6581061763691460559}
-  size: 1.04
+  size: 1.08
 --- !u!114 &6105717079193990227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,8 +241,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.04, y: 1.04, z: 3.12}
-  m_Center: {x: 0, y: 0, z: 1.04}
+  m_Size: {x: 1.08, y: 1.08, z: 3.2400002}
+  m_Center: {x: 0, y: 0, z: 1.08}
 --- !u!1 &8201057460031497194
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,7 +270,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8201057460031497194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 2.08}
+  m_LocalPosition: {x: 0, y: -0, z: 2.16}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -368,7 +368,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8468856308086050956}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 1.04}
+  m_LocalPosition: {x: 0, y: -0, z: 1.08}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -464,7 +464,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b4019b7a6e21f0e49a2791999abc1c47,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.04
+      value: 1.08
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b4019b7a6e21f0e49a2791999abc1c47,
         type: 3}
@@ -501,6 +501,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: b4019b7a6e21f0e49a2791999abc1c47,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 27780e8c64b37e94fb138a563148673e, type: 2}
     - target: {fileID: 919132149155446097, guid: b4019b7a6e21f0e49a2791999abc1c47,
         type: 3}
       propertyPath: m_Name

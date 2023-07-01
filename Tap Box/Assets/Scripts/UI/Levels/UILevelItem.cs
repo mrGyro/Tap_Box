@@ -12,7 +12,7 @@ namespace UI.Levels
         [SerializeField] private OpenButtonView openButtonView;
         [SerializeField] private PassedButtonView passedButton;
 
-        public void Setup(LevelData data)
+        public void Setup(LevelData data, int index)
         {
             switch (data.LevelStatus)
             {
@@ -22,7 +22,7 @@ namespace UI.Levels
                     passedButton.SetActive(false);
                     closeButtonView.SetActive(false);
                     openButtonView.SetActive(true);
-                    openButtonView.Setup(data);
+                    openButtonView.Setup(data, index);
                     break;
                 case Status.Passed:
                     openButtonView.SetActive(false);

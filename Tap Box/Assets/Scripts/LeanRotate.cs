@@ -24,7 +24,10 @@ namespace DefaultNamespace
         private void Update()
         {
             if (_isActive)
+            {
                 Velocity();
+                distanceToTarget = Vector3.Distance(rot.transform.position, _centr.position);
+            }
         }
 
         public void SetActive(bool value)
@@ -48,7 +51,7 @@ namespace DefaultNamespace
             if (fingers[0].Age == 0)
             {
                 _previousPosition = Camera.ScreenToViewportPoint(fingers[0].LastScreenPosition);
-                distanceToTarget = Vector3.Distance(rot.transform.position, _centr.position);
+                //distanceToTarget = Vector3.Distance(rot.transform.position, _centr.position);
             }
             else
             {
