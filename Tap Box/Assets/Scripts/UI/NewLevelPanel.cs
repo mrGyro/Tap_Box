@@ -44,7 +44,7 @@ namespace UI
 
         private async void LevelChanged(int obj)
         {
-            int count = GameManager.Instance.GameField.GetCountOfReward() / 10;
+            int count = Random.Range(10, 80);
             int minCountForLevel = 10;
             count = Mathf.Clamp(count, minCountForLevel, int.MaxValue);
             _reward.SetActive(true);

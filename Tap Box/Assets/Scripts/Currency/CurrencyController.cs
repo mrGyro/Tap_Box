@@ -91,10 +91,10 @@ namespace Currency
         {
             return new List<RewardViewSetting>()
             {
-                new() { IsBig = false, RewardCount = 10, Percent = 10, RewardType = Type.Coin },
-                new() { IsBig = false, RewardCount = 20, Percent = 30, RewardType = Type.Coin },
-                new() { IsBig = false, RewardCount = 30, Percent = 50, RewardType = Type.Coin },
-                new() { IsBig = false, RewardCount = 40, Percent = 70, RewardType = Type.Coin },
+                new() { IsBig = false, RewardCount = 30, Percent = 10, RewardType = Type.Coin },
+                new() { IsBig = false, RewardCount = 40, Percent = 30, RewardType = Type.Coin },
+                new() { IsBig = false, RewardCount = 50, Percent = 50, RewardType = Type.Coin },
+                new() { IsBig = false, RewardCount = 60, Percent = 70, RewardType = Type.Coin },
                 new() { IsBig = false, RewardCount = 1, Percent = 90, RewardType = Type.RandomSkin }
             };
         }
