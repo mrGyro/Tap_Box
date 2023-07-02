@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Boxes;
 using Core.MessengerStatic;
@@ -28,6 +29,19 @@ public class InputController : MonoBehaviour
         _isTouchEnable = value;
         _isZoomEnable = value;
         _isSwipeEnable = value;
+    }
+
+    private void Update()
+    {
+        if (Input.mouseScrollDelta != Vector2.zero)
+        {
+            _zoom.SetZomValue(_zoom.Zoom + Input.mouseScrollDelta.y);
+        }
+    }
+
+    public float GetZoomValue()
+    {
+        return _zoom.Zoom;
     }
     
     public void SetActiveTouchInput(bool value)
@@ -181,6 +195,7 @@ public class InputController : MonoBehaviour
     {
         LeanTouch.OnFingerTap += HandleFingerTap;
         LeanTouch.OnGesture += Swipe;
+        
     }
     
     private void OnDestroy()

@@ -5,7 +5,7 @@
     <package>com.google.android.gms:play-services-basement:18.1.0</package>
     <package>com.ironsource.adapters:admobadapter:4.3.38</package>
     <package>com.ironsource.adapters:unityadsadapter:4.3.30</package>
-    <package>com.ironsource.sdk:mediationsdk:7.3.1</package>
+    <package>com.ironsource.sdk:mediationsdk:7.3.1.1</package>
     <package>com.unity3d.ads:unity-ads:4.7.1</package>
     <package>com.unity3d.mediation:adcolony-adapter:[1.0,2.0[</package>
     <package>com.unity3d.mediation:admob-adapter:[1.0,2.0[</package>
