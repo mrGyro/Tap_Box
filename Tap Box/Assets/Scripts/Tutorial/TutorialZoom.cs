@@ -11,9 +11,10 @@ namespace Tutorial
         private async void OnEnable()
         {
             gameObject.SetActive(true);
+            GameManager.Instance.InputController.SetActiveAllInput(true);
             _startCameraPosition = GameManager.Instance.InputController.GetZoomValue();
             await WaitForZoom();
-            GameManager.Instance.InputController.SetActiveAllInput(true);
+            
             gameObject.SetActive(false);
         }
 
