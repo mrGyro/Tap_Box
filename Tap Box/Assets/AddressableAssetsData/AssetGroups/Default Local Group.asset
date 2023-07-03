@@ -433,6 +433,26 @@ MonoBehaviour:
     m_Address: Skin13_BigBoxTapFlowBox_3_3_3
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 84fbcd05a5c6af544a4545000e4bafcf
+    m_Address: Default3_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 7df7ed6c4efa2cd4a84743586e4c9392
+    m_Address: Default4_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d0416e658ecd13747a488f00e7aa999c
+    m_Address: Default6_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 998f94ce2ff81ea41a45d96a10b7221b
+    m_Address: Default5_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 33a79fdd675ba884c98db114df551738
+    m_Address: Default7_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d2092fe1ab8035d4192c7661d5d020b3, type: 2}
   m_SchemaSet:

@@ -27,17 +27,18 @@ namespace Managers
             ChangeTailSkin(GameManager.Instance.Progress.CurrentTailSkin);
         }
 
-        private void CreateTail(Transform arg1, Vector3 arg2)
+        private void CreateTail(Transform root, Vector3 scale)
         {
             if (_currentTailParticles == null)
                 return;
 
             var shape = _currentTailParticles.shape;
-            shape.scale = arg2;
+            shape.scale = scale;
 
-            GameObject x = Object.Instantiate(_currentTail, arg1);
-            x.transform.localPosition = Vector3.zero;
-            x.transform.LookAt(arg1.transform.position - arg1.transform.parent.forward * 10);
+            GameObject gameObject = Object.Instantiate(_currentTail, root);
+            gameObject.transform.localPosition = Vector3.zero;
+            Debug.LogError(scale, root);
+            gameObject.transform.LookAt(root.transform.position - root.transform.parent.forward * 10);
         }
 
         public async void ChangeTapSkin(string key)

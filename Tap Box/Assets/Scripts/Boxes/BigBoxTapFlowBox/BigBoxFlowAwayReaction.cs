@@ -59,7 +59,8 @@ namespace Boxes.BigBoxTapFlowBox
             }
 
             Vector3 size = ((BoxCollider)colliders[0]).size;
-            Messenger<Transform, Vector3>.Broadcast(Constants.Events.OnTailStart, transform.GetChild(0), size);
+            Transform root = transform.GetChild(transform.childCount - 1);
+            Messenger<Transform, Vector3>.Broadcast(Constants.Events.OnTailStart, root, size);
 
             var isPlayDie = false;
             var startPos = _parent.position;
