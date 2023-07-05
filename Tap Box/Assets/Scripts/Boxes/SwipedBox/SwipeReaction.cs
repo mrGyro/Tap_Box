@@ -159,8 +159,6 @@ namespace Boxes.SwipableBox
         
         private async UniTask MoveOut(Vector3 direction)
         {
-            GameManager.Instance.GameField.CheckForWin();
-
             bool isPlayDie = false;
             Vector3 startPos = _parent.position;
             while (Vector3.Distance(_parent.position, startPos) < _distanse)

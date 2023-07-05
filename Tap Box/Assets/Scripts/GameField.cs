@@ -50,19 +50,22 @@ public class GameField : MonoBehaviour, IInitializable
         await CreateLevel(levelName);
     }
 
-    public async void CheckForWin()
+    private async void CheckForWin()
     {
         if (_boxes.Count == 0)
         {
-            await UniTask.Delay(1000);
-            GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.WinPopUp);
-            _data.LevelStatus = Status.Passed;
-            _data.Data = null;
-            _data.BestResult = _turnsesCount;
-            GameManager.Instance.SaveLevel(_data);
-
-            return;
+            await ShowWinWindow();
         }
+    }
+
+    private async UniTask ShowWinWindow()
+    {
+        await UniTask.Delay(1000);
+        GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.WinPopUp);
+        _data.LevelStatus = Status.Passed;
+        _data.Data = null;
+        _data.BestResult = _turnsesCount;
+        GameManager.Instance.SaveLevel(_data);
     }
 
     private void SetNewCameraTargetPosition(Vector3 target, Vector3 cameraPosition)
@@ -134,6 +137,7 @@ public class GameField : MonoBehaviour, IInitializable
     {
         _boxes.Remove(box);
         Core.MessengerStatic.Messenger<BaseBox>.Broadcast(Constants.Events.OnBoxRemoveFromGameField, box);
+        GameManager.Instance.GameField.CheckForWin();
     }
 
     public List<Vector3> EmptyPositionBetweenTwoBoxes(Vector3 destination, Vector3 origin)

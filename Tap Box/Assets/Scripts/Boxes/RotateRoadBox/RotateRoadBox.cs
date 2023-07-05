@@ -72,7 +72,6 @@ namespace Boxes.RotateRoadBox
                 _collider.enabled = true;
             }
 
-            GameManager.Instance.GameField.CheckForWin();
         }
 
         private List<RotateRoadBox> GetNearestAndCanConnected(List<RotateRoadBox> nearestBoxes)

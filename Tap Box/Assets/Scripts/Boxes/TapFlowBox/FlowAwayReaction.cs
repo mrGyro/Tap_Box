@@ -32,7 +32,6 @@ namespace Boxes.TapFlowBox
             if (box == null)
             {
                 GameManager.Instance.GameField.RemoveBox(_box);
-                GameManager.Instance.GameField.CheckForWin();
                 await MoveOut();
             }
             else

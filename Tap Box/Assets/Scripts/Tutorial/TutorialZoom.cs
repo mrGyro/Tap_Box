@@ -25,6 +25,5 @@ namespace Tutorial
                 await UniTask.WaitForEndOfFrame(this);
             }
         }
-
     }
 }
