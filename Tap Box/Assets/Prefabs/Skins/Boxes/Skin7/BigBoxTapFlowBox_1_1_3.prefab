@@ -208,7 +208,10 @@ MonoBehaviour:
   - {fileID: 6109716146863259008}
   - {fileID: 4075511924385423440}
   - {fileID: 1585620931587101227}
-  boxeDirectionPositions: []
+  boxeDirectionPositions:
+  - {fileID: 6109716146863259008}
+  - {fileID: 4075511924385423440}
+  - {fileID: 1585620931587101227}
   renderer: {fileID: 6581061763691460559}
   size: 1.08
 --- !u!114 &6105717079193990227

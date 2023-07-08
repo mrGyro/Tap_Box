@@ -134,7 +134,7 @@ namespace LevelCreator.Validator
         }
 
         private static RaycastHit[] results;
-        private static bool IsBoxesInDirection(BaseBox box)
+        public static bool IsBoxesInDirection(BaseBox box)
         {
             results = new RaycastHit[5];
             if (box.Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)

@@ -6,6 +6,7 @@ using Boxes.BigBoxTapFlowBox;
 using Boxes.SwipableBox;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
+using LevelCreator.Validator;
 using Managers;
 using UI.Skins;
 using Unity.VisualScripting;
@@ -58,6 +59,42 @@ public class GameField : MonoBehaviour, IInitializable
         }
     }
 
+    #if UNITY_EDITOR
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            RemoveAvailableBox();
+        }
+    }
+
+    public void RemoveAvailableBox()
+    {
+        if (_boxes == null || _boxes.Count == 0)
+        {
+            return;
+        }
+        
+        BaseBox box = null;
+        foreach (var VARIABLE in _boxes)
+        {
+            if (!ValidatorController.IsBoxesInDirection(VARIABLE))
+            {
+                box = VARIABLE;
+                break;
+            }
+        }
+
+        if (box == null)
+        {
+            return;
+        }
+
+        GameManager.Instance.InputController.RemoveBox(box);
+    }
+    #endif
+    
+    
     private async UniTask ShowWinWindow()
     {
         await UniTask.Delay(1000);

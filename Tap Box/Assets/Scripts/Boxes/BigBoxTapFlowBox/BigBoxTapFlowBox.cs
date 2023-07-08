@@ -70,6 +70,10 @@ namespace Boxes.BigBoxTapFlowBox
         [ContextMenu("AllThree")]
         private void AllThree()
         {
+            if (boxeDirectionPositions == null || boxeDirectionPositions.Length != boxePositions.Length)
+            {
+                boxeDirectionPositions = boxePositions;
+            }
             CalculatePositions();
             ResetPositionToLocalDefaultPlaces();
             SetByCenterPosition();
