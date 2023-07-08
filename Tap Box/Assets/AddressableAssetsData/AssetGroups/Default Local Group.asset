@@ -165,54 +165,6 @@ MonoBehaviour:
     m_Address: asdIcon_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 45aabd377a094a745b8b5f6ac13c83c0
-    m_Address: Skin7_RotateRoadBox
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 2ca3421906b792849b4ba85df477ea39
-    m_Address: Skin7_SwipedBox
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: ce287448f1e83664e84ea59682b89578
-    m_Address: Skin7_TapFlowBox
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 7bfd0f96b9319ed418cecf7ffea77598
-    m_Address: Skin7_BigBoxTapFlowBox_1_1_2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 9262cc2f1d970a942b98d2bd74f755b3
-    m_Address: Skin7_BigBoxTapFlowBox_1_1_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 049b4b7ff96d9bf4ab8c9aab305e3482
-    m_Address: Skin7_BigBoxTapFlowBox_2_1_2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 6717bc2735d29f14d9a17cd29cc7ac25
-    m_Address: Skin7_BigBoxTapFlowBox_2_1_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: dd658b76a88ea5d4198ca882fc2a0c53
-    m_Address: Skin7_BigBoxTapFlowBox_2_2_2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 89377abe549b9b141b95147de03060ab
-    m_Address: Skin7_BigBoxTapFlowBox_2_2_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 125ac59a6b4ef054497d2767d6239bf6
-    m_Address: Skin7_BigBoxTapFlowBox_3_1_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: dba953b4895556d46a747906f282954f
-    m_Address: Skin7_BigBoxTapFlowBox_3_2_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: a683566c0ff4fe840a742a1171f38487
-    m_Address: Skin7_BigBoxTapFlowBox_3_3_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: e5f5729758cdaa341a8325bb5c1e5efc
     m_Address: skin1_tap
     m_ReadOnly: 0
@@ -233,46 +185,6 @@ MonoBehaviour:
     m_Address: skin5_tap
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: b376f2d65a2c459419938aee2082e500
-    m_Address: Default_TapFlowBox
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 518d0a7483159964987b45a814e556f4
-    m_Address: Default_BigBoxTapFlowBox_1_1_2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 7ec278870e68d0c4d81ef3ad8086dfe8
-    m_Address: Default_BigBoxTapFlowBox_1_1_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: cd7b4541faa3e514bbd214271c5c55eb
-    m_Address: Default_BigBoxTapFlowBox_2_1_2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: b420df02b2f950847a7fbafbe03ebef0
-    m_Address: Default_BigBoxTapFlowBox_2_1_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 800b6ca0969a52940985d04a3e1cb339
-    m_Address: Default_BigBoxTapFlowBox_2_2_2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 8b58aabc1b6e0c64aa6f08f3296cbcb7
-    m_Address: Default_BigBoxTapFlowBox_2_2_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 7da2a1ee10431474f9f215a18a66f307
-    m_Address: Default_BigBoxTapFlowBox_3_1_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 71cef042288ab8349b7420c1a52e9e2d
-    m_Address: Default_BigBoxTapFlowBox_3_2_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 765bb7d87fcf1904ea8959979dfdd991
-    m_Address: Default_BigBoxTapFlowBox_3_3_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 84fbcd05a5c6af544a4545000e4bafcf
     m_Address: Default3_tail
     m_ReadOnly: 0
@@ -291,46 +203,6 @@ MonoBehaviour:
     m_SerializedLabels: []
   - m_GUID: 33a79fdd675ba884c98db114df551738
     m_Address: Default7_tail
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: d57fd403609f7c948804fabba173ea53
-    m_Address: Skin1_TapFlowBox
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 1a81bc681e0e32346a036c2bfe4a5085
-    m_Address: Skin1_BigBoxTapFlowBox_1_1_2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: ebc98ee9ed41a074abf4afc97badb55f
-    m_Address: Skin1_BigBoxTapFlowBox_1_1_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: a955dd7dc98c4b14889a967fa9b9ff03
-    m_Address: Skin1_BigBoxTapFlowBox_2_1_2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: fc9d6f6b3c58442438fafa88313f7835
-    m_Address: Skin1_BigBoxTapFlowBox_2_1_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: b212a38c63fb15f43a86b693205765cd
-    m_Address: Skin1_BigBoxTapFlowBox_2_2_2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 59eed04f9fee0b146804b2789f9056d1
-    m_Address: Skin1_BigBoxTapFlowBox_2_2_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 6a6334494f2d5aa45bdb2826a3a98f42
-    m_Address: Skin1_BigBoxTapFlowBox_3_1_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 46d73eabcf094e441927102c47a5750b
-    m_Address: Skin1_BigBoxTapFlowBox_3_2_3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: bc50ea797464bbc42bb94deb92de9566
-    m_Address: Skin1_BigBoxTapFlowBox_3_3_3
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0
