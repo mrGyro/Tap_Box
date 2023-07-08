@@ -210,7 +210,7 @@ MonoBehaviour:
   - {fileID: 1585620931587101227}
   boxeDirectionPositions: []
   renderer: {fileID: 258542020042741996}
-  size: 1.03
+  size: 1.04
 --- !u!114 &6105717079193990227
 MonoBehaviour:
   m_ObjectHideFlags: 0
