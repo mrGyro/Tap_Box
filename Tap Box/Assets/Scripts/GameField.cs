@@ -286,7 +286,6 @@ public class GameField : MonoBehaviour, IInitializable
             if (i % 10 == 0)
             {
                 await UniTask.Yield();
-                GetTurnsCount = _boxes.Count;
                 GameManager.Instance.UIManager.ShowTurns();
             }
         }
