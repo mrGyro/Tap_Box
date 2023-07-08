@@ -67,6 +67,7 @@ public class GameField : MonoBehaviour, IInitializable
             RemoveAvailableBox();
         }
     }
+#endif
 
     public void RemoveAvailableBox()
     {
@@ -92,7 +93,6 @@ public class GameField : MonoBehaviour, IInitializable
 
         GameManager.Instance.InputController.RemoveBox(box);
     }
-    #endif
     
     
     private async UniTask ShowWinWindow()
