@@ -4,6 +4,7 @@ using System.Linq;
 using Boxes;
 using Boxes.BigBoxTapFlowBox;
 using Boxes.SwipableBox;
+using Boxes.TapFlowBox;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
 using LevelCreator.Validator;
@@ -79,10 +80,30 @@ public class GameField : MonoBehaviour, IInitializable
         BaseBox box = null;
         foreach (var VARIABLE in _boxes)
         {
-            if (!ValidatorController.IsBoxesInDirection(VARIABLE))
+            var bigBoxTapFlowBox = VARIABLE as BigBoxTapFlowBox;
+            if (bigBoxTapFlowBox != null)
             {
-                box = VARIABLE;
-                break;
+                Vector3[] array = bigBoxTapFlowBox.GetBoxWorldPositionsAsVectors();
+                var box2 = GameManager.Instance.GameField.GetNearestBoxInDirection(array, bigBoxTapFlowBox.GetDirection(), VARIABLE);
+
+                if (box2 == null)
+                {
+                    box = VARIABLE;
+                    break;
+                }
+            }
+            else
+            {
+                var nearesBox = GameManager.Instance.GameField.GetNearestBoxInDirection(
+                    new[] { VARIABLE.Data.ArrayPosition.ToVector3() }, 
+                    VARIABLE.GetComponent<FlowAwayReaction>().GetDirection(), 
+                    VARIABLE);
+
+                if (nearesBox == null)
+                {
+                    box = VARIABLE;
+                    break;
+                }
             }
         }
 
@@ -90,10 +111,9 @@ public class GameField : MonoBehaviour, IInitializable
         {
             return;
         }
-
+        
         GameManager.Instance.InputController.RemoveBox(box);
     }
-    
     
     private async UniTask ShowWinWindow()
     {
@@ -173,6 +193,7 @@ public class GameField : MonoBehaviour, IInitializable
     public void RemoveBox(BaseBox box)
     {
         _boxes.Remove(box);
+
         Core.MessengerStatic.Messenger<BaseBox>.Broadcast(Constants.Events.OnBoxRemoveFromGameField, box);
         GameManager.Instance.GameField.CheckForWin();
     }

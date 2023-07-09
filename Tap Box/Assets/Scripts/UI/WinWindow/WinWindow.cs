@@ -142,12 +142,13 @@ public class WinWindow : PopUpBase
 
     private async UniTask GetRewardFromSettings(RewardViewSetting nearestPercent)
     {
-        //TODO skin name 
+        var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen);
+
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardPercentText(
-            nearestPercent.RewardType == CurrencyController.Type.RandomSkin 
-                ? "New skin" 
+            nearestPercent.RewardType == CurrencyController.Type.RandomSkin
+                ? randomSkin == null ? "+" + GetCountOfLastRewardInCoins() : "New skin"
                 : $"+{nearestPercent.RewardCount}");
-        
+
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetTokState(true);
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetActiveVFX(true);
         winVFX.SetActive(true);
@@ -186,28 +187,31 @@ public class WinWindow : PopUpBase
             return;
         }
 
-        var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen);
-
-        if (randomSkin == null)
-        {
-            GetCoinsRewardInLastSlot();
-            return;
-        }
-
         _reset = true;
         _getForAds.gameObject.SetActive(true);
         await UniTask.Delay(1000);
         _loseButton.gameObject.SetActive(true);
     }
 
-    private void GetCoinsRewardInLastSlot()
+    private async UniTask GetCoinsRewardInLastSlot()
     {
         ProgressToEnd();
-        var settings = GameManager.Instance.CurrencyController.GetRewardSettings();
-        var max = settings.Max(x => x.RewardCount) * 1.5f;
-        var rewardCount = (GameManager.Instance.GameField.GetCountOfReward() / 100f) * max;
-        GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, (int)rewardCount);
+
+        _currencyCounter.CoinsAnimation(rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].GetCurrencyRoot());
+        await UniTask.Delay(1000);
+        GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, GetCountOfLastRewardInCoins());
+
+
+        await UniTask.Delay(500);
+        await UniTask.WaitUntil(_currencyCounter.IsAnimationComplete);
         goNextButton.gameObject.SetActive(true);
+    }
+
+    private int GetCountOfLastRewardInCoins()
+    {
+        var settings = GameManager.Instance.CurrencyController.GetRewardSettings();
+        var max = settings.Max(x => x.RewardCount) * 2f;
+        return (int)Random.Range(max / 1.5f, max);
     }
 
     private async void ProgressToEnd()
@@ -227,7 +231,9 @@ public class WinWindow : PopUpBase
         _getForAds.gameObject.SetActive(false);
         _loseButton.gameObject.SetActive(false);
         ProgressToEnd();
-
+#if UNITY_EDITOR
+        GetLastReward();
+#endif
         if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
         {
             GameManager.Instance.Mediation.Show(Constants.Ads.Rewarded, ID);
@@ -241,21 +247,32 @@ public class WinWindow : PopUpBase
         }
     }
 
-    private async void OnRewardedAdDone(string placeId)
+    private void OnRewardedAdDone(string placeId)
     {
         if (placeId != ID)
         {
             return;
         }
 
+        GetLastReward();
+    }
+
+    private async void GetLastReward()
+    {
         var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen);
+
+        if (randomSkin == null)
+        {
+            await GetCoinsRewardInLastSlot();
+            return;
+        }
+
         GameManager.Instance.CurrencyController.AddSkin(randomSkin.WayToGet, randomSkin.Type, randomSkin.SkinAddressableName);
         Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, randomSkin.WayToGet, randomSkin.SkinAddressableName);
         ProgressToEnd();
         goNextButton.gameObject.SetActive(true);
 
         var sprite = await AssetProvider.LoadAssetAsync<Sprite>(randomSkin.SkinAddressableName + "_icon");
-        Debug.LogError(sprite);
         rewardViews[^1].SetRewardSprite(sprite);
     }
 
@@ -303,7 +320,6 @@ public class WinWindow : PopUpBase
 
     private void OnClose()
     {
-        
         GameManager.Instance.LoadNextLevel();
         GameManager.Instance.UIManager.ClosePopUp(ID);
 
