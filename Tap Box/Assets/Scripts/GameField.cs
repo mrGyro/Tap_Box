@@ -133,7 +133,7 @@ public class GameField : MonoBehaviour, IInitializable
     public Vector3 GetNewCenter()
     {
         SetNewMaxMinSize();
-        Debug.DrawLine(_minLevelSize, _maxLevelSize, Color.magenta, 10);
+       // Debug.DrawLine(_minLevelSize, _maxLevelSize, Color.red, 10);
         float x = _maxLevelSize.x + (_minLevelSize.x - _maxLevelSize.x) / 2;
         float y = _maxLevelSize.y + (_minLevelSize.y - _maxLevelSize.y) / 2;
         float z = _maxLevelSize.z + (_minLevelSize.z - _maxLevelSize.z) / 2;
@@ -164,8 +164,8 @@ public class GameField : MonoBehaviour, IInitializable
         float minDistance = float.MaxValue;
         foreach (var variable in boxArrayPosition)
         {
-            var hits = Physics.RaycastAll(variable, direction, 1000F, mask);
-            Debug.DrawLine(variable, direction * 100F, Color.magenta, 20);
+            var hits = Physics.RaycastAll(variable, direction * Size, 1000F, mask);
+            Debug.DrawLine(variable, direction * Size * 100F, Color.magenta, 20);
             var hitBox = hits.FirstOrDefault(x => x.transform != currentBox.transform);
 
             if (hitBox.transform == null)

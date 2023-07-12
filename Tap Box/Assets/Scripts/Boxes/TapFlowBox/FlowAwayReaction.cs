@@ -24,6 +24,7 @@ namespace Boxes.TapFlowBox
                 return;
 
             _isMove = true;
+            
             var box = GameManager.Instance.GameField.GetNearestBoxInDirection(
                 new[] { _box.Data.ArrayPosition.ToVector3() }, 
                 _parent.forward, 
