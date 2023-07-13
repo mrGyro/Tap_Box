@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Core.MessengerStatic;
 using Currency;
 using Cysharp.Threading.Tasks;
@@ -7,6 +8,12 @@ using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
+#endif
 
 namespace UI.Skins
 {
@@ -29,6 +36,53 @@ namespace UI.Skins
         public SkinData GetSkinData() => data;
 
         public void SetSkinData(SkinData value) => data = value;
+
+        [ContextMenu("Tools/Create skin addressable")]
+        public void CreateAddresabbleForSkin()
+        {
+#if UNITY_EDITOR
+
+            string group_name = "Blocks";
+            string path_to_object = @"Assets\Prefabs\Skins\Boxes\" + data.SkinAddressableName + @"\";
+
+            List<string> pathes = new List<string>()
+            {
+                "TapFlowBox",
+                "BigBoxTapFlowBox_1_1_2",
+                "BigBoxTapFlowBox_1_1_3",
+                "BigBoxTapFlowBox_2_1_2",
+                "BigBoxTapFlowBox_2_1_3",
+                "BigBoxTapFlowBox_2_2_2",
+                "BigBoxTapFlowBox_2_2_3",
+                "BigBoxTapFlowBox_3_1_3",
+                "BigBoxTapFlowBox_3_2_3",
+                "BigBoxTapFlowBox_3_3_3"
+            };
+
+
+            AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
+            AddressableAssetGroup g = settings.FindGroup(group_name);
+
+            foreach (var VARIABLE in pathes)
+            {
+                string assetGUID = AssetDatabase.AssetPathToGUID(path_to_object + VARIABLE + ".prefab");
+                if (string.IsNullOrEmpty(assetGUID))
+                {
+                    continue;
+                }
+                
+                var x = settings.CreateAssetReference(assetGUID);
+
+                var entry = settings.FindAssetEntry(x.AssetGUID);
+                entry.address = data.SkinAddressableName + "_" + VARIABLE;
+                settings.MoveEntry(entry, g);
+            }
+
+
+            AssetDatabase.SaveAssets();
+#endif
+
+        }
 
         public async void Setup()
         {
@@ -58,7 +112,6 @@ namespace UI.Skins
                     {
                         button.interactable = rewardedAd.IsReady.Value;
                         _isReady = rewardedAd.IsReady.Subscribe(OnSiReadyStatusChanged);
-                        
                     }
 
                     break;
@@ -133,7 +186,7 @@ namespace UI.Skins
 
         private async UniTask ChangeSkin()
         {
-Debug.LogError(data.SkinAddressableName);
+            Debug.LogError(data.SkinAddressableName);
             switch (data.Type)
             {
                 case CurrencyController.Type.BoxSkin:
@@ -143,7 +196,7 @@ Debug.LogError(data.SkinAddressableName);
                     await GameManager.Instance.Progress.ChangeBlock(data.SkinAddressableName);
                     await GameManager.Instance.Progress.Save();
                     GameManager.Instance.UIManager.ClosePopUp(Constants.PopUps.LoadingPopup);
-                    
+
                     break;
                 case CurrencyController.Type.BackgroundSkin:
                     await GameManager.Instance.SkinsManager.ChangeBackgroundSkin(data.SkinAddressableName);

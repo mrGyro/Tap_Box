@@ -137,6 +137,11 @@ public class InputController : MonoBehaviour
         if (box == null)
             return;
 
+        RemoveBox(box);
+    }
+
+    public void RemoveBox(BaseBox box)
+    {
         Vibration();
         GameManager.Instance.SoundManager.Play(new ClipDataMessage() { Id = Constants.Sounds.Game.TapOnBox, SoundType = SoundData.SoundType.Game });
 

@@ -4,8 +4,10 @@ using System.Linq;
 using Boxes;
 using Boxes.BigBoxTapFlowBox;
 using Boxes.SwipableBox;
+using Boxes.TapFlowBox;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
+using LevelCreator.Validator;
 using Managers;
 using UI.Skins;
 using Unity.VisualScripting;
@@ -58,6 +60,61 @@ public class GameField : MonoBehaviour, IInitializable
         }
     }
 
+    #if UNITY_EDITOR
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            RemoveAvailableBox();
+        }
+    }
+#endif
+
+    public void RemoveAvailableBox()
+    {
+        if (_boxes == null || _boxes.Count == 0)
+        {
+            return;
+        }
+        
+        BaseBox box = null;
+        foreach (var VARIABLE in _boxes)
+        {
+            var bigBoxTapFlowBox = VARIABLE as BigBoxTapFlowBox;
+            if (bigBoxTapFlowBox != null)
+            {
+                Vector3[] array = bigBoxTapFlowBox.GetBoxWorldPositionsAsVectors();
+                var box2 = GameManager.Instance.GameField.GetNearestBoxInDirection(array, bigBoxTapFlowBox.GetDirection(), VARIABLE);
+
+                if (box2 == null)
+                {
+                    box = VARIABLE;
+                    break;
+                }
+            }
+            else
+            {
+                var nearesBox = GameManager.Instance.GameField.GetNearestBoxInDirection(
+                    new[] { VARIABLE.Data.ArrayPosition.ToVector3() }, 
+                    VARIABLE.GetComponent<FlowAwayReaction>().GetDirection(), 
+                    VARIABLE);
+
+                if (nearesBox == null)
+                {
+                    box = VARIABLE;
+                    break;
+                }
+            }
+        }
+
+        if (box == null)
+        {
+            return;
+        }
+        
+        GameManager.Instance.InputController.RemoveBox(box);
+    }
+    
     private async UniTask ShowWinWindow()
     {
         await UniTask.Delay(1000);
@@ -76,7 +133,7 @@ public class GameField : MonoBehaviour, IInitializable
     public Vector3 GetNewCenter()
     {
         SetNewMaxMinSize();
-        Debug.DrawLine(_minLevelSize, _maxLevelSize, Color.magenta, 10);
+       // Debug.DrawLine(_minLevelSize, _maxLevelSize, Color.red, 10);
         float x = _maxLevelSize.x + (_minLevelSize.x - _maxLevelSize.x) / 2;
         float y = _maxLevelSize.y + (_minLevelSize.y - _maxLevelSize.y) / 2;
         float z = _maxLevelSize.z + (_minLevelSize.z - _maxLevelSize.z) / 2;
@@ -107,8 +164,8 @@ public class GameField : MonoBehaviour, IInitializable
         float minDistance = float.MaxValue;
         foreach (var variable in boxArrayPosition)
         {
-            var hits = Physics.RaycastAll(variable, direction, 1000F, mask);
-            Debug.DrawLine(variable, direction * 100F, Color.magenta, 20);
+            var hits = Physics.RaycastAll(variable, direction * Size, 1000F, mask);
+            Debug.DrawLine(variable, direction * Size * 100F, Color.magenta, 20);
             var hitBox = hits.FirstOrDefault(x => x.transform != currentBox.transform);
 
             if (hitBox.transform == null)
@@ -136,6 +193,7 @@ public class GameField : MonoBehaviour, IInitializable
     public void RemoveBox(BaseBox box)
     {
         _boxes.Remove(box);
+
         Core.MessengerStatic.Messenger<BaseBox>.Broadcast(Constants.Events.OnBoxRemoveFromGameField, box);
         GameManager.Instance.GameField.CheckForWin();
     }
@@ -249,7 +307,6 @@ public class GameField : MonoBehaviour, IInitializable
             if (i % 10 == 0)
             {
                 await UniTask.Yield();
-                GetTurnsCount = _boxes.Count;
                 GameManager.Instance.UIManager.ShowTurns();
             }
         }

@@ -24,6 +24,7 @@ namespace Boxes.TapFlowBox
                 return;
 
             _isMove = true;
+            
             var box = GameManager.Instance.GameField.GetNearestBoxInDirection(
                 new[] { _box.Data.ArrayPosition.ToVector3() }, 
                 _parent.forward, 
@@ -31,6 +32,8 @@ namespace Boxes.TapFlowBox
             
             if (box == null)
             {
+                _collider.enabled = false;
+
                 GameManager.Instance.GameField.RemoveBox(_box);
                 await MoveOut();
             }
@@ -54,7 +57,6 @@ namespace Boxes.TapFlowBox
         {
             Messenger<Transform, Vector3>.Broadcast(Constants.Events.OnTailStart, transform.GetChild(0), ((BoxCollider)_collider).size);
 
-            _collider.enabled = false;
             var isPlayDie = false;
             var startPos = _parent.position;
             while (Vector3.Distance(_parent.position, startPos) < _distanse)

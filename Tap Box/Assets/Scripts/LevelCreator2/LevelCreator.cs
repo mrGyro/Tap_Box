@@ -13,7 +13,6 @@ namespace LevelCreator2
     public class LevelCreator : MonoBehaviour
     {
         public static Action OnLevelChanged;
-        //public static Action<BigBoxTapFlowBox> OnBoxChanged;
         [SerializeField] Camera camera;
         [SerializeField] Button _validate;
         [SerializeField] Button _showAll;

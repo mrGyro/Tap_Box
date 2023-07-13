@@ -28,7 +28,11 @@ namespace Boxes.BigBoxTapFlowBox
             var bigBoxTapFlowBox = _box as BigBoxTapFlowBox;
             Vector3[] array = bigBoxTapFlowBox.GetBoxWorldPositionsAsVectors();
 
-            var box = GameManager.Instance.GameField.GetNearestBoxInDirection(array, GetDirection(), _box);
+            var box = GameManager.Instance.GameField.GetNearestBoxInDirection(
+                array, 
+                GetDirection(), 
+                _box);
+            
             if (box == null)
             {
                 GameManager.Instance.GameField.RemoveBox(_box);
