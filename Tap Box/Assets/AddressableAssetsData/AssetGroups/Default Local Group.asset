@@ -110,7 +110,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: ee0152f4026eaed49bce1f31450b3c7f
-    m_Address: Skin1_icon
+    m_Address: Default_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 08f79c2dba6b71948a9201b4a145fc7b
@@ -118,23 +118,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: c4800b35f1c54da4eb1f16fde8be5f7c
-    m_Address: Skin2_icon
+    m_Address: Skin6_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 1e1db1dd27d2b384fa51b1f53b8a86b4
-    m_Address: Skin3_icon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: b0a4b0ebfaa640446a69c07ac1d5c850
-    m_Address: Skin4_icon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 21b8c2166784fbc4092fad6ebe93ddfe
     m_Address: Skin5_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: b0a4b0ebfaa640446a69c07ac1d5c850
+    m_Address: Skin3_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 21b8c2166784fbc4092fad6ebe93ddfe
+    m_Address: Skin2_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   - m_GUID: 96e92ea4204c7924bb01e615e853aaf4
-    m_Address: Skin6_icon
+    m_Address: Skin4_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 8e3588eda6917784fa65ba6e9895b1d6
@@ -203,6 +203,42 @@ MonoBehaviour:
     m_SerializedLabels: []
   - m_GUID: 33a79fdd675ba884c98db114df551738
     m_Address: Default7_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ad84358ad5c78aa46a42ce966b5c0d18
+    m_Address: Skin8_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1f9094ed711e5b9449b2a683ab322314
+    m_Address: Skin9_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 54528fb0bd9e1474fb76af33476a1bff
+    m_Address: Skin10_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5115c2acc74a43d459516d6e27fc6a16
+    m_Address: Skin11_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: c642a7b2b4338744d8bd4344b1bcba77
+    m_Address: Skin12_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: dbfc65b68da20a44aa4d5f37b5d3430f
+    m_Address: Skin13_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d10d1befec1a76a46840988491fa3d7f
+    m_Address: Skin14_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8ad465d8998ca8c42910f6a9b86cca03
+    m_Address: Skin15_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d471b39fc9acb354aaea894645622997
+    m_Address: Skin16_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

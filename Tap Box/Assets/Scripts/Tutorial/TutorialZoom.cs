@@ -12,9 +12,12 @@ namespace Tutorial
         {
             gameObject.SetActive(true);
             GameManager.Instance.InputController.SetActiveAllInput(true);
+            GameManager.Instance.InputController.SetActiveTouchInput(false);
             _startCameraPosition = GameManager.Instance.InputController.GetZoomValue();
             await WaitForZoom();
-            
+            GameManager.Instance.InputController.SetActiveAllInput(true);
+
+
             gameObject.SetActive(false);
         }
 
