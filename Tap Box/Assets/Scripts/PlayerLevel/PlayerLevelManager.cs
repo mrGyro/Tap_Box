@@ -14,7 +14,7 @@ namespace PlayerLevel
         {
             Core.MessengerStatic.Messenger<BaseBox>.AddListener(Constants.Events.OnBoxRemoveFromGameField, Handler);
         }
-
+        
         private void Handler(BaseBox obj)
         {
             AddExperience(1);

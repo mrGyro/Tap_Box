@@ -35,6 +35,7 @@ namespace UI.Skins
         {
             Setup();
             Messenger<CurrencyController.Type, string>.AddListener(Constants.Events.OnGetRandomSkin, OnGetRandomSkin);
+            GameManager.Instance.PlayerLevelManager.OnLevelChanged += OnGetSkinByLevel;
             Messenger<string>.AddListener(Constants.Events.OnRewardedVideoReward, OnRewardedAdDone);
 
             _getCoinsByRewardedAd.onClick.RemoveAllListeners();
@@ -168,12 +169,18 @@ namespace UI.Skins
         {
             Setup();
         }
+        
+        private void OnGetSkinByLevel(int level)
+        {
+            Setup();
+        }
 
         private void Setup()
         {
             foreach (var button in _topButtons)
             {
                 button.Initialize();
+                button.OnClick = null;
                 button.OnClick += OnTopButtonStateChanged;
             }
 
@@ -255,6 +262,8 @@ namespace UI.Skins
         private void OnDestroy()
         {
             Messenger<CurrencyController.Type, string>.RemoveListener(Constants.Events.OnGetRandomSkin, OnGetRandomSkin);
+            GameManager.Instance.PlayerLevelManager.OnLevelChanged -= OnGetSkinByLevel;
+
             _isReady?.Dispose();
         }
     }

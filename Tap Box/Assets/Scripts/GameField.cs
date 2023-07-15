@@ -88,8 +88,6 @@ public class GameField : MonoBehaviour, IInitializable
 
                 if (box2 == null)
                 {
-                    Debug.LogError("---1--");
-
                     box = VARIABLE;
                     break;
                 }
@@ -105,7 +103,6 @@ public class GameField : MonoBehaviour, IInitializable
 
                 if (nearesBox == null)
                 {
-                    Debug.LogError("---2--");
                     box = VARIABLE;
                     break;
                 }

@@ -28,6 +28,7 @@ namespace UI.Skins
         [SerializeField] private Image _selector;
         [SerializeField] private Image getTypeIcon;
         [SerializeField] private TMP_Text getTypeText;
+        [SerializeField] private TMP_Text levelTypeText;
         [Space] [SerializeField] private SkinData data;
 
         private IDisposable _isReady;
@@ -130,6 +131,20 @@ namespace UI.Skins
                     break;
                 case CurrencyController.Type.RandomSkin:
                     _uunounBg.SetActive(true);
+                    levelTypeText.text = "?";
+
+                    break;
+                case CurrencyController.Type.Level:
+                    _uunounBg.SetActive(true);
+                    levelTypeText.text = "Reach level\n" + data.Price;
+
+                    if (GameManager.Instance.Progress.CurrentPlayerLevel >= data.Price)
+                    {
+                        _uunounBg.SetActive(false);
+
+                        getTypeIcon.sprite = await AssetProvider.LoadAssetAsync<Sprite>($"{Constants.Currency.Exp}_icon");
+                        getTypeText.text = "Open";
+                    }
                     break;
             }
         }
@@ -177,6 +192,11 @@ namespace UI.Skins
                     }
 
                     GameManager.Instance.Mediation.Show(Constants.Ads.Interstitial, _skinButton + data.SkinAddressableName);
+                    BuySkin();
+                    Setup();
+                    await GameManager.Instance.Progress.Save();
+                    return;
+                case CurrencyController.Type.Level:
                     BuySkin();
                     Setup();
                     await GameManager.Instance.Progress.Save();

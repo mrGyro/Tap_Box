@@ -19,7 +19,8 @@ namespace Currency
             TailSkin,
             TapSkin,
             RewardedAds,
-            InterstitialAds
+            InterstitialAds,
+            Level
         }
 
         public Action<Type, int> OnCurrencyCountChanged;
