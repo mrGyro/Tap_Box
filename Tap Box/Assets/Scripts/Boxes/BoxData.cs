@@ -9,5 +9,6 @@ namespace Boxes
         public SerializedVector3 ArrayPosition;
         public SerializedVector3 Rotation;
         public SerializedVector3 Size;
+        
     }
 }

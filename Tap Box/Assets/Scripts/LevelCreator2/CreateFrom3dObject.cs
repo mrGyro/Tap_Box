@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using Boxes;
 using Boxes.BigBoxTapFlowBox;
 using Cysharp.Threading.Tasks;
@@ -33,9 +32,10 @@ public class CreateFrom3dObject : MonoBehaviour
     private Vector3 _minLevelSize = Vector3.positiveInfinity;
 
     private List<Vector3Class> _arrayPositions = new();
-    private List<GameObject> _gameObjects = new();
+    //  private List<GameObject> _gameObjects = new();
 
     private List<Vector3Class> _emptyArrayPositions = new();
+    private List<Vector3Class> _ipmosiblePosition = new();
     private List<BaseBox> _listOfPossibleBox;
     private List<BaseBox> _level;
 
@@ -51,6 +51,7 @@ public class CreateFrom3dObject : MonoBehaviour
     public class Vector3Class
     {
         public Vector3 Value;
+        public GameObject GameObject;
     }
 
     public void StopGenerator()
@@ -63,16 +64,19 @@ public class CreateFrom3dObject : MonoBehaviour
     {
         _level = new List<BaseBox>();
         _emptyArrayPositions = _arrayPositions.ToList();
-        Shuffle(_emptyArrayPositions);
+        //Shuffle(_emptyArrayPositions);
+        _emptyArrayPositions = SortNearToCenter(_emptyArrayPositions);
         _listOfPossibleBox = GetPossibleBoxes();
         _isGeneratorProccess = true;
 
         var startTime = System.DateTime.UtcNow;
+        int index = 0;
         while (_emptyArrayPositions.Count > 0 && _isGeneratorProccess)
         {
             await UniTask.Yield();
             int indexOfProbability = GetIndexForNextBox();
             await TryPutBoxToField(indexOfProbability);
+
             BeckBoxVariantsToDefaultPosition();
             _countOfEmptyCellsCountText.text = _emptyArrayPositions.Count.ToString();
         }
@@ -93,23 +97,29 @@ public class CreateFrom3dObject : MonoBehaviour
     {
         int countOfOperations = 0;
         var defaultPosition = Vector3.one * 1000;
+        int index = 0;
+
         for (int i = indexOfProbability; i >= 0; i--)
         {
             int firstIndexOfInstance = GetFirstIndexWithSize(_listOfPossibleBox, _possibleBoxesProbability[i].Box.Data.Size.ToVector3());
             int lastIndexOfInstance = GetLastIndexWithSize(_listOfPossibleBox, _possibleBoxesProbability[i].Box.Data.Size.ToVector3());
             List<BaseBox> boxesForInstance = _listOfPossibleBox.GetRange(firstIndexOfInstance, lastIndexOfInstance - firstIndexOfInstance + 1);
+
             Shuffle(boxesForInstance);
 
             foreach (var boxForInstance in boxesForInstance)
             {
                 for (int j = 0; j < _emptyArrayPositions.Count; j++)
                 {
+                    // await UniTask.Yield();
                     countOfOperations++;
+
                     bool canPut = await CanPutBoxInField(boxForInstance, _emptyArrayPositions[j].Value);
                     if (canPut)
                     {
                         PutBoxInField(boxForInstance);
-                        RemoveFilledCell();
+                        RemoveFilledCell(boxForInstance);
+                        RemoveFilledImposiblePositionCell(boxForInstance);
                         boxForInstance.transform.position = defaultPosition;
                         return;
                     }
@@ -120,6 +130,80 @@ public class CreateFrom3dObject : MonoBehaviour
         }
 
         Debug.LogError($"countOfOperations = {countOfOperations}");
+    }
+
+    private void RemoveFilledCell(BaseBox box)
+    {
+        switch (box.Data.Type)
+        {
+            case BaseBox.BlockType.None:
+            case BaseBox.BlockType.TapFlowBox:
+            case BaseBox.BlockType.RotateRoadBox:
+            case BaseBox.BlockType.SwipedBox:
+            {
+                var pos = _emptyArrayPositions.FirstOrDefault(x => x.Value == box.Data.ArrayPosition.ToVector3());
+                if (pos != null)
+                {
+                    Destroy(pos.GameObject);
+                    _emptyArrayPositions.Remove(pos);
+                }
+            }
+
+                break;
+            case BaseBox.BlockType.BigBoxTapFlowBox:
+                var bigBox = (box as BigBoxTapFlowBox);
+                if (bigBox != null)
+                {
+                    var positions = bigBox.GetBoxPositionsAsVectors();
+                    foreach (var VARIABLE in positions)
+                    {
+                        var pos = _emptyArrayPositions.FirstOrDefault(x => x.Value == VARIABLE);
+                        if (pos != null)
+                        {
+                            Destroy(pos.GameObject);
+                            _emptyArrayPositions.Remove(pos);
+                        }
+                    }
+                }
+
+                break;
+        }
+    }
+
+    private void RemoveFilledImposiblePositionCell(BaseBox box)
+    {
+        switch (box.Data.Type)
+        {
+            case BaseBox.BlockType.None:
+            case BaseBox.BlockType.TapFlowBox:
+            case BaseBox.BlockType.RotateRoadBox:
+            case BaseBox.BlockType.SwipedBox:
+            {
+                var pos = _ipmosiblePosition.FirstOrDefault(x => x.GameObject == box.gameObject && x.Value == box.Data.ArrayPosition.ToVector3());
+                if (pos != null)
+                {
+                    _ipmosiblePosition.Remove(pos);
+                }
+            }
+
+                break;
+            case BaseBox.BlockType.BigBoxTapFlowBox:
+                var bigBox = (box as BigBoxTapFlowBox);
+                if (bigBox != null)
+                {
+                    var positions = bigBox.GetBoxPositionsAsVectors();
+                    foreach (var VARIABLE in positions)
+                    {
+                        var pos = _ipmosiblePosition.FirstOrDefault(x => x.Value == VARIABLE);
+                        if (pos != null)
+                        {
+                            _ipmosiblePosition.Remove(pos);
+                        }
+                    }
+                }
+
+                break;
+        }
     }
 
     private void RemoveFilledCell()
@@ -136,6 +220,7 @@ public class CreateFrom3dObject : MonoBehaviour
                     case BaseBox.BlockType.SwipedBox:
                         if (box.IsBoxInPosition(_emptyArrayPositions[i].Value))
                         {
+                            Destroy(_emptyArrayPositions[i].GameObject);
                             _emptyArrayPositions.Remove(_emptyArrayPositions[i]);
                         }
 
@@ -146,6 +231,7 @@ public class CreateFrom3dObject : MonoBehaviour
                         {
                             if (bigBox.IsBoxInPosition(_emptyArrayPositions[i].Value))
                             {
+                                Destroy(_emptyArrayPositions[i].GameObject);
                                 _emptyArrayPositions.Remove(_emptyArrayPositions[i]);
                             }
                         }
@@ -156,9 +242,13 @@ public class CreateFrom3dObject : MonoBehaviour
         }
     }
 
-
     private async UniTask<bool> CanPutBoxInField(BaseBox box, Vector3 position)
     {
+        if (_ipmosiblePosition.Exists(x => x.Value == position && x.GameObject == box.gameObject))
+        {
+            return false;
+        }
+
         box.transform.position = position * GameField.Size;
         box.Data.ArrayPosition = position;
         var x = box as BigBoxTapFlowBox;
@@ -168,14 +258,24 @@ public class CreateFrom3dObject : MonoBehaviour
         }
 
         if (!IsBoxInLevelShablon(box))
+        {
+            _ipmosiblePosition.Add(new Vector3Class() { GameObject = box.gameObject, Value = position });
             return false;
+        }
 
         if (IsBoxInPosition(position, box))
+        {
+            _ipmosiblePosition.Add(new Vector3Class() { GameObject = box.gameObject, Value = position });
+
             return false;
+        }
 
         bool isValid = await IsValidationPassed(box);
         if (!isValid)
+        {
+            _ipmosiblePosition.Add(new Vector3Class() { GameObject = box.gameObject, Value = position });
             return false;
+        }
 
         return true;
     }
@@ -186,11 +286,9 @@ public class CreateFrom3dObject : MonoBehaviour
         level.Add(box);
         level.AddRange(_level);
 
-        //var x = await ValidatorController.Validate(level);
         var x = await ValidatorController.IsValidateLastAddedBlock(level, box);
 
         return x;
-        //return x.Count == 0;
     }
 
     private bool IsBoxInLevelShablon(BaseBox box)
@@ -212,8 +310,8 @@ public class CreateFrom3dObject : MonoBehaviour
                     var positionsOfBox = bigBox.GetBoxPositionsAsVectors();
                     foreach (var variable in positionsOfBox)
                     {
-                        var asd = _emptyArrayPositions.FirstOrDefault(x => x.Value == variable);
-                        if (asd == null)
+                        var emptyPosition = _emptyArrayPositions.FirstOrDefault(x => x.Value == variable);
+                        if (emptyPosition == null)
                         {
                             return false;
                         }
@@ -367,14 +465,18 @@ public class CreateFrom3dObject : MonoBehaviour
                 {
                     Vector3 pos = new Vector3(x, y, z);
                     var closestPoint = GetColliderClosestPoint(pos);
-                   // Debug.DrawLine(closestPoint, pos, Color.blue, 2);
 
                     if (Vector3.Distance(closestPoint, pos) <= _minDistance)
                     {
-                        GameObject g = Instantiate(_baseBoxPlace, pos, quaternion.identity, transform);
-                        _arrayPositions.Add(new Vector3Class() { Value = g.transform.position });
-                        g.transform.position *= GameField.Size;
-                        _gameObjects.Add(g);
+                        GameObject instantiate = Instantiate(_baseBoxPlace, pos, quaternion.identity, transform);
+                        _arrayPositions.Add(new Vector3Class()
+                            {
+                                Value = instantiate.transform.position,
+                                GameObject = instantiate
+                            }
+                        );
+                        instantiate.transform.position *= GameField.Size;
+                        // _gameObjects.Add(instantiate);
                     }
                 }
             }
@@ -425,12 +527,17 @@ public class CreateFrom3dObject : MonoBehaviour
     [ContextMenu("Tools/RemoveAll")]
     public void RemoveAll()
     {
-        foreach (var VARIABLE in _gameObjects)
+        foreach (var VARIABLE in _arrayPositions)
         {
-            Destroy(VARIABLE, 2f);
+            Destroy(VARIABLE.GameObject, 2f);
         }
 
-        _gameObjects.Clear();
+        // foreach (var VARIABLE in _gameObjects)
+        // {
+        //     Destroy(VARIABLE, 2f);
+        // }
+
+        //  _gameObjects.Clear();
         _arrayPositions.Clear();
     }
 
@@ -490,6 +597,25 @@ public class CreateFrom3dObject : MonoBehaviour
             int k = rng.Next(n + 1);
             (list[k], list[n]) = (list[n], list[k]);
         }
+    }
+
+    public static List<Vector3Class> SortNearToCenter(List<Vector3Class> list)
+    {
+        List<Vector3Class> listResult = new List<Vector3Class>();
+
+        while (list.Count > 0)
+        {
+            var minDistance = list.Min(x => Vector3.Distance(x.Value, Vector3.zero));
+            var item = list.FirstOrDefault(x => Vector3.Distance(x.Value, Vector3.zero) == minDistance);
+            if (item != null)
+            { 
+                listResult.Add(item);
+                list.Remove(item);
+            }
+        }
+        Debug.LogError(list.Count);
+
+        return listResult;
     }
 #endif
 }

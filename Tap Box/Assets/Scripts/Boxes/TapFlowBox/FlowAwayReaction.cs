@@ -26,7 +26,7 @@ namespace Boxes.TapFlowBox
             _isMove = true;
             
             var box = GameManager.Instance.GameField.GetNearestBoxInDirection(
-                new[] { _box.Data.ArrayPosition.ToVector3() }, 
+                new[] { _parent.transform.position }, 
                 _parent.forward, 
                 _box);
             
@@ -39,6 +39,9 @@ namespace Boxes.TapFlowBox
             }
             else
             {
+                Debug.LogError("---1--",this);
+                Debug.LogError("---2--",box);
+                
                 await MoveToAndBack(box);
             }
         }

@@ -29,10 +29,10 @@ namespace Boxes.BigBoxTapFlowBox
             Vector3[] array = bigBoxTapFlowBox.GetBoxWorldPositionsAsVectors();
 
             var box = GameManager.Instance.GameField.GetNearestBoxInDirection(
-                array, 
-                GetDirection(), 
+                array,
+                GetDirection() * GameField.Size,
                 _box);
-            
+
             if (box == null)
             {
                 GameManager.Instance.GameField.RemoveBox(_box);
@@ -40,6 +40,8 @@ namespace Boxes.BigBoxTapFlowBox
             }
             else
             {
+                Debug.LogError("---------------", this);
+
                 await MoveToAndBack(box);
             }
         }

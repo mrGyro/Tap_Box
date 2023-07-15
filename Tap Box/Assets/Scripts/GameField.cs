@@ -60,7 +60,7 @@ public class GameField : MonoBehaviour, IInitializable
         }
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -76,7 +76,7 @@ public class GameField : MonoBehaviour, IInitializable
         {
             return;
         }
-        
+
         BaseBox box = null;
         foreach (var VARIABLE in _boxes)
         {
@@ -88,19 +88,24 @@ public class GameField : MonoBehaviour, IInitializable
 
                 if (box2 == null)
                 {
+                    Debug.LogError("---1--");
+
                     box = VARIABLE;
                     break;
                 }
             }
             else
             {
+                Debug.DrawRay(VARIABLE.transform.position, VARIABLE.GetComponent<FlowAwayReaction>().GetDirection() * Size, Color.red, 30, true);
+
                 var nearesBox = GameManager.Instance.GameField.GetNearestBoxInDirection(
-                    new[] { VARIABLE.Data.ArrayPosition.ToVector3() }, 
-                    VARIABLE.GetComponent<FlowAwayReaction>().GetDirection(), 
+                    new[] { VARIABLE.transform.position },
+                    VARIABLE.GetComponent<FlowAwayReaction>().GetDirection(),
                     VARIABLE);
 
                 if (nearesBox == null)
                 {
+                    Debug.LogError("---2--");
                     box = VARIABLE;
                     break;
                 }
@@ -111,10 +116,10 @@ public class GameField : MonoBehaviour, IInitializable
         {
             return;
         }
-        
+
         GameManager.Instance.InputController.RemoveBox(box);
     }
-    
+
     private async UniTask ShowWinWindow()
     {
         await UniTask.Delay(1000);
@@ -133,7 +138,7 @@ public class GameField : MonoBehaviour, IInitializable
     public Vector3 GetNewCenter()
     {
         SetNewMaxMinSize();
-       // Debug.DrawLine(_minLevelSize, _maxLevelSize, Color.red, 10);
+        // Debug.DrawLine(_minLevelSize, _maxLevelSize, Color.red, 10);
         float x = _maxLevelSize.x + (_minLevelSize.x - _maxLevelSize.x) / 2;
         float y = _maxLevelSize.y + (_minLevelSize.y - _maxLevelSize.y) / 2;
         float z = _maxLevelSize.z + (_minLevelSize.z - _maxLevelSize.z) / 2;
@@ -162,11 +167,16 @@ public class GameField : MonoBehaviour, IInitializable
         LayerMask mask = LayerMask.GetMask("GameFieldElement");
         Transform results = null;
         float minDistance = float.MaxValue;
+        int layer = currentBox.gameObject.layer;
+        currentBox.gameObject.layer = 0;
+
         foreach (var variable in boxArrayPosition)
         {
-            var hits = Physics.RaycastAll(variable, direction * Size, 1000F, mask);
-            Debug.DrawLine(variable, direction * Size * 100F, Color.magenta, 20);
-            var hitBox = hits.FirstOrDefault(x => x.transform != currentBox.transform);
+
+            if (!Physics.Raycast(variable, direction * Size * 1000, out var hitBox, Mathf.Infinity, mask))
+            {
+                continue;
+            }
 
             if (hitBox.transform == null)
             {
@@ -187,6 +197,7 @@ public class GameField : MonoBehaviour, IInitializable
             }
         }
 
+        currentBox.gameObject.layer = layer;
         return results == null ? null : results.GetComponent<BaseBox>();
     }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using Boxes;
 using Boxes.BigBoxTapFlowBox;
 using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace LevelCreator.Validator
@@ -29,7 +30,7 @@ namespace LevelCreator.Validator
                 VARIABLE.gameObject.SetActive(false);
             }
         }
-        
+
         public static async UniTask<bool> IsValidateLastAddedBlock(List<BaseBox> levelInput, BaseBox newBox)
         {
             BaseBox[] levelNew = levelInput.ToArray();
@@ -46,12 +47,12 @@ namespace LevelCreator.Validator
                 await UniTask.Yield();
                 for (var index = 0; index < length; index++)
                 {
-                    var variable = levelNew[index];
-                    if (variable.gameObject.layer != layer)
+                    if (levelNew[index].gameObject.layer != layer)
                     {
                         continue;
                     }
 
+                    var variable = levelNew[index];
                     variable.gameObject.layer = defaultLayer;
 
                     if (!IsBoxesInDirection(variable))
@@ -83,6 +84,7 @@ namespace LevelCreator.Validator
 
             return result == null;
         }
+
         public static async UniTask<List<BaseBox>> Validate(List<BaseBox> levelInput)
         {
             BaseBox[] copy = new BaseBox[levelInput.Count];
@@ -133,21 +135,17 @@ namespace LevelCreator.Validator
             return result;
         }
 
-        private static RaycastHit[] results;
         public static bool IsBoxesInDirection(BaseBox box)
         {
-            results = new RaycastHit[5];
             if (box.Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
             {
                 var bigBox = box as BigBoxTapFlowBox;
                 var array = bigBox.GetDirectionParts();
                 var direction = bigBox.GetDirection();
 
-                foreach (var bigBoxPart in array)
+                for (var index = 0; index < array.Length; index++)
                 {
-                    var size = Physics.RaycastNonAlloc(bigBoxPart.transform.position, direction, results, _distanceToCheck, _mask);
-
-                    if (size != _zero)
+                    if (Physics.Raycast(array[index].transform.position, direction * GameField.Size, _distanceToCheck, _mask))
                     {
                         return true;
                     }
@@ -155,11 +153,34 @@ namespace LevelCreator.Validator
             }
             else
             {
-                var size = Physics.RaycastNonAlloc(box.transform.position, box.transform.forward, results, _distanceToCheck, _mask);
-                return size != _zero;
+                if (Physics.Raycast(box.transform.position, box.transform.forward, _distanceToCheck, _mask))
+                {
+                    return true;
+                }
             }
 
             return false;
+        }
+
+        public static RaycastHit[] GetBoxesInDirection(BaseBox box)
+        {
+            if (box.Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
+            {
+                var bigBox = box as BigBoxTapFlowBox;
+                var array = bigBox.GetDirectionParts();
+                var direction = bigBox.GetDirection();
+
+                for (var index = 0; index < array.Length; index++)
+                {
+                    return Physics.RaycastAll(array[index].transform.position, direction * _distanceToCheck, _distanceToCheck, _mask);
+                }
+            }
+            else
+            {
+                return Physics.RaycastAll(box.transform.position, box.transform.forward * _distanceToCheck, _distanceToCheck, _mask);
+            }
+
+            return null;
         }
 
         private static bool IsHitBox(BaseBox box, RaycastHit[] hits)
@@ -209,7 +230,7 @@ namespace LevelCreator.Validator
                 }
             }
         }
-        
+
         private static void SetNewMaxMinSize(List<BaseBox> boxes)
         {
             _maxLevelSize = boxes.Count == 0 ? Vector3.zero : boxes[0].Data.ArrayPosition;

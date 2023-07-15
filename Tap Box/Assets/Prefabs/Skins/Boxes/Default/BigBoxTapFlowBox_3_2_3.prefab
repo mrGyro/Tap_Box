@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 0, z: 0}
+  ArrayPosition: {x: -4, y: -5, z: 0}
   ArrayDirection: {x: 1, y: 0, z: 0}
 --- !u!33 &5810581476615220996
 MeshFilter:
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: -0, z: 2}
+  ArrayPosition: {x: -3, y: -5, z: 2}
   ArrayDirection: {x: 2, y: -0, z: 2}
 --- !u!33 &1191335913841187400
 MeshFilter:
@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 1, z: 1}
+  ArrayPosition: {x: -5, y: -4, z: 1}
   ArrayDirection: {x: 0, y: 1, z: 1}
 --- !u!33 &6652874406058635196
 MeshFilter:
@@ -340,7 +340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 1, z: 0}
+  ArrayPosition: {x: -3, y: -4, z: 0}
   ArrayDirection: {x: 2, y: 1, z: 0}
 --- !u!33 &1088165868324352643
 MeshFilter:
@@ -438,7 +438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 1, z: 2}
+  ArrayPosition: {x: -3, y: -4, z: 2}
   ArrayDirection: {x: 2, y: 1, z: 2}
 --- !u!33 &5440119201389374873
 MeshFilter:
@@ -536,7 +536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 0, z: 0}
+  ArrayPosition: {x: -5, y: -5, z: 0}
   ArrayDirection: {x: 0, y: 0, z: 0}
 --- !u!33 &4581390670399105694
 MeshFilter:
@@ -634,7 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: -0, z: 2}
+  ArrayPosition: {x: -4, y: -5, z: 2}
   ArrayDirection: {x: 1, y: -0, z: 2}
 --- !u!33 &1474201159213381732
 MeshFilter:
@@ -732,7 +732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 1, z: 2}
+  ArrayPosition: {x: -4, y: -4, z: 2}
   ArrayDirection: {x: 1, y: 1, z: 2}
 --- !u!33 &2173368910270056897
 MeshFilter:
@@ -830,7 +830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 1, z: 0}
+  ArrayPosition: {x: -5, y: -4, z: 0}
   ArrayDirection: {x: 0, y: 1, z: 0}
 --- !u!33 &2680227593893237478
 MeshFilter:
@@ -928,7 +928,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: -0, z: 1}
+  ArrayPosition: {x: -4, y: -5, z: 1}
   ArrayDirection: {x: 1, y: -0, z: 1}
 --- !u!33 &7725993652739715200
 MeshFilter:
@@ -1008,7 +1008,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6105717079193990225}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1000, y: 1000, z: 1000}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1088,8 +1088,8 @@ MonoBehaviour:
   Data:
     Type: 40
     ArrayPosition:
-      x: 0
-      y: 0
+      x: -5
+      y: -5
       z: 0
     Rotation:
       x: 0
@@ -1219,7 +1219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 1, z: 1}
+  ArrayPosition: {x: -4, y: -4, z: 1}
   ArrayDirection: {x: 1, y: 1, z: 1}
 --- !u!33 &4065709047977193522
 MeshFilter:
@@ -1317,7 +1317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 0, z: 0}
+  ArrayPosition: {x: -3, y: -5, z: 0}
   ArrayDirection: {x: 2, y: 0, z: 0}
 --- !u!33 &1751730621564647779
 MeshFilter:
@@ -1415,7 +1415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: -0, z: 1}
+  ArrayPosition: {x: -3, y: -5, z: 1}
   ArrayDirection: {x: 2, y: -0, z: 1}
 --- !u!33 &3351229120682612304
 MeshFilter:
@@ -1513,7 +1513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: -0, z: 2}
+  ArrayPosition: {x: -5, y: -5, z: 2}
   ArrayDirection: {x: 0, y: -0, z: 2}
 --- !u!33 &6283649779590191825
 MeshFilter:
@@ -1611,7 +1611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: -0, z: 1}
+  ArrayPosition: {x: -5, y: -5, z: 1}
   ArrayDirection: {x: 0, y: -0, z: 1}
 --- !u!33 &1151145485874204219
 MeshFilter:
@@ -1709,7 +1709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 0, y: 1, z: 2}
+  ArrayPosition: {x: -5, y: -4, z: 2}
   ArrayDirection: {x: 0, y: 1, z: 2}
 --- !u!33 &8796433962285893610
 MeshFilter:
@@ -1807,7 +1807,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 1, y: 1, z: 0}
+  ArrayPosition: {x: -4, y: -4, z: 0}
   ArrayDirection: {x: 1, y: 1, z: 0}
 --- !u!33 &7074543175015611308
 MeshFilter:
@@ -1905,7 +1905,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a4a86003bef824c9490101c112f9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrayPosition: {x: 2, y: 1, z: 1}
+  ArrayPosition: {x: -3, y: -4, z: 1}
   ArrayDirection: {x: 2, y: 1, z: 1}
 --- !u!33 &5454194014121505738
 MeshFilter:
