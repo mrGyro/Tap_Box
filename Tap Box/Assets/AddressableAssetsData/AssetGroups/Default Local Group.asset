@@ -245,6 +245,18 @@ MonoBehaviour:
     m_Address: expIcon_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 877b1e11e6fd28f40ba579a6b101ade5
+    m_Address: Default2_bg_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8beff1a1059a32948b179c013fb9b122
+    m_Address: Default4_bg_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1cc41c4a2f0910c4f904f9f1bbb92d4a
+    m_Address: Default4_bg_1_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d2092fe1ab8035d4192c7661d5d020b3, type: 2}
   m_SchemaSet:
