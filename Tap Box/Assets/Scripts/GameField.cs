@@ -78,32 +78,30 @@ public class GameField : MonoBehaviour, IInitializable
         }
 
         BaseBox box = null;
-        foreach (var VARIABLE in _boxes)
+        foreach (var baseBox in _boxes)
         {
-            var bigBoxTapFlowBox = VARIABLE as BigBoxTapFlowBox;
+            var bigBoxTapFlowBox = baseBox as BigBoxTapFlowBox;
             if (bigBoxTapFlowBox != null)
             {
                 Vector3[] array = bigBoxTapFlowBox.GetBoxWorldPositionsAsVectors();
-                var box2 = GameManager.Instance.GameField.GetNearestBoxInDirection(array, bigBoxTapFlowBox.GetDirection(), VARIABLE);
+                var box2 = GameManager.Instance.GameField.GetNearestBoxInDirection(array, bigBoxTapFlowBox.GetDirection(), baseBox);
 
                 if (box2 == null)
                 {
-                    box = VARIABLE;
+                    box = baseBox;
                     break;
                 }
             }
             else
             {
-                Debug.DrawRay(VARIABLE.transform.position, VARIABLE.GetComponent<FlowAwayReaction>().GetDirection() * Size, Color.red, 30, true);
+                var nearestBoxInDirection = GameManager.Instance.GameField.GetNearestBoxInDirection(
+                    new[] { baseBox.transform.position },
+                    baseBox.GetComponent<FlowAwayReaction>().GetDirection(),
+                    baseBox);
 
-                var nearesBox = GameManager.Instance.GameField.GetNearestBoxInDirection(
-                    new[] { VARIABLE.transform.position },
-                    VARIABLE.GetComponent<FlowAwayReaction>().GetDirection(),
-                    VARIABLE);
-
-                if (nearesBox == null)
+                if (nearestBoxInDirection == null)
                 {
-                    box = VARIABLE;
+                    box = baseBox;
                     break;
                 }
             }
@@ -164,8 +162,9 @@ public class GameField : MonoBehaviour, IInitializable
         LayerMask mask = LayerMask.GetMask("GameFieldElement");
         Transform results = null;
         float minDistance = float.MaxValue;
-        int layer = currentBox.gameObject.layer;
-        currentBox.gameObject.layer = 0;
+        var currentBoxGameObject = currentBox.gameObject;
+        int layer = currentBoxGameObject.layer;
+        currentBoxGameObject.layer = 0;
 
         foreach (var variable in boxArrayPosition)
         {
