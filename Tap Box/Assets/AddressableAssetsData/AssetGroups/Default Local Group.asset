@@ -270,7 +270,35 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 82ce582fea64def478e9e513a5cf59ca
-    m_Address: Assets/UI/Tap_Images/skin3_tap_icon.jpg
+    m_Address: skin3_tap_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 678395142e685704faf0ed0566888a8d
+    m_Address: skin4_tap_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: efe49cde79363334a970d6f6e2ae1cc3
+    m_Address: skin5_tap_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e93e7e859992bf14dbb6e8eeecb8b86b
+    m_Address: Default2_tail_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ae9d9e100c1c0ad4497fef08126251d2
+    m_Address: Default3_tail_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2ea90ebe072805b4ebac561dfe028930
+    m_Address: Default4_tail_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 9fabaa7ded222ad42bb7f789facd7b2e
+    m_Address: Default5_tail_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: db80c9c46175915449baaed89ecfa5ab
+    m_Address: Default6_tail_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

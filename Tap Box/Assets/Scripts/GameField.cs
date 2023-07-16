@@ -7,7 +7,6 @@ using Boxes.SwipableBox;
 using Boxes.TapFlowBox;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
-using LevelCreator.Validator;
 using Managers;
 using UI.Skins;
 using Unity.VisualScripting;

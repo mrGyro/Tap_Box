@@ -16,7 +16,6 @@ namespace LevelCreator2
         [SerializeField] Camera camera;
         [SerializeField] Button _validate;
         [SerializeField] Button _showAll;
-        [SerializeField] float size;
         [SerializeField] Transform root;
         [SerializeField] ShadowBox shadowBox;
         [SerializeField] private Image currentBoxIcon;
@@ -66,7 +65,7 @@ namespace LevelCreator2
         public void CreateLevelFromChildren()
         {
             Level.Clear();
-            foreach (Transform  VARIABLE in transform)
+            foreach (Transform VARIABLE in transform)
             {
                 var box = VARIABLE.GetComponent<BaseBox>();
                 if (box != null)
@@ -289,7 +288,7 @@ namespace LevelCreator2
 
         private void CreateBox()
         {
-            if(_3dObj.activeSelf)
+            if (_3dObj.activeSelf)
                 return;
             if (!Input.GetMouseButtonDown(0))
                 return;
@@ -351,7 +350,7 @@ namespace LevelCreator2
             Vector3 dir = Vector3.zero;
             foreach (var variable in _directions)
             {
-                float currentDistance = Vector3.Distance((arrayPosition + variable) * size, hit.point);
+                float currentDistance = Vector3.Distance((arrayPosition + variable) * GameField.Size, hit.point);
                 if (currentDistance < distance)
                 {
                     distance = currentDistance;
@@ -373,7 +372,7 @@ namespace LevelCreator2
                 case BaseBox.BlockType.TapFlowBox:
                 case BaseBox.BlockType.RotateRoadBox:
                 case BaseBox.BlockType.SwipedBox:
-                    result = new List<Vector3>() { (position + direction) * size };
+                    result = new List<Vector3>() { (position + direction) * GameField.Size };
                     break;
 
                 case BaseBox.BlockType.BigBoxTapFlowBox:
@@ -492,9 +491,9 @@ namespace LevelCreator2
             box.transform.position = starPos;
             box.transform.rotation = Quaternion.Euler(shadowBaseBox.Data.Rotation);
             Vector3 Arrayposition = new Vector3(
-                starPos.x == 0 ? 0 : starPos.x / size,
-                starPos.y == 0 ? 0 : starPos.y / size,
-                starPos.z == 0 ? 0 : starPos.z / size);
+                starPos.x == 0 ? 0 : starPos.x / GameField.Size,
+                starPos.y == 0 ? 0 : starPos.y / GameField.Size,
+                starPos.z == 0 ? 0 : starPos.z / GameField.Size);
 
             box.Data = new BoxData()
             {
@@ -551,7 +550,7 @@ namespace LevelCreator2
 
             return false;
         }
-        
+
         public bool IsBoxInPosition(Vector3 arrayPosition, BaseBox box)
         {
             foreach (var variable in Level)
@@ -560,6 +559,7 @@ namespace LevelCreator2
                 {
                     continue;
                 }
+
                 switch (variable.Data.Type)
                 {
                     case BaseBox.BlockType.None:
@@ -570,6 +570,7 @@ namespace LevelCreator2
                         {
                             return true;
                         }
+
                         continue;
                     case BaseBox.BlockType.BigBoxTapFlowBox:
                         var bigBox = (variable as BigBoxTapFlowBox);
@@ -611,7 +612,7 @@ namespace LevelCreator2
 
             var boxGameObject = await InstantiateAssetAsync(GetAddressableName(data));
             var box = boxGameObject.GetComponent<BaseBox>();
-            box.transform.position = data.ArrayPosition.ToVector3() * size;
+            box.transform.position = data.ArrayPosition.ToVector3() * GameField.Size;
             box.transform.rotation = Quaternion.Euler(data.Rotation);
             box.Data = data;
             Level.Add(box);
@@ -693,7 +694,7 @@ namespace LevelCreator2
             //     Debug.LogError("Has collisions: " + _collisions.Count);
             // }
 
-           // ValidatorController.Validate(Level);
+            // ValidatorController.Validate(Level);
         }
 
         private bool IsBlockCrossPosition(BaseBox box, BaseBox box2)
