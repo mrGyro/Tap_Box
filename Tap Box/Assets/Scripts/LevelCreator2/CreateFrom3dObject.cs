@@ -25,6 +25,7 @@ public class CreateFrom3dObject : MonoBehaviour
     [SerializeField] private Transform _objectsWithCollidersForCreate;
     [SerializeField] private TMP_Text _countOfEmptyCellsCountText;
     [SerializeField] private AudioClip audioClip;
+    [SerializeField] private int _targetCount;
     [SerializeField] private List<BoxProbability> _possibleBoxesProbability;
 
     private List<Collider> _colliders;
@@ -427,8 +428,81 @@ public class CreateFrom3dObject : MonoBehaviour
 
 
 #if UNITY_EDITOR
-    public async void CreateFrom3d()
+
+
+    public void CreateFieldWithNeearCountOfBox()
     {
+        DoAction();
+
+    }
+
+    private async void DoAction()
+    {
+        float midleBoxSize = 2.3f;
+        Debug.LogError("Target size of empty position is " + _targetCount * midleBoxSize);
+        await CreateLevelFrom3d();
+
+        float distance1 = Vector3.Distance(Vector3.zero, _objectsWithCollidersForCreate.localScale);
+        float distance2 = Vector3.Distance(Vector3.zero, _objectsWithCollidersForCreate.localScale + Vector3.one * 0.01f);
+        Vector3 direction = distance1 > distance2 ? Vector3.one * 0.01f : -Vector3.one * 0.01f;
+        List<SizeBlock> sizeBlocks = new List<SizeBlock>();
+        sizeBlocks.Add(new SizeBlock() {GeneretedBlock = _arrayPositions.Count,  BlockCount = (int)(_arrayPositions.Count / midleBoxSize), Scale = _objectsWithCollidersForCreate.localScale });
+        while (true)
+        {
+            _objectsWithCollidersForCreate.localScale += direction;
+
+            ClearArrayPosition();
+            await UniTask.Yield();
+
+            await CreateLevelFrom3d();
+
+            if (sizeBlocks[^1].BlockCount != (int)(_arrayPositions.Count / midleBoxSize))
+            {
+                sizeBlocks.Add(new SizeBlock() {GeneretedBlock = _arrayPositions.Count, BlockCount = (int)(_arrayPositions.Count / midleBoxSize), Scale = _objectsWithCollidersForCreate.localScale });
+            }
+
+            if (Vector3.Distance(Vector3.zero, _objectsWithCollidersForCreate.localScale) < 0.02f)
+            {
+                _countOfEmptyCellsCountText.text = _arrayPositions.Count.ToString();
+                break;
+            }
+
+            _countOfEmptyCellsCountText.text = _arrayPositions.Count.ToString();
+        }
+
+        foreach (var VARIABLE in sizeBlocks)
+        {
+            Debug.LogError($"sacale = {VARIABLE.Scale}  BlockCount = {VARIABLE.BlockCount} GeneretedBlock = {VARIABLE.GeneretedBlock}");
+        }
+    }
+
+    private class SizeBlock
+    {
+        public Vector3 Scale;
+        public int BlockCount;
+        public int GeneretedBlock;
+    }
+
+    private void ClearArrayPosition()
+    {
+        if (_arrayPositions != null && _arrayPositions.Count > 0)
+        {
+            foreach (var variable in _arrayPositions)
+            {
+                Destroy(variable.GameObject);
+            }
+
+            _arrayPositions.Clear();
+        }
+    }
+
+    private async UniTask CreateLevelFrom3d()
+    {
+        foreach (Transform variable in _objectsWithCollidersForCreate)
+        {
+            variable.gameObject.SetActive(true);
+        }
+
         _colliders ??= new List<Collider>();
         _colliders.Clear();
         foreach (Transform variable in _objectsWithCollidersForCreate)
@@ -469,14 +543,15 @@ public class CreateFrom3dObject : MonoBehaviour
                     if (Vector3.Distance(closestPoint, pos) <= _minDistance)
                     {
                         GameObject instantiate = Instantiate(_baseBoxPlace, pos, quaternion.identity, transform);
+                        var position = instantiate.transform.position;
                         _arrayPositions.Add(new Vector3Class()
                             {
-                                Value = instantiate.transform.position,
+                                Value = position,
                                 GameObject = instantiate
                             }
                         );
-                        instantiate.transform.position *= GameField.Size;
-                        // _gameObjects.Add(instantiate);
+                        position *= GameField.Size;
+                        instantiate.transform.position = position;
                     }
                 }
             }
@@ -486,6 +561,13 @@ public class CreateFrom3dObject : MonoBehaviour
         {
             variable.gameObject.SetActive(false);
         }
+        _countOfEmptyCellsCountText.text = _arrayPositions.Count.ToString();
+
+    }
+
+    public void CreateFrom3d()
+    {
+        CreateLevelFrom3d();
     }
 
     public bool IsBoxInPosition(Vector3 arrayPosition, BaseBox box)
@@ -608,12 +690,11 @@ public class CreateFrom3dObject : MonoBehaviour
             var minDistance = list.Min(x => Vector3.Distance(x.Value, Vector3.zero));
             var item = list.FirstOrDefault(x => Vector3.Distance(x.Value, Vector3.zero) == minDistance);
             if (item != null)
-            { 
+            {
                 listResult.Add(item);
                 list.Remove(item);
             }
         }
-        Debug.LogError(list.Count);
 
         return listResult;
     }
