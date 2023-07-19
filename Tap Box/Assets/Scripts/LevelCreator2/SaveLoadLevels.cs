@@ -54,6 +54,15 @@ public class SaveLoadLevels
         return null;
     }
 
+    public static void RemoveFile(string fileName)
+    {
+        string path = Path + fileName + ".txt";
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+    }
+
     public static List<string> LoadLevelsFromFile()
     {
         if (!Directory.Exists(Path))

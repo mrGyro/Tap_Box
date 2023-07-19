@@ -76,7 +76,7 @@ namespace LevelCreator2
                 }
             }, fileName.text);
         }
-        
+
         public void Save(LevelData levelData, string fileName)
         {
             int.TryParse(reward.text, out var rewardCount);
@@ -112,8 +112,8 @@ namespace LevelCreator2
                     _status = Status.Passed;
                     break;
             }
-        }        
-        
+        }
+
         public void RequirementChanged()
         {
             Debug.LogError(requirementDropDown.value);
@@ -122,27 +122,30 @@ namespace LevelCreator2
                 case 0:
                     _requirement = Reqirement.RequirementType.PassedLevel;
                     break;
-      
             }
         }
-        
-        [ContextMenu("Load Levels Data From File")]
+
+        [ContextMenu("Load Levels Data From File And save sorted")]
         public List<LevelData> LoadLevelsDataFromFile()
         {
             var levelsNames = SaveLoadLevels.LoadLevelsFromFile();
             List<LevelData> result = new List<LevelData>();
-            foreach (var fileName in levelsNames)
+            foreach (var fileName1 in levelsNames)
             {
-                var level = SaveLoadLevels.LoadLevelFromFile(fileName);
+                Debug.LogError(fileName1);
+                var level = SaveLoadLevels.LoadLevelFromFile(fileName1);
                 if (level != null)
                 {
+                    Debug.LogError("add " + fileName1 + " " + level.ID);
                     result.Add(level);
+                    SaveLoadLevels.RemoveFile(fileName1);
                 }
             }
 
+            Debug.LogError("----------------");
+
             result.Sort((x, y) =>
             {
-                
                 if (x.Data.Count > y.Data.Count)
                     return 1;
                 if (x.Data.Count < y.Data.Count)
@@ -153,7 +156,11 @@ namespace LevelCreator2
 
             for (int i = 0; i < result.Count; i++)
             {
-                Debug.LogError(result[i].Data.Count);
+                Debug.LogError(i + " " + result[i].Data.Count);
+                result[i].BestResult = 0;
+                result[i].Reqirement = new Reqirement() { Type = Reqirement.RequirementType.PassedLevel, Value = i.ToString() };
+                result[i].ID = (i + 1).ToString();
+                result[i].LevelStatus = Status.Close;
                 Save(result[i], (i + 1).ToString());
             }
 
@@ -171,12 +178,13 @@ namespace LevelCreator2
             var list = SaveLoadLevels.LoadLevelsFromFile();
             if (list == null || list.Count == 0)
                 return;
-            
+
             list.Sort((x, y) =>
             {
                 int ix, iy;
                 return int.TryParse(x, out ix) && int.TryParse(y, out iy)
-                    ? ix.CompareTo(iy) : string.Compare(x, y);
+                    ? ix.CompareTo(iy)
+                    : string.Compare(x, y);
             });
 
             foreach (var button in list)
@@ -194,7 +202,7 @@ namespace LevelCreator2
                 Debug.LogError("Level nit fount:" + selectedFileName);
                 return;
             }
-            
+
             _currentSelected = selectedFileName;
             fileName.text = selectedFileName;
             id.text = levelData.ID;
