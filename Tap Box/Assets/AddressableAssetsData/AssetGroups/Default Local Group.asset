@@ -317,6 +317,10 @@ MonoBehaviour:
     m_Address: Default_bg_black_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: ede94761fc3ebf94990fbc791cb173a6
+    m_Address: 13
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d2092fe1ab8035d4192c7661d5d020b3, type: 2}
   m_SchemaSet:

@@ -72,11 +72,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Levels
-  - m_GUID: ede94761fc3ebf94990fbc791cb173a6
-    m_Address: 13
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Levels
   - m_GUID: 33de5b713936d0c48a1e6da4cc023151
     m_Address: 16
     m_ReadOnly: 0
