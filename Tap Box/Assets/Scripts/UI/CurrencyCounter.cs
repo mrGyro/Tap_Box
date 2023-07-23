@@ -30,7 +30,6 @@ namespace UI
             _currentValue = GameManager.Instance.CurrencyController.GetCurrency(type);
             count.text = _currentValue.ToString();
             GameManager.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;
-            Debug.LogError("--------init");
         }
 
         public bool IsAnimationComplete()
