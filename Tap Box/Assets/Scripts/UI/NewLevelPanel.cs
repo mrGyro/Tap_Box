@@ -25,8 +25,26 @@ namespace UI
             Priority = 100;
             GameManager.Instance.PlayerLevelManager.OnLevelChanged += LevelChanged;
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener((() => GameManager.Instance.UIManager.ClosePopUp(ID)));
+            button.onClick.AddListener(ClosePopup);
             _currencyCounter.Initialize();
+        }
+
+        private void ClosePopup()
+        {
+            // if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
+            // {
+            //     GameManager.Instance.Mediation.Show(Constants.Ads.Rewarded, ID);
+            //     GameManager.Instance.UIManager.ClosePopUp(ID);
+            //
+            //     return;
+            // }
+
+            if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
+            {
+                GameManager.Instance.Mediation.Show(Constants.Ads.Interstitial, ID);
+            }
+            
+            GameManager.Instance.UIManager.ClosePopUp(ID);
         }
 
         public override async void Show()
