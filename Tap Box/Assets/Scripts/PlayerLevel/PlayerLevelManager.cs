@@ -23,7 +23,7 @@ namespace PlayerLevel
         public void AddExperience(float value)
         {
             GameManager.Instance.Progress.CurrentPlayerLevelProgress += value;
-            if (GameManager.Instance.Progress.CurrentPlayerLevelProgress >= 100)
+            if (GameManager.Instance.Progress.CurrentPlayerLevelProgress >= 150)
             {
                 AddLevel();
                 return;

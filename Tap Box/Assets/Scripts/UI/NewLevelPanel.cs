@@ -44,19 +44,19 @@ namespace UI
 
         private async void LevelChanged(int obj)
         {
-            int count = Random.Range(10, 80);
+            int count = Random.Range(70, 150);
             int minCountForLevel = 10;
             count = Mathf.Clamp(count, minCountForLevel, int.MaxValue);
             _reward.SetActive(true);
             _countOfReward.text = $"+{count}";
             _levelText.text = $"You get {obj} level";
             await UniTask.Delay(1000);
-             _currencyCounter.CoinsAnimation(_image.transform);
-             await UniTask.Delay(500);
-             GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, count);
-             await UniTask.Delay(500);
-             button.gameObject.SetActive(true);
-             await GameManager.Instance.Progress.Save();
+            _currencyCounter.CoinsAnimation(_image.transform);
+            await UniTask.Delay(500);
+            GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, count);
+            await UniTask.Delay(500);
+            button.gameObject.SetActive(true);
+            await GameManager.Instance.Progress.Save();
         }
 
         private void OnDestroy()

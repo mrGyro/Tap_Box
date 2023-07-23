@@ -40,8 +40,6 @@ namespace Boxes.BigBoxTapFlowBox
             }
             else
             {
-                Debug.LogError("---------------", this);
-
                 await MoveToAndBack(box);
             }
         }
