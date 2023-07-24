@@ -137,7 +137,8 @@ namespace UI.Skins
                 return;
             }
 
-            var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen && skin.Type == _selectedType);
+            var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(
+                skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen && skin.Type == _selectedType);
             _getRandomSkinByCoins.gameObject.SetActive(randomSkin != null);
             _getRandomSkinByCoins.interactable = GameManager.Instance.CurrencyController.GetCurrency(CurrencyController.Type.Coin) >= GetPriceForRandomSkin();
             _getRandomSkinByCoinsText.text = GetPriceForRandomSkin().ToString();
@@ -188,6 +189,8 @@ namespace UI.Skins
             SetPage(_backgroundsSkinsButtons);
             SetPage(_tailButtons);
             SetPage(_tapButtons);
+            SetBottomButtons(CurrencyController.Type.BoxSkin);
+
         }
 
         private void OnTopButtonStateChanged(StateButton arg1, bool arg2)

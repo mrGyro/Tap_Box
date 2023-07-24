@@ -41,6 +41,38 @@ public class GameField : MonoBehaviour, IInitializable
         return _data.Reward;
     }
 
+    public void BombBox(BaseBox box, Vector3 point, Vector3 size)
+    {
+        if (box == null)
+        {
+            return;
+        }
+
+        Debug.LogError(point, box);
+        //get nearest box part 
+        Vector3 boxPartPosition = box.transform.position;
+        if (box is BigBoxTapFlowBox)
+        {
+            var bigBox = box as BigBoxTapFlowBox;
+            var parts = bigBox.GetBoxPositions();
+            float minDistance = float.MaxValue;
+            foreach (var VARIABLE in parts)
+            {
+                if (Vector3.Distance(VARIABLE.transform.position, point) < minDistance)
+                {
+                    boxPartPosition = VARIABLE.transform.position;
+                }
+            }
+        }
+        
+        
+
+        //get center of size box
+        //get position by direction from center
+        // check boxes in position and add to list
+        //remove boxes list
+    }
+
     public string GetCurrentLevelID()
     {
         return _data.ID;
@@ -51,7 +83,7 @@ public class GameField : MonoBehaviour, IInitializable
         await CreateLevel(levelName);
     }
 
-    public void DoAction()
+    public void DoCheatRemoveAction()
     {
         if (_isActiveRemove && _isDown)
         {
