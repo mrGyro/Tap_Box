@@ -41,6 +41,38 @@ public class GameField : MonoBehaviour, IInitializable
         return _data.Reward;
     }
 
+    public void BombBox(BaseBox box, Vector3 point, Vector3 size)
+    {
+        if (box == null)
+        {
+            return;
+        }
+
+        Debug.LogError(point, box);
+        //get nearest box part 
+        Vector3 boxPartPosition = box.transform.position;
+        if (box is BigBoxTapFlowBox)
+        {
+            var bigBox = box as BigBoxTapFlowBox;
+            var parts = bigBox.GetBoxPositions();
+            float minDistance = float.MaxValue;
+            foreach (var VARIABLE in parts)
+            {
+                if (Vector3.Distance(VARIABLE.transform.position, point) < minDistance)
+                {
+                    boxPartPosition = VARIABLE.transform.position;
+                }
+            }
+        }
+        
+        
+
+        //get center of size box
+        //get position by direction from center
+        // check boxes in position and add to list
+        //remove boxes list
+    }
+
     public string GetCurrentLevelID()
     {
         return _data.ID;
@@ -51,6 +83,24 @@ public class GameField : MonoBehaviour, IInitializable
         await CreateLevel(levelName);
     }
 
+    public void DoCheatRemoveAction()
+    {
+        if (_isActiveRemove && _isDown)
+        {
+            RemoveAvailableBox();
+        }
+    }
+
+    public void DoDown()
+    {
+        _isDown = true;
+    }
+
+    public void DoUp()
+    {
+        _isDown = false;
+    }
+
     private async void CheckForWin()
     {
         if (_boxes.Count == 0)
@@ -59,10 +109,12 @@ public class GameField : MonoBehaviour, IInitializable
         }
     }
 
+    private bool _isActiveRemove = true;
+    private bool _isDown = false;
 #if UNITY_EDITOR
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (_isActiveRemove && Input.GetKey(KeyCode.Q))
         {
             RemoveAvailableBox();
         }
@@ -71,8 +123,11 @@ public class GameField : MonoBehaviour, IInitializable
 
     public void RemoveAvailableBox()
     {
+        _isActiveRemove = false;
         if (_boxes == null || _boxes.Count == 0)
         {
+            _isActiveRemove = true;
+
             return;
         }
 
@@ -112,6 +167,7 @@ public class GameField : MonoBehaviour, IInitializable
         }
 
         GameManager.Instance.InputController.RemoveBox(box);
+        _isActiveRemove = true;
     }
 
     private async UniTask ShowWinWindow()
@@ -167,7 +223,6 @@ public class GameField : MonoBehaviour, IInitializable
 
         foreach (var variable in boxArrayPosition)
         {
-
             if (!Physics.Raycast(variable, direction * Size * 1000, out var hitBox, Mathf.Infinity, mask))
             {
                 continue;

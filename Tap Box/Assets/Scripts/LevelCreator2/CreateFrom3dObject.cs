@@ -18,6 +18,7 @@ public class CreateFrom3dObject : MonoBehaviour
 {
 #if UNITY_EDITOR
 
+
     [SerializeField] private GameObject _baseBoxPlace;
     [SerializeField] private float _minDistance;
     [SerializeField] private Transform _rootGameField;
@@ -292,6 +293,38 @@ public class CreateFrom3dObject : MonoBehaviour
         return x;
     }
 
+    // public static bool IsBoxesInDirectionNotInMoveFront(BaseBox box)
+    // {
+    //     if (box.Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
+    //     {
+    //         var bigBox = box as BigBoxTapFlowBox;
+    //         var array = bigBox.GetDirectionParts();
+    //         var direction = bigBox.GetDirection();
+    //
+    //         for (var index = 0; index < array.Length; index++)
+    //         {
+    //             var hits = Physics.RaycastAll(array[index].transform.position, direction * GameField.Size, _distanceToCheck, _mask);
+    //             for (int i = 0; i < hits.Length; i++)
+    //             {
+    //             }
+    //
+    //             if ()
+    //             {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     else
+    //     {
+    //         if (Physics.Raycast(box.transform.position, box.transform.forward, _distanceToCheck, _mask))
+    //         {
+    //             return true;
+    //         }
+    //     }
+    //
+    //     return false;
+    // }
+
     private bool IsBoxInLevelShablon(BaseBox box)
     {
         switch (box.Data.Type)
@@ -433,7 +466,6 @@ public class CreateFrom3dObject : MonoBehaviour
     public void CreateFieldWithNeearCountOfBox()
     {
         DoAction();
-
     }
 
     private async void DoAction()
@@ -446,7 +478,7 @@ public class CreateFrom3dObject : MonoBehaviour
         float distance2 = Vector3.Distance(Vector3.zero, _objectsWithCollidersForCreate.localScale + Vector3.one * 0.01f);
         Vector3 direction = distance1 > distance2 ? Vector3.one * 0.01f : -Vector3.one * 0.01f;
         List<SizeBlock> sizeBlocks = new List<SizeBlock>();
-        sizeBlocks.Add(new SizeBlock() {GeneretedBlock = _arrayPositions.Count,  BlockCount = (int)(_arrayPositions.Count / midleBoxSize), Scale = _objectsWithCollidersForCreate.localScale });
+        sizeBlocks.Add(new SizeBlock() { GeneretedBlock = _arrayPositions.Count, BlockCount = (int)(_arrayPositions.Count / midleBoxSize), Scale = _objectsWithCollidersForCreate.localScale });
         while (true)
         {
             _objectsWithCollidersForCreate.localScale += direction;
@@ -458,7 +490,7 @@ public class CreateFrom3dObject : MonoBehaviour
 
             if (sizeBlocks[^1].BlockCount != (int)(_arrayPositions.Count / midleBoxSize))
             {
-                sizeBlocks.Add(new SizeBlock() {GeneretedBlock = _arrayPositions.Count, BlockCount = (int)(_arrayPositions.Count / midleBoxSize), Scale = _objectsWithCollidersForCreate.localScale });
+                sizeBlocks.Add(new SizeBlock() { GeneretedBlock = _arrayPositions.Count, BlockCount = (int)(_arrayPositions.Count / midleBoxSize), Scale = _objectsWithCollidersForCreate.localScale });
             }
 
             if (Vector3.Distance(Vector3.zero, _objectsWithCollidersForCreate.localScale) < 0.02f)
@@ -561,8 +593,8 @@ public class CreateFrom3dObject : MonoBehaviour
         {
             variable.gameObject.SetActive(false);
         }
-        _countOfEmptyCellsCountText.text = _arrayPositions.Count.ToString();
 
+        _countOfEmptyCellsCountText.text = _arrayPositions.Count.ToString();
     }
 
     public void CreateFrom3d()

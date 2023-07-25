@@ -74,7 +74,7 @@ namespace UI
             {
                 return;
             }
-            
+
             _isAnimationCompleate = false;
 
             _targetValue = newValue;
@@ -87,29 +87,28 @@ namespace UI
                 _currentValue = GameManager.Instance.CurrencyController.GetCurrency(type);
                 count.text = _currentValue.ToString();
             }
+
             _isAnimationCompleate = true;
         }
 
         private async UniTask IncrementGold()
         {
-            int time = 50;
-            int differance = _targetValue - _currentValue;
-            if (differance < 20)
+            int time = 100;
+            float differance = _targetValue - _currentValue;
+            differance /= 15;
+
+            float currentValue = _currentValue;
+            while (_targetValue >= (int)currentValue)
             {
-                time = 100;
-            }
-            else if (differance > 100)
-            {
-                time = 1;
-            }
-            
-            while (_targetValue >= _currentValue)
-            {
-                count.text = _currentValue.ToString();
-                _currentValue++;
+                count.text = ((int)currentValue).ToString();
+                currentValue += differance;
+                currentValue = Mathf.Clamp(currentValue, 0, _targetValue + 1);
+
                 LayoutRebuilder.ForceRebuildLayoutImmediate(count.transform as RectTransform);
                 await UniTask.Delay(time);
             }
+
+            _currentValue = (int)currentValue;
         }
     }
 }

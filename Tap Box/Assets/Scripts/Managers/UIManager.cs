@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour, IInitializable
     [SerializeField] private PlayerLevelUI playerLevelUI;
     [SerializeField] private TurnsLeftCounter turnsLeftCounter;
     [SerializeField] private TMP_Text _currentLevelText;
+    [SerializeField] private BombBoosterUI _bombBoosterUI;
 
     [SerializeField] private List<PopUpBase> popups;
     private List<PopUpBase> _popUpsQueue = new();
@@ -35,6 +36,7 @@ public class UIManager : MonoBehaviour, IInitializable
         }
         Core.MessengerStatic.Messenger<string>.AddListener(Constants.Events.OnLevelCreated, OnLevelChanged);
         _currentLevelText.text = "Level " + GameManager.Instance.Progress.LastStartedLevelID;
+        _bombBoosterUI.Initialize();
     }
 
     private void OnLevelChanged(string obj)

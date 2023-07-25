@@ -14,8 +14,9 @@ namespace LevelCreator.Validator
         private static Vector3 _maxLevelSize;
         private static Vector3 _minLevelSize;
         private static LayerMask _mask = LayerMask.GetMask("GameFieldElement");
-        private static List<BaseBox> level;
         private static float _distanceToCheck = 1000f;
+
+        private static List<BaseBox> level;
         private static int _zero = 0;
 
         public static async void HidePassed(List<BaseBox> levelInput)

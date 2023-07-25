@@ -72,11 +72,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Levels
-  - m_GUID: ede94761fc3ebf94990fbc791cb173a6
-    m_Address: 13
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Levels
   - m_GUID: 33de5b713936d0c48a1e6da4cc023151
     m_Address: 16
     m_ReadOnly: 0
@@ -154,6 +149,21 @@ MonoBehaviour:
     - Levels
   - m_GUID: 8cf4c1a956c778f4f8769f5f4c8a3ba7
     m_Address: 4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Levels
+  - m_GUID: ede94761fc3ebf94990fbc791cb173a6
+    m_Address: 13
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Levels
+  - m_GUID: 5ad84983e71309e46aca436d0696806d
+    m_Address: 29
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Levels
+  - m_GUID: 3f9cd55ea3d0eeb4b88d4f997cc5e812
+    m_Address: 30
     m_ReadOnly: 0
     m_SerializedLabels:
     - Levels
