@@ -5,6 +5,7 @@ using Boxes;
 using Boxes.BigBoxTapFlowBox;
 using Boxes.SwipableBox;
 using Boxes.TapFlowBox;
+using Currency;
 using Cysharp.Threading.Tasks;
 using LevelCreator;
 using Managers;
@@ -47,30 +48,102 @@ public class GameField : MonoBehaviour, IInitializable
         {
             return;
         }
+        
 
-        Debug.LogError(point, box);
-        //get nearest box part 
         Vector3 boxPartPosition = box.transform.position;
         if (box is BigBoxTapFlowBox)
         {
             var bigBox = box as BigBoxTapFlowBox;
             var parts = bigBox.GetBoxPositions();
             float minDistance = float.MaxValue;
-            foreach (var VARIABLE in parts)
+            foreach (var bigBoxPart in parts)
             {
-                if (Vector3.Distance(VARIABLE.transform.position, point) < minDistance)
+                if (Vector3.Distance(bigBoxPart.transform.position, point) < minDistance)
                 {
-                    boxPartPosition = VARIABLE.transform.position;
+                    boxPartPosition = bigBoxPart.transform.position;
                 }
             }
         }
-        
-        
 
-        //get center of size box
-        //get position by direction from center
-        // check boxes in position and add to list
-        //remove boxes list
+        Vector3 minPos = boxPartPosition / Size - size;
+        Vector3 maxPos = boxPartPosition / Size + size;
+
+        List<Vector3> positions = new List<Vector3>();
+        for (int x = (int)minPos.x; x <= maxPos.x; x++)
+        {
+            for (int y = (int)minPos.y; y <= maxPos.y; y++)
+            {
+                for (int z = (int)minPos.z; z <= maxPos.z; z++)
+                {
+                    positions.Add(new Vector3(x, y, z));
+                }
+            }
+        }
+
+        List<BaseBox> boxesForRemove = new List<BaseBox>();
+        foreach (var arrayPosition in positions)
+        {
+            var boxInPosition = GetBoxInPosition(arrayPosition);
+
+            if (boxInPosition != null && !boxesForRemove.Exists(x => x == boxInPosition))
+            {
+                boxesForRemove.Add(boxInPosition);
+            }
+        }
+
+        if (boxesForRemove.Count == 0)
+        {
+            return;
+        }
+        
+        GameManager.Instance.CurrencyController.RemoveCurrency(CurrencyController.Type.Coin, GameManager.Instance.UIManager.GetBombCos());
+        GameManager.Instance.UIManager.ClickOnBomb();
+
+        foreach (var baseBox in boxesForRemove)
+        {
+            BombRemoveBlock(baseBox);
+        }
+    }
+
+    private BaseBox GetBoxInPosition(Vector3 arrayPosition)
+    {
+        foreach (var variable in _boxes)
+        {
+            switch (variable.Data.Type)
+            {
+                case BaseBox.BlockType.None:
+                case BaseBox.BlockType.TapFlowBox:
+                case BaseBox.BlockType.RotateRoadBox:
+                case BaseBox.BlockType.SwipedBox:
+                    if (variable.IsBoxInPosition(arrayPosition))
+                        return variable;
+                    continue;
+                case BaseBox.BlockType.BigBoxTapFlowBox:
+                    var bigBox = (variable as BigBoxTapFlowBox);
+                    if (bigBox != null)
+                    {
+                        if (bigBox.IsBoxInPosition(arrayPosition))
+                            return bigBox;
+                    }
+
+                    continue;
+            }
+        }
+
+        return null;
+    }
+
+    private async void BombRemoveBlock(BaseBox box)
+    {
+        Vector3 dif = new Vector3(0.01f, 0.01f, 0.01f);
+        while (Vector3.Distance(box.transform.localScale, Vector3.zero) > 0.1f)
+        {
+            await UniTask.Yield();
+            box.transform.localScale -= dif;
+        }
+
+        RemoveBox(box);
+        Destroy(box.gameObject);
     }
 
     public string GetCurrentLevelID()

@@ -39,9 +39,6 @@ namespace Boxes.TapFlowBox
             }
             else
             {
-                Debug.LogError("---1--",this);
-                Debug.LogError("---2--",box);
-                
                 await MoveToAndBack(box);
             }
         }

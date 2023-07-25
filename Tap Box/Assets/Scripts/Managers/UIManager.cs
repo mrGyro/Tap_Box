@@ -38,6 +38,16 @@ public class UIManager : MonoBehaviour, IInitializable
         _currentLevelText.text = "Level " + GameManager.Instance.Progress.LastStartedLevelID;
         _bombBoosterUI.Initialize();
     }
+    
+    public int GetBombCos()
+    {
+        return _bombBoosterUI.GetPrice();
+    }
+
+    public void ClickOnBomb()
+    {
+        _bombBoosterUI.ClickOnBombButton();
+    }
 
     private void OnLevelChanged(string obj)
     {

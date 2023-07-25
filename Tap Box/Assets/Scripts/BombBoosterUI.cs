@@ -40,9 +40,20 @@ public class BombBoosterUI : MonoBehaviour
 
         var pointerDrag = _eventTrigger.triggers.FirstOrDefault(x => x.eventID == EventTriggerType.Drag);
         pointerDrag?.callback.AddListener(OnPointerDrag);
-        
-        _layerMask = LayerMask.GetMask(GameFieldElement);
 
+        _layerMask = LayerMask.GetMask(GameFieldElement);
+    }
+
+    public int GetPrice()
+    {
+        return _bombCost;
+    }
+    
+    public void ClickOnBombButton()
+    {
+        _bombInputObject.SetActive(!_bombInputObject.activeSelf);
+        _bombIcon.gameObject.SetActive(!_bombInputObject.activeSelf);
+        _canselIcon.gameObject.SetActive(_bombInputObject.activeSelf);
     }
 
     private void OnPointerDrag(BaseEventData arg0)
@@ -54,11 +65,19 @@ public class BombBoosterUI : MonoBehaviour
     {
         _bombCross.gameObject.SetActive(false);
         GameManager.Instance.InputController.SetActiveAllInput(true);
-        var x = GameManager.Instance.InputController.RaycastBox(arg0.currentInputModule.input.mousePosition+ _offset, _layerMask);
+        var distance = Vector2.Distance(arg0.currentInputModule.input.mousePosition, _bombInputObject.transform.position);
+        int minDistance = Screen.height / 8;
+        
+        if (distance < minDistance)
+        {
+            return;
+        }
+
+        var x = GameManager.Instance.InputController.RaycastBox(arg0.currentInputModule.input.mousePosition + _offset, _layerMask);
         if (x.collider != null)
         {
             BaseBox box = x.transform.GetComponent<BaseBox>();
-            GameManager.Instance.GameField.BombBox(box, x.point, Vector3.one * 2);
+            GameManager.Instance.GameField.BombBox(box, x.point, Vector3.one);
         }
     }
 
@@ -80,10 +99,5 @@ public class BombBoosterUI : MonoBehaviour
         _bombButton.interactable = arg2 >= _bombCost;
     }
 
-    private void ClickOnBombButton()
-    {
-        _bombInputObject.SetActive(!_bombInputObject.activeSelf);
-        _bombIcon.gameObject.SetActive(!_bombInputObject.activeSelf);
-        _canselIcon.gameObject.SetActive(_bombInputObject.activeSelf);
-    }
+
 }
