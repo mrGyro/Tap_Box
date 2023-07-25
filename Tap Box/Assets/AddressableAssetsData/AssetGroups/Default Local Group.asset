@@ -61,10 +61,6 @@ MonoBehaviour:
     m_Address: SmalRewardView
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 3c2d1716851c050428eaa420f5088c1e
-    m_Address: CoinsCurrency_icon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 394c0b82b56efc643a3dfe9aebf348f2
     m_Address: Coin_notGet
     m_ReadOnly: 0
@@ -94,11 +90,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 87154ead5fbddc84aaf999dc1d12b1cd
-    m_Address: Default_tap
+    m_Address: Default2_tap
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: fb09c3b154cc10b47ad649811da8d16b
-    m_Address: Default2_tap
+    m_Address: Default_tap
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 16b28c4561f7bac4baaeb8b22d0e5415
@@ -241,7 +237,7 @@ MonoBehaviour:
     m_Address: Skin16_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 8e659895f11130a458e453363316fb79
+  - m_GUID: e90abdbc8985ac648aba203ce3c08bc2
     m_Address: expIcon_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
@@ -315,6 +311,10 @@ MonoBehaviour:
     m_SerializedLabels: []
   - m_GUID: 242b86851c0f83a4e896c1b49c456bae
     m_Address: Default_bg_black_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: f3952cfb935df4a48aec2027fc41df2f
+    m_Address: CoinsCurrency_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0
