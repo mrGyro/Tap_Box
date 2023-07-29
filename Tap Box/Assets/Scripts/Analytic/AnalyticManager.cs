@@ -13,7 +13,10 @@ namespace Analytic
         {
             foreach (var provider in _analyticProviders)
             {
-                provider.Initialize();
+                if (provider != null)
+                {
+                    provider.Initialize();
+                }
             }
         }
 
