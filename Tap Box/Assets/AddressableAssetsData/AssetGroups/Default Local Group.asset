@@ -317,6 +317,46 @@ MonoBehaviour:
     m_Address: CoinsCurrency_icon
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: c9ccf97d002327644b648bbf2e9fa739
+    m_Address: Skin4_BigBoxTapFlowBox_1_1_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 333ff9eba2bc5d245acc6e209381f9a3
+    m_Address: Skin4_BigBoxTapFlowBox_1_1_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 17c66ff73341d4940811c65e01c59965
+    m_Address: Skin4_BigBoxTapFlowBox_2_1_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: bb5b6779dd862ec4f8cbba3e92caa106
+    m_Address: Skin4_BigBoxTapFlowBox_2_1_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 82efd879fb85101468865ca4ba68c0a1
+    m_Address: Skin4_BigBoxTapFlowBox_2_2_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8a4c6dc9b759ba544bd78da513586ff8
+    m_Address: Skin4_BigBoxTapFlowBox_2_2_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 07dc5c2ee4ad6f9458e1b3996c3e88e1
+    m_Address: Skin4_BigBoxTapFlowBox_3_1_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 040f405550f41074da2b1adef9519703
+    m_Address: Skin4_BigBoxTapFlowBox_3_2_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 4e58348488050364f8c3f3d364e7043c
+    m_Address: Skin4_BigBoxTapFlowBox_3_3_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 521875b4288e7c140b6c316dcf84aa98
+    m_Address: Skin4_TapFlowBox
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d2092fe1ab8035d4192c7661d5d020b3, type: 2}
   m_SchemaSet:
