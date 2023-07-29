@@ -28,6 +28,9 @@ namespace SaveLoad_progress
         public int NextRewardIndexWinWindow;
         public int CurrentPlayerLevel;
         public float CurrentPlayerLevelProgress;
+        
+        public int CurrentLevelTurnsLeftValue;
+
 
         public string CurrentBoxSkin;
         public string CurrentBackgroundSkin;
@@ -36,7 +39,6 @@ namespace SaveLoad_progress
 
         public bool CurrentSoundSetting = true;
         public bool CurrentVibroSetting = true;
-
 
         public Dictionary<CurrencyController.Type, int> Currencies;
 
@@ -62,6 +64,7 @@ namespace SaveLoad_progress
             NextRewardIndexWinWindow = progress.NextRewardIndexWinWindow;
             Currencies = progress.Currencies ?? new Dictionary<CurrencyController.Type, int>();
             CurrentPlayerLevel = progress.CurrentPlayerLevel;
+            CurrentLevelTurnsLeftValue = progress.CurrentLevelTurnsLeftValue;
             CurrentPlayerLevelProgress = progress.CurrentPlayerLevelProgress;
             SkinDatas = progress.SkinDatas ?? new List<SkinData>();
             CurrentBoxSkin = string.IsNullOrEmpty(progress.CurrentBoxSkin) ? "Default" : progress.CurrentBoxSkin;

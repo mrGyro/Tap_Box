@@ -24,7 +24,6 @@ namespace Ads
             
             IronSourceEvents.onSdkInitializationCompletedEvent += SdkInitializationCompletedEvent;
             IronSource.Agent.init(YOUR_APP_KEY);
-            Debug.LogError("start init");
 
             await UniTask.Delay(1000);
             IronSource.Agent.validateIntegration();

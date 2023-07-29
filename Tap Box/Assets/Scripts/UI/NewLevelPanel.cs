@@ -39,7 +39,7 @@ namespace UI
             //     return;
             // }
 
-            if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
+            if (!GameManager.Instance.IAPManager.HasNoAds() && GameManager.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
             {
                 GameManager.Instance.Mediation.Show(Constants.Ads.Interstitial, ID);
             }

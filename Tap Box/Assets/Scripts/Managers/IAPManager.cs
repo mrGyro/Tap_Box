@@ -1,22 +1,23 @@
-using System;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
 using UnityEngine.UI;
+using Product = UnityEngine.Purchasing.Product;
 
 namespace Managers
 {
-    public class IAPManager : MonoBehaviour, IDetailedStoreListener
+    public class IAPManager : MonoBehaviour, IDetailedStoreListener, IInitializable
     {
         [SerializeField] private Button _btnNoAds;
 
         private IStoreController m_StoreController;
 
         private const string NoAds = "com.gyrogame.tapbox.noads";
-
-        void Start()
+        
+        public void Initialize()
         {
             Init();
         }
@@ -147,5 +148,6 @@ namespace Managers
             PlayerPrefs.SetInt("ads", 1);
         }
 #endif
+        
     }
 }

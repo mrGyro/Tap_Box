@@ -393,24 +393,24 @@ public class GameField : MonoBehaviour, IInitializable
         if (level != null && GameManager.Instance.Progress.LastSavedLevelDataID == _data.ID && GameManager.Instance.Progress.LastLevelData != null)
         {
             await CreateBoxes(GameManager.Instance.Progress.LastLevelData);
+            GetTurnsCount = GameManager.Instance.Progress.CurrentLevelTurnsLeftValue;
         }
         else
         {
             await CreateBoxes(_data.Data);
+            GetTurnsCount = _boxes.Count + AddedTurns();
         }
 
         SetNewMaxMinSize();
-        GetTurnsCount = _boxes.Count + AddedTurns();
 
-        //GameManager.Instance.InputController.SetCameraTarget(GetNewCenter());
         SetNewCameraTargetPosition(GetNewCenter(), _data.CameraPosition.ToVector3());
         GameManager.Instance.UIManager.ClosePopUp(Constants.PopUps.LoadingPopup);
     }
 
     private int AddedTurns()
     {
-        var count = _boxes.Count * 0.05f;
-        count = Mathf.Clamp(count, 1, 100);
+        var count = _boxes.Count * 0.08f;
+        count = Mathf.Clamp(count, 5, 100);
         return (int)count;
     }
 
@@ -438,11 +438,11 @@ public class GameField : MonoBehaviour, IInitializable
             box.name = box.Data.Type + "_" + _boxes.Count;
             _boxes.Add(box);
 
-            if (i % 10 == 0)
-            {
-                await UniTask.Yield();
-                GameManager.Instance.UIManager.ShowTurns();
-            }
+            // if (i % 10 == 0)
+            // {
+            //     await UniTask.Yield();
+            //     GameManager.Instance.UIManager.ShowTurns();
+            // }
         }
 
         for (var index = 0; index < _boxes.Count; index++)

@@ -231,9 +231,11 @@ public class WinWindow : PopUpBase
         _getForAds.gameObject.SetActive(false);
         _loseButton.gameObject.SetActive(false);
         ProgressToEnd();
-#if UNITY_EDITOR
-        GetLastReward();
-#endif
+
+        if (GameManager.Instance.IAPManager.HasNoAds())
+        {
+            GetLastReward();
+        }
         if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
         {
             GameManager.Instance.Mediation.Show(Constants.Ads.Rewarded, ID);
@@ -245,6 +247,10 @@ public class WinWindow : PopUpBase
             GameManager.Instance.Mediation.Show(Constants.Ads.Interstitial, ID);
             return;
         }
+        
+#if UNITY_EDITOR
+        GetLastReward();
+#endif
     }
 
     private void OnRewardedAdDone(string placeId)

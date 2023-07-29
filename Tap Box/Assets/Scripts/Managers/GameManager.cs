@@ -7,6 +7,7 @@ using PlayerLevel;
 using SaveLoad_progress;
 using Sounds;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VFX;
 
 namespace Managers
@@ -26,6 +27,8 @@ namespace Managers
         public SoundController SoundManager;
         public AnalyticManager AnalyticManager;
         public TutorialManager TutorialManager;
+        public IAPManager IAPManager;
+        [FormerlySerializedAs("CheetManager")] public CheatManager _cheatManager;
         [SerializeField] private TapEffectController _tapEffectController;
 
         private async void Awake()
@@ -48,6 +51,8 @@ namespace Managers
 
             GameField.Initialize();
             PlayerLevelManager.Initialize();
+            IAPManager.Initialize();
+            _cheatManager.Initialize();
 
             Progress.LastStartedLevelID =
                 string.IsNullOrEmpty(Progress.LastStartedLevelID)
@@ -79,9 +84,9 @@ namespace Managers
 
             await GameField.LoadLevelByName(Progress.LastStartedLevelID);
 
+            Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
             await Progress.Save();
             Instance.InputController.SetActiveTouchInput(true);
-            Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
         }
 
         public float GetWinProgress()

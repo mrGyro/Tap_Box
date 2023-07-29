@@ -52,6 +52,7 @@ namespace UI.Settings
         
         private void OnRestoreClick()
         {
+            GameManager.Instance.IAPManager.RestoreMyProduct();
         }
         
         private void OnPrivacyClick()

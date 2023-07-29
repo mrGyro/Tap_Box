@@ -33,6 +33,7 @@ namespace UI
 
         public void SetTurnsText()
         {
+            GameManager.Instance.Progress.CurrentLevelTurnsLeftValue = GameManager.Instance.GameField.GetTurnsCount;
             counter.text = $"{GameManager.Instance.GameField.GetTurnsCount} turns";
         }
 
