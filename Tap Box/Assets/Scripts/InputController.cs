@@ -18,6 +18,9 @@ public class InputController : MonoBehaviour
     private bool _isTouchEnable = true;
     private bool _isZoomEnable = true;
     private bool _isSwipeEnable = true;
+    
+    private bool _isZoomActive = false;
+
     private int _layerMask;
     private const string GameFieldElement = "GameFieldElement";
     private AndroidNativeVibrationService _nativeVibration;
@@ -112,6 +115,8 @@ public class InputController : MonoBehaviour
         {
             case 1:
             {
+                _isZoomActive = false;
+
                 if (_isSwipeEnable)
                 {
                     _rotate.Rotate(fingers);
@@ -119,12 +124,37 @@ public class InputController : MonoBehaviour
                 break;
             }
             case 2:
+                _isZoomActive = true;
+
                 if (_isZoomEnable)
                 {
                     _zoom.SetZoom(fingers);
                 }
+
+                BlockSwipeWhenZoom();
+                break;
+            default:
+                _isZoomActive = false;
+
                 break;
         }
+    }
+
+    private async void BlockSwipeWhenZoom()
+    {
+        if (_isZoomActive)
+        {
+            return;
+        }
+        
+        SetActiveTouchInput(false);
+        
+        while (_isZoomActive)
+        {
+            await UniTask.Delay(200);
+        }
+        
+        SetActiveTouchInput(true);
     }
 
     private void HandleFingerTap(LeanFinger finger)

@@ -61,19 +61,24 @@ namespace Managers
         {
             try
             {
-                var options = new InitializationOptions()
-                    .SetEnvironmentName(environment);
+                if (UnityServices.State != ServicesInitializationState.Initialized)
+                {
+                    var options = new InitializationOptions()
+                        .SetEnvironmentName(environment);
 
-                await UnityServices.InitializeAsync(options);
+                    await UnityServices.InitializeAsync(options);
+                }
+
                 var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
                 builder.AddProduct(NoAds, ProductType.NonConsumable);
 
                 UnityPurchasing.Initialize(this, builder);
+
                 Debug.Log($"InitializePurchasing");
             }
             catch (Exception exception)
             {
-                // An error occurred during services initialization.
+                Debug.LogError($"Error initialize");
             }
         }
 
@@ -98,9 +103,11 @@ namespace Managers
             m_StoreController.InitiatePurchase(productName);
         }
 
-        public void OnInitializeFailed(InitializationFailureReason error, string message)
+        public async void OnInitializeFailed(InitializationFailureReason error, string message)
         {
             Debug.LogError("initialize failed " + error + " " + message);
+            await Task.Delay(2000);
+            InitializePurchasing();
         }
 
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
@@ -129,9 +136,8 @@ namespace Managers
         public async void OnInitializeFailed(InitializationFailureReason error)
         {
             Debug.Log($"In-App Purchasing initialize failed: {error}");
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             InitializePurchasing();
-            await Task.Delay(1000);
         }
 
         public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
@@ -151,11 +157,40 @@ namespace Managers
             Debug.LogError("OnPurchaseFailed " + product.metadata.localizedTitle + " " + failureDescription.productId + " " + failureDescription.message + " " + failureDescription.reason);
         }
 
-        public void RestoreMyProduct()
+        public async void RestoreMyProduct()
         {
-            // _analyticsManager.OnButtonClick(Constants.Buttons.Restore);
-            Debug.LogError(CodelessIAPStoreListener.Instance.StoreController.products.WithID(NoAds).metadata.localizedTitle);
-            if (CodelessIAPStoreListener.Instance.StoreController.products.WithID(NoAds).hasReceipt)
+            await UniTask.WaitWhile(() =>
+            {
+                return m_StoreController == null;
+            });
+            
+            if (m_StoreController == null)
+            {
+                Debug.LogError("m_StoreController == null");
+                return;
+            }
+
+            if (m_StoreController.products == null)
+            {
+                Debug.LogError("m_StoreController.products == null");
+                return;
+            }
+
+            var withID = m_StoreController.products.WithID(NoAds);
+
+            if (withID == null)
+            {
+                Debug.LogError("withID == null");
+                return;
+            }
+
+            if (withID.metadata == null)
+            {
+                Debug.LogError("withID.metadata == null");
+                return;
+            }
+
+            if (withID.hasReceipt)
             {
                 Product_NoAds();
             }
