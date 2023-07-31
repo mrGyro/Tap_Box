@@ -9,5 +9,6 @@
         public static string LosePopUp = "LosePopUp";
         public static string SettingsPopup = "SettingsPopup";
         public static string LoadingPopup = "LoadingPopup";
+        public static string NotEnoughCoinPopup = "NotEnoughCoinPopup";
     }
 }

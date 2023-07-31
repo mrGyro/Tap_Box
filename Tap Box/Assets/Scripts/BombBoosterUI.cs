@@ -23,11 +23,12 @@ public class BombBoosterUI : MonoBehaviour
 
     private Vector2 _offset = Vector2.up * Screen.width / 8;
     private int _layerMask;
+    private bool _isActive = false;
 
     public void Initialize()
     {
         GameManager.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;
-        _bombButton.interactable = GameManager.Instance.CurrencyController.GetCurrency(CurrencyController.Type.Coin) >= _bombCost;
+       // _bombButton.interactable = GameManager.Instance.CurrencyController.GetCurrency(CurrencyController.Type.Coin) >= _bombCost;
 
         _bombButtonText.text = _bombCost.ToString();
         _bombInputObject.SetActive(false);
@@ -51,9 +52,17 @@ public class BombBoosterUI : MonoBehaviour
     
     public void ClickOnBombButton()
     {
-        _bombInputObject.SetActive(!_bombInputObject.activeSelf);
-        _bombIcon.gameObject.SetActive(!_bombInputObject.activeSelf);
-        _canselIcon.gameObject.SetActive(_bombInputObject.activeSelf);
+        if (_isActive || GameManager.Instance.CurrencyController.GetCurrency(CurrencyController.Type.Coin) >= _bombCost)
+        {
+            _bombInputObject.SetActive(!_bombInputObject.activeSelf);
+            _bombIcon.gameObject.SetActive(!_bombInputObject.activeSelf);
+            _canselIcon.gameObject.SetActive(_bombInputObject.activeSelf);
+            _isActive = _canselIcon.gameObject.activeSelf;
+        }
+        else
+        {
+            GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.NotEnoughCoinPopup);
+        }
     }
 
     private void OnPointerDrag(BaseEventData arg0)
@@ -91,13 +100,11 @@ public class BombBoosterUI : MonoBehaviour
 
     private void CurrencyCountChanged(CurrencyController.Type arg1, int arg2)
     {
-        if (arg1 != CurrencyController.Type.Coin)
-        {
-            return;
-        }
-
-        _bombButton.interactable = arg2 >= _bombCost;
+        // if (arg1 != CurrencyController.Type.Coin)
+        // {
+        //     return;
+        // }
+        //
+        // _bombButton.interactable = arg2 >= _bombCost;
     }
-
-
 }

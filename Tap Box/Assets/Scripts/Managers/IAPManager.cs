@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -6,6 +8,8 @@ using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
 using UnityEngine.UI;
 using Product = UnityEngine.Purchasing.Product;
+using Unity.Services.Core;
+using Unity.Services.Core.Environments;
 
 namespace Managers
 {
@@ -16,7 +20,8 @@ namespace Managers
         private IStoreController m_StoreController;
 
         private const string NoAds = "com.gyrogame.tapbox.noads";
-        
+        public string environment = "production";
+
         public void Initialize()
         {
             Init();
@@ -24,8 +29,9 @@ namespace Managers
 
         private async void Init()
         {
-            await Task.Delay(2);
+            await Task.Delay(1000);
             InitializePurchasing();
+            await Task.Delay(1000);
 
             if (PlayerPrefs.HasKey("firstStart") == false)
             {
@@ -34,29 +40,41 @@ namespace Managers
             }
 
             RestoreVariable();
-            CheckNoEdsButton();
-            
+            Debug.LogError("---init");
             _btnNoAds.onClick.AddListener(BuyNoAds);
         }
 
         public void BuyNoAds()
         {
+            Debug.LogError("---BuyNoAds");
+
             BuyProduct(NoAds);
         }
-        
+
 
         public void CheckNoEdsButton()
         {
             _btnNoAds.gameObject.SetActive(PlayerPrefs.GetInt("ads", 0) == 0);
         }
 
-        void InitializePurchasing()
+        private async void InitializePurchasing()
         {
-            var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
+            try
+            {
+                var options = new InitializationOptions()
+                    .SetEnvironmentName(environment);
 
-            builder.AddProduct(NoAds, ProductType.NonConsumable);
+                await UnityServices.InitializeAsync(options);
+                var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
+                builder.AddProduct(NoAds, ProductType.NonConsumable);
 
-            UnityPurchasing.Initialize(this, builder);
+                UnityPurchasing.Initialize(this, builder);
+                Debug.Log($"InitializePurchasing");
+            }
+            catch (Exception exception)
+            {
+                // An error occurred during services initialization.
+            }
         }
 
         void RestoreVariable()
@@ -75,6 +93,7 @@ namespace Managers
         public void BuyProduct(string productName)
         {
             //_analyticsManager.OnButtonClick(Constants.Buttons.BuyProductClick + productName);
+            Debug.LogError("---BuyProduct " + productName);
 
             m_StoreController.InitiatePurchase(productName);
         }
@@ -88,6 +107,7 @@ namespace Managers
         {
             var product = args.purchasedProduct;
 
+            Debug.LogError(product.definition.id);
             if (product.definition.id == NoAds)
             {
                 Product_NoAds();
@@ -100,13 +120,18 @@ namespace Managers
 
         private void Product_NoAds()
         {
+            Debug.Log($"Product_NoAds");
+
             PlayerPrefs.SetInt("ads", 1);
             _btnNoAds.gameObject.SetActive(false);
         }
 
-        public void OnInitializeFailed(InitializationFailureReason error)
+        public async void OnInitializeFailed(InitializationFailureReason error)
         {
             Debug.Log($"In-App Purchasing initialize failed: {error}");
+            await Task.Delay(1000);
+            InitializePurchasing();
+            await Task.Delay(1000);
         }
 
         public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
@@ -118,6 +143,7 @@ namespace Managers
         {
             Debug.Log("In-App Purchasing successfully initialized");
             m_StoreController = controller;
+            CheckNoEdsButton();
         }
 
         public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
@@ -128,7 +154,7 @@ namespace Managers
         public void RestoreMyProduct()
         {
             // _analyticsManager.OnButtonClick(Constants.Buttons.Restore);
-
+            Debug.LogError(CodelessIAPStoreListener.Instance.StoreController.products.WithID(NoAds).metadata.localizedTitle);
             if (CodelessIAPStoreListener.Instance.StoreController.products.WithID(NoAds).hasReceipt)
             {
                 Product_NoAds();
@@ -148,6 +174,5 @@ namespace Managers
             PlayerPrefs.SetInt("ads", 1);
         }
 #endif
-        
     }
 }
