@@ -151,7 +151,7 @@ public class InputController : MonoBehaviour
         
         while (_isZoomActive)
         {
-            await UniTask.Delay(200);
+            await UniTask.Delay(400);
         }
         
         SetActiveTouchInput(true);

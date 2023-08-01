@@ -1,4 +1,5 @@
 ﻿using UniRx;
+using UnityEngine;
 
 namespace Ads
 {
@@ -45,8 +46,6 @@ namespace Ads
         void BannerOnAdLoadFailedEvent(IronSourceError ironSourceError)
         {
             IsReady.SetValueAndForceNotify(false);
-
-           // _isReady = false;
         }
 
 // Invoked when end user clicks on the banner ad

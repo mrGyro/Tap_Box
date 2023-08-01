@@ -18,6 +18,7 @@ public class WinWindow : PopUpBase
     [SerializeField] private Slider progress;
     [SerializeField] private Button goNextButton;
     [SerializeField] private Button _getForAds;
+    [SerializeField] private GameObject _getForAdsAdsIcon;
     [SerializeField] private GameObject winVFX;
     [SerializeField] private Button _loseButton;
     [SerializeField] private List<RewardView> rewardViews;
@@ -104,9 +105,14 @@ public class WinWindow : PopUpBase
     private async void SetActive(bool value)
     {
         gameObject.SetActive(value);
-        if (!value) return;
+        if (!value)
+        {
+            return;
+        }
 
         Setup();
+        
+        _getForAdsAdsIcon.SetActive(!GameManager.Instance.IAPManager.HasNoAds());
 
         await MakeProgress();
         goNextButton.gameObject.SetActive(true);
@@ -235,6 +241,7 @@ public class WinWindow : PopUpBase
         if (GameManager.Instance.IAPManager.HasNoAds())
         {
             GetLastReward();
+            return;
         }
         if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
         {

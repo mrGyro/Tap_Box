@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace.Managers;
@@ -5,6 +6,7 @@ using DefaultNamespace.UI.Popup;
 using Managers;
 using TMPro;
 using UI;
+using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +22,7 @@ public class UIManager : MonoBehaviour, IInitializable
 
     [SerializeField] private List<PopUpBase> popups;
     private List<PopUpBase> _popUpsQueue = new();
-
+    private IDisposable isBanerRedy;
     public void Initialize()
     {
         GameManager.Instance.SkinsManager.AddBackground(_background);
@@ -37,6 +39,21 @@ public class UIManager : MonoBehaviour, IInitializable
         Core.MessengerStatic.Messenger<string>.AddListener(Constants.Events.OnLevelCreated, OnLevelChanged);
         _currentLevelText.text = "Level " + GameManager.Instance.Progress.LastStartedLevelID;
         _bombBoosterUI.Initialize();
+
+        var bannerAd = GameManager.Instance.Mediation.GetAddElement(Constants.Ads.Banner);
+        if (bannerAd != null)
+        {
+            isBanerRedy = bannerAd.IsReady.Subscribe(OnBannerReady);
+        }
+    }
+    
+    private void OnBannerReady(bool value)
+    {
+        Debug.LogError(GameManager.Instance.IAPManager.HasNoAds());
+        if (GameManager.Instance.IAPManager.HasNoAds())
+        {
+            GameManager.Instance.Mediation.Hide(Constants.Ads.Banner);
+        }
     }
     
     public int GetBombCos()
@@ -84,6 +101,7 @@ public class UIManager : MonoBehaviour, IInitializable
     public void ClosePopUp(string id)
     {
         var popup = popups.Find(x => x.ID == id);
+        isBanerRedy?.Dispose();
         if (popup == null)
             return;
 

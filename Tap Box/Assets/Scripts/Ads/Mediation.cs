@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Managers;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -39,7 +40,9 @@ namespace Ads
             }
 
             if (_adElements.ContainsKey(adType))
+            {
                 _adElements[adType].Show(place);
+            }
         }
 
         public IAdElement GetAddElement(string adType)
