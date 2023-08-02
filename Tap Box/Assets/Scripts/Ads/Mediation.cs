@@ -26,8 +26,9 @@ namespace Ads
             IronSourceEvents.onSdkInitializationCompletedEvent += SdkInitializationCompletedEvent;
             IronSource.Agent.init(YOUR_APP_KEY);
 
-            await UniTask.Delay(1000);
+           // await UniTask.Delay(1000);
             IronSource.Agent.validateIntegration();
+            
             LoadAddCycle();
         }
 
@@ -53,13 +54,17 @@ namespace Ads
         public void Hide(string adType)
         {
             if (_adElements.ContainsKey(adType))
+            {
                 _adElements[adType].Hide();
+            }
         }
 
         public void Load(string adType)
         {
             if (_adElements.ContainsKey(adType))
+            {
                 _adElements[adType].Load();
+            }
         }
 
         public bool IsReady(string adType)
@@ -79,8 +84,14 @@ namespace Ads
 
                 foreach (var adElement in _adElements)
                 {
-                    if (adElement.Value.IsReady.Value)
+                    if (!adElement.Value.isEnable)
+                    {
                         continue;
+                    }
+                    if (adElement.Value.IsReady.Value)
+                    {
+                        continue;
+                    }
 
                     adElement.Value.Load();
                 }

@@ -21,30 +21,26 @@ namespace Managers
 
         private const string NoAds = "com.gyrogame.tapbox.noads";
         public string environment = "production";
+        private Product _noAds;
 
-        public void Initialize()
+        public async void Initialize()
         {
-            Init();
+
         }
 
-        private async void Init()
+        public async UniTask AwaitInitialization()
         {
-            await Task.Delay(1000);
-            InitializePurchasing();
-            await Task.Delay(1000);
+            await InitializePurchasing();
 
-            if (PlayerPrefs.HasKey("firstStart") == false)
-            {
-                PlayerPrefs.SetInt("firstStart", 1);
-                RestoreMyProduct();
-            }
+            CheckAndRestoreNoAds();
 
-            RestoreVariable();
-            Debug.LogError("---init");
             _btnNoAds.onClick.AddListener(BuyNoAds);
+
+            await UniTask.WaitWhile(() => _noAds == null);
+            Debug.LogError("end of initialization");
         }
 
-        public void BuyNoAds()
+        private void BuyNoAds()
         {
             Debug.LogError("---BuyNoAds");
 
@@ -54,10 +50,10 @@ namespace Managers
 
         public void CheckNoEdsButton()
         {
-            _btnNoAds.gameObject.SetActive(PlayerPrefs.GetInt("ads", 0) == 0);
+            _btnNoAds.gameObject.SetActive(_noAds.availableToPurchase);
         }
 
-        private async void InitializePurchasing()
+        private async UniTask InitializePurchasing()
         {
             try
             {
@@ -82,17 +78,9 @@ namespace Managers
             }
         }
 
-        void RestoreVariable()
-        {
-            if (PlayerPrefs.HasKey("ads"))
-            {
-                _btnNoAds.gameObject.SetActive(false);
-            }
-        }
-
         public bool HasNoAds()
         {
-            return PlayerPrefs.HasKey("ads");
+            return !_noAds.availableToPurchase;
         }
 
         public void BuyProduct(string productName)
@@ -127,10 +115,7 @@ namespace Managers
 
         private void Product_NoAds()
         {
-            Debug.Log($"Product_NoAds");
-
-            PlayerPrefs.SetInt("ads", 1);
-            _btnNoAds.gameObject.SetActive(false);
+            CheckNoEdsButton();
         }
 
         public async void OnInitializeFailed(InitializationFailureReason error)
@@ -149,7 +134,7 @@ namespace Managers
         {
             Debug.Log("In-App Purchasing successfully initialized");
             m_StoreController = controller;
-            CheckNoEdsButton();
+            //CheckNoEdsButton();
         }
 
         public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
@@ -157,13 +142,9 @@ namespace Managers
             Debug.LogError("OnPurchaseFailed " + product.metadata.localizedTitle + " " + failureDescription.productId + " " + failureDescription.message + " " + failureDescription.reason);
         }
 
-        public async void RestoreMyProduct()
+        public async void CheckAndRestoreNoAds()
         {
-            await UniTask.WaitWhile(() =>
-            {
-                return m_StoreController == null;
-            });
-            
+            await UniTask.WaitWhile(() => { return m_StoreController == null; });
             if (m_StoreController == null)
             {
                 Debug.LogError("m_StoreController == null");
@@ -176,21 +157,27 @@ namespace Managers
                 return;
             }
 
-            var withID = m_StoreController.products.WithID(NoAds);
+            _noAds = m_StoreController.products.WithID(NoAds);
 
-            if (withID == null)
+            if (_noAds == null)
             {
                 Debug.LogError("withID == null");
                 return;
             }
 
-            if (withID.metadata == null)
+            if (_noAds.metadata == null)
             {
                 Debug.LogError("withID.metadata == null");
                 return;
             }
 
-            if (withID.hasReceipt)
+            Debug.LogError(_noAds.hasReceipt + " " + _noAds.availableToPurchase);
+            if (_noAds.availableToPurchase)
+            {
+                Debug.LogError("---avalible");
+                CheckNoEdsButton();
+            }
+            else
             {
                 Product_NoAds();
             }

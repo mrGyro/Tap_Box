@@ -7,11 +7,13 @@ namespace Ads
     public class RewardedAds : IAdElement
     {
         public ReactiveProperty<bool> IsReady { get; set; }
+        public bool isEnable { get; set; }
 
         private string _place = string.Empty;
 
         public void Init()
         {
+            isEnable = true;
             IsReady = new ReactiveProperty<bool>(false);
 
             //Add AdInfo Rewarded Video Events
@@ -26,8 +28,15 @@ namespace Ads
 
         public void Show(string place)
         {
-            if (!IsReady.Value)
+            if (!isEnable)
+            {
                 return;
+            }
+
+            if (!IsReady.Value)
+            {
+                return;
+            }
 
             _place = place;
             IronSource.Agent.showRewardedVideo();

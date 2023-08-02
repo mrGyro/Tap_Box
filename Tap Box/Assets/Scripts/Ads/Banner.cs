@@ -6,11 +6,13 @@ namespace Ads
     public class Banner : IAdElement
     {
         public ReactiveProperty<bool> IsReady { get; set; }
+        public bool isEnable { get; set; }
 
         public void Init()
         {
+            isEnable = true;
             IsReady = new ReactiveProperty<bool>(false);
-
+            
             //Add AdInfo Banner Events
             IronSourceBannerEvents.onAdLoadedEvent += BannerOnAdLoadedEvent;
             IronSourceBannerEvents.onAdLoadFailedEvent += BannerOnAdLoadFailedEvent;
@@ -22,7 +24,11 @@ namespace Ads
 
         public void Show(string place)
         {
-            IronSource.Agent.displayBanner();
+            if (isEnable)
+            {
+                Debug.LogError("------show banner------" + place);
+                IronSource.Agent.displayBanner();
+            }
         }
 
         public void Hide()
@@ -39,12 +45,14 @@ namespace Ads
 //Invoked once the banner has loaded
         void BannerOnAdLoadedEvent(IronSourceAdInfo adInfo)
         {
+            Debug.LogError("BannerOnAdLoadedEvent");
             IsReady.SetValueAndForceNotify(true);
         }
 
 //Invoked when the banner loading process has failed.
         void BannerOnAdLoadFailedEvent(IronSourceError ironSourceError)
         {
+            Debug.LogError("BannerOnAdLoadFailedEvent");
             IsReady.SetValueAndForceNotify(false);
         }
 

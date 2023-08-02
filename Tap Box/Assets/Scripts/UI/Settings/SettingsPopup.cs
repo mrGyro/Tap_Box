@@ -52,7 +52,7 @@ namespace UI.Settings
         
         private void OnRestoreClick()
         {
-            GameManager.Instance.IAPManager.RestoreMyProduct();
+            GameManager.Instance.IAPManager.CheckAndRestoreNoAds();
         }
         
         private void OnPrivacyClick()

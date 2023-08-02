@@ -6,9 +6,11 @@ namespace Ads
     public class InterstitialAds : IAdElement
     {
         public ReactiveProperty<bool> IsReady { get; set; }
+        public bool isEnable { get; set; }
 
         public void Init()
         {
+            isEnable = true;
             IsReady = new ReactiveProperty<bool>(false);
 
             //Add AdInfo Interstitial Events
@@ -23,8 +25,15 @@ namespace Ads
 
         public void Show(string place)
         {
-            if (!IsReady.Value)
+            if (!isEnable)
+            {
                 return;
+            }
+            
+            if (!IsReady.Value)
+            {
+                return;
+            }
             
             IsReady.SetValueAndForceNotify(false);
             IronSource.Agent.showInterstitial();

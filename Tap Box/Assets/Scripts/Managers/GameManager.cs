@@ -41,18 +41,19 @@ namespace Managers
                 PlayerLevelManager = new PlayerLevelManager();
                 SkinsManager = new SkinsManager();
             }
-            Mediation.Initialize();
 
             TutorialManager.Initialize();
             AnalyticManager.Initialize();
             await Progress.Load();
-            SkinsManager.Initialize();
-            UIManager.Initialize();
 
             GameField.Initialize();
             PlayerLevelManager.Initialize();
-            IAPManager.Initialize();
+            await IAPManager.AwaitInitialization();
             _cheatManager.Initialize();
+
+            Mediation.Initialize();
+            UIManager.Initialize();
+            SkinsManager.Initialize();
 
             Progress.LastStartedLevelID =
                 string.IsNullOrEmpty(Progress.LastStartedLevelID)
@@ -62,6 +63,7 @@ namespace Managers
 
             LoadLevelById(Progress.LastStartedLevelID);
             _tapEffectController.Initialize();
+
         }
 
         public async void SaveLevel(LevelData level)

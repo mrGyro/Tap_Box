@@ -45,14 +45,25 @@ public class UIManager : MonoBehaviour, IInitializable
         {
             isBanerRedy = bannerAd.IsReady.Subscribe(OnBannerReady);
         }
+
+//        OnBannerReady(false);
     }
     
     private void OnBannerReady(bool value)
     {
-        Debug.LogError(GameManager.Instance.IAPManager.HasNoAds());
+        Debug.LogError("HasNoAds = " + GameManager.Instance.IAPManager.HasNoAds() + " value = " + value);
         if (GameManager.Instance.IAPManager.HasNoAds())
         {
+            Debug.LogError("hide bunner");
+            GameManager.Instance.Mediation.GetAddElement(Constants.Ads.Banner).isEnable = false;
             GameManager.Instance.Mediation.Hide(Constants.Ads.Banner);
+        }
+        else
+        {
+            Debug.LogError("Show bunner");
+
+            GameManager.Instance.Mediation.GetAddElement(Constants.Ads.Banner).isEnable = true;
+            GameManager.Instance.Mediation.Show(Constants.Ads.Banner, "UIManager");
         }
     }
     
