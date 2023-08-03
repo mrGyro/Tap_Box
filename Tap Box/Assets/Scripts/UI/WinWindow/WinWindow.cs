@@ -112,7 +112,7 @@ public class WinWindow : PopUpBase
 
         Setup();
         
-        _getForAdsAdsIcon.SetActive(!GameManager.Instance.IAPManager.HasNoAds());
+        _getForAdsAdsIcon.SetActive(!GameManager.Instance.IAPManager.HasNonConsumableProduct(Constants.IAP.NoAds));
 
         await MakeProgress();
         goNextButton.gameObject.SetActive(true);
@@ -238,7 +238,7 @@ public class WinWindow : PopUpBase
         _loseButton.gameObject.SetActive(false);
         ProgressToEnd();
 
-        if (GameManager.Instance.IAPManager.HasNoAds())
+        if (GameManager.Instance.IAPManager.HasNonConsumableProduct(Constants.IAP.NoAds))
         {
             GetLastReward();
             return;

@@ -48,7 +48,6 @@ public class GameField : MonoBehaviour, IInitializable
         {
             return;
         }
-        
 
         Vector3 boxPartPosition = box.transform.position;
         if (box is BigBoxTapFlowBox)
@@ -135,7 +134,7 @@ public class GameField : MonoBehaviour, IInitializable
 
     private async void BombRemoveBlock(BaseBox box)
     {
-        Vector3 dif = new Vector3(0.01f, 0.01f, 0.01f);
+        Vector3 dif = new Vector3(0.03f, 0.03f, 0.03f);
         while (Vector3.Distance(box.transform.localScale, Vector3.zero) > 0.1f)
         {
             await UniTask.Yield();

@@ -24,6 +24,13 @@
 
 
     }
+    
+    public static class IAP
+    {
+        public const string PurchaseSuccess = "PurchaseSuccess";
+        public const string NoAds = "com.gyrogame.tapbox.noads";
+
+    }
 
     public static class Sounds
     {

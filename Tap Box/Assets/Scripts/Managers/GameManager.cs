@@ -1,12 +1,15 @@
+using System.Collections.Generic;
 using System.Linq;
 using Ads;
 using Analytic;
 using Currency;
+using IAP;
 using LevelCreator;
 using PlayerLevel;
 using SaveLoad_progress;
 using Sounds;
 using UnityEngine;
+using UnityEngine.Purchasing;
 using UnityEngine.Serialization;
 using VFX;
 
@@ -48,7 +51,15 @@ namespace Managers
 
             GameField.Initialize();
             PlayerLevelManager.Initialize();
-            await IAPManager.AwaitInitialization();
+            await IAPManager.AwaitInitialization(new List<IapProduct>()
+            {
+                new IapProduct()
+                {
+                    Id = Constants.IAP.NoAds,
+                    ProductType = ProductType.NonConsumable
+                }
+                
+            });
             _cheatManager.Initialize();
 
             Mediation.Initialize();

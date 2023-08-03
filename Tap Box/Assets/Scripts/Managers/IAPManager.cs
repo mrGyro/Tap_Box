@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Core.MessengerStatic;
 using Cysharp.Threading.Tasks;
+using IAP;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
-using UnityEngine.UI;
 using Product = UnityEngine.Purchasing.Product;
 using Unity.Services.Core;
 using Unity.Services.Core.Environments;
@@ -15,43 +18,25 @@ namespace Managers
 {
     public class IAPManager : MonoBehaviour, IDetailedStoreListener, IInitializable
     {
-        [SerializeField] private Button _btnNoAds;
-
         private IStoreController m_StoreController;
 
-        private const string NoAds = "com.gyrogame.tapbox.noads";
         public string environment = "production";
-        private Product _noAds;
+        private List<Product> _products;
+        private List<IapProduct> _productsIds;
 
         public async void Initialize()
         {
-
         }
 
-        public async UniTask AwaitInitialization()
+        public async UniTask AwaitInitialization(List<IapProduct> products)
         {
+            _productsIds = products;
             await InitializePurchasing();
+            await CheckAndRestoreNoAds();
 
-            CheckAndRestoreNoAds();
-
-            _btnNoAds.onClick.AddListener(BuyNoAds);
-
-            await UniTask.WaitWhile(() => _noAds == null);
-            Debug.LogError("end of initialization");
+            Debug.Log("end of initialization");
         }
 
-        private void BuyNoAds()
-        {
-            Debug.LogError("---BuyNoAds");
-
-            BuyProduct(NoAds);
-        }
-
-
-        public void CheckNoEdsButton()
-        {
-            _btnNoAds.gameObject.SetActive(_noAds.availableToPurchase);
-        }
 
         private async UniTask InitializePurchasing()
         {
@@ -66,7 +51,10 @@ namespace Managers
                 }
 
                 var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
-                builder.AddProduct(NoAds, ProductType.NonConsumable);
+                foreach (var variable in _productsIds)
+                {
+                    builder.AddProduct(variable.Id, variable.ProductType);
+                }
 
                 UnityPurchasing.Initialize(this, builder);
 
@@ -74,26 +62,32 @@ namespace Managers
             }
             catch (Exception exception)
             {
-                Debug.LogError($"Error initialize");
+                Debug.LogError($"Error initialize " + exception.Message);
             }
         }
 
-        public bool HasNoAds()
+        public bool HasNonConsumableProduct(string id)
         {
-            return !_noAds.availableToPurchase;
+            var product = _products.FirstOrDefault(x => x.definition.id == id);
+            if (product == null)
+            {
+                return false;
+            }
+
+            return product.hasReceipt;
         }
 
         public void BuyProduct(string productName)
         {
             //_analyticsManager.OnButtonClick(Constants.Buttons.BuyProductClick + productName);
-            Debug.LogError("---BuyProduct " + productName);
+            Debug.Log("---BuyProduct " + productName);
 
             m_StoreController.InitiatePurchase(productName);
         }
 
         public async void OnInitializeFailed(InitializationFailureReason error, string message)
         {
-            Debug.LogError("initialize failed " + error + " " + message);
+            Debug.Log("initialize failed " + error + " " + message);
             await Task.Delay(2000);
             InitializePurchasing();
         }
@@ -102,39 +96,28 @@ namespace Managers
         {
             var product = args.purchasedProduct;
 
-            Debug.LogError(product.definition.id);
-            if (product.definition.id == NoAds)
-            {
-                Product_NoAds();
-            }
-
+            Messenger<string>.Broadcast(Constants.IAP.PurchaseSuccess, product.definition.id);
             Debug.Log($"Purchase Complete - Product: {product.definition.id}");
 
             return PurchaseProcessingResult.Complete;
         }
 
-        private void Product_NoAds()
-        {
-            CheckNoEdsButton();
-        }
-
         public async void OnInitializeFailed(InitializationFailureReason error)
         {
-            Debug.Log($"In-App Purchasing initialize failed: {error}");
+            Debug.LogError($"In-App Purchasing initialize failed: {error}");
             await Task.Delay(2000);
             InitializePurchasing();
         }
 
         public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
         {
-            Debug.Log($"Purchase failed - Product: '{product.definition.id}', PurchaseFailureReason: {failureReason}");
+            Debug.LogError($"Purchase failed - Product: '{product.definition.id}', PurchaseFailureReason: {failureReason}");
         }
 
         public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
         {
             Debug.Log("In-App Purchasing successfully initialized");
             m_StoreController = controller;
-            //CheckNoEdsButton();
         }
 
         public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
@@ -142,7 +125,7 @@ namespace Managers
             Debug.LogError("OnPurchaseFailed " + product.metadata.localizedTitle + " " + failureDescription.productId + " " + failureDescription.message + " " + failureDescription.reason);
         }
 
-        public async void CheckAndRestoreNoAds()
+        public async UniTask CheckAndRestoreNoAds()
         {
             await UniTask.WaitWhile(() => { return m_StoreController == null; });
             if (m_StoreController == null)
@@ -157,29 +140,20 @@ namespace Managers
                 return;
             }
 
-            _noAds = m_StoreController.products.WithID(NoAds);
+            _products = new List<Product>();
+            foreach (var vaProductsId in _productsIds)
+            {
+                var prod = m_StoreController.products.WithID(vaProductsId.Id);
 
-            if (_noAds == null)
-            {
-                Debug.LogError("withID == null");
-                return;
-            }
+                if (prod == null)
+                {
+                    continue;
+                }
 
-            if (_noAds.metadata == null)
-            {
-                Debug.LogError("withID.metadata == null");
-                return;
-            }
-
-            Debug.LogError(_noAds.hasReceipt + " " + _noAds.availableToPurchase);
-            if (_noAds.availableToPurchase)
-            {
-                Debug.LogError("---avalible");
-                CheckNoEdsButton();
-            }
-            else
-            {
-                Product_NoAds();
+                _products.Add(prod);
+                Debug.Log("_noAds.Id = " + prod.metadata.localizedTitle);
+                Debug.Log("_noAds.hasReceipt = " + prod.hasReceipt);
+                await UniTask.Yield();
             }
         }
 

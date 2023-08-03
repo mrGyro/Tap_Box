@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.MessengerStatic;
 using DefaultNamespace.Managers;
 using DefaultNamespace.UI.Popup;
 using Managers;
@@ -19,6 +20,7 @@ public class UIManager : MonoBehaviour, IInitializable
     [SerializeField] private TurnsLeftCounter turnsLeftCounter;
     [SerializeField] private TMP_Text _currentLevelText;
     [SerializeField] private BombBoosterUI _bombBoosterUI;
+    [SerializeField] private Button _btnNoAds;
 
     [SerializeField] private List<PopUpBase> popups;
     private List<PopUpBase> _popUpsQueue = new();
@@ -36,7 +38,12 @@ public class UIManager : MonoBehaviour, IInitializable
         {
             variable.Initialize();
         }
-        Core.MessengerStatic.Messenger<string>.AddListener(Constants.Events.OnLevelCreated, OnLevelChanged);
+        Messenger<string>.AddListener(Constants.Events.OnLevelCreated, OnLevelChanged);
+        Messenger<string>.AddListener(Constants.IAP.PurchaseSuccess, OnPurchaseSuccess);
+        _btnNoAds.onClick.AddListener(BuyNoAds);
+        _btnNoAds.gameObject.SetActive(!GameManager.Instance.IAPManager.HasNonConsumableProduct(Constants.IAP.NoAds));
+
+        
         _currentLevelText.text = "Level " + GameManager.Instance.Progress.LastStartedLevelID;
         _bombBoosterUI.Initialize();
 
@@ -49,18 +56,39 @@ public class UIManager : MonoBehaviour, IInitializable
 //        OnBannerReady(false);
     }
     
+    private void BuyNoAds()
+    {
+        Debug.Log("---BuyNoAds");
+        GameManager.Instance.IAPManager.BuyProduct(Constants.IAP.NoAds);
+    }
+
+    private void OnPurchaseSuccess(string obj)
+    {
+        Debug.Log("OnPurchaseSuccess");
+
+        if (obj != Constants.IAP.NoAds)
+        {
+            return;
+        }
+        Debug.Log("hide after purcase");
+        _btnNoAds.gameObject.SetActive(false);
+        GameManager.Instance.Mediation.GetAddElement(Constants.Ads.Banner).isEnable = false;
+        GameManager.Instance.Mediation.Hide(Constants.Ads.Banner);
+
+    }
+
     private void OnBannerReady(bool value)
     {
-        Debug.LogError("HasNoAds = " + GameManager.Instance.IAPManager.HasNoAds() + " value = " + value);
-        if (GameManager.Instance.IAPManager.HasNoAds())
+        Debug.Log("HasNoAds = " + GameManager.Instance.IAPManager.HasNonConsumableProduct(Constants.IAP.NoAds) + " value = " + value);
+        if (GameManager.Instance.IAPManager.HasNonConsumableProduct(Constants.IAP.NoAds))
         {
-            Debug.LogError("hide bunner");
+            Debug.Log("hide bunner");
             GameManager.Instance.Mediation.GetAddElement(Constants.Ads.Banner).isEnable = false;
             GameManager.Instance.Mediation.Hide(Constants.Ads.Banner);
         }
         else
         {
-            Debug.LogError("Show bunner");
+            Debug.Log("Show bunner");
 
             GameManager.Instance.Mediation.GetAddElement(Constants.Ads.Banner).isEnable = true;
             GameManager.Instance.Mediation.Show(Constants.Ads.Banner, "UIManager");

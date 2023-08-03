@@ -27,9 +27,6 @@ public class BombBoosterUI : MonoBehaviour
 
     public void Initialize()
     {
-        GameManager.Instance.CurrencyController.OnCurrencyCountChanged += CurrencyCountChanged;
-       // _bombButton.interactable = GameManager.Instance.CurrencyController.GetCurrency(CurrencyController.Type.Coin) >= _bombCost;
-
         _bombButtonText.text = _bombCost.ToString();
         _bombInputObject.SetActive(false);
         _bombButton.onClick.AddListener(ClickOnBombButton);
@@ -75,7 +72,7 @@ public class BombBoosterUI : MonoBehaviour
         _bombCross.gameObject.SetActive(false);
         GameManager.Instance.InputController.SetActiveAllInput(true);
         var distance = Vector2.Distance(arg0.currentInputModule.input.mousePosition, _bombInputObject.transform.position);
-        int minDistance = Screen.height / 8;
+        int minDistance = Screen.height / 6;
         
         if (distance < minDistance)
         {
@@ -95,16 +92,5 @@ public class BombBoosterUI : MonoBehaviour
         _bombCross.transform.position = arg0.currentInputModule.input.mousePosition + _offset;
         _bombCross.gameObject.SetActive(true);
         GameManager.Instance.InputController.SetActiveAllInput(false);
-    }
-
-
-    private void CurrencyCountChanged(CurrencyController.Type arg1, int arg2)
-    {
-        // if (arg1 != CurrencyController.Type.Coin)
-        // {
-        //     return;
-        // }
-        //
-        // _bombButton.interactable = arg2 >= _bombCost;
     }
 }

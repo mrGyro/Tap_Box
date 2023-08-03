@@ -26,7 +26,7 @@ namespace Ads
         {
             if (isEnable)
             {
-                Debug.LogError("------show banner------" + place);
+                Debug.Log("------show banner------" + place);
                 IronSource.Agent.displayBanner();
             }
         }
