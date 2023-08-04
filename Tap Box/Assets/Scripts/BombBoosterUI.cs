@@ -3,6 +3,7 @@ using Boxes;
 using Currency;
 using Managers;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -19,6 +20,7 @@ public class BombBoosterUI : MonoBehaviour
     [SerializeField] private TMP_Text _bombButtonText;
 
     [SerializeField] private GameObject _bombInputObject;
+    [SerializeField] private GameObject _bombVfx;
     [SerializeField] private EventTrigger _eventTrigger;
 
     private Vector2 _offset = Vector2.up * Screen.width / 8;
@@ -82,6 +84,8 @@ public class BombBoosterUI : MonoBehaviour
         var x = GameManager.Instance.InputController.RaycastBox(arg0.currentInputModule.input.mousePosition + _offset, _layerMask);
         if (x.collider != null)
         {
+            GameObject g = Instantiate(_bombVfx, x.point, quaternion.identity);
+            Destroy(g,5);
             BaseBox box = x.transform.GetComponent<BaseBox>();
             GameManager.Instance.GameField.BombBox(box, x.point, Vector3.one);
         }

@@ -29,6 +29,7 @@ public class InputController : MonoBehaviour
     public void SetActiveAllInput(bool value)
     {
         LeanTouch.Fingers.Clear();
+        _rotate.CleanVelocity();
         _isTouchEnable = value;
         _isZoomEnable = value;
         _isSwipeEnable = value;
@@ -89,7 +90,7 @@ public class InputController : MonoBehaviour
         while (Vector3.Distance(_newTarget, _rotate.GetTargetPosition()) > 0.1f)
         {
             await UniTask.WaitForEndOfFrame(this);
-            Vector3 newPosition = Vector3.Lerp(_rotate.GetTargetPosition(), _newTarget, 0.01f);
+            Vector3 newPosition = Vector3.Lerp(_rotate.GetTargetPosition(), _newTarget, 0.02f);
             _rotate.SetTargetPosition(newPosition);
         }
     }

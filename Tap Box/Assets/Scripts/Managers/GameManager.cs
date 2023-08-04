@@ -4,6 +4,7 @@ using Ads;
 using Analytic;
 using Currency;
 using IAP;
+using Lean.Touch;
 using LevelCreator;
 using PlayerLevel;
 using SaveLoad_progress;
@@ -86,12 +87,13 @@ namespace Managers
 
         public void LoadNextLevel()
         {
-            Instance.InputController.SetActiveTouchInput(false);
+            //Instance.InputController.SetActiveTouchInput(false);
             LoadLevelById(GetNextLevelId());
         }
 
         public async void LoadLevelById(string id)
         {
+            LeanTouch.Fingers.Clear();
             Instance.InputController.SetDefaultZoom();
             Progress.LastStartedLevelID = id;
 
@@ -99,7 +101,7 @@ namespace Managers
 
             Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
             await Progress.Save();
-            Instance.InputController.SetActiveTouchInput(true);
+            //Instance.InputController.SetActiveTouchInput(true);
         }
 
         public float GetWinProgress()

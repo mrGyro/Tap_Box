@@ -35,6 +35,12 @@ namespace DefaultNamespace
             _isActive = value;
         }
 
+        public void CleanVelocity()
+        {
+            _rotationAroundXAxis = 0;
+            _rotationAroundYAxis = 0;
+        }
+
         public void SetStartPosition(Vector3 position)
         {
             float distance = Vector3.Distance(position, _centr.position);
@@ -51,7 +57,6 @@ namespace DefaultNamespace
             if (fingers[0].Age == 0)
             {
                 _previousPosition = Camera.ScreenToViewportPoint(fingers[0].LastScreenPosition);
-                //distanceToTarget = Vector3.Distance(rot.transform.position, _centr.position);
             }
             else
             {
