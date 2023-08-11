@@ -94,7 +94,7 @@ public class GameField : MonoBehaviour, IInitializable
         {
             return;
         }
-        
+
         GameManager.Instance.CurrencyController.RemoveCurrency(CurrencyController.Type.Coin, GameManager.Instance.UIManager.GetBombCos());
         GameManager.Instance.UIManager.ClickOnBomb();
 
@@ -102,6 +102,13 @@ public class GameField : MonoBehaviour, IInitializable
         {
             BombRemoveBlock(baseBox);
         }
+    }
+
+    public int GetTurnsCountAfterLoose()
+    {
+        int additionalCount = (int)(_boxes.Count * 0.15f);
+        additionalCount = Mathf.Clamp(additionalCount, 5, 50);
+        return _boxes.Count + additionalCount;
     }
 
     private BaseBox GetBoxInPosition(Vector3 arrayPosition)

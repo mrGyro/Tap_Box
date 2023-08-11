@@ -59,7 +59,6 @@ namespace Managers
                     Id = Constants.IAP.NoAds,
                     ProductType = ProductType.NonConsumable
                 }
-                
             });
             _cheatManager.Initialize();
 
@@ -71,11 +70,10 @@ namespace Managers
                 string.IsNullOrEmpty(Progress.LastStartedLevelID)
                     ? GetNextLevelId()
                     : Progress.LastStartedLevelID;
-            
+
 
             LoadLevelById(Progress.LastStartedLevelID);
             _tapEffectController.Initialize();
-
         }
 
         public async void SaveLevel(LevelData level)
@@ -121,7 +119,7 @@ namespace Managers
 
             if (updateLevelButton == -1)
                 return;
-            
+
             Progress.LevelDatas[updateLevelButton].LevelStatus = level.LevelStatus;
             Progress.LevelDatas[updateLevelButton].BestResult = level.BestResult;
         }
@@ -131,7 +129,7 @@ namespace Managers
             var index = Progress.LevelDatas.FirstOrDefault(x => x.LevelStatus == Status.Open)
                         ?? Progress.LevelDatas.Last(x => x.LevelStatus == Status.Passed);
 
-           
+
             return index.ID;
         }
     }

@@ -183,7 +183,8 @@ public class InputController : MonoBehaviour
         Messenger.Broadcast(Constants.Events.OnBoxClicked);
         if (GameManager.Instance.GameField.IsNotWinCondition())
         {
-            GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
+            //Debug.LogError("-----------------------");
+           // GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
             Messenger.Broadcast(Constants.Events.OnGameLoose);
         }
     }
