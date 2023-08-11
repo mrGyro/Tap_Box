@@ -9,6 +9,9 @@
         public static string OnGetRandomSkin = "OnGetRandomSkin";
         public static string OnRewardedVideoReward = "OnRewardedVideoReward";
         
+        public static string OnGetNewSkin = "OnGetNewSkin";
+        public static string OnEquipSkin = "OnEquipSkin";
+
         
         public static string OnBackgroundSpriteChanged = "OnBackgroundSpriteChanged";
         public static string OnBackgroundMaterialChanged = "OnBackgroundMaterialChanged";

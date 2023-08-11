@@ -67,6 +67,9 @@ public class WinWindow : PopUpBase
         var scrollRect = progress.GetComponent<RectTransform>();
 
         _settings = GameManager.Instance.CurrencyController.GetRewardSettings();
+        //For test last reward uncoment 
+        //GameManager.Instance.Progress.NextRewardIndexWinWindow = _settings.Count - 1;
+        //GameManager.Instance.Progress.CurrentWinWindowsProgress = _settings[GameManager.Instance.Progress.NextRewardIndexWinWindow].Percent - 10;
         var size = scrollRect.sizeDelta.x / 100;
 
         progress.value = GameManager.Instance.Progress.CurrentWinWindowsProgress;
@@ -243,6 +246,11 @@ public class WinWindow : PopUpBase
             GetLastReward();
             return;
         }
+        
+#if UNITY_EDITOR
+        GetLastReward();
+#endif
+
         if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
         {
             GameManager.Instance.Mediation.Show(Constants.Ads.Rewarded, ID);
@@ -252,12 +260,9 @@ public class WinWindow : PopUpBase
         if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
         {
             GameManager.Instance.Mediation.Show(Constants.Ads.Interstitial, ID);
+            GetLastReward();
             return;
         }
-        
-#if UNITY_EDITOR
-        GetLastReward();
-#endif
     }
 
     private void OnRewardedAdDone(string placeId)
@@ -273,7 +278,6 @@ public class WinWindow : PopUpBase
     private async void GetLastReward()
     {
         var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen);
-
         if (randomSkin == null)
         {
             await GetCoinsRewardInLastSlot();
@@ -282,11 +286,15 @@ public class WinWindow : PopUpBase
 
         GameManager.Instance.CurrencyController.AddSkin(randomSkin.WayToGet, randomSkin.Type, randomSkin.SkinAddressableName);
         Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, randomSkin.WayToGet, randomSkin.SkinAddressableName);
+        Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetNewSkin, randomSkin.Type, randomSkin.SkinAddressableName);
         ProgressToEnd();
         goNextButton.gameObject.SetActive(true);
 
         var sprite = await AssetProvider.LoadAssetAsync<Sprite>(randomSkin.SkinAddressableName + "_icon");
         rewardViews[^1].SetRewardSprite(sprite);
+        
+        GameManager.Instance.UIManager.ShowUpToAllPopUp(Constants.PopUps.NewSkinPopUp);
+        
     }
 
     private float GetPercents()

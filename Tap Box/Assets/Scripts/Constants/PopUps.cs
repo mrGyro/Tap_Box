@@ -10,5 +10,6 @@
         public static string SettingsPopup = "SettingsPopup";
         public static string LoadingPopup = "LoadingPopup";
         public static string NotEnoughCoinPopup = "NotEnoughCoinPopup";
+        public static string NewSkinPopUp = "NewSkinPopUp";
     }
 }

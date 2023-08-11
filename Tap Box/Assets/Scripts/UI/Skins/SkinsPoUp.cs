@@ -35,6 +35,8 @@ namespace UI.Skins
         {
             Setup();
             Messenger<CurrencyController.Type, string>.AddListener(Constants.Events.OnGetRandomSkin, OnGetRandomSkin);
+            Messenger<CurrencyController.Type, string>.AddListener(Constants.Events.OnEquipSkin, EquipSkin);
+
             GameManager.Instance.PlayerLevelManager.OnLevelChanged += OnGetSkinByLevel;
             Messenger<string>.AddListener(Constants.Events.OnRewardedVideoReward, OnRewardedAdDone);
 
@@ -47,14 +49,14 @@ namespace UI.Skins
             _getCoinsByRewardedAdText.text = $"+{_coinsCountForWatchAd}";
             _getRandomSkinByCoinsText.text = GetPriceForRandomSkin().ToString();
             _selectedType = CurrencyController.Type.BoxSkin;
-            
+
             var rewardedAd = GameManager.Instance.Mediation.GetAddElement(Constants.Ads.Rewarded);
             if (rewardedAd != null)
             {
                 _getCoinsByRewardedAd.interactable = rewardedAd.IsReady.Value;
                 _isReady = rewardedAd.IsReady.Subscribe(OnSiReadyStatusChanged);
             }
-            
+
 #if UNITY_EDITOR
             _getCoinsByRewardedAd.interactable = true;
 #endif
@@ -68,10 +70,12 @@ namespace UI.Skins
                 GameField.Size = skinButton.GetSkinData().Size;
             }
         }
+
         private void OnSiReadyStatusChanged(bool value)
         {
             _getCoinsByRewardedAd.interactable = value;
         }
+
         private void OnEnable()
         {
             SetBottomButtons(_selectedType);
@@ -97,6 +101,40 @@ namespace UI.Skins
             SetBottomButtons(CurrencyController.Type.BackgroundSkin);
         }
 
+        private void EquipSkin(CurrencyController.Type type, string addressableID)
+        {
+            switch (type)
+            {
+                case CurrencyController.Type.BoxSkin:
+                    var box = _boxesSkinsButtons.FirstOrDefault(x => x.GetSkinData().SkinAddressableName == addressableID && x.GetSkinData().Type == type);
+                    CheckAndChangeSkin(box);
+                    break;
+                case CurrencyController.Type.BackgroundSkin:
+                    var back = _backgroundsSkinsButtons.FirstOrDefault(x => x.GetSkinData().SkinAddressableName == addressableID && x.GetSkinData().Type == type);
+                    CheckAndChangeSkin(back);
+                    break;
+                case CurrencyController.Type.TailSkin:
+                    var tail = _tailButtons.FirstOrDefault(x => x.GetSkinData().SkinAddressableName == addressableID && x.GetSkinData().Type == type);
+                    CheckAndChangeSkin(tail);
+
+                    break;
+                case CurrencyController.Type.TapSkin:
+                    var tap = _tapButtons.FirstOrDefault(x => x.GetSkinData().SkinAddressableName == addressableID && x.GetSkinData().Type == type);
+                    CheckAndChangeSkin(tap);
+                    break;
+            }
+        }
+
+        private void CheckAndChangeSkin(SkinsButton button)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            button.ChangeSkin();
+        }
+
         private async void BuyRandomSkin()
         {
             var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen && skin.Type == _selectedType);
@@ -107,7 +145,6 @@ namespace UI.Skins
                 GameManager.Instance.CurrencyController.RemoveCurrency(CurrencyController.Type.Coin, GetPriceForRandomSkin());
                 SetBottomButtons(randomSkin.Type);
                 await GameManager.Instance.Progress.Save();
-
             }
         }
 
@@ -170,7 +207,7 @@ namespace UI.Skins
         {
             Setup();
         }
-        
+
         private void OnGetSkinByLevel(int level)
         {
             Setup();
@@ -190,7 +227,6 @@ namespace UI.Skins
             SetPage(_tailButtons);
             SetPage(_tapButtons);
             SetBottomButtons(CurrencyController.Type.BoxSkin);
-
         }
 
         private void OnTopButtonStateChanged(StateButton arg1, bool arg2)
@@ -218,7 +254,7 @@ namespace UI.Skins
         {
             var data = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(x
                 => x.SkinAddressableName == button.GetSkinData().SkinAddressableName);
-            
+
             if (data == null)
             {
                 var forCopy = button.GetSkinData();
