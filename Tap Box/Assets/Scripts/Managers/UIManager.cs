@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour, IInitializable
 {
-    [SerializeField] private Canvas _canvas;
+    [SerializeField] private RectTransform _canvas;
     [SerializeField] private Image _background;
     [SerializeField] private CurrencyCounter coinCounter;
     [SerializeField] private PlayerLevelUI playerLevelUI;
@@ -145,10 +145,12 @@ public class UIManager : MonoBehaviour, IInitializable
         {
             VARIABLE.RecalculateSafeArea();
         }
+
+        await UniTask.Yield();
         
         foreach (var VARIABLE in _ignoreSafeAreas)
         {
-            VARIABLE.Recalculate(_canvasScaler.referenceResolution);
+            VARIABLE.Recalculate(new Vector2(_canvas.rect.width, _canvas.rect.height));
         }
     }
 
