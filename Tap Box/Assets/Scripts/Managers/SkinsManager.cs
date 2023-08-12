@@ -37,7 +37,6 @@ namespace Managers
 
             GameObject gameObject = Object.Instantiate(_currentTail, root);
             gameObject.transform.localPosition = Vector3.zero;
-            Debug.LogError(scale, root);
             gameObject.transform.LookAt(root.transform.position - root.transform.parent.forward * 10);
         }
 

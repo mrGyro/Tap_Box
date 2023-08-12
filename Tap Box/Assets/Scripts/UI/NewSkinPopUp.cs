@@ -13,8 +13,8 @@ namespace UI
         [SerializeField] private Button _closePopup;
         [SerializeField] private Button _equipButton;
 
-        private CurrencyController.Type skinType;
-        private string skinAddressabpeId;
+        private CurrencyController.Type _skinType;
+        private string _skinAddressabpeId;
         public override void Initialize()
         {
             ID = Constants.PopUps.NewSkinPopUp;
@@ -33,13 +33,14 @@ namespace UI
 
         private void EquipSkin()
         {
-            Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnEquipSkin, skinType, skinAddressabpeId);
+            Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnEquipSkin, _skinType, _skinAddressabpeId);
+            _closePopup.onClick.Invoke();
         }
 
         private async void NewRandomSkin(CurrencyController.Type arg1, string arg2)
         {
-            skinType = arg1;
-            skinAddressabpeId = arg2;
+            _skinType = arg1;
+            _skinAddressabpeId = arg2;
             var sprite = await AssetProvider.LoadAssetAsync<Sprite>(arg2 + "_icon");
             _icon.sprite = sprite;
         }

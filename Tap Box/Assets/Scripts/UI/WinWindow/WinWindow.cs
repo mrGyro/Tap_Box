@@ -8,6 +8,7 @@ using DefaultNamespace.UI.WinWindow;
 using Managers;
 using Sounds;
 using UI;
+using UI.Skins;
 using UI.WinWindow;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,7 +28,7 @@ public class WinWindow : PopUpBase
     private List<RewardViewSetting> _settings;
     private float _sliderProgressTarget;
     private bool _reset;
-
+    private SkinData _randomSkin;
     public override void Initialize()
     {
         ID = Constants.PopUps.WinPopUp;
@@ -38,6 +39,7 @@ public class WinWindow : PopUpBase
 
     public override void Show()
     {
+        _randomSkin = null;
         SetActive(true);
         _smile.Play();
     }
@@ -70,6 +72,8 @@ public class WinWindow : PopUpBase
         //For test last reward uncoment 
         //GameManager.Instance.Progress.NextRewardIndexWinWindow = _settings.Count - 1;
         //GameManager.Instance.Progress.CurrentWinWindowsProgress = _settings[GameManager.Instance.Progress.NextRewardIndexWinWindow].Percent - 10;
+        //---------------------
+        
         var size = scrollRect.sizeDelta.x / 100;
 
         progress.value = GameManager.Instance.Progress.CurrentWinWindowsProgress;
@@ -151,11 +155,11 @@ public class WinWindow : PopUpBase
 
     private async UniTask GetRewardFromSettings(RewardViewSetting nearestPercent)
     {
-        var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen);
+        _randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen);
 
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardPercentText(
             nearestPercent.RewardType == CurrencyController.Type.RandomSkin
-                ? randomSkin == null ? "+" + GetCountOfLastRewardInCoins() : "New skin"
+                ? _randomSkin == null ? "+" + GetCountOfLastRewardInCoins() : "New skin"
                 : $"+{nearestPercent.RewardCount}");
 
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetTokState(true);
@@ -277,20 +281,25 @@ public class WinWindow : PopUpBase
 
     private async void GetLastReward()
     {
-        var randomSkin = GameManager.Instance.Progress.SkinDatas.FirstOrDefault(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen);
-        if (randomSkin == null)
+        var randomSkin = GameManager.Instance.Progress.SkinDatas.Where(skin => skin.WayToGet == CurrencyController.Type.RandomSkin && !skin.IsOpen).ToList();
+        if (randomSkin.Count > 0)
+        {
+            _randomSkin = randomSkin[Random.Range(0, randomSkin.Count)];
+        }
+        
+        if (_randomSkin == null)
         {
             await GetCoinsRewardInLastSlot();
             return;
         }
 
-        GameManager.Instance.CurrencyController.AddSkin(randomSkin.WayToGet, randomSkin.Type, randomSkin.SkinAddressableName);
-        Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, randomSkin.WayToGet, randomSkin.SkinAddressableName);
-        Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetNewSkin, randomSkin.Type, randomSkin.SkinAddressableName);
+        GameManager.Instance.CurrencyController.AddSkin(_randomSkin.WayToGet, _randomSkin.Type, _randomSkin.SkinAddressableName);
+        Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetRandomSkin, _randomSkin.WayToGet, _randomSkin.SkinAddressableName);
+        Messenger<CurrencyController.Type, string>.Broadcast(Constants.Events.OnGetNewSkin, _randomSkin.Type, _randomSkin.SkinAddressableName);
         ProgressToEnd();
         goNextButton.gameObject.SetActive(true);
 
-        var sprite = await AssetProvider.LoadAssetAsync<Sprite>(randomSkin.SkinAddressableName + "_icon");
+        var sprite = await AssetProvider.LoadAssetAsync<Sprite>(_randomSkin.SkinAddressableName + "_icon");
         rewardViews[^1].SetRewardSprite(sprite);
         
         GameManager.Instance.UIManager.ShowUpToAllPopUp(Constants.PopUps.NewSkinPopUp);
