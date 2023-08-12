@@ -96,7 +96,7 @@ namespace Managers
             Progress.LastStartedLevelID = id;
 
             await GameField.LoadLevelByName(Progress.LastStartedLevelID);
-
+            
             Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
             await Progress.Save();
             //Instance.InputController.SetActiveTouchInput(true);

@@ -16,6 +16,7 @@ namespace UI
 
         private void OnClick()
         {
+            GameManager.Instance.Progress.LastSavedLevelDataID = string.Empty;
             GameManager.Instance.LoadLevelById(GameManager.Instance.Progress.LastStartedLevelID);
         }
     }

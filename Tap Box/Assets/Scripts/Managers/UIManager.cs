@@ -15,6 +15,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour, IInitializable
 {
+    [SerializeField] private Canvas _canvas;
     [SerializeField] private Image _background;
     [SerializeField] private CurrencyCounter coinCounter;
     [SerializeField] private PlayerLevelUI playerLevelUI;
@@ -26,6 +27,7 @@ public class UIManager : MonoBehaviour, IInitializable
     [SerializeField] private GameObject _topCenterContent;
 
     [SerializeField] private List<PopUpBase> popups;
+    [SerializeField] private List<SafeArea> _safeAreas;
     private List<PopUpBase> _popUpsQueue = new();
     private IDisposable isBanerRedy;
     private Vector2 _baseResolution;
@@ -137,6 +139,11 @@ public class UIManager : MonoBehaviour, IInitializable
         int max = Screen.width > Screen.height ? Screen.width : Screen.height;
         var size = new Vector2(max, max);
         _background.rectTransform.sizeDelta = size;
+
+        foreach (var VARIABLE in _safeAreas)
+        {
+            VARIABLE.RecalculateSafeArea();
+        }
     }
 
     private void BuyNoAds()

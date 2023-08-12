@@ -34,7 +34,10 @@ public class GameField : MonoBehaviour, IInitializable
     public int GetTurnsCount
     {
         get => _turnsesCount;
-        set => _turnsesCount = value;
+        set
+        {
+            _turnsesCount = value;
+        }
     }
 
     public int GetCountOfReward()
@@ -199,6 +202,16 @@ public class GameField : MonoBehaviour, IInitializable
         }
     }
 #endif
+
+    public Vector3 GetMinLevelSize()
+    {
+        return _minLevelSize;
+    }
+    
+    public Vector3 GetMaxLevelSize()
+    {
+        return _maxLevelSize;
+    }
 
     public void RemoveAvailableBox()
     {

@@ -25,6 +25,7 @@ namespace UI
             _closePopup.onClick.RemoveAllListeners();
             _closePopup.onClick.AddListener(() =>
             {
+                GameManager.Instance.Progress.LastSavedLevelDataID = string.Empty;
                 GameManager.Instance.LoadLevelById(GameManager.Instance.Progress.LastStartedLevelID);
                 GameManager.Instance.UIManager.ClosePopUp(ID);
             });
