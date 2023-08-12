@@ -39,6 +39,8 @@ namespace UI
             _leftButton.gameObject.SetActive(!_leftButton.gameObject.activeSelf);
             _rightButton.gameObject.SetActive(!_rightButton.gameObject.activeSelf);
             _toCentr.gameObject.SetActive(!_toCentr.gameObject.activeSelf);
+            
+            GameManager.Instance.InputController.SetActiveTouchInput(!_upButton.gameObject.activeSelf);
         }
 
         private void Up()

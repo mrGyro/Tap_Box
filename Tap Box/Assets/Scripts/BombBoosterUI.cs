@@ -23,7 +23,7 @@ public class BombBoosterUI : MonoBehaviour
     [SerializeField] private GameObject _bombVfx;
     [SerializeField] private EventTrigger _eventTrigger;
 
-    private Vector2 _offset = Vector2.up * Screen.width / 8;
+    private Vector2 _offset;
     private int _layerMask;
     private bool _isActive = false;
 
@@ -48,7 +48,7 @@ public class BombBoosterUI : MonoBehaviour
     {
         return _bombCost;
     }
-    
+
     public void ClickOnBombButton()
     {
         if (_isActive || GameManager.Instance.CurrencyController.GetCurrency(CurrencyController.Type.Coin) >= _bombCost)
@@ -75,7 +75,7 @@ public class BombBoosterUI : MonoBehaviour
         GameManager.Instance.InputController.SetActiveAllInput(true);
         var distance = Vector2.Distance(arg0.currentInputModule.input.mousePosition, _bombInputObject.transform.position);
         int minDistance = Screen.height / 6;
-        
+
         if (distance < minDistance)
         {
             return;
@@ -85,7 +85,7 @@ public class BombBoosterUI : MonoBehaviour
         if (x.collider != null)
         {
             GameObject g = Instantiate(_bombVfx, x.point, quaternion.identity);
-            Destroy(g,5);
+            Destroy(g, 5);
             BaseBox box = x.transform.GetComponent<BaseBox>();
             GameManager.Instance.GameField.BombBox(box, x.point, Vector3.one);
         }
@@ -93,6 +93,11 @@ public class BombBoosterUI : MonoBehaviour
 
     private void OnPointerDown(BaseEventData arg0)
     {
+        //float size = Screen.width > Screen.height ? Screen.width : Screen.height;
+        float size = Screen.width < Screen.height ? Screen.width : Screen.height;
+        _offset = Vector2.up * size / 7;
+        Debug.LogError(Screen.width + " " + Screen.height + " " + _offset);
+
         _bombCross.transform.position = arg0.currentInputModule.input.mousePosition + _offset;
         _bombCross.gameObject.SetActive(true);
         GameManager.Instance.InputController.SetActiveAllInput(false);

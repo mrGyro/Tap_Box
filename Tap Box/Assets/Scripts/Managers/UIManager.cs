@@ -28,6 +28,7 @@ public class UIManager : MonoBehaviour, IInitializable
 
     [SerializeField] private List<PopUpBase> popups;
     [SerializeField] private List<SafeArea> _safeAreas;
+    [SerializeField] private List<IgnoreSafeArea> _ignoreSafeAreas;
     private List<PopUpBase> _popUpsQueue = new();
     private IDisposable isBanerRedy;
     private Vector2 _baseResolution;
@@ -143,6 +144,11 @@ public class UIManager : MonoBehaviour, IInitializable
         foreach (var VARIABLE in _safeAreas)
         {
             VARIABLE.RecalculateSafeArea();
+        }
+        
+        foreach (var VARIABLE in _ignoreSafeAreas)
+        {
+            VARIABLE.Recalculate(_canvasScaler.referenceResolution);
         }
     }
 
