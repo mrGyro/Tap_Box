@@ -6,7 +6,7 @@ public class IgnoreSafeArea : MonoBehaviour
 
     public void Recalculate(Vector2 screenSize)
     {
-        _rectTransform.sizeDelta = screenSize + Vector2.one * 50;
+        _rectTransform.sizeDelta = screenSize + Vector2.one * 300;
         _rectTransform.localPosition = new Vector3(0, (Screen.safeArea.height - Screen.height) / 2);
     }
 }

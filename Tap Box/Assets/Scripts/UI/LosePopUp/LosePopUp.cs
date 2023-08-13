@@ -33,7 +33,7 @@ namespace UI
             _addMoreTurns.onClick.RemoveAllListeners();
             _addMoreTurns.onClick.AddListener((() =>
             {
-                if (!GameManager.Instance.IAPManager.HasNonConsumableProduct(Constants.IAP.NoAds) && GameManager.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
+                if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
                 {
                     GameManager.Instance.Mediation.Show(Constants.Ads.Interstitial, ID);
                 }
