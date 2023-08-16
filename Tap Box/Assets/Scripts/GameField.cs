@@ -40,11 +40,6 @@ public class GameField : MonoBehaviour, IInitializable
         }
     }
 
-    public int GetCountOfReward()
-    {
-        return _data.Reward;
-    }
-
     public void BombBox(BaseBox box, Vector3 point, Vector3 size)
     {
         if (box == null)

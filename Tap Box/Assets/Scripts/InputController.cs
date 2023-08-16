@@ -180,11 +180,11 @@ public class InputController : MonoBehaviour
         _newTarget = GameManager.Instance.GameField.GetNewCenter();
 
         GameManager.Instance.GameField.GetTurnsCount--;
+        
         Messenger.Broadcast(Constants.Events.OnBoxClicked);
+        
         if (GameManager.Instance.GameField.IsNotWinCondition())
         {
-            //Debug.LogError("-----------------------");
-           // GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
             Messenger.Broadcast(Constants.Events.OnGameLoose);
         }
     }
