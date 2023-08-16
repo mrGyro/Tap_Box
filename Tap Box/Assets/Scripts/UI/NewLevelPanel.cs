@@ -31,14 +31,6 @@ namespace UI
 
         private void ClosePopup()
         {
-            // if (GameManager.Instance.Mediation.IsReady(Constants.Ads.Rewarded))
-            // {
-            //     GameManager.Instance.Mediation.Show(Constants.Ads.Rewarded, ID);
-            //     GameManager.Instance.UIManager.ClosePopUp(ID);
-            //
-            //     return;
-            // }
-
             if (!GameManager.Instance.IAPManager.HasNonConsumableProduct(Constants.IAP.NoAds) && GameManager.Instance.Mediation.IsReady(Constants.Ads.Interstitial))
             {
                 GameManager.Instance.Mediation.Show(Constants.Ads.Interstitial, ID);
