@@ -34,10 +34,7 @@ public class GameField : MonoBehaviour, IInitializable
     public int GetTurnsCount
     {
         get => _turnsesCount;
-        set
-        {
-            _turnsesCount = value;
-        }
+        set { _turnsesCount = value; }
     }
 
     public void BombBox(BaseBox box, Vector3 point, Vector3 size)
@@ -182,6 +179,16 @@ public class GameField : MonoBehaviour, IInitializable
     {
         if (_boxes.Count == 0)
         {
+            if (PlayerPrefs.HasKey("WinLevel_" + GameManager.Instance.Progress.LastStartedLevelID))
+            {
+                GameManager.Instance.AnalyticManager.SendEvent(Constants.AnalyticsEvent.WinLevel, Constants.AnalyticsEvent.LevelIdParameter, GameManager.Instance.Progress.LastStartedLevelID);
+            }
+            else
+            {
+                PlayerPrefs.SetInt("WinLevel_" + GameManager.Instance.Progress.LastStartedLevelID, 1);
+                GameManager.Instance.AnalyticManager.SendEvent(Constants.AnalyticsEvent.FirstWinLevel, Constants.AnalyticsEvent.LevelIdParameter, GameManager.Instance.Progress.LastStartedLevelID);
+            }
+
             await ShowWinWindow();
         }
     }
@@ -202,7 +209,7 @@ public class GameField : MonoBehaviour, IInitializable
     {
         return _minLevelSize;
     }
-    
+
     public Vector3 GetMaxLevelSize()
     {
         return _maxLevelSize;

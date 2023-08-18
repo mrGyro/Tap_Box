@@ -20,7 +20,6 @@ namespace Managers
     {
         private IStoreController m_StoreController;
 
-        public string environment = "production";
         private List<Product> _products;
         private List<IapProduct> _productsIds;
 
@@ -42,14 +41,6 @@ namespace Managers
         {
             try
             {
-                if (UnityServices.State != ServicesInitializationState.Initialized)
-                {
-                    var options = new InitializationOptions()
-                        .SetEnvironmentName(environment);
-
-                    await UnityServices.InitializeAsync(options);
-                }
-
                 var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
                 foreach (var variable in _productsIds)
                 {

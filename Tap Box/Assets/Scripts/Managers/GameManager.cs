@@ -9,6 +9,9 @@ using LevelCreator;
 using PlayerLevel;
 using SaveLoad_progress;
 using Sounds;
+using Unity.Services.Analytics;
+using Unity.Services.Core;
+using Unity.Services.Core.Environments;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Serialization;
@@ -19,6 +22,7 @@ namespace Managers
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
+        public string environment = "production";
 
         public GameField GameField;
         public InputController InputController;
@@ -52,6 +56,17 @@ namespace Managers
 
             GameField.Initialize();
             PlayerLevelManager.Initialize();
+            
+            if (UnityServices.State != ServicesInitializationState.Initialized)
+            {
+                var options = new InitializationOptions()
+                    .SetEnvironmentName(environment);
+
+                await UnityServices.InitializeAsync(options);
+                AnalyticsService.Instance.StartDataCollection();
+            }
+            
+            
             await IAPManager.AwaitInitialization(new List<IapProduct>()
             {
                 new IapProduct()
@@ -85,12 +100,24 @@ namespace Managers
 
         public void LoadNextLevel()
         {
-            //Instance.InputController.SetActiveTouchInput(false);
             LoadLevelById(GetNextLevelId());
         }
 
         public async void LoadLevelById(string id)
         {
+            if (PlayerPrefs.HasKey("OpenLevel_" + id))
+            {
+                Debug.LogError("not first " + id);
+                AnalyticManager.SendEvent(Constants.AnalyticsEvent.OpenLevel, Constants.AnalyticsEvent.LevelIdParameter, id);
+            }
+            else
+            {
+                Debug.LogError("first " + id);
+
+                PlayerPrefs.SetInt("OpenLevel_" + id, 1);
+                AnalyticManager.SendEvent(Constants.AnalyticsEvent.FirstOpenLevel, Constants.AnalyticsEvent.LevelIdParameter, id);
+            }
+            
             LeanTouch.Fingers.Clear();
             Instance.InputController.SetDefaultZoom();
             Progress.LastStartedLevelID = id;
@@ -99,7 +126,6 @@ namespace Managers
             
             Core.MessengerStatic.Messenger<string>.Broadcast(Constants.Events.OnLevelCreated, Progress.LastStartedLevelID);
             await Progress.Save();
-            //Instance.InputController.SetActiveTouchInput(true);
         }
 
         public float GetWinProgress()

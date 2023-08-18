@@ -2,29 +2,41 @@
 {
     public static class Events
     {
-        public static string OnBoxRemoveFromGameField = "OnBoxRemoveFromGameField";
-        public static string OnBoxClicked = "OnBoxClicked";
-        public static string OnLevelCreated = "OnLevelCreated";
-        public static string OnGameLoose = "OnGameLoose";
-        public static string OnGetRandomSkin = "OnGetRandomSkin";
-        public static string OnRewardedVideoReward = "OnRewardedVideoReward";
+        public const string OnBoxRemoveFromGameField = "OnBoxRemoveFromGameField";
+        public const string OnBoxClicked = "OnBoxClicked";
+        public const string OnLevelCreated = "OnLevelCreated";
+        public const string OnGameLoose = "OnGameLoose";
+        public const string OnGetRandomSkin = "OnGetRandomSkin";
+        public const string OnRewardedVideoReward = "OnRewardedVideoReward";
         
-        public static string OnGetNewSkin = "OnGetNewSkin";
-        public static string OnEquipSkin = "OnEquipSkin";
+        public const string OnGetNewSkin = "OnGetNewSkin";
+        public const string OnEquipSkin = "OnEquipSkin";
 
         
-        public static string OnBackgroundSpriteChanged = "OnBackgroundSpriteChanged";
-        public static string OnBackgroundMaterialChanged = "OnBackgroundMaterialChanged";
+        public const string OnBackgroundSpriteChanged = "OnBackgroundSpriteChanged";
+        public const string OnBackgroundMaterialChanged = "OnBackgroundMaterialChanged";
         
         
-        public static string OnTapSkinChanged = "OnTapSkinChanged";
-        public static string OnTapShow = "OnTapShow";
+        public const string OnTapSkinChanged = "OnTapSkinChanged";
+        public const string OnTapShow = "OnTapShow";
         
-        public static string OnTailSkinChanged = "OnTailSkinChanged";
-        public static string OnTailStart = "OnTailStart";
+        public const string OnTailSkinChanged = "OnTailSkinChanged";
+        public const string OnTailStart = "OnTailStart";
         
-        public static string OnPlaySound = "OnPlaySound";
+        public const string OnPlaySound = "OnPlaySound";
 
+
+    }
+
+    public static class AnalyticsEvent
+    {
+        public const string FirstOpenLevel = "first_level_open";
+        public const string OpenLevel = "level_open";
+        public const string FirstWinLevel = "first_level_finish";
+        public const string WinLevel = "level_finish";
+        
+        
+        public const string LevelIdParameter = "level_id";
 
     }
     
@@ -39,16 +51,16 @@
     {
         public static class UI
         {
-            public static string WinWindowShow = "WinWindowShow";
-            public static string LoseWindowShow = "LoseWindowShow";
-            public static string NewLevelWindowShow = "NewLevelWindowShow";
-            public static string WinWindowGetReward = "WinWindowGetReward";
-            public static string WinWindowGetSkinReward = "WinWindowGetSkinReward";
+            public const string WinWindowShow = "WinWindowShow";
+            public const string LoseWindowShow = "LoseWindowShow";
+            public const string NewLevelWindowShow = "NewLevelWindowShow";
+            public const string WinWindowGetReward = "WinWindowGetReward";
+            public const string WinWindowGetSkinReward = "WinWindowGetSkinReward";
         }
         
         public static class Game
         {
-            public static string TapOnBox = "TapOnBox";
+            public const string TapOnBox = "TapOnBox";
 
         }
 

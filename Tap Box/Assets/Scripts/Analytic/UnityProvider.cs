@@ -9,15 +9,7 @@ namespace Analytic
     {
         public override async void Initialize()
         {
-            try
-            {
-                await UnityServices.InitializeAsync();
-                //List<string> consentIdentifiers = await AnalyticsService.Instance.CheckForRequiredConsents();
-            }
-            catch (ConsentCheckException e)
-            {
-                // Something went wrong when checking the GeoIP, check the e.Reason and handle appropriately.
-            }
+            await UnityServices.InitializeAsync();
         }
 
         public override void SendEvent(string eventName, string paramName, string value)

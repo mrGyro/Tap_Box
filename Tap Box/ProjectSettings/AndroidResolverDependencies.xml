@@ -5,7 +5,7 @@
     <package>com.google.android.gms:play-services-ads:22.2.0</package>
     <package>com.google.android.gms:play-services-ads-identifier:18.0.1</package>
     <package>com.google.android.gms:play-services-basement:18.1.0</package>
-    <package>com.ironsource.adapters:adcolonyadapter:4.3.14</package>
+    <package>com.ironsource.adapters:adcolonyadapter:4.3.15</package>
     <package>com.ironsource.adapters:admobadapter:4.3.39</package>
     <package>com.ironsource.adapters:applovinadapter:4.3.39</package>
     <package>com.ironsource.adapters:unityadsadapter:4.3.31</package>
