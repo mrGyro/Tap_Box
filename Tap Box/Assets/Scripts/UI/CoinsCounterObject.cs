@@ -1,14 +1,13 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace UI
 {
     public class CoinsCounterObject : MonoBehaviour
     {
-        public async void PlayAnimation(Vector3 finish)
+        public async void PlayAnimation(Vector3 finish, float duration)
         {
-            float duration = 20f;
+            //float duration = 20f;
             float startTime = Time.time;
             Vector3 x = Vector3.zero;
 

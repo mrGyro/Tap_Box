@@ -63,7 +63,7 @@ namespace UI.Settings
         public override async void Show()
         {
             gameObject.SetActive(true);
-            await _currencyCounter.UpdateLayout();
+            //await _currencyCounter.UpdateLayout();
         }
         
         public override void Close()

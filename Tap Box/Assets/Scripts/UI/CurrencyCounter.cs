@@ -11,8 +11,6 @@ namespace UI
 {
     public class CurrencyCounter : MonoBehaviour, IInitializable
     {
-        [SerializeField] private RectTransform countRectTransform;
-        [SerializeField] private RectTransform textRectTransform;
         [SerializeField] private RectTransform iconTransform;
         [SerializeField] private Image icon;
         [SerializeField] private TMP_Text count;
@@ -51,21 +49,10 @@ namespace UI
 
             foreach (var coinsCounterObject in objects)
             {
-                await UniTask.Delay(100);
+                await UniTask.Delay(50);
                 coinsCounterObject.PlayScaleAnimation();
-                coinsCounterObject.PlayAnimation(iconTransform.position);
+                coinsCounterObject.PlayAnimation(iconTransform.position, 10f);
             }
-        }
-
-        public async UniTask UpdateLayout()
-        {
-            LayoutRebuilder.ForceRebuildLayoutImmediate(countRectTransform);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(textRectTransform);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(iconTransform);
-            await UniTask.Yield();
-            LayoutRebuilder.ForceRebuildLayoutImmediate(countRectTransform);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(textRectTransform);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(iconTransform);
         }
 
         private async void CurrencyCountChanged(CurrencyController.Type typeOfCurrency, int newValue)
@@ -93,7 +80,7 @@ namespace UI
 
         private async UniTask IncrementGold()
         {
-            int time = 100;
+            int time = 50;
             float differance = _targetValue - _currentValue;
             differance /= 15;
 
@@ -104,7 +91,6 @@ namespace UI
                 currentValue += differance;
                 currentValue = Mathf.Clamp(currentValue, 0, _targetValue + 1);
 
-                LayoutRebuilder.ForceRebuildLayoutImmediate(count.transform as RectTransform);
                 await UniTask.Delay(time);
             }
 

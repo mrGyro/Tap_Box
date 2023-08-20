@@ -39,12 +39,12 @@ namespace UI
             GameManager.Instance.UIManager.ClosePopUp(ID);
         }
 
-        public override async void Show()
+        public override void Show()
         {
             button.gameObject.SetActive(false);
             GameManager.Instance.SoundManager.Play(new ClipDataMessage() { Id = Constants.Sounds.UI.NewLevelWindowShow, SoundType = SoundData.SoundType.UI });
             gameObject.SetActive(true);
-            await _currencyCounter.UpdateLayout();
+            //await _currencyCounter.UpdateLayout();
         }
 
         public override void Close()

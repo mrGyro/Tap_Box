@@ -36,7 +36,7 @@
         public const string WinLevel = "level_finish";
         
         
-        public const string LevelIdParameter = "level_id";
+        public const string LevelIdParameter = "level_name";
 
     }
     

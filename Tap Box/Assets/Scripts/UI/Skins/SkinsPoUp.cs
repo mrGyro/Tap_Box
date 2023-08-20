@@ -290,7 +290,7 @@ namespace UI.Skins
         public override async void Show()
         {
             gameObject.SetActive(true);
-            await counter.UpdateLayout();
+            //await counter.UpdateLayout();
         }
 
         public override void Close()

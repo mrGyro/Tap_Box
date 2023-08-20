@@ -44,7 +44,7 @@ namespace UI
             
             if (_currentCountToSave >= _countToSave && GameManager.Instance.GameField.GetTurnsCount > 10)
             {
-                Debug.LogError("save");
+                Debug.Log("save");
                 _currentCountToSave = 0;
                 GameManager.Instance.Progress.Save();
             }

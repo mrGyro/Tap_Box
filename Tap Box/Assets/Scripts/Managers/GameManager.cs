@@ -107,7 +107,6 @@ namespace Managers
         {
             if (PlayerPrefs.HasKey("OpenLevel_" + id))
             {
-                Debug.LogError("not first " + id);
                 AnalyticManager.SendEvent(Constants.AnalyticsEvent.OpenLevel, Constants.AnalyticsEvent.LevelIdParameter, id);
             }
             else

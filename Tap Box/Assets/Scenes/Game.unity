@@ -600,8 +600,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e2c87d02372581498415ccc21e70455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countRectTransform: {fileID: 189214877}
-  textRectTransform: {fileID: 189214877}
   iconTransform: {fileID: 692166565}
   icon: {fileID: 692166566}
   count: {fileID: 189214879}
@@ -21279,8 +21277,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e2c87d02372581498415ccc21e70455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countRectTransform: {fileID: 405307876}
-  textRectTransform: {fileID: 405307876}
   iconTransform: {fileID: 1361432797}
   icon: {fileID: 1361432795}
   count: {fileID: 405307873}
@@ -38829,8 +38825,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e2c87d02372581498415ccc21e70455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countRectTransform: {fileID: 696114998}
-  textRectTransform: {fileID: 13615902}
   iconTransform: {fileID: 479402701}
   icon: {fileID: 479402702}
   count: {fileID: 13615904}
@@ -39423,7 +39417,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6228143f1906243a73e45d4784c88b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  environment: production
 --- !u!1 &741498991
 GameObject:
   m_ObjectHideFlags: 0
@@ -51375,7 +51368,6 @@ GameObject:
   - component: {fileID: 837801471}
   - component: {fileID: 837801474}
   - component: {fileID: 837801473}
-  - component: {fileID: 837801472}
   m_Layer: 5
   m_Name: Counter
   m_TagString: Untagged
@@ -51403,20 +51395,6 @@ RectTransform:
   m_AnchoredPosition: {x: 49.01, y: -50}
   m_SizeDelta: {x: 49.01, y: 100}
   m_Pivot: {x: 1, y: 0.5}
---- !u!114 &837801472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 837801470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 0
 --- !u!114 &837801473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55776,6 +55754,7 @@ GameObject:
   - component: {fileID: 1073563589}
   - component: {fileID: 1073563591}
   - component: {fileID: 1073563590}
+  - component: {fileID: 1073563592}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -55823,7 +55802,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3c2d1716851c050428eaa420f5088c1e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a18ea4709e5e25848b2f9db971c9e5d4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -55841,6 +55820,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1073563588}
   m_CullTransparentMesh: 1
+--- !u!114 &1073563592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1073563588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 100
+  m_PreferredHeight: 100
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &1083853628
 GameObject:
   m_ObjectHideFlags: 0
@@ -65960,7 +65959,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3c2d1716851c050428eaa420f5088c1e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a18ea4709e5e25848b2f9db971c9e5d4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -70565,7 +70564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 1
+  m_HorizontalFit: 2
   m_VerticalFit: 0
 --- !u!114 &1591898766
 MonoBehaviour:
@@ -70588,7 +70587,7 @@ MonoBehaviour:
   m_Spacing: 10
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
+  m_ChildControlWidth: 1
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
@@ -70605,8 +70604,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e2c87d02372581498415ccc21e70455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countRectTransform: {fileID: 837801471}
-  textRectTransform: {fileID: 837801471}
   iconTransform: {fileID: 1073563589}
   icon: {fileID: 1073563590}
   count: {fileID: 837801473}
@@ -93686,8 +93683,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e2c87d02372581498415ccc21e70455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countRectTransform: {fileID: 2089400979}
-  textRectTransform: {fileID: 608532568}
   iconTransform: {fileID: 526573643}
   icon: {fileID: 526573644}
   count: {fileID: 608532570}
@@ -94265,6 +94260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe735899c5675c4e934f43d733b6a43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  environment: production
   GameField: {fileID: 1460762548}
   InputController: {fileID: 1379034134}
   Progress:

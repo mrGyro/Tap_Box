@@ -2,6 +2,7 @@
 using Analitics;
 using Unity.Services.Analytics;
 using Unity.Services.Core;
+using UnityEngine;
 
 namespace Analytic
 {
@@ -18,6 +19,8 @@ namespace Analytic
             {
                 { paramName, value }
             };
+            
+            Debug.Log(paramName + " " + value);
             AnalyticsService.Instance.CustomData(eventName, parameters);
             AnalyticsService.Instance.Flush();
         }

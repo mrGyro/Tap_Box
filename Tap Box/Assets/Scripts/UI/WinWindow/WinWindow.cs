@@ -127,13 +127,12 @@ public class WinWindow : PopUpBase
 
     private async UniTask MakeProgress()
     {
-        await _currencyCounter.UpdateLayout();
-        await UniTask.Delay(1000);
-
+        await UniTask.Delay(500);
         var nearestPercent = SetNextNearestPercent();
-
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
-        float duration = 20f;
+        rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardPercentText(((int)GetPercents()) + "%");
+
+        float duration = 15f;
         float startTime = Time.time;
         while (progress.value < _sliderProgressTarget)
         {
