@@ -60,7 +60,7 @@ namespace UI
             _reward.SetActive(true);
             _countOfReward.text = $"+{count}";
             _levelText.text = $"You get {obj} level";
-            await UniTask.Delay(1000);
+            await UniTask.Delay(500);
             _currencyCounter.CoinsAnimation(_image.transform);
             await UniTask.Delay(500);
             GameManager.Instance.CurrencyController.AddCurrency(CurrencyController.Type.Coin, count);

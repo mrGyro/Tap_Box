@@ -127,12 +127,12 @@ public class WinWindow : PopUpBase
 
     private async UniTask MakeProgress()
     {
-        await UniTask.Delay(500);
+        //await UniTask.Delay(500);
         var nearestPercent = SetNextNearestPercent();
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].SetActiveReward(true);
         rewardViews[GameManager.Instance.Progress.NextRewardIndexWinWindow].UpdateRewardPercentText(((int)GetPercents()) + "%");
 
-        float duration = 15f;
+        float duration = 10f;
         float startTime = Time.time;
         while (progress.value < _sliderProgressTarget)
         {

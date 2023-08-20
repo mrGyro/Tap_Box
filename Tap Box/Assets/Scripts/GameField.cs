@@ -179,15 +179,14 @@ public class GameField : MonoBehaviour, IInitializable
     {
         if (_boxes.Count == 0)
         {
-            if (PlayerPrefs.HasKey("WinLevel_" + GameManager.Instance.Progress.LastStartedLevelID))
-            {
-                GameManager.Instance.AnalyticManager.SendEvent(Constants.AnalyticsEvent.WinLevel, Constants.AnalyticsEvent.LevelIdParameter, GameManager.Instance.Progress.LastStartedLevelID);
-            }
-            else
+            if (!PlayerPrefs.HasKey("WinLevel_" + GameManager.Instance.Progress.LastStartedLevelID))
             {
                 PlayerPrefs.SetInt("WinLevel_" + GameManager.Instance.Progress.LastStartedLevelID, 1);
                 GameManager.Instance.AnalyticManager.SendEvent(Constants.AnalyticsEvent.FirstWinLevel, Constants.AnalyticsEvent.LevelIdParameter, GameManager.Instance.Progress.LastStartedLevelID);
+
             }
+            
+            GameManager.Instance.AnalyticManager.SendEvent(Constants.AnalyticsEvent.WinLevel, Constants.AnalyticsEvent.LevelIdParameter, GameManager.Instance.Progress.LastStartedLevelID);
 
             await ShowWinWindow();
         }

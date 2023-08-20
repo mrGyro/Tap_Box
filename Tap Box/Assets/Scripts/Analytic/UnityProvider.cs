@@ -11,6 +11,7 @@ namespace Analytic
         public override async void Initialize()
         {
             await UnityServices.InitializeAsync();
+            AnalyticsService.Instance.StartDataCollection();
         }
 
         public override void SendEvent(string eventName, string paramName, string value)

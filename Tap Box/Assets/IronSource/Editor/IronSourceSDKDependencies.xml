@@ -2,7 +2,7 @@
   <unityversion>7.4.0</unityversion>
 
     <androidPackages>
-        <androidPackage spec="androidx.fragment:fragment:1.1.1" />
+        <androidPackage spec="androidx.fragment:fragment:1.1.0" />
     </androidPackages>
     
   <androidPackages>

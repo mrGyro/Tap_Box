@@ -70610,7 +70610,7 @@ MonoBehaviour:
   type: 0
   animationObject: {fileID: 5935043317527484534, guid: 3349d8c1eee108e45934279df634545a,
     type: 3}
-  animationObjectCount: 5
+  animationObjectCount: 10
 --- !u!222 &1591898768
 CanvasRenderer:
   m_ObjectHideFlags: 0

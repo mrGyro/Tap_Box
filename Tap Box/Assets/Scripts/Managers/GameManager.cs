@@ -105,17 +105,14 @@ namespace Managers
 
         public async void LoadLevelById(string id)
         {
-            if (PlayerPrefs.HasKey("OpenLevel_" + id))
+            if (!PlayerPrefs.HasKey("OpenLevel_" + id))
             {
-                AnalyticManager.SendEvent(Constants.AnalyticsEvent.OpenLevel, Constants.AnalyticsEvent.LevelIdParameter, id);
-            }
-            else
-            {
-                Debug.LogError("first " + id);
-
                 PlayerPrefs.SetInt("OpenLevel_" + id, 1);
                 AnalyticManager.SendEvent(Constants.AnalyticsEvent.FirstOpenLevel, Constants.AnalyticsEvent.LevelIdParameter, id);
             }
+           
+            AnalyticManager.SendEvent(Constants.AnalyticsEvent.OpenLevel, Constants.AnalyticsEvent.LevelIdParameter, id);
+
             
             LeanTouch.Fingers.Clear();
             Instance.InputController.SetDefaultZoom();
