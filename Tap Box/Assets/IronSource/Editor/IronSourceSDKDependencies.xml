@@ -1,6 +1,10 @@
 <dependencies>
   <unityversion>7.4.0</unityversion>
 
+    <androidPackages>
+        <androidPackage spec="androidx.fragment:fragment:1.1.1" />
+    </androidPackages>
+    
   <androidPackages>
     <androidPackage spec="com.ironsource.sdk:mediationsdk:7.4.0">
       <repositories>
