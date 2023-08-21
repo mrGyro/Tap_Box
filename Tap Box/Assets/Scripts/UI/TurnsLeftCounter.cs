@@ -7,7 +7,8 @@ namespace UI
 {
     public class TurnsLeftCounter : MonoBehaviour, IInitializable
     {
-        [SerializeField] private TMP_Text counter;
+        [SerializeField] private TMP_Text _counter;
+        [SerializeField] private float _defaultFontSize;
 
         private int _countToSave = 20;
         private int _currentCountToSave = 0;
@@ -23,6 +24,14 @@ namespace UI
             GameManager.Instance.UIManager.ShowPopUp(Constants.PopUps.LosePopUp);
         }
 
+        private void Update()
+        {
+            if (_counter.fontSize > _defaultFontSize)
+            {
+                _counter.fontSize -= 0.5f;
+            }
+        }
+
         private void OnLevelCreated(string obj)
         {
             _currentCountToSave = 0;
@@ -32,13 +41,14 @@ namespace UI
         private void OnBoxRemoved()
         {
             SetTurnsText();
-
+            _counter.fontSize = _defaultFontSize * 1.3f;
         }
+        
 
         public void SetTurnsText()
         {
             GameManager.Instance.Progress.CurrentLevelTurnsLeftValue = GameManager.Instance.GameField.GetTurnsCount;
-            counter.text = $"{GameManager.Instance.GameField.GetTurnsCount} turns";
+            _counter.text = $"{GameManager.Instance.GameField.GetTurnsCount} turns";
             
             _currentCountToSave++;
             

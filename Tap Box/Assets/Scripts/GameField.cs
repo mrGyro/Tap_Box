@@ -177,19 +177,21 @@ public class GameField : MonoBehaviour, IInitializable
 
     private async void CheckForWin()
     {
-        if (_boxes.Count == 0)
+        if (_boxes.Count != 0)
         {
-            if (!PlayerPrefs.HasKey("WinLevel_" + GameManager.Instance.Progress.LastStartedLevelID))
-            {
-                PlayerPrefs.SetInt("WinLevel_" + GameManager.Instance.Progress.LastStartedLevelID, 1);
-                GameManager.Instance.AnalyticManager.SendEvent(Constants.AnalyticsEvent.FirstWinLevel, Constants.AnalyticsEvent.LevelIdParameter, GameManager.Instance.Progress.LastStartedLevelID);
-
-            }
-            
-            GameManager.Instance.AnalyticManager.SendEvent(Constants.AnalyticsEvent.WinLevel, Constants.AnalyticsEvent.LevelIdParameter, GameManager.Instance.Progress.LastStartedLevelID);
-
-            await ShowWinWindow();
+            return;
         }
+        
+        if (!PlayerPrefs.HasKey("WinLevel_" + GameManager.Instance.Progress.LastStartedLevelID))
+        {
+            PlayerPrefs.SetInt("WinLevel_" + GameManager.Instance.Progress.LastStartedLevelID, 1);
+            GameManager.Instance.AnalyticManager.SendEvent(Constants.AnalyticsEvent.FirstWinLevel, Constants.AnalyticsEvent.LevelIdParameter, GameManager.Instance.Progress.LastStartedLevelID);
+
+        }
+            
+        GameManager.Instance.AnalyticManager.SendEvent(Constants.AnalyticsEvent.WinLevel, Constants.AnalyticsEvent.LevelIdParameter, GameManager.Instance.Progress.LastStartedLevelID);
+
+        await ShowWinWindow();
     }
 
     private bool _isActiveRemove = true;
@@ -352,6 +354,16 @@ public class GameField : MonoBehaviour, IInitializable
         GameManager.Instance.GameField.CheckForWin();
     }
 
+    public int GetCurrentBoxCount()
+    {
+        return _boxes.Count;
+    }
+    
+    public int GetBoxCountOnStart()
+    {
+        return _data.Data.Count;
+    }
+
     public List<Vector3> EmptyPositionBetweenTwoBoxes(Vector3 destination, Vector3 origin)
     {
         Vector3 direction = (destination - origin).normalized;
@@ -457,12 +469,6 @@ public class GameField : MonoBehaviour, IInitializable
             box.Data = data;
             box.name = box.Data.Type + "_" + _boxes.Count;
             _boxes.Add(box);
-
-            // if (i % 10 == 0)
-            // {
-            //     await UniTask.Yield();
-            //     GameManager.Instance.UIManager.ShowTurns();
-            // }
         }
 
         for (var index = 0; index < _boxes.Count; index++)

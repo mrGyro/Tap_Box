@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour, IInitializable
     [SerializeField] private Image _background;
     [SerializeField] private CurrencyCounter coinCounter;
     [SerializeField] private PlayerLevelUI playerLevelUI;
+    [SerializeField] private GameLevelUI _gameLevelUI;
     [SerializeField] private TurnsLeftCounter turnsLeftCounter;
     [SerializeField] private TMP_Text _currentLevelText;
     [SerializeField] private BombBoosterUI _bombBoosterUI;
@@ -58,7 +59,8 @@ public class UIManager : MonoBehaviour, IInitializable
         coinCounter.Initialize();
         playerLevelUI.Initialize();
         turnsLeftCounter.Initialize();
-
+        _gameLevelUI.Initialize();
+        
         foreach (var variable in popups)
         {
             variable.Initialize();
@@ -78,7 +80,6 @@ public class UIManager : MonoBehaviour, IInitializable
         {
             isBanerRedy = bannerAd.IsReady.Subscribe(OnBannerReady);
         }
-
     }
 
     private async void CheckResolution()
@@ -86,55 +87,33 @@ public class UIManager : MonoBehaviour, IInitializable
         if (Screen.width > Screen.height)
         {
             _canvasScaler.referenceResolution = _baseResolution * 1.5f;
-            var vertical = _topCenterContent.GetComponent<VerticalLayoutGroup>();
-            if (vertical != null)
-            {
-                Destroy(vertical);
-            }
-
-            await UniTask.WaitWhile(() => vertical != null);
-
-            var horizontal = _topCenterContent.GetComponent<HorizontalLayoutGroup>();
-            if (horizontal == null)
-            {
-                horizontal = _topCenterContent.AddComponent<HorizontalLayoutGroup>();
-            }
-
-            if (horizontal != null)
-            {
-                horizontal.spacing = 50;
-                horizontal.padding.top = 50;
-                horizontal.childControlHeight = false;
-                horizontal.childControlWidth = false;
-                horizontal.childAlignment = TextAnchor.MiddleCenter;
-                horizontal.childForceExpandWidth = false;
-            }
         }
         else
         {
             _canvasScaler.referenceResolution = _baseResolution;
-            var horizontal = _topCenterContent.GetComponent<HorizontalLayoutGroup>();
-            if (horizontal != null)
-            {
-                Destroy(horizontal);
-            }
-            await UniTask.WaitWhile(() => horizontal != null);
+        }
+        
+        var horizontal = _topCenterContent.GetComponent<HorizontalLayoutGroup>();
+        if (horizontal != null)
+        {
+            Destroy(horizontal);
+        }
+        await UniTask.WaitWhile(() => horizontal != null);
 
-            var vertical = _topCenterContent.GetComponent<VerticalLayoutGroup>();
-            if (vertical == null)
-            {
-                vertical = _topCenterContent.AddComponent<VerticalLayoutGroup>();
-            }
+        var vertical = _topCenterContent.GetComponent<VerticalLayoutGroup>();
+        if (vertical == null)
+        {
+            vertical = _topCenterContent.AddComponent<VerticalLayoutGroup>();
+        }
 
-            if (vertical != null)
-            {
-                vertical.spacing = 30;
-                vertical.padding.top = 30;
-                vertical.childControlHeight = false;
-                vertical.childControlWidth = false;
-                vertical.childAlignment = TextAnchor.UpperCenter;
-                vertical.childForceExpandWidth = false;
-            }
+        if (vertical != null)
+        {
+            vertical.spacing = 10;
+            vertical.padding.top = 30;
+            vertical.childControlHeight = false;
+            vertical.childControlWidth = false;
+            vertical.childAlignment = TextAnchor.UpperCenter;
+            vertical.childForceExpandWidth = false;
         }
 
         int max = Screen.width > Screen.height ? Screen.width : Screen.height;
