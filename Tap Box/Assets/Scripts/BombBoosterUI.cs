@@ -51,6 +51,11 @@ public class BombBoosterUI : MonoBehaviour
 
     public void ClickOnBombButton()
     {
+        if (GameManager.Instance.UIManager.HasBlocker() && !_isActive)
+        {
+            return;
+        }
+        
         if (_isActive || GameManager.Instance.CurrencyController.GetCurrency(CurrencyController.Type.Coin) >= _bombCost)
         {
             _bombInputObject.SetActive(!_bombInputObject.activeSelf);
@@ -96,7 +101,6 @@ public class BombBoosterUI : MonoBehaviour
         //float size = Screen.width > Screen.height ? Screen.width : Screen.height;
         float size = Screen.width < Screen.height ? Screen.width : Screen.height;
         _offset = Vector2.up * size / 7;
-        Debug.LogError(Screen.width + " " + Screen.height + " " + _offset);
 
         _bombCross.transform.position = arg0.currentInputModule.input.mousePosition + _offset;
         _bombCross.gameObject.SetActive(true);

@@ -26,15 +26,18 @@ public class UIManager : MonoBehaviour, IInitializable
     [SerializeField] private Button _btnNoAds;
     [SerializeField] private CanvasScaler _canvasScaler;
     [SerializeField] private GameObject _topCenterContent;
+    [SerializeField] private CameraCentrateController _cameraCentrateController;
 
     [SerializeField] private List<PopUpBase> popups;
     [SerializeField] private List<SafeArea> _safeAreas;
     [SerializeField] private List<IgnoreSafeArea> _ignoreSafeAreas;
+    [SerializeField] private List<GameObject> _blockedObject;
     private List<PopUpBase> _popUpsQueue = new();
     private IDisposable isBanerRedy;
     private Vector2 _baseResolution;
     private bool _hasToChangeUI;
     private int _currentScreenWidth;
+    
     private void Start()
     {
         _baseResolution = _canvasScaler.referenceResolution;
@@ -74,6 +77,7 @@ public class UIManager : MonoBehaviour, IInitializable
 
         _currentLevelText.text = "Level " + GameManager.Instance.Progress.LastStartedLevelID;
         _bombBoosterUI.Initialize();
+        _cameraCentrateController.Initialize();
 
         var bannerAd = GameManager.Instance.Mediation.GetAddElement(Constants.Ads.Banner);
         if (bannerAd != null)
@@ -82,6 +86,10 @@ public class UIManager : MonoBehaviour, IInitializable
         }
     }
 
+    public bool HasBlocker()
+    {
+        return _blockedObject.Exists(x => x.gameObject.activeSelf);
+    }
     private async void CheckResolution()
     {
         if (Screen.width > Screen.height)
@@ -181,7 +189,7 @@ public class UIManager : MonoBehaviour, IInitializable
     {
         _bombBoosterUI.ClickOnBombButton();
     }
-
+    
     private void OnLevelChanged(string obj)
     {
         _currentLevelText.text = "Level " + obj;
@@ -194,6 +202,10 @@ public class UIManager : MonoBehaviour, IInitializable
 
     public void ShowPopUp(string id)
     {
+        if (HasBlocker())
+        {
+            return;
+        }
         var popup = popups.Find(x => x.ID == id);
         if (popup == null)
             return;

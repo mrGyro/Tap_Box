@@ -8,6 +8,8 @@ namespace UI
     public class CameraCentrateController : MonoBehaviour
     {
         [SerializeField] private LeanRotate _leanRotate;
+        [SerializeField] private Image _defaultIcon;
+        [SerializeField] private Image _closeIcon;
 
         [SerializeField] private Button _centrateButton;
         [SerializeField] private Button _upButton;
@@ -16,7 +18,7 @@ namespace UI
         [SerializeField] private Button _rightButton;
         [SerializeField] private Button _toCentr;
 
-        private void Start()
+        public void Initialize()
         {
             _centrateButton.onClick.AddListener(OnCentrateButtonClick);
 
@@ -34,12 +36,19 @@ namespace UI
 
         private void OnCentrateButtonClick()
         {
+            if (GameManager.Instance.UIManager.HasBlocker() && !_closeIcon.gameObject.activeSelf)
+            {
+                return;
+            }
             _upButton.gameObject.SetActive(!_upButton.gameObject.activeSelf);
             _downButton.gameObject.SetActive(!_downButton.gameObject.activeSelf);
             _leftButton.gameObject.SetActive(!_leftButton.gameObject.activeSelf);
             _rightButton.gameObject.SetActive(!_rightButton.gameObject.activeSelf);
             _toCentr.gameObject.SetActive(!_toCentr.gameObject.activeSelf);
             
+            _defaultIcon.gameObject.SetActive(!_upButton.gameObject.activeSelf);
+            _closeIcon.gameObject.SetActive(_upButton.gameObject.activeSelf);
+
             GameManager.Instance.InputController.SetActiveTouchInput(!_upButton.gameObject.activeSelf);
         }
 
