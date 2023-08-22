@@ -41,7 +41,7 @@ namespace UI
         private void OnBoxRemoved()
         {
             SetTurnsText();
-            _counter.fontSize = _defaultFontSize * 1.3f;
+            _counter.fontSize = _defaultFontSize * 1.1f;
         }
         
 
