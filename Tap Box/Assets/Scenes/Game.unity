@@ -22910,9 +22910,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Clips:
   - Id: TapOnBox
-    Clip: {fileID: 8300000, guid: 7efbca9195e15f848a030640a849a475, type: 3}
+    Clip: {fileID: 8300000, guid: da1cde3971a5ce044b37d06fdd5b1178, type: 3}
   - Id: TapOnBox
-    Clip: {fileID: 8300000, guid: 7efbca9195e15f848a030640a849a475, type: 3}
+    Clip: {fileID: 8300000, guid: da1cde3971a5ce044b37d06fdd5b1178, type: 3}
 --- !u!1001 &498263518
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31842,7 +31842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.60784316, b: 0, a: 1}
+  m_Color: {r: 0.39340806, g: 0.43304294, b: 0.8396226, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -62211,7 +62211,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 200
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 39.1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -89603,7 +89603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.11795415, g: 0.4228628, b: 0.5283019, a: 1}
+  m_Color: {r: 1, g: 0.60784316, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
