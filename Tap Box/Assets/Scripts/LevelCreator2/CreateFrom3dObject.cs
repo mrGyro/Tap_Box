@@ -1,0 +1,734 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Boxes;
+using Boxes.BigBoxTapFlowBox;
+using Cysharp.Threading.Tasks;
+using LevelCreator.Validator;
+using TMPro;
+using Unity.Mathematics;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using UnityEngine;
+using Random = UnityEngine.Random;
+using Vector3 = UnityEngine.Vector3;
+
+public class CreateFrom3dObject : MonoBehaviour
+{
+#if UNITY_EDITOR
+
+
+    [SerializeField] private GameObject _baseBoxPlace;
+    [SerializeField] private float _minDistance;
+    [SerializeField] private Transform _rootGameField;
+    [SerializeField] private Transform _rootPool;
+    [SerializeField] private Transform _objectsWithCollidersForCreate;
+    [SerializeField] private TMP_Text _countOfEmptyCellsCountText;
+    [SerializeField] private AudioClip audioClip;
+    [SerializeField] private int _targetCount;
+    [SerializeField] private List<BoxProbability> _possibleBoxesProbability;
+
+    private List<Collider> _colliders;
+    private Vector3 _maxLevelSize = Vector3.negativeInfinity;
+    private Vector3 _minLevelSize = Vector3.positiveInfinity;
+
+    private List<Vector3Class> _arrayPositions = new();
+    //  private List<GameObject> _gameObjects = new();
+
+    private List<Vector3Class> _emptyArrayPositions = new();
+    private List<Vector3Class> _ipmosiblePosition = new();
+    private List<BaseBox> _listOfPossibleBox;
+    private List<BaseBox> _level;
+
+    private static System.Random rng = new((int)DateTime.Now.Ticks & 0x0000FFFF);
+    private bool _isGeneratorProccess;
+
+    private void Awake()
+    {
+        Application.runInBackground = true;
+    }
+
+    [Serializable]
+    public class Vector3Class
+    {
+        public Vector3 Value;
+        public GameObject GameObject;
+    }
+
+    public void StopGenerator()
+    {
+        _isGeneratorProccess = false;
+    }
+
+    [ContextMenu("Tools/CreateGameFieldFromArrayPositions")]
+    public async void CreateGameFieldFromArrayPositions()
+    {
+        _level = new List<BaseBox>();
+        _emptyArrayPositions = _arrayPositions.ToList();
+        //Shuffle(_emptyArrayPositions);
+        _emptyArrayPositions = SortNearToCenter(_emptyArrayPositions);
+        _listOfPossibleBox = GetPossibleBoxes();
+        _isGeneratorProccess = true;
+
+        var startTime = System.DateTime.UtcNow;
+        int index = 0;
+        while (_emptyArrayPositions.Count > 0 && _isGeneratorProccess)
+        {
+            await UniTask.Yield();
+            int indexOfProbability = GetIndexForNextBox();
+            await TryPutBoxToField(indexOfProbability);
+
+            BeckBoxVariantsToDefaultPosition();
+            _countOfEmptyCellsCountText.text = _emptyArrayPositions.Count.ToString();
+        }
+
+        _isGeneratorProccess = false;
+        System.TimeSpan ts = System.DateTime.UtcNow - startTime;
+        Debug.Log("--------------------------------------" + ts.TotalSeconds);
+        var source = Camera.main.GetComponent<AudioSource>();
+        if (source != null)
+        {
+            source.PlayOneShot(audioClip);
+        }
+
+        _countOfEmptyCellsCountText.text = _emptyArrayPositions.Count.ToString();
+    }
+
+    private async UniTask TryPutBoxToField(int indexOfProbability)
+    {
+        int countOfOperations = 0;
+        var defaultPosition = Vector3.one * 1000;
+        int index = 0;
+
+        for (int i = indexOfProbability; i >= 0; i--)
+        {
+            int firstIndexOfInstance = GetFirstIndexWithSize(_listOfPossibleBox, _possibleBoxesProbability[i].Box.Data.Size.ToVector3());
+            int lastIndexOfInstance = GetLastIndexWithSize(_listOfPossibleBox, _possibleBoxesProbability[i].Box.Data.Size.ToVector3());
+            List<BaseBox> boxesForInstance = _listOfPossibleBox.GetRange(firstIndexOfInstance, lastIndexOfInstance - firstIndexOfInstance + 1);
+
+            Shuffle(boxesForInstance);
+
+            foreach (var boxForInstance in boxesForInstance)
+            {
+                for (int j = 0; j < _emptyArrayPositions.Count; j++)
+                {
+                    // await UniTask.Yield();
+                    countOfOperations++;
+
+                    bool canPut = await CanPutBoxInField(boxForInstance, _emptyArrayPositions[j].Value);
+                    if (canPut)
+                    {
+                        PutBoxInField(boxForInstance);
+                        RemoveFilledCell(boxForInstance);
+                        RemoveFilledImposiblePositionCell(boxForInstance);
+                        boxForInstance.transform.position = defaultPosition;
+                        return;
+                    }
+
+                    boxForInstance.transform.position = defaultPosition;
+                }
+            }
+        }
+
+        Debug.LogError($"countOfOperations = {countOfOperations}");
+    }
+
+    private void RemoveFilledCell(BaseBox box)
+    {
+        switch (box.Data.Type)
+        {
+            case BaseBox.BlockType.None:
+            case BaseBox.BlockType.TapFlowBox:
+            case BaseBox.BlockType.RotateRoadBox:
+            case BaseBox.BlockType.SwipedBox:
+            {
+                var pos = _emptyArrayPositions.FirstOrDefault(x => x.Value == box.Data.ArrayPosition.ToVector3());
+                if (pos != null)
+                {
+                    Destroy(pos.GameObject);
+                    _emptyArrayPositions.Remove(pos);
+                }
+            }
+
+                break;
+            case BaseBox.BlockType.BigBoxTapFlowBox:
+                var bigBox = (box as BigBoxTapFlowBox);
+                if (bigBox != null)
+                {
+                    var positions = bigBox.GetBoxPositionsAsVectors();
+                    foreach (var VARIABLE in positions)
+                    {
+                        var pos = _emptyArrayPositions.FirstOrDefault(x => x.Value == VARIABLE);
+                        if (pos != null)
+                        {
+                            Destroy(pos.GameObject);
+                            _emptyArrayPositions.Remove(pos);
+                        }
+                    }
+                }
+
+                break;
+        }
+    }
+
+    private void RemoveFilledImposiblePositionCell(BaseBox box)
+    {
+        switch (box.Data.Type)
+        {
+            case BaseBox.BlockType.None:
+            case BaseBox.BlockType.TapFlowBox:
+            case BaseBox.BlockType.RotateRoadBox:
+            case BaseBox.BlockType.SwipedBox:
+            {
+                var pos = _ipmosiblePosition.FirstOrDefault(x => x.GameObject == box.gameObject && x.Value == box.Data.ArrayPosition.ToVector3());
+                if (pos != null)
+                {
+                    _ipmosiblePosition.Remove(pos);
+                }
+            }
+
+                break;
+            case BaseBox.BlockType.BigBoxTapFlowBox:
+                var bigBox = (box as BigBoxTapFlowBox);
+                if (bigBox != null)
+                {
+                    var positions = bigBox.GetBoxPositionsAsVectors();
+                    foreach (var VARIABLE in positions)
+                    {
+                        var pos = _ipmosiblePosition.FirstOrDefault(x => x.Value == VARIABLE);
+                        if (pos != null)
+                        {
+                            _ipmosiblePosition.Remove(pos);
+                        }
+                    }
+                }
+
+                break;
+        }
+    }
+
+    private void RemoveFilledCell()
+    {
+        for (int i = _emptyArrayPositions.Count - 1; i >= 0; i--)
+        {
+            foreach (var box in _level)
+            {
+                switch (box.Data.Type)
+                {
+                    case BaseBox.BlockType.None:
+                    case BaseBox.BlockType.TapFlowBox:
+                    case BaseBox.BlockType.RotateRoadBox:
+                    case BaseBox.BlockType.SwipedBox:
+                        if (box.IsBoxInPosition(_emptyArrayPositions[i].Value))
+                        {
+                            Destroy(_emptyArrayPositions[i].GameObject);
+                            _emptyArrayPositions.Remove(_emptyArrayPositions[i]);
+                        }
+
+                        continue;
+                    case BaseBox.BlockType.BigBoxTapFlowBox:
+                        var bigBox = (box as BigBoxTapFlowBox);
+                        if (bigBox != null)
+                        {
+                            if (bigBox.IsBoxInPosition(_emptyArrayPositions[i].Value))
+                            {
+                                Destroy(_emptyArrayPositions[i].GameObject);
+                                _emptyArrayPositions.Remove(_emptyArrayPositions[i]);
+                            }
+                        }
+
+                        continue;
+                }
+            }
+        }
+    }
+
+    private async UniTask<bool> CanPutBoxInField(BaseBox box, Vector3 position)
+    {
+        if (_ipmosiblePosition.Exists(x => x.Value == position && x.GameObject == box.gameObject))
+        {
+            return false;
+        }
+
+        box.transform.position = position * GameField.Size;
+        box.Data.ArrayPosition = position;
+        var x = box as BigBoxTapFlowBox;
+        if (x != null)
+        {
+            x.UpdatePositions();
+        }
+
+        if (!IsBoxInLevelShablon(box))
+        {
+            _ipmosiblePosition.Add(new Vector3Class() { GameObject = box.gameObject, Value = position });
+            return false;
+        }
+
+        if (IsBoxInPosition(position, box))
+        {
+            _ipmosiblePosition.Add(new Vector3Class() { GameObject = box.gameObject, Value = position });
+
+            return false;
+        }
+
+        bool isValid = await IsValidationPassed(box);
+        if (!isValid)
+        {
+            _ipmosiblePosition.Add(new Vector3Class() { GameObject = box.gameObject, Value = position });
+            return false;
+        }
+
+        return true;
+    }
+
+    private async UniTask<bool> IsValidationPassed(BaseBox box)
+    {
+        var level = new List<BaseBox>();
+        level.Add(box);
+        level.AddRange(_level);
+
+        var x = await ValidatorController.IsValidateLastAddedBlock(level, box);
+
+        return x;
+    }
+
+    // public static bool IsBoxesInDirectionNotInMoveFront(BaseBox box)
+    // {
+    //     if (box.Data.Type == BaseBox.BlockType.BigBoxTapFlowBox)
+    //     {
+    //         var bigBox = box as BigBoxTapFlowBox;
+    //         var array = bigBox.GetDirectionParts();
+    //         var direction = bigBox.GetDirection();
+    //
+    //         for (var index = 0; index < array.Length; index++)
+    //         {
+    //             var hits = Physics.RaycastAll(array[index].transform.position, direction * GameField.Size, _distanceToCheck, _mask);
+    //             for (int i = 0; i < hits.Length; i++)
+    //             {
+    //             }
+    //
+    //             if ()
+    //             {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     else
+    //     {
+    //         if (Physics.Raycast(box.transform.position, box.transform.forward, _distanceToCheck, _mask))
+    //         {
+    //             return true;
+    //         }
+    //     }
+    //
+    //     return false;
+    // }
+
+    private bool IsBoxInLevelShablon(BaseBox box)
+    {
+        switch (box.Data.Type)
+        {
+            case BaseBox.BlockType.None:
+            case BaseBox.BlockType.TapFlowBox:
+            case BaseBox.BlockType.RotateRoadBox:
+            case BaseBox.BlockType.SwipedBox:
+                var result = _emptyArrayPositions.FirstOrDefault(x => x.Value == box.Data.ArrayPosition.ToVector3());
+                return result != null;
+
+            case BaseBox.BlockType.BigBoxTapFlowBox:
+
+                var bigBox = (box as BigBoxTapFlowBox);
+                if (bigBox != null)
+                {
+                    var positionsOfBox = bigBox.GetBoxPositionsAsVectors();
+                    foreach (var variable in positionsOfBox)
+                    {
+                        var emptyPosition = _emptyArrayPositions.FirstOrDefault(x => x.Value == variable);
+                        if (emptyPosition == null)
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+                break;
+        }
+
+        return false;
+    }
+
+    private void PutBoxInField(BaseBox box)
+    {
+        BaseBox newBox = Instantiate(box, box.transform.position, quaternion.identity, _rootGameField);
+        newBox.transform.rotation = box.transform.rotation;
+        _level.Add(newBox);
+    }
+
+    private int GetLastIndexWithSize(List<BaseBox> listOfPossibleBox, Vector3 size)
+    {
+        int index = 0;
+        for (int i = 0; i < listOfPossibleBox.Count; i++)
+        {
+            if (listOfPossibleBox[i].Data.Size.ToVector3() == size)
+            {
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int GetFirstIndexWithSize(List<BaseBox> listOfPossibleBox, Vector3 size)
+    {
+        for (int i = 0; i < listOfPossibleBox.Count; i++)
+        {
+            if (listOfPossibleBox[i].Data.Size.ToVector3() == size)
+            {
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+    private List<BaseBox> GetPossibleBoxes()
+    {
+        List<BaseBox> result = new List<BaseBox>();
+
+        foreach (var possibleBox in _possibleBoxesProbability)
+        {
+            result.AddRange(GetAllVariantsOfBlock(possibleBox.Box));
+        }
+
+        return result;
+    }
+
+    private List<BaseBox> GetAllVariantsOfBlock(BaseBox box)
+    {
+        List<BaseBox> result = new List<BaseBox>();
+
+        for (int i = 0; i < BoxRotator.GetSize(); i++)
+        {
+            var obj = Instantiate(box, Vector3.one * 1000, quaternion.identity, _rootPool);
+            BoxRotator.Rotate(i, obj);
+            result.Add(obj);
+        }
+
+        return result;
+    }
+
+    private void BeckBoxVariantsToDefaultPosition()
+    {
+        foreach (var VARIABLE in _listOfPossibleBox)
+        {
+            VARIABLE.transform.position = Vector3.one * 1000;
+        }
+    }
+
+    private int GetIndexForNextBox()
+    {
+        int max = 0;
+        foreach (var VARIABLE in _possibleBoxesProbability)
+        {
+            max += VARIABLE.Chanse;
+        }
+
+        int random = Random.Range(0, max);
+
+        int summ = 0;
+        for (int i = 0; i < _possibleBoxesProbability.Count; i++)
+        {
+            summ += _possibleBoxesProbability[0].Chanse;
+            if (summ >= random)
+            {
+                return i;
+            }
+        }
+
+        return _possibleBoxesProbability.Count - 1;
+    }
+
+
+    [Serializable]
+    private class BoxProbability
+    {
+        public BaseBox Box;
+        public int Chanse;
+    }
+
+
+#if UNITY_EDITOR
+
+
+    public void CreateFieldWithNeearCountOfBox()
+    {
+        DoAction();
+    }
+
+    private async void DoAction()
+    {
+        float midleBoxSize = 2.3f;
+        Debug.LogError("Target size of empty position is " + _targetCount * midleBoxSize);
+        await CreateLevelFrom3d();
+
+        float distance1 = Vector3.Distance(Vector3.zero, _objectsWithCollidersForCreate.localScale);
+        float distance2 = Vector3.Distance(Vector3.zero, _objectsWithCollidersForCreate.localScale + Vector3.one * 0.01f);
+        Vector3 direction = distance1 > distance2 ? Vector3.one * 0.01f : -Vector3.one * 0.01f;
+        List<SizeBlock> sizeBlocks = new List<SizeBlock>();
+        sizeBlocks.Add(new SizeBlock() { GeneretedBlock = _arrayPositions.Count, BlockCount = (int)(_arrayPositions.Count / midleBoxSize), Scale = _objectsWithCollidersForCreate.localScale });
+        while (true)
+        {
+            _objectsWithCollidersForCreate.localScale += direction;
+
+            ClearArrayPosition();
+            await UniTask.Yield();
+
+            await CreateLevelFrom3d();
+
+            if (sizeBlocks[^1].BlockCount != (int)(_arrayPositions.Count / midleBoxSize))
+            {
+                sizeBlocks.Add(new SizeBlock() { GeneretedBlock = _arrayPositions.Count, BlockCount = (int)(_arrayPositions.Count / midleBoxSize), Scale = _objectsWithCollidersForCreate.localScale });
+            }
+
+            if (Vector3.Distance(Vector3.zero, _objectsWithCollidersForCreate.localScale) < 0.02f)
+            {
+                _countOfEmptyCellsCountText.text = _arrayPositions.Count.ToString();
+                break;
+            }
+
+            _countOfEmptyCellsCountText.text = _arrayPositions.Count.ToString();
+        }
+
+        foreach (var VARIABLE in sizeBlocks)
+        {
+            Debug.LogError($"sacale = {VARIABLE.Scale}  BlockCount = {VARIABLE.BlockCount} GeneretedBlock = {VARIABLE.GeneretedBlock}");
+        }
+    }
+
+    private class SizeBlock
+    {
+        public Vector3 Scale;
+        public int BlockCount;
+        public int GeneretedBlock;
+    }
+
+    private void ClearArrayPosition()
+    {
+        if (_arrayPositions != null && _arrayPositions.Count > 0)
+        {
+            foreach (var variable in _arrayPositions)
+            {
+                Destroy(variable.GameObject);
+            }
+
+            _arrayPositions.Clear();
+        }
+    }
+
+    private async UniTask CreateLevelFrom3d()
+    {
+        foreach (Transform variable in _objectsWithCollidersForCreate)
+        {
+            variable.gameObject.SetActive(true);
+        }
+
+        _colliders ??= new List<Collider>();
+        _colliders.Clear();
+        foreach (Transform variable in _objectsWithCollidersForCreate)
+        {
+            var item = variable.GetComponents<Collider>();
+            if (item != null && item.Length > 0)
+            {
+                _colliders.AddRange(item);
+            }
+
+            item = variable.GetComponentsInChildren<Collider>();
+            if (item != null && item.Length > 0)
+            {
+                _colliders.AddRange(item);
+            }
+        }
+
+        foreach (var variable in _colliders)
+        {
+            SetMaxLevelSize(variable.bounds.min);
+            SetMinLevelSize(variable.bounds.min);
+
+            SetMaxLevelSize(variable.bounds.max);
+            SetMinLevelSize(variable.bounds.max);
+        }
+
+        for (int x = (int)(_minLevelSize.x - 1); x < _maxLevelSize.x + 1; x++)
+        {
+            await UniTask.Yield();
+
+            for (int y = (int)(_minLevelSize.y - 1); y < _maxLevelSize.y + 1; y++)
+            {
+                for (int z = (int)(_minLevelSize.z - 1); z < _maxLevelSize.z + 1; z++)
+                {
+                    Vector3 pos = new Vector3(x, y, z);
+                    var closestPoint = GetColliderClosestPoint(pos);
+
+                    if (Vector3.Distance(closestPoint, pos) <= _minDistance)
+                    {
+                        GameObject instantiate = Instantiate(_baseBoxPlace, pos, quaternion.identity, transform);
+                        var position = instantiate.transform.position;
+                        _arrayPositions.Add(new Vector3Class()
+                            {
+                                Value = position,
+                                GameObject = instantiate
+                            }
+                        );
+                        position *= GameField.Size;
+                        instantiate.transform.position = position;
+                    }
+                }
+            }
+        }
+
+        foreach (Transform variable in _objectsWithCollidersForCreate)
+        {
+            variable.gameObject.SetActive(false);
+        }
+
+        _countOfEmptyCellsCountText.text = _arrayPositions.Count.ToString();
+    }
+
+    public void CreateFrom3d()
+    {
+        CreateLevelFrom3d();
+    }
+
+    public bool IsBoxInPosition(Vector3 arrayPosition, BaseBox box)
+    {
+        foreach (var variable in _level)
+        {
+            if (variable == box)
+            {
+                continue;
+            }
+
+            switch (variable.Data.Type)
+            {
+                case BaseBox.BlockType.None:
+                case BaseBox.BlockType.TapFlowBox:
+                case BaseBox.BlockType.RotateRoadBox:
+                case BaseBox.BlockType.SwipedBox:
+                    if (variable.IsBoxInPosition(arrayPosition))
+                    {
+                        return true;
+                    }
+
+                    continue;
+                case BaseBox.BlockType.BigBoxTapFlowBox:
+                    var bigBox = (variable as BigBoxTapFlowBox);
+                    if (bigBox != null)
+                    {
+                        if (bigBox.IsBoxInPosition(arrayPosition))
+                            return true;
+                    }
+
+                    continue;
+            }
+        }
+
+        return false;
+    }
+
+    [ContextMenu("Tools/RemoveAll")]
+    public void RemoveAll()
+    {
+        foreach (var VARIABLE in _arrayPositions)
+        {
+            Destroy(VARIABLE.GameObject, 2f);
+        }
+
+        // foreach (var VARIABLE in _gameObjects)
+        // {
+        //     Destroy(VARIABLE, 2f);
+        // }
+
+        //  _gameObjects.Clear();
+        _arrayPositions.Clear();
+    }
+
+
+    private Vector3 GetColliderClosestPoint(Vector3 point)
+    {
+        float minDistance = float.MaxValue;
+        Vector3 closestPoint = Vector3.zero;
+        foreach (var collider1 in _colliders)
+        {
+            var x = collider1.ClosestPoint(point);
+            float distance = Vector3.Distance(point, x);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestPoint = x;
+            }
+        }
+
+        return closestPoint;
+    }
+
+#endif
+
+    private void SetMaxLevelSize(Vector3 arrayPosition)
+    {
+        _maxLevelSize.x = _maxLevelSize.x < arrayPosition.x ? arrayPosition.x : _maxLevelSize.x;
+        _maxLevelSize.y = _maxLevelSize.y < arrayPosition.y ? arrayPosition.y : _maxLevelSize.y;
+        _maxLevelSize.z = _maxLevelSize.z < arrayPosition.z ? arrayPosition.z : _maxLevelSize.z;
+    }
+
+    private void SetMinLevelSize(Vector3 arrayPosition)
+    {
+        _minLevelSize.x = _minLevelSize.x > arrayPosition.x ? arrayPosition.x : _minLevelSize.x;
+        _minLevelSize.y = _minLevelSize.y > arrayPosition.y ? arrayPosition.y : _minLevelSize.y;
+        _minLevelSize.z = _minLevelSize.z > arrayPosition.z ? arrayPosition.z : _minLevelSize.z;
+    }
+
+
+    public static void Shuffle(IList<BaseBox> list)
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+    }
+
+    public static void Shuffle(List<Vector3Class> list)
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+    }
+
+    public static List<Vector3Class> SortNearToCenter(List<Vector3Class> list)
+    {
+        List<Vector3Class> listResult = new List<Vector3Class>();
+
+        while (list.Count > 0)
+        {
+            var minDistance = list.Min(x => Vector3.Distance(x.Value, Vector3.zero));
+            var item = list.FirstOrDefault(x => Vector3.Distance(x.Value, Vector3.zero) == minDistance);
+            if (item != null)
+            {
+                listResult.Add(item);
+                list.Remove(item);
+            }
+        }
+
+        return listResult;
+    }
+#endif
+}

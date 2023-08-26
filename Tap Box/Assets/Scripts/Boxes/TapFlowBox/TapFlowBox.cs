@@ -13,6 +13,5 @@ namespace Boxes.TapFlowBox
             await _reaction.ReactionStart();
             await _reaction.ReactionEnd();
         }
-
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cinemachine;
 using Lean.Touch;
 using UnityEngine;
 
@@ -22,17 +23,24 @@ namespace DefaultNamespace
         [Tooltip("The maximum FOV/Size we want to zoom to")]
         public float ZoomMax = 60.0f;
 
+        public CinemachineVirtualCamera _camera;
 
         public void SetZoom(List<LeanFinger> fingers)
         {
             Zoom *= LeanGesture.GetPinchRatio(fingers, WheelSensitivity);
+            SetZomValue(Zoom);
+        }
 
+        public void SetZomValue(float zoom)
+        {
+            Zoom = zoom;
             if (ZoomClamp)
             {
                 Zoom = Mathf.Clamp(Zoom, ZoomMin, ZoomMax);
             }
 
             Camera.fieldOfView = Zoom;
+            _camera.m_Lens.FieldOfView = Zoom;
         }
     }
 }

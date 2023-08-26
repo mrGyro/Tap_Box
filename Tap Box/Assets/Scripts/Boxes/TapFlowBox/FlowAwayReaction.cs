@@ -1,6 +1,8 @@
-using System;
+using System.Collections.Generic;
 using Boxes.Reactions;
+using Core.MessengerStatic;
 using Cysharp.Threading.Tasks;
+using Managers;
 using UnityEngine;
 
 namespace Boxes.TapFlowBox
@@ -10,10 +12,11 @@ namespace Boxes.TapFlowBox
         [SerializeField] private BaseBox _box;
         [SerializeField] private Transform _parent;
         [SerializeField] private float _speed;
+        [SerializeField] private float _distanse;
+        [SerializeField] private float _distanseToDieAction;
+        [SerializeField] private Collider _collider;
 
         private bool _isMove;
-        private int _layerMask;
-        private const string GameFieldElement = "GameFieldElement";
 
         public override async UniTask ReactionStart()
         {
@@ -21,68 +24,125 @@ namespace Boxes.TapFlowBox
                 return;
 
             _isMove = true;
-            _layerMask = LayerMask.GetMask(GameFieldElement);
-
-            var box = GetNearestForwardBox();
+            
+            var box = GameManager.Instance.GameField.GetNearestBoxInDirection(
+                new[] { _parent.transform.position }, 
+                _parent.forward, 
+                _box);
+            
             if (box == null)
             {
-                GameField.Instance.RemoveBox(_box);
+                _collider.enabled = false;
+
+                GameManager.Instance.GameField.RemoveBox(_box);
                 await MoveOut();
             }
             else
             {
-                await MoveTo(box);
+                await MoveToAndBack(box);
             }
+        }
+        
+        public Vector3 GetDirection()
+        {
+            return _parent.forward;
         }
 
         private void OnDrawGizmosSelected()
         {
-            Debug.DrawRay(_parent.position, _parent.forward * 50, Color.red);
+            Debug.DrawRay(_parent.position, _parent.forward * _distanse, Color.red);
         }
 
         private async UniTask MoveOut()
         {
-            var x = _parent.forward * 50;
-            while (Vector3.Distance(_parent.position, x) > 1.03f)
+            Messenger<Transform, Vector3>.Broadcast(Constants.Events.OnTailStart, transform.GetChild(0), ((BoxCollider)_collider).size);
+
+            var isPlayDie = false;
+            var startPos = _parent.position;
+            while (Vector3.Distance(_parent.position, startPos) < _distanse)
             {
+                if (!isPlayDie && Vector3.Distance(_parent.position, startPos) > _distanseToDieAction)
+                {
+                    isPlayDie = true;
+                    GetComponent<IDieAction>()?.DieAction();
+                }
+
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
-                await UniTask.Delay(30);
+                await UniTask.WaitForEndOfFrame(this);
             }
 
             _isMove = false;
+            Destroy(_parent.gameObject);
         }
 
-        private async UniTask MoveTo(BaseBox box)
+        private async UniTask MoveToAndBack(BaseBox targetBaseBox)
         {
-            while (Vector3.Distance(_parent.position, box.transform.position) > 1.03f)
+            var startPos = _parent.position;
+            var nearestBoxPosition = GetNearestPositionMoveAndBack(targetBaseBox, out var contactBox);
+
+            while (true)
             {
+                var distance = Vector3.Distance(nearestBoxPosition, contactBox.position);
+                if (distance < GameField.Size)
+                {
+                    break;
+                }
+
                 _parent.Translate(_parent.forward * Time.deltaTime * _speed, Space.World);
-                await UniTask.Delay(30);
+                await UniTask.WaitForEndOfFrame(this);
             }
 
-            var nearestPosition = GetNearestPosition(box);
-            _box.Data.ArrayPosition = GameField.Instance.GetIndexByWorldPosition(nearestPosition);
-            _parent.position = nearestPosition;
+            while (Vector3.Distance(_parent.position, startPos) > 0.2f)
+            {
+                _parent.Translate(-_parent.forward * Time.deltaTime * _speed, Space.World);
+                await UniTask.WaitForEndOfFrame(this);
+            }
+
+            _parent.position = startPos;
             _isMove = false;
         }
-
-        private Vector3 GetNearestPosition(BaseBox box)
+        
+        private Vector3 GetNearestPositionMoveAndBack(BaseBox targetBaseBox, out Transform contactBox)
         {
-            var direction = _box.Data.ArrayPosition - box.Data.ArrayPosition;
-            return GameField.Instance.GetWorldPosition(box.Data.ArrayPosition + direction.normalized);
-        }
+            float minDistance = float.MaxValue;
+            float distance = 0;
+            Vector3 result = Vector3.zero;
+            List<Vector3> targetPosition = new List<Vector3>();
 
-        private BaseBox GetNearestForwardBox()
-        {
-            var ray = new Ray(_parent.position, _parent.forward * 1000);
-            if (!Physics.Raycast(ray, out var hit, 1000, _layerMask))
+            switch (targetBaseBox.Data.Type)
             {
-                return null;
+                case BaseBox.BlockType.None:
+                case BaseBox.BlockType.TapFlowBox:
+                case BaseBox.BlockType.RotateRoadBox:
+                case BaseBox.BlockType.SwipedBox:
+                    targetPosition.Add(targetBaseBox.transform.position);
+                    break;
+                case BaseBox.BlockType.BigBoxTapFlowBox:
+                    var targetBigBox = targetBaseBox as BigBoxTapFlowBox.BigBoxTapFlowBox;
+                    var targetBoxParts = targetBigBox.GetBoxPositions();
+                    foreach (var VARIABLE in targetBoxParts)
+                    {
+                        targetPosition.Add(VARIABLE.ArrayPosition * GameField.Size);
+                    }
+
+                    break;
             }
 
-            var box = hit.transform.GetComponent<BaseBox>();
+            contactBox = null;
+            {
+                foreach (var targetBigBoxPart in targetPosition)
+                {
+                    distance = Vector3.Distance(targetBigBoxPart, _box.transform.position);
+                    if (minDistance > distance)
+                    {
+                        contactBox = _box.transform;
+                        minDistance = distance;
+                        result = targetBigBoxPart;
+                    }
+                }
+            }
 
-            return box;
+            return result;
         }
     }
 }

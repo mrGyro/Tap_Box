@@ -26,9 +26,7 @@ public class BoxConnections : MonoBehaviour
                 && Vector3.Distance(otherBox.transform.position, connection) < 0.3f);
             
             if (result != Vector3.zero)
-            {
                 return true;
-            }
         }
 
         return false;
@@ -40,9 +38,7 @@ public class BoxConnections : MonoBehaviour
         var transform1 = transform;
 
         if (Up)
-        {
-            result.Add(transform1.position + transform1.localPosition);
-        }
+            result.Add(transform1.position + transform1.up);
 
         if (Down)
             result.Add(transform1.position - transform1.up);

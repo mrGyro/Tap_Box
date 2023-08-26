@@ -17,24 +17,344 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 946a778866cf27d4d9f0e3c6d861d482
   m_SerializeEntries:
-  - m_GUID: 11b6b4cf7fe70524b8ab9ac8ae84d751
-    m_Address: TapFlowBox
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: e5043400040339443843d5e068853cb1
-    m_Address: RotateRoadBox
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 8bbff50bad1dcb74ba950424e443a1e2
-    m_Address: TapFlowBox
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 06a832c91faa89c499a35d607725c9dc
-    m_Address: SwipedBox
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 019fd73bde56b7243ba49f9f3d975e96
     m_Address: TapObject
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6ee2e833346650b448baf67aafb0ed77
+    m_Address: TapObjectSwipedBoxCansel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 24dd9c4aa68fc434e95491107bf411d0
+    m_Address: TapFlowBox_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6b44de80b2877104991437d8fee2061d
+    m_Address: RotateRoadBox_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b0265bfe271ae5e4ab2ed9c55e5dc7e4
+    m_Address: SwipedBox_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 9fa10cf5f5e66bf4a89aca7932bb77c9
+    m_Address: LevelButton
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e87d1fd608533b547977da3ccd228f0b
+    m_Address: PassedIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 01bd3deec7a98c048bc714958bfe6fd3
+    m_Address: OpenIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ff6a7dcf82298d74aa31cf2ad7cf176c
+    m_Address: CloseIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: bbe42065ff2702b4c800f53c8b61e2f1
+    m_Address: BigRewardView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 33f605a95775ab240bdf1a0701f694eb
+    m_Address: SmalRewardView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 394c0b82b56efc643a3dfe9aebf348f2
+    m_Address: Coin_notGet
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 0a876add25ea7cd4db6e4fbcccf31c0f
+    m_Address: Coin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a18ea4709e5e25848b2f9db971c9e5d4
+    m_Address: Coin_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 32ca7b2777dccb840bc51ef93d0d4532
+    m_Address: RandomSkin_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 75957692ff3444047a413ad65022528d
+    m_Address: RandomSkin_notGet
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5433de3a099913f4ca5681ce1ccbeba0
+    m_Address: Default4_bg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 629c194e8da77d9448b00fff04f106b8
+    m_Address: Default2_bg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 87154ead5fbddc84aaf999dc1d12b1cd
+    m_Address: Default2_tap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: fb09c3b154cc10b47ad649811da8d16b
+    m_Address: Default_tap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 16b28c4561f7bac4baaeb8b22d0e5415
+    m_Address: Default2_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 624c3dafe13e11d4b9593cec922968c0
+    m_Address: Default_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ee0152f4026eaed49bce1f31450b3c7f
+    m_Address: Default_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 08f79c2dba6b71948a9201b4a145fc7b
+    m_Address: Default3_bg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: c4800b35f1c54da4eb1f16fde8be5f7c
+    m_Address: Skin6_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1e1db1dd27d2b384fa51b1f53b8a86b4
+    m_Address: Skin5_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b0a4b0ebfaa640446a69c07ac1d5c850
+    m_Address: Skin3_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 21b8c2166784fbc4092fad6ebe93ddfe
+    m_Address: Skin2_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 96e92ea4204c7924bb01e615e853aaf4
+    m_Address: Skin4_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8e3588eda6917784fa65ba6e9895b1d6
+    m_Address: Skin7_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 9a79ca4a3b047ad4aa7720f5fcf8587b
+    m_Address: Default_bg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8ac904cf0dd916140a6a9560155f15ca
+    m_Address: Default_bg_blue
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 50d65f9777d17c24283be5cf467f3e4f
+    m_Address: Default_bg_black
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8e8fcb7ef6475aa498290e4f9105551e
+    m_Address: Default_bg_green
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3310e887828d759489254dee2faa6190
+    m_Address: Default4_bg_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a84fed80221d9f446aed6e93d1f391c6
+    m_Address: asdIcon_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e5f5729758cdaa341a8325bb5c1e5efc
+    m_Address: skin1_tap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d30b887eec754a64893c708d718faa90
+    m_Address: skin2_tap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 624070d026db68443b76f59e814abe4f
+    m_Address: skin3_tap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8e7ad97197d061e47a9a3f3420819718
+    m_Address: skin4_tap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3a4fcc90624cb9a43bb1d6a2f7336d5e
+    m_Address: skin5_tap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 84fbcd05a5c6af544a4545000e4bafcf
+    m_Address: Default3_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 7df7ed6c4efa2cd4a84743586e4c9392
+    m_Address: Default4_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d0416e658ecd13747a488f00e7aa999c
+    m_Address: Default6_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 998f94ce2ff81ea41a45d96a10b7221b
+    m_Address: Default5_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 33a79fdd675ba884c98db114df551738
+    m_Address: Default7_tail
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ad84358ad5c78aa46a42ce966b5c0d18
+    m_Address: Skin8_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1f9094ed711e5b9449b2a683ab322314
+    m_Address: Skin9_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 54528fb0bd9e1474fb76af33476a1bff
+    m_Address: Skin10_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5115c2acc74a43d459516d6e27fc6a16
+    m_Address: Skin11_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: c642a7b2b4338744d8bd4344b1bcba77
+    m_Address: Skin12_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: dbfc65b68da20a44aa4d5f37b5d3430f
+    m_Address: Skin13_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d10d1befec1a76a46840988491fa3d7f
+    m_Address: Skin14_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8ad465d8998ca8c42910f6a9b86cca03
+    m_Address: Skin15_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d471b39fc9acb354aaea894645622997
+    m_Address: Skin16_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e90abdbc8985ac648aba203ce3c08bc2
+    m_Address: expIcon_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 877b1e11e6fd28f40ba579a6b101ade5
+    m_Address: Default2_bg_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8beff1a1059a32948b179c013fb9b122
+    m_Address: Default4_bg_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1cc41c4a2f0910c4f904f9f1bbb92d4a
+    m_Address: Default4_bg_1_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 23f3930088357d742b844ce26c635c40
+    m_Address: skin1_tap_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5b233bd39be1d234e8c690632e2c7b7f
+    m_Address: Default_tap_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 0530845b5e79b054eafbe1bd374eec9e
+    m_Address: skin2_tap_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 82ce582fea64def478e9e513a5cf59ca
+    m_Address: skin3_tap_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 678395142e685704faf0ed0566888a8d
+    m_Address: skin4_tap_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: efe49cde79363334a970d6f6e2ae1cc3
+    m_Address: skin5_tap_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e93e7e859992bf14dbb6e8eeecb8b86b
+    m_Address: Default2_tail_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ae9d9e100c1c0ad4497fef08126251d2
+    m_Address: Default3_tail_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2ea90ebe072805b4ebac561dfe028930
+    m_Address: Default4_tail_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 9fabaa7ded222ad42bb7f789facd7b2e
+    m_Address: Default5_tail_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: db80c9c46175915449baaed89ecfa5ab
+    m_Address: Default6_tail_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: daf8dbe488017cc468d299c8ccbbc207
+    m_Address: Default_bg_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 778f8eb14024d3c4b98b2e13e7bc7053
+    m_Address: Default_bg_green_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 43598091fceb71940be14e91a1412ff9
+    m_Address: Default_bg_blue_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 242b86851c0f83a4e896c1b49c456bae
+    m_Address: Default_bg_black_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: f3952cfb935df4a48aec2027fc41df2f
+    m_Address: CoinsCurrency_icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: c9ccf97d002327644b648bbf2e9fa739
+    m_Address: Skin4_BigBoxTapFlowBox_1_1_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 333ff9eba2bc5d245acc6e209381f9a3
+    m_Address: Skin4_BigBoxTapFlowBox_1_1_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 17c66ff73341d4940811c65e01c59965
+    m_Address: Skin4_BigBoxTapFlowBox_2_1_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: bb5b6779dd862ec4f8cbba3e92caa106
+    m_Address: Skin4_BigBoxTapFlowBox_2_1_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 82efd879fb85101468865ca4ba68c0a1
+    m_Address: Skin4_BigBoxTapFlowBox_2_2_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8a4c6dc9b759ba544bd78da513586ff8
+    m_Address: Skin4_BigBoxTapFlowBox_2_2_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 07dc5c2ee4ad6f9458e1b3996c3e88e1
+    m_Address: Skin4_BigBoxTapFlowBox_3_1_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 040f405550f41074da2b1adef9519703
+    m_Address: Skin4_BigBoxTapFlowBox_3_2_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 4e58348488050364f8c3f3d364e7043c
+    m_Address: Skin4_BigBoxTapFlowBox_3_3_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 521875b4288e7c140b6c316dcf84aa98
+    m_Address: Skin4_TapFlowBox
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0
